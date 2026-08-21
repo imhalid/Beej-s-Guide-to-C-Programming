@@ -348,10 +348,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!query.trim()) {
       cmdResults.innerHTML = `
-        <div class="cmd-palette-empty">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <p>Konu veya kavram yazın... (Örn: <code>pointers</code>, <code>threads</code>, <code>malloc</code>, <code>structs</code>, <code>bitwise</code>)</p>
+        <div class="cmd-palette-suggestions">
+          <div class="cmd-suggestion-label">Hızlı Arama Önerileri</div>
+          <div class="cmd-suggestion-tags">
+            <button class="cmd-tag-btn" data-query="pointers">pointers</button>
+            <button class="cmd-tag-btn" data-query="malloc">malloc / bellek</button>
+            <button class="cmd-tag-btn" data-query="structs">structs</button>
+            <button class="cmd-tag-btn" data-query="threads">threads / izlekler</button>
+            <button class="cmd-tag-btn" data-query="preprocessor">ön işlemci</button>
+            <button class="cmd-tag-btn" data-query="arrays">diziler</button>
+          </div>
         </div>`;
+
+      const tagBtns = cmdResults.querySelectorAll('.cmd-tag-btn');
+      tagBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const q = btn.getAttribute('data-query');
+          if (cmdInput) {
+            cmdInput.value = q;
+            cmdInput.focus();
+            performSemanticSearch(q);
+          }
+        });
+      });
       return;
     }
 
@@ -366,23 +385,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let html = '<div class="cmd-results-list">';
     results.forEach((res, idx) => {
       const isSelected = idx === selectedResultIndex ? 'selected' : '';
-      const scoreClass = res.score >= 80 ? 'score-high' : res.score >= 50 ? 'score-med' : 'score-low';
       
       let sectionSnippet = '';
       if (res.item.headings && res.item.headings.length) {
-        const top3 = res.item.headings.slice(0, 3).map(h => h.title).join(' • ');
-        sectionSnippet = `<div class="cmd-item-sections">${escapeHtml(top3)}</div>`;
+        sectionSnippet = res.item.headings.slice(0, 2).map(h => h.title).join('  ·  ');
       }
 
       html += `
         <div class="cmd-result-item ${isSelected}" data-index="${idx}">
+          <div class="cmd-item-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </div>
           <div class="cmd-item-main">
             <div class="cmd-item-title">${escapeHtml(res.item.title)}</div>
-            ${sectionSnippet}
+            ${sectionSnippet ? `<div class="cmd-item-sub">${escapeHtml(sectionSnippet)}</div>` : ''}
           </div>
-          <div class="cmd-item-score ${scoreClass}">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-            ${res.score}% Uyum
+          <div class="cmd-item-action">
+            <span class="cmd-enter-icon">↵</span>
           </div>
         </div>`;
     });
