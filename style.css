@@ -344,7 +344,7 @@ body.app-layout {
   pointer-events: none;
 }
 
-/* Sidebar Nav */
+/* Sidebar Nav - Tree Structure with Dashed Lines */
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
@@ -357,17 +357,43 @@ body.app-layout {
   margin: 0;
 }
 
+.sidebar-nav nav#TOC li {
+  position: relative;
+  list-style: none;
+}
+
 .sidebar-nav nav#TOC > ul > li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+/* Sub-lists: Vertical dashed line connecting tree nodes */
+.sidebar-nav nav#TOC ul ul {
+  position: relative;
+  padding-left: 14px;
+  margin-left: 12px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-left: 1px dashed color-mix(in oklch, var(--text-muted) 40%, transparent);
+}
+
+/* Horizontal dashed branch connectors for nested items */
+.sidebar-nav nav#TOC ul ul > li::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 14px;
+  width: 10px;
+  height: 0;
+  border-top: 1px dashed color-mix(in oklch, var(--text-muted) 40%, transparent);
 }
 
 .sidebar-nav nav#TOC a {
   display: block;
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: 6px;
   color: var(--text-body);
   text-decoration: none;
-  font-size: 0.885rem;
+  font-size: 0.875rem;
   line-height: 1.4;
 }
 
@@ -376,7 +402,19 @@ body.app-layout {
   color: var(--link-hover);
 }
 
-/* Minimal TOC Active Item Styling (Dynamic accent left border line + subtle tinted background) */
+/* Nested links */
+.sidebar-nav nav#TOC ul ul a {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 4px 8px;
+}
+
+.sidebar-nav nav#TOC ul ul a:hover {
+  color: var(--text-bold);
+  background-color: var(--bg-card);
+}
+
+/* Dynamic Active Item Styling per Theme */
 .sidebar-nav nav#TOC a.active,
 .sidebar-nav nav#TOC ul ul a.active {
   background-color: color-mix(in oklch, var(--link-color) 16%, transparent) !important;
@@ -402,23 +440,6 @@ body.app-layout {
 .sidebar-nav nav#TOC a.active:hover .toc-section-number,
 .sidebar-nav nav#TOC ul ul a.active:hover .toc-section-number {
   color: var(--link-hover) !important;
-}
-
-.sidebar-nav nav#TOC ul ul {
-  padding-left: 14px;
-  margin-top: 4px;
-  border-left: 1px solid var(--border-color);
-}
-
-.sidebar-nav nav#TOC ul ul a {
-  font-size: 0.825rem;
-  color: var(--text-muted);
-  padding: 4px 8px;
-}
-
-.sidebar-nav nav#TOC ul ul a:hover {
-  color: var(--text-bold);
-  background-color: var(--bg-card);
 }
 
 .toc-section-number {
