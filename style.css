@@ -55,6 +55,14 @@
   --scrollbar-thumb-hover: oklch(48% 0.02 260);
   --scrollbar-track: var(--bg-main);
 
+  /* Centralized Border Radius System (All radii derive from --radius-base) */
+  --radius-base: 8px;
+  --radius-xs: calc(var(--radius-base) * 0.5);   /* 4px */
+  --radius-sm: calc(var(--radius-base) * 0.75);  /* 6px */
+  --radius-md: var(--radius-base);               /* 8px */
+  --radius-lg: calc(var(--radius-base) * 1.5);   /* 12px */
+  --radius-full: 9999px;
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
 }
@@ -215,7 +223,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
   color: var(--text-bold);
@@ -342,7 +350,7 @@ body.app-layout {
   width: 100%;
   padding: 8px 12px 8px 36px;
   font-size: 0.875rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   background-color: var(--bg-main);
   color: var(--text-bold);
@@ -410,7 +418,7 @@ body.app-layout {
 .sidebar-nav nav#TOC a {
   display: block;
   padding: 5px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   color: var(--text-body);
   text-decoration: none;
   font-size: 0.875rem;
@@ -441,7 +449,7 @@ body.app-layout {
   border-left: 3px solid var(--link-color) !important;
   color: var(--text-bold) !important;
   font-weight: 700;
-  border-radius: 0 6px 6px 0 !important;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
 }
 
 .sidebar-nav nav#TOC a.active .toc-section-number,
@@ -499,7 +507,7 @@ body.app-layout {
   background: none;
   border: 1px solid var(--border-color);
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--text-bold);
   font-size: 1rem;
@@ -566,7 +574,7 @@ div[style*="text-align:center"] a {
   text-decoration: none;
   font-weight: 600;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: none !important;
   transition: color 0.15s ease;
 }
@@ -633,7 +641,7 @@ code {
   background-color: var(--code-inline-bg);
   border: 1px solid var(--code-inline-border);
   padding: 2px 7px;
-  border-radius: 5px;
+  border-radius: var(--radius-xs);
   font-weight: 600;
 }
 
@@ -646,7 +654,7 @@ pre.sourceCode {
   background-color: var(--bg-code);
   color: var(--text-bold);
   padding: 18px 22px;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -700,7 +708,7 @@ blockquote {
   padding: 16px 22px;
   background-color: var(--bg-sidebar);
   border-left: 4px solid var(--link-color);
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   color: var(--text-body);
 }
 
@@ -751,7 +759,7 @@ tr:hover td {
 
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border: 2px solid var(--scrollbar-track);
 }
 
@@ -781,7 +789,7 @@ tr:hover td {
   width: 28px !important;
   height: 28px !important;
   padding: 0 !important;
-  border-radius: 6px !important;
+  border-radius: var(--radius-sm) !important;
   color: var(--text-muted) !important;
   background-color: var(--bg-sidebar) !important;
   border: 1px solid var(--border-color) !important;
@@ -813,7 +821,7 @@ tr:hover td {
   transform: translateY(-50%);
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
+  border-radius: var(--radius-xs);
   color: var(--text-muted);
   font-size: 0.72rem;
   padding: 2px 5px;
@@ -878,7 +886,7 @@ tr:hover td {
   max-height: 68vh;
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -926,7 +934,7 @@ tr:hover td {
 .cmd-kbd {
   font-size: 0.68rem;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
@@ -968,7 +976,7 @@ tr:hover td {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   padding: 5px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 0.12s ease, background-color 0.12s ease, color 0.12s ease;
 }
@@ -997,7 +1005,7 @@ tr:hover td {
   align-items: center;
   gap: 12px;
   padding: 9px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color 0.12s ease;
   border-left: 3px solid transparent;
@@ -1045,17 +1053,22 @@ tr:hover td {
   text-overflow: ellipsis;
 }
 
-.cmd-item-action {
+.cmd-item-meta {
   display: flex;
   align-items: center;
-  opacity: 0;
+  gap: 8px;
   flex-shrink: 0;
-  transition: opacity 0.12s ease;
 }
 
-.cmd-result-item:hover .cmd-item-action,
-.cmd-result-item.selected .cmd-item-action {
-  opacity: 1;
+.cmd-score-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--link-color);
+  background-color: color-mix(in oklch, var(--link-color) 12%, var(--bg-card));
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid color-mix(in oklch, var(--link-color) 25%, transparent);
 }
 
 .cmd-enter-icon {
@@ -1063,6 +1076,13 @@ tr:hover td {
   font-size: 0.75rem;
   color: var(--link-color);
   font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.cmd-result-item:hover .cmd-enter-icon,
+.cmd-result-item.selected .cmd-enter-icon {
+  opacity: 1;
 }
 
 .cmd-palette-footer {
@@ -1092,7 +1112,7 @@ tr:hover td {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   padding: 1px 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
   color: var(--text-bold);

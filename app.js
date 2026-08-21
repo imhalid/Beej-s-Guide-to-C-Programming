@@ -400,7 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="cmd-item-title">${escapeHtml(res.item.title)}</div>
             ${sectionSnippet ? `<div class="cmd-item-sub">${escapeHtml(sectionSnippet)}</div>` : ''}
           </div>
-          <div class="cmd-item-action">
+          <div class="cmd-item-meta">
+            <span class="cmd-score-badge" title="Anlamsal Eşleşme Skoru">%${res.score}</span>
             <span class="cmd-enter-icon">↵</span>
           </div>
         </div>`;
