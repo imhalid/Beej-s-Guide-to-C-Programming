@@ -523,6 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themes = [
     { id: 'dark-obsidian', name: 'Dark Obsidian' },
+    { id: 'tokyo-night', name: 'Tokyo Night' },
+    { id: 'catppuccin-mocha', name: 'Catppuccin' },
+    { id: 'dracula-pro', name: 'Dracula Pro' },
+    { id: 'neutral-900', name: 'Neutral 900' },
+    { id: 'solarized-dark', name: 'Solarized' },
     { id: 'cyber-neon', name: 'Cyber Neon' },
     { id: 'nordic-slate', name: 'Nordic Slate' },
     { id: 'light-tech', name: 'Light Tech' }

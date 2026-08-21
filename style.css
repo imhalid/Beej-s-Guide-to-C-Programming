@@ -221,6 +221,186 @@ html, body {
   --scrollbar-track: var(--bg-main);
 }
 
+/* Theme 5: Tokyo Night */
+:root[data-theme="tokyo-night"], [data-theme="tokyo-night"] {
+  --bg-main: oklch(18% 0.03 265);
+  --bg-sidebar: oklch(21.5% 0.035 265);
+  --bg-card: oklch(26% 0.04 265);
+  --bg-code: oklch(14% 0.025 265);
+  --border-color: oklch(30% 0.035 265);
+  --border-highlight: oklch(42% 0.05 265);
+  --text-body: oklch(78% 0.015 265);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(60% 0.02 265);
+  --link-color: oklch(78% 0.22 285);
+  --link-hover: oklch(86% 0.24 280);
+  --code-inline-fg: oklch(84% 0.18 190);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(78% 0.23 325);
+  --syn-dt: oklch(80% 0.20 195);
+  --syn-st: oklch(82% 0.18 150);
+  --syn-ch: oklch(84% 0.18 135);
+  --syn-im: oklch(82% 0.18 150);
+  --syn-sc: oklch(85% 0.20 40);
+  --syn-co: oklch(60% 0.04 265);
+  --syn-fu: oklch(80% 0.20 270);
+  --syn-pp: oklch(82% 0.20 60);
+  --syn-dv: oklch(85% 0.20 95);
+  --syn-cn: oklch(84% 0.20 40);
+  --syn-op: oklch(78% 0.14 280);
+  --syn-va: oklch(86% 0.16 210);
+
+  --scrollbar-thumb: oklch(34% 0.04 265);
+  --scrollbar-thumb-hover: oklch(52% 0.08 285);
+  --scrollbar-track: var(--bg-main);
+}
+
+/* Theme 6: Catppuccin Mocha */
+:root[data-theme="catppuccin-mocha"], [data-theme="catppuccin-mocha"] {
+  --bg-main: oklch(20% 0.025 270);
+  --bg-sidebar: oklch(23.5% 0.028 270);
+  --bg-card: oklch(28% 0.03 270);
+  --bg-code: oklch(16% 0.02 270);
+  --border-color: oklch(32% 0.03 270);
+  --border-highlight: oklch(44% 0.04 270);
+  --text-body: oklch(80% 0.015 270);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(62% 0.02 270);
+  --link-color: oklch(82% 0.16 280);
+  --link-hover: oklch(88% 0.18 275);
+  --code-inline-fg: oklch(85% 0.15 350);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(80% 0.22 345);
+  --syn-dt: oklch(82% 0.18 190);
+  --syn-st: oklch(84% 0.16 140);
+  --syn-ch: oklch(86% 0.16 125);
+  --syn-im: oklch(84% 0.16 140);
+  --syn-sc: oklch(86% 0.18 45);
+  --syn-co: oklch(62% 0.03 270);
+  --syn-fu: oklch(82% 0.18 250);
+  --syn-pp: oklch(84% 0.18 65);
+  --syn-dv: oklch(86% 0.18 95);
+  --syn-cn: oklch(85% 0.18 45);
+  --syn-op: oklch(80% 0.12 280);
+  --syn-va: oklch(88% 0.14 210);
+
+  --scrollbar-thumb: oklch(35% 0.03 270);
+  --scrollbar-thumb-hover: oklch(55% 0.08 280);
+  --scrollbar-track: var(--bg-main);
+}
+
+/* Theme 7: Dracula Pro */
+:root[data-theme="dracula-pro"], [data-theme="dracula-pro"] {
+  --bg-main: oklch(19% 0.03 290);
+  --bg-sidebar: oklch(22.5% 0.035 290);
+  --bg-card: oklch(27% 0.04 290);
+  --bg-code: oklch(14.5% 0.025 290);
+  --border-color: oklch(31% 0.04 290);
+  --border-highlight: oklch(45% 0.06 290);
+  --text-body: oklch(79% 0.015 290);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(60% 0.025 290);
+  --link-color: oklch(80% 0.22 330);
+  --link-hover: oklch(88% 0.24 325);
+  --code-inline-fg: oklch(84% 0.18 190);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(82% 0.24 330);
+  --syn-dt: oklch(84% 0.20 190);
+  --syn-st: oklch(86% 0.18 90);
+  --syn-ch: oklch(87% 0.18 80);
+  --syn-im: oklch(86% 0.18 90);
+  --syn-sc: oklch(86% 0.22 35);
+  --syn-co: oklch(62% 0.04 290);
+  --syn-fu: oklch(84% 0.20 270);
+  --syn-pp: oklch(85% 0.22 55);
+  --syn-dv: oklch(87% 0.20 95);
+  --syn-cn: oklch(86% 0.22 35);
+  --syn-op: oklch(82% 0.16 310);
+  --syn-va: oklch(89% 0.16 200);
+
+  --scrollbar-thumb: oklch(35% 0.04 290);
+  --scrollbar-thumb-hover: oklch(55% 0.12 330);
+  --scrollbar-track: var(--bg-main);
+}
+
+/* Theme 8: Neutral 900 Charcoal (Soft Warm Dark) */
+:root[data-theme="neutral-900"], [data-theme="neutral-900"] {
+  --bg-main: oklch(17% 0.01 250);
+  --bg-sidebar: oklch(20.5% 0.012 250);
+  --bg-card: oklch(25% 0.015 250);
+  --bg-code: oklch(13% 0.01 250);
+  --border-color: oklch(29% 0.015 250);
+  --border-highlight: oklch(40% 0.02 250);
+  --text-body: oklch(77% 0.008 250);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(58% 0.012 250);
+  --link-color: oklch(78% 0.16 75);
+  --link-hover: oklch(86% 0.18 70);
+  --code-inline-fg: oklch(82% 0.14 210);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(78% 0.20 30);
+  --syn-dt: oklch(80% 0.16 210);
+  --syn-st: oklch(82% 0.16 135);
+  --syn-ch: oklch(84% 0.15 120);
+  --syn-im: oklch(82% 0.16 135);
+  --syn-sc: oklch(84% 0.18 45);
+  --syn-co: oklch(60% 0.02 250);
+  --syn-fu: oklch(80% 0.16 260);
+  --syn-pp: oklch(82% 0.18 65);
+  --syn-dv: oklch(85% 0.16 85);
+  --syn-cn: oklch(84% 0.18 45);
+  --syn-op: oklch(78% 0.10 270);
+  --syn-va: oklch(86% 0.12 210);
+
+  --scrollbar-thumb: oklch(32% 0.015 250);
+  --scrollbar-thumb-hover: oklch(50% 0.06 75);
+  --scrollbar-track: var(--bg-main);
+}
+
+/* Theme 9: Solarized Dark */
+:root[data-theme="solarized-dark"], [data-theme="solarized-dark"] {
+  --bg-main: oklch(19% 0.04 220);
+  --bg-sidebar: oklch(22.5% 0.045 220);
+  --bg-card: oklch(27% 0.05 220);
+  --bg-code: oklch(14.5% 0.035 220);
+  --border-color: oklch(31% 0.045 220);
+  --border-highlight: oklch(43% 0.06 220);
+  --text-body: oklch(78% 0.02 220);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(58% 0.03 220);
+  --link-color: oklch(78% 0.19 210);
+  --link-hover: oklch(86% 0.21 200);
+  --code-inline-fg: oklch(80% 0.20 60);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(76% 0.22 45);
+  --syn-dt: oklch(78% 0.18 60);
+  --syn-st: oklch(80% 0.18 165);
+  --syn-ch: oklch(82% 0.16 150);
+  --syn-im: oklch(80% 0.18 165);
+  --syn-sc: oklch(82% 0.20 40);
+  --syn-co: oklch(60% 0.04 220);
+  --syn-fu: oklch(78% 0.18 230);
+  --syn-pp: oklch(80% 0.20 55);
+  --syn-dv: oklch(82% 0.18 90);
+  --syn-cn: oklch(80% 0.20 40);
+  --syn-op: oklch(76% 0.12 200);
+  --syn-va: oklch(84% 0.14 210);
+
+  --scrollbar-thumb: oklch(34% 0.045 220);
+  --scrollbar-thumb-hover: oklch(52% 0.10 210);
+  --scrollbar-track: var(--bg-main);
+}
+
 /* Top-Right Floating Theme Toggle Button */
 .theme-toggle-btn {
   position: absolute;
