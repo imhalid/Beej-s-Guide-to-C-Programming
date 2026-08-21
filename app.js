@@ -102,18 +102,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     isRestoringScroll = true;
 
-    const doInject = async () => {
-      try {
-        let htmlText = pageCache[pageFile];
-        if (!htmlText) {
-          const resp = await fetch(pageFile);
-          if (!resp.ok) {
-            isRestoringScroll = false;
-            return;
-          }
-          htmlText = await resp.text();
-          pageCache[pageFile] = htmlText;
+  function resolveFetchUrl(path) {
+    if (!path) return path;
+    if (path.startsWith('/') || path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (path.startsWith('html/')) return '/' + path;
+    return '/html/' + path;
+  }
+
+  const doInject = async () => {
+    try {
+      let htmlText = pageCache[pageFile];
+      if (!htmlText) {
+        let resp = await fetch(resolveFetchUrl(pageFile));
+        if (!resp.ok) {
+          resp = await fetch(pageFile);
         }
+        if (!resp.ok) {
+          isRestoringScroll = false;
+          return;
+        }
+        htmlText = await resp.text();
+        pageCache[pageFile] = htmlText;
+      }
 
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
@@ -450,7 +460,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Pre-load all 235 footnotes globally so tooltips work across every chapter
   async function loadGlobalFootnotes() {
     try {
-      const resp = await fetch('function-specifiers-alignment-specifiersoperators.html');
+      let resp = await fetch(resolveFetchUrl('function-specifiers-alignment-specifiersoperators.html'));
+      if (!resp.ok) resp = await fetch('function-specifiers-alignment-specifiersoperators.html');
       if (!resp.ok) return;
       const htmlText = await resp.text();
       const parser = new DOMParser();
