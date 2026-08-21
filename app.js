@@ -139,9 +139,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nameBadge) nameBadge.textContent = themeObj.name;
     if (btn) btn.setAttribute('title', `Tema Değiştir (Sıradaki: ${nextThemeObj.name})`);
 
-    if (iframe && iframe.contentWindow && iframe.contentWindow.document) {
+    if (iframe && iframe.contentWindow) {
       try {
-        iframe.contentWindow.document.documentElement.setAttribute('data-theme', themeId);
+        iframe.contentWindow.postMessage({ type: 'SET_THEME', themeId: themeId }, '*');
+      } catch (e) {}
+
+      try {
+        if (iframe.contentWindow.document && iframe.contentWindow.document.documentElement) {
+          iframe.contentWindow.document.documentElement.setAttribute('data-theme', themeId);
+        }
       } catch (e) {}
     }
   }
