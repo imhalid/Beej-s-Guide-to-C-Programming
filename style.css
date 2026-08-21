@@ -808,6 +808,13 @@ body.app-layout {
   .content-viewport {
     height: calc(100vh - 52px);
   }
+  .main-content-body {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 9px 12px 30px 12px;
+    box-sizing: border-box;
+  }
 }
 
 /* ==========================================================================
@@ -1059,6 +1066,24 @@ tr:hover td {
   justify-content: flex-end !important;
   gap: 6px !important;
   padding: 2px 0 !important;
+  margin: 4px 0 16px 0 !important;
+}
+
+/* Top Navigation Header Specific Adjustment */
+.nav-header:first-of-type,
+.main-content-body > .nav-header:first-child,
+.container > .nav-header:first-child {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  padding: 2px 0 !important;
+  margin: 4px 110px 16px 0 !important;
+}
+
+/* Bottom Navigation Header Remains Unchanged */
+.nav-header:last-of-type:not(:first-of-type),
+.main-content-body > .nav-header:last-child {
   margin: 4px 0 16px 0 !important;
 }
 
