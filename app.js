@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             localStorage.setItem('bgc-active-html', container.innerHTML);
           } catch (e) {}
+          attachThemeBtnToTopNav();
           currentLoadedPage = pageFile;
           savePageLocation(targetUrl);
           handleInternalLinks(mainContentBody);
@@ -552,9 +553,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  function attachThemeBtnToTopNav() {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (!themeBtn || !mainContentBody) return;
+
+    const topNavHeader = mainContentBody.querySelector('.nav-header:first-of-type');
+    if (topNavHeader && !topNavHeader.contains(themeBtn)) {
+      topNavHeader.appendChild(themeBtn);
+    }
+  }
+
   // Initial Chapter Load
   const initialPage = window.__INITIAL_FULL_PAGE__ || window.__INITIAL_PAGE__ || 'foreword.html';
   loadChapterContent(initialPage, false);
+  setTimeout(attachThemeBtnToTopNav, 60);
 
   // ==========================================================================
   // Multi-Theme Switching System
