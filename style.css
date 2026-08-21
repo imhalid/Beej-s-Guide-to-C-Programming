@@ -175,7 +175,7 @@
   --scrollbar-track: var(--bg-main);
 }
 
-/* Theme 4: Clean Light Tech (GitHub & Xcode Inspired Light Syntax Palette) */
+/* Theme 4: Clean Light Tech (VS Code & IntelliJ Inspired Multi-Color Theory Palette) */
 :root[data-theme="light-tech"], [data-theme="light-tech"] {
   --bg-main: oklch(98.8% 0.002 260);
   --bg-sidebar: oklch(96.2% 0.005 260);
@@ -187,24 +187,24 @@
   --text-muted: oklch(46% 0.015 260);
   --link-color: oklch(45% 0.24 255);
   --link-hover: oklch(35% 0.26 250);
-  --code-inline-fg: oklch(36% 0.22 25);
+  --code-inline-fg: oklch(38% 0.22 290);
   --code-inline-bg: oklch(94.5% 0.008 260);
   --code-inline-border: oklch(87% 0.015 260);
 
-  /* High-Contrast GitHub/Xcode Inspired Light Syntax Palette */
-  --syn-kw: oklch(48% 0.26 25);     /* Deep Carmine Red (int, void, return, if, struct) */
-  --syn-dt: oklch(42% 0.22 250);    /* Vivid Sapphire Blue (char, float, double, size_t) */
-  --syn-st: oklch(35% 0.18 255);    /* Deep Ocean Blue for strings ("Hello, World!") */
-  --syn-ch: oklch(40% 0.20 150);    /* Dark Emerald Green for chars ('a') */
-  --syn-im: oklch(38% 0.20 250);    /* Dark Sapphire Blue for headers (<stdio.h>) */
-  --syn-sc: oklch(50% 0.24 40);     /* Vivid Burnt Amber for escape sequences (\n, \t) */
-  --syn-co: oklch(52% 0.02 260);    /* Clean Medium Slate Gray for comments */
-  --syn-fu: oklch(45% 0.25 295);    /* Rich Royal Violet/Purple for functions (printf, main) */
-  --syn-pp: oklch(46% 0.25 25);     /* Deep Crimson for preprocessor (#include, #define) */
-  --syn-dv: oklch(45% 0.22 250);    /* Royal Blue for numbers */
+  /* VS Code Light & IntelliJ Inspired Rich Multi-Color Theory Palette */
+  --syn-kw: oklch(42% 0.28 290);    /* Cobalt Royal Blue/Violet for keywords (int, void, return, if, for) */
+  --syn-dt: oklch(40% 0.18 200);    /* Deep Teal Cyan for data types (char, float, double, size_t) */
+  --syn-st: oklch(42% 0.22 145);    /* Emerald Green for strings ("Hello, world!") */
+  --syn-ch: oklch(42% 0.22 145);    /* Emerald Green for chars ('a') */
+  --syn-im: oklch(42% 0.22 145);    /* Emerald Green for header files (<stdio.h>) */
+  --syn-sc: oklch(52% 0.26 40);     /* Coral Amber Orange for escape sequences (\n, %c) */
+  --syn-co: oklch(48% 0.02 260);    /* Slate Gray for comments (// ...) */
+  --syn-fu: oklch(44% 0.22 75);     /* Warm Ochre Gold for functions (printf, main) */
+  --syn-pp: oklch(45% 0.26 345);    /* Vivid Magenta Rose for preprocessor (#include, #define) */
+  --syn-dv: oklch(48% 0.22 55);     /* Vivid Amber Orange for numbers (13, 0) */
   --syn-cn: oklch(48% 0.24 45);     /* Burnt Orange for constants (NULL, EOF) */
-  --syn-op: oklch(20% 0.01 260);    /* Crisp Dark Charcoal for operators (=, +, *, &) */
-  --syn-va: oklch(24% 0.02 260);    /* Deep Slate for variables */
+  --syn-op: oklch(20% 0.01 260);    /* Dark Charcoal for operators (=, <, ++, *) */
+  --syn-va: oklch(24% 0.12 250);    /* Deep Slate Navy for variables (s, i) */
   --syn-at: oklch(42% 0.22 310);    /* Plum Violet for attributes */
   --syn-al: oklch(45% 0.26 25);     /* Crimson Red for alerts */
 
