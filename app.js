@@ -38,10 +38,49 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLoadedPage = '';
   let isExplicitUserClick = false;
 
-  // Mobile sidebar toggle
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
+  // Mobile sidebar & overlay backdrop management
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+  function openMobileSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+  }
+
+  function closeMobileSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (sidebar && sidebar.classList.contains('open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    });
+  }
+
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeMobileSidebar);
+  }
+
+  // Close mobile sidebar on outside click
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('open')) {
+      if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        closeMobileSidebar();
+      }
+    }
+  });
+
+  // Automatically close mobile sidebar when a TOC link is clicked
+  if (tocNav) {
+    tocNav.addEventListener('click', (e) => {
+      if (e.target.closest('a') && window.innerWidth <= 768) {
+        closeMobileSidebar();
+      }
     });
   }
 
