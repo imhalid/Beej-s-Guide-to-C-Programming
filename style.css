@@ -1,5 +1,14 @@
 
 /* ==========================================================================
+   Global Reset: Disable all Shadows and Transitions
+   ========================================================================== */
+*, *::before, *::after {
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ==========================================================================
    Beej's Guide to C Programming - Base Variables & Multi-Theme System
    ========================================================================== */
 
@@ -30,6 +39,8 @@
   --syn-dt: oklch(79% 0.18 190);    /* Cyan data types (char, void, size_t, struct) */
   --syn-st: oklch(82% 0.17 145);    /* Emerald Green strings */
   --syn-ch: oklch(84% 0.16 125);    /* Lime/Mint Green char literals */
+  --syn-im: oklch(82% 0.17 145);    /* Emerald Green header files <stdio.h> */
+  --syn-sc: oklch(85% 0.20 40);     /* Coral Orange escape sequences (\n, \t) */
   --syn-co: oklch(60% 0.03 260);    /* Muted Slate Grey comments */
   --syn-fu: oklch(80% 0.18 250);    /* Vibrant Sapphire Blue functions (printf, main) */
   --syn-pp: oklch(82% 0.18 60);     /* Amber Orange preprocessor (#include, #define) */
@@ -42,9 +53,6 @@
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
-  
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 /* Theme 1: Dark Obsidian (Default) */
@@ -67,6 +75,8 @@
   --syn-dt: oklch(79% 0.18 190);
   --syn-st: oklch(82% 0.17 145);
   --syn-ch: oklch(84% 0.16 125);
+  --syn-im: oklch(82% 0.17 145);
+  --syn-sc: oklch(85% 0.20 40);
   --syn-co: oklch(60% 0.03 260);
   --syn-fu: oklch(80% 0.18 250);
   --syn-pp: oklch(82% 0.18 60);
@@ -97,6 +107,8 @@
   --syn-dt: oklch(82% 0.22 195);
   --syn-st: oklch(84% 0.22 145);
   --syn-ch: oklch(86% 0.22 130);
+  --syn-im: oklch(84% 0.22 145);
+  --syn-sc: oklch(86% 0.22 35);
   --syn-co: oklch(60% 0.04 290);
   --syn-fu: oklch(82% 0.20 270);
   --syn-pp: oklch(84% 0.22 55);
@@ -127,6 +139,8 @@
   --syn-dt: oklch(80% 0.17 190);
   --syn-st: oklch(84% 0.18 150);
   --syn-ch: oklch(86% 0.16 135);
+  --syn-im: oklch(84% 0.18 150);
+  --syn-sc: oklch(85% 0.18 45);
   --syn-co: oklch(60% 0.03 200);
   --syn-fu: oklch(82% 0.17 230);
   --syn-pp: oklch(84% 0.18 65);
@@ -137,34 +151,38 @@
   --syn-at: oklch(82% 0.16 310);
 }
 
-/* Theme 4: Clean Light Tech */
+/* Theme 4: Clean Light Tech (Enhanced High Contrast) */
 :root[data-theme="light-tech"], [data-theme="light-tech"] {
-  --bg-main: oklch(99% 0.003 260);
-  --bg-sidebar: oklch(96.5% 0.005 260);
-  --bg-card: oklch(93.5% 0.008 260);
-  --bg-code: oklch(96% 0.005 260);
-  --border-color: oklch(88% 0.008 260);
-  --text-body: oklch(35% 0.01 260);
-  --text-bold: oklch(15% 0.015 260);
-  --text-muted: oklch(52% 0.01 260);
-  --link-color: oklch(48% 0.22 260);
-  --link-hover: oklch(38% 0.25 260);
-  --code-inline-fg: oklch(42% 0.20 30);
-  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 10%, var(--bg-card));
-  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 25%, transparent);
+  --bg-main: oklch(98.5% 0.003 260);
+  --bg-sidebar: oklch(95.5% 0.006 260);
+  --bg-card: oklch(92.5% 0.008 260);
+  --bg-code: oklch(95% 0.006 260);
+  --border-color: oklch(86% 0.01 260);
+  --text-body: oklch(25% 0.01 260);
+  --text-bold: oklch(10% 0.015 260);
+  --text-muted: oklch(45% 0.015 260);
+  --link-color: oklch(42% 0.24 255);
+  --link-hover: oklch(35% 0.26 250);
+  --code-inline-fg: oklch(35% 0.20 30);
+  --code-inline-bg: oklch(93% 0.012 260);
+  --code-inline-border: oklch(85% 0.02 260);
 
-  --syn-kw: oklch(48% 0.25 345);
-  --syn-dt: oklch(46% 0.20 200);
-  --syn-st: oklch(42% 0.20 145);
-  --syn-ch: oklch(44% 0.18 130);
-  --syn-co: oklch(55% 0.02 260);
-  --syn-fu: oklch(46% 0.22 260);
-  --syn-pp: oklch(48% 0.22 55);
-  --syn-dv: oklch(45% 0.20 90);
-  --syn-cn: oklch(44% 0.22 35);
-  --syn-op: oklch(48% 0.15 280);
-  --syn-va: oklch(42% 0.16 210);
-  --syn-at: oklch(46% 0.20 310);
+  /* High-Contrast Syntax Highlighting for Light Theme */
+  --syn-kw: oklch(42% 0.28 340);    /* Deep Vivid Crimson/Pink (int, void, return, if) */
+  --syn-dt: oklch(38% 0.22 250);    /* Deep Navy Blue (char, float, size_t) */
+  --syn-st: oklch(40% 0.20 145);    /* Dark Emerald Green ("Hello, World!") */
+  --syn-ch: oklch(40% 0.20 145);    /* Dark Emerald Green ('a') */
+  --syn-im: oklch(38% 0.22 165);    /* Dark Teal Green for header files (<stdio.h>) */
+  --syn-sc: oklch(46% 0.26 30);     /* Vivid Coral/Red-Orange for escape sequences (\n, \t) */
+  --syn-co: oklch(50% 0.02 260);    /* Clear Slate Gray for comments */
+  --syn-fu: oklch(40% 0.26 285);    /* Rich Deep Indigo/Purple for functions (main, printf) */
+  --syn-pp: oklch(45% 0.24 45);     /* Deep Burnt Amber for preprocessor (#include, #define) */
+  --syn-dv: oklch(42% 0.22 85);     /* Ochre Brown for numbers */
+  --syn-cn: oklch(42% 0.25 35);     /* Deep Rust Red for constants (NULL, EOF) */
+  --syn-op: oklch(30% 0.01 260);    /* Crisp Dark Slate for operators (=, +, *, &) */
+  --syn-va: oklch(35% 0.16 220);    /* Deep Steel Blue for variables */
+  --syn-at: oklch(40% 0.22 310);    /* Plum Violet */
+  --syn-al: oklch(42% 0.26 25);
 }
 
 /* Top-Right Floating Theme Toggle Button */
@@ -184,21 +202,17 @@
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
 }
 
 .theme-toggle-btn:hover {
   border-color: var(--link-color);
   background-color: var(--bg-card);
   color: var(--link-color);
-  transform: translateY(-1px);
 }
 
 .theme-toggle-btn svg {
   stroke: var(--link-color);
   flex-shrink: 0;
-}
 }
 
 /* Global Resets */
@@ -313,12 +327,10 @@ body.app-layout {
   background-color: var(--bg-main);
   color: var(--text-bold);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .search-box input:focus {
   border-color: var(--link-color);
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--link-color) 25%, transparent);
 }
 
 .search-box svg {
@@ -357,7 +369,6 @@ body.app-layout {
   text-decoration: none;
   font-size: 0.885rem;
   line-height: 1.4;
-  transition: background-color 0.15s, color 0.15s;
 }
 
 .sidebar-nav nav#TOC a:hover {
@@ -365,11 +376,11 @@ body.app-layout {
   color: var(--link-hover);
 }
 
-/* Minimal TOC Active Item Styling (Bright left border line + subtle tinted background) */
+/* Minimal TOC Active Item Styling (Dynamic accent left border line + subtle tinted background) */
 .sidebar-nav nav#TOC a.active,
 .sidebar-nav nav#TOC ul ul a.active {
   background-color: color-mix(in oklch, var(--link-color) 16%, transparent) !important;
-  border-left: 3px solid oklch(85% 0.19 225) !important;
+  border-left: 3px solid var(--link-color) !important;
   color: var(--text-bold) !important;
   font-weight: 700;
   border-radius: 0 6px 6px 0 !important;
@@ -377,20 +388,20 @@ body.app-layout {
 
 .sidebar-nav nav#TOC a.active .toc-section-number,
 .sidebar-nav nav#TOC ul ul a.active .toc-section-number {
-  color: oklch(85% 0.19 225) !important;
+  color: var(--link-color) !important;
 }
 
 .sidebar-nav nav#TOC a.active:hover,
 .sidebar-nav nav#TOC ul ul a.active:hover {
   background-color: color-mix(in oklch, var(--link-color) 26%, transparent) !important;
   color: var(--text-bold) !important;
-  border-left-color: oklch(92% 0.20 220) !important;
+  border-left-color: var(--link-hover) !important;
   text-decoration: none;
 }
 
 .sidebar-nav nav#TOC a.active:hover .toc-section-number,
 .sidebar-nav nav#TOC ul ul a.active:hover .toc-section-number {
-  color: oklch(92% 0.20 220) !important;
+  color: var(--link-hover) !important;
 }
 
 .sidebar-nav nav#TOC ul ul {
@@ -476,7 +487,6 @@ body.app-layout {
     width: 290px;
     height: calc(100vh - 52px);
     transform: translateX(-100%);
-    box-shadow: var(--shadow-md);
   }
   .sidebar.open {
     transform: translateX(0);
@@ -593,15 +603,14 @@ div.sourceCode {
 
 pre.sourceCode {
   background-color: var(--bg-code);
-  color: oklch(90% 0.005 260);
+  color: var(--text-bold);
   padding: 18px 22px;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.55;
-  border: 1px solid color-mix(in oklch, var(--link-color) 20%, var(--border-color));
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 pre code {
@@ -617,10 +626,13 @@ code span.kw { color: var(--syn-kw); font-weight: 700; } /* Keywords (int, retur
 code span.dt { color: var(--syn-dt); font-weight: 700; } /* Data Types (char, void, size_t) */
 code span.st { color: var(--syn-st); } /* Strings */
 code span.ch { color: var(--syn-ch); } /* Char Literals */
+code span.im { color: var(--syn-im); font-weight: 700; } /* Header Files (<stdio.h>) */
+code span.sc { color: var(--syn-sc); font-weight: 700; } /* Escape Sequences (\n, \t) */
 code span.co { color: var(--syn-co); font-style: italic; } /* Comments */
 code span.cv { color: var(--syn-co); font-style: italic; font-weight: 700; }
 code span.do { color: var(--syn-co); font-style: italic; }
 code span.fu { color: var(--syn-fu); font-weight: 700; } /* Functions (printf, main) */
+code span.bu { color: var(--syn-fu); font-weight: 700; } /* Built-in functions */
 code span.pp { color: var(--syn-pp); font-weight: 700; } /* Preprocessor (#include, #define) */
 code span.dv { color: var(--syn-dv); } /* Decimal Numbers */
 code span.fl { color: var(--syn-dv); } /* Float Numbers */
@@ -631,11 +643,12 @@ code span.va { color: var(--syn-va); } /* Variables */
 code span.at { color: var(--syn-at); } /* Attributes */
 code span.al { color: var(--syn-al); font-weight: 700; } /* Alert / Error */
 code span.er { color: var(--syn-al); font-weight: 700; }
+code span.in { color: var(--syn-im); }
 
 /* Line Numbers in Code Blocks */
 pre.numberSource code > span > a:first-child::before {
-  color: oklch(48% 0.005 260);
-  border-right: 1px solid oklch(22% 0.005 260);
+  color: var(--text-muted);
+  border-right: 1px solid var(--border-color);
   padding-right: 8px;
   margin-right: 10px;
 }
@@ -811,7 +824,6 @@ tr:hover td {
   background-color: var(--bg-sidebar);
   border: 1px solid oklch(35% 0.02 260);
   border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px oklch(35% 0.02 260);
   display: flex;
   flex-direction: column;
   overflow: hidden;
