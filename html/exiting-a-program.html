@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -26,41 +26,41 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Beej's Guide to C Programming</title>
+  <title>Beej's C Programlama Rehberi</title>
   <link rel="stylesheet" href="../style.css" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="nav-header"><a href="unicode-wide-characters-and-all-that.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="signal-handling.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="28" id="exiting-a-program"><span class="header-section-number">28</span> Exiting a Program</h1>
+<h1 data-number="28" id="exiting-a-program"><span class="header-section-number">28</span> Bir Programdan Çıkış Yapmak</h1>
 <p></p>
-<p>Turns out there are a lot of ways to do this, and even ways to set up “hooks” so that a function runs when a program exits.</p>
-<p>In this chapter we’ll dive in and check them out.</p>
-<p>We already covered the meaning of the exit status code in the <a href="the-outside-environment.html#exit-status">Exit Status</a> section, so jump back there and review if you have to.</p>
-<p>All the functions in this section are in <code>&lt;stdlib.h&gt;</code>.</p>
-<h2 data-number="28.1" id="normal-exits"><span class="header-section-number">28.1</span> Normal Exits</h2>
-<p>We’ll start with the regular ways to exit a program, and then jump to some of the rarer, more esoteric ones.</p>
-<p>When you exit a program normally, all open I/O streams are flushed and temporary files removed. Basically it’s a nice exit where everything gets cleaned up and handled. It’s what you want to do almost all the time unless you have reasons to do otherwise.</p>
-<h3 data-number="28.1.1" id="returning-from-main"><span class="header-section-number">28.1.1</span> Returning From <code>main()</code></h3>
+<p>Meğer bunu yapmanın pek çok yolu varmış, hatta bir program sonlandığında bir fonksiyonun çalışmasını sağlayacak "kancalar" (hook) kurmanın bile yolları bulunuyormuş.</p>
+<p>Bu bölümde konunun derinliklerine dalıp hepsine göz atacağız.</p>
+<p>Çıkış durum kodunun (exit status code) ne anlama geldiğine <a href="the-outside-environment.html#exit-status">Çıkış Durumu</a> bölümünde değinmiştik; ihtiyaç duyarsanız geriye dönüp tekrar göz atabilirsiniz.</p>
+<p>Bu bölümdeki tüm fonksiyonlar <code>&lt;stdlib.h&gt;</code> başlık dosyasında yer almaktadır.</p>
+<h2 data-number="28.1" id="normal-exits"><span class="header-section-number">28.1</span> Normal Çıkışlar</h2>
+<p>İşe bir programdan çıkmanın standart yollarıyla başlayacağız, ardından daha nadir ve sıra dışı olanlarına geçeceğiz.</p>
+<p>Bir programdan normal şekilde çıktığınızda, tüm açık G/Ç akışları (I/O streams) boşaltılır (flush edilir) ve geçici dosyalar silinir. Temelde her şeyin temizlendiği ve düzgünce halledildiği nazik bir çıkıştır. Aksini yapmak için özel bir sebebiniz yoksa neredeyse her zaman tercih etmek isteyeceğiniz yöntem budur.</p>
+<h3 data-number="28.1.1" id="returning-from-main"><span class="header-section-number">28.1.1</span> <code>main()</code> Fonksiyonundan Dönmek</h3>
 <p></p>
-<p>If you’ve noticed, <code>main()</code> has a return type of <code>int</code>… and yet I’ve rarely, if ever, been <code>return</code>ing anything from <code>main()</code> at all.</p>
-<p>This is because for <code>main()</code> only (and I can’t stress enough this special case <em>only</em> applies to <code>main()</code> and no other functions anywhere) has an <em>implicit</em> <code>return 0</code> if you fall off the end.</p>
-<p>You can explicitly <code>return</code> from <code>main()</code> any time you want, and some programmers feel it’s more <em>Right</em> to always have a <code>return</code> at the end of <code>main()</code>. But if you leave it off, C will put one there for you.</p>
-<p>So… here are the <code>return</code> rules for <code>main()</code>:</p>
+<p>Fark ettiyseniz <code>main()</code> fonksiyonunun dönüş türü <code>int</code>... yine de <code>main()</code> içinden neredeyse hiç <code>return</code> ile bir değer döndürmedim.</p>
+<p>Bunun sebebi, yalnızca <code>main()</code> fonksiyonuna özel olarak (ve bu özel durumun <em>sadece ve sadece</em> <code>main()</code> için geçerli olduğunu, başka hiçbir fonksiyon için geçerli olmadığını ne kadar vurgulasam azdır), bloğun sonuna ulaştığınızda <em>örtük (implicit)</em> bir <code>return 0</code> bulunmasıdır.</p>
+<p>İstediğiniz zaman <code>main()</code> içinden açıkça (explicit) <code>return</code> yapabilirsiniz; hatta bazı programcılar <code>main()</code> sonunda her zaman bir <code>return</code> bulunmasının daha <em>Doğru</em> olduğunu düşünür. Ancak koymazsanız, C sizin yerinize bir tane ekleyecektir.</p>
+<p>Yani... <code>main()</code> için <code>return</code> kuralları şunlardır:</p>
 <ul>
-<li>You can return an exit status from <code>main()</code> with a <code>return</code> statement. <code>main()</code> is the only function with this special behavior. Using <code>return</code> in any other function just returns from that function to the caller.</li>
-<li>If you don’t explicitly <code>return</code> and just fall off the end of <code>main()</code>, it’s just as if you’d returned <code>0</code> or <code>EXIT_SUCCESS</code>.</li>
+<li>Bir <code>return</code> ifadesi ile <code>main()</code> fonksiyonundan bir çıkış durumu döndürebilirsiniz. <code>main()</code> bu özel davranışa sahip tek fonksiyondur. Başka herhangi bir fonksiyonda <code>return</code> kullanmak, yalnızca o fonksiyondan çağıran yere geri dönülmesini sağlar.</li>
+<li>Açıkça <code>return</code> kullanmazsanız ve <code>main()</code> fonksiyonunun sonuna ulaşırsanız, sanki <code>0</code> veya <code>EXIT_SUCCESS</code> döndürmüşsünüz gibi davranılır.</li>
 </ul>
 <p></p>
 <h3 data-number="28.1.2" id="exit"><span class="header-section-number">28.1.2</span> <code>exit()</code></h3>
 <p></p>
-<p>This one has also made an appearance a few times. If you call <code>exit()</code> from anywhere in your program, it will exit at that point.</p>
-<p>The argument you pass to <code>exit()</code> is the exit status.</p>
-<h3 data-number="28.1.3" id="setting-up-exit-handlers-with-atexit"><span class="header-section-number">28.1.3</span> Setting Up Exit Handlers with <code>atexit()</code></h3>
+<p>Bu fonksiyon da daha önce birkaç kez karşımıza çıktı. Programınızın herhangi bir yerinden <code>exit()</code> fonksiyonunu çağırırsanız, program tam o noktada sonlanır.</p>
+<p><code>exit()</code> fonksiyonuna verdiğiniz argüman, çıkış durumudur (exit status).</p>
+<h3 data-number="28.1.3" id="setting-up-exit-handlers-with-atexit"><span class="header-section-number">28.1.3</span> <code>atexit()</code> ile Çıkış İşleyicileri (Exit Handlers) Tanımlamak</h3>
 <p></p>
-<p>You can register functions to be called when a program exits whether by returning from <code>main()</code> or calling the <code>exit()</code> function.</p>
-<p>A call to <code>atexit()</code> with the handler function name will get it done. You can register multiple exit handlers, and they’ll be called in the reverse order of registration.</p>
-<p>Here’s an example:</p>
+<p>İster <code>main()</code> fonksiyonundan dönerek ister <code>exit()</code> fonksiyonunu çağırarak olsun, program sonlandığında çağrılacak fonksiyonlar kaydedebilirsiniz.</p>
+<p>İşleyici (handler) fonksiyon adı ile <code>atexit()</code> çağrısı yapmak bu işi halleder. Birden fazla çıkış işleyicisi kaydedebilirsiniz; bunlar kayıt sırasının tersi sırayla çağrılırlar.</p>
+<p>İşte bir örnek:</p>
 <div class="sourceCode" id="cb577"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb577-1"><a href="exiting-a-program.html#cb577-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb577-2"><a href="exiting-a-program.html#cb577-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb577-3"><a href="exiting-a-program.html#cb577-3"></a></span>
@@ -81,20 +81,20 @@
 <span id="cb577-18"><a href="exiting-a-program.html#cb577-18"></a>    </span>
 <span id="cb577-19"><a href="exiting-a-program.html#cb577-19"></a>    printf<span class="op">(</span><span class="st">&quot;About to exit...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb577-20"><a href="exiting-a-program.html#cb577-20"></a><span class="op">}</span></span></code></pre></div>
-<p>And the output is:</p>
+<p>Ve çıktı şu şekildedir:</p>
 <div class="sourceCode" id="cb578"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb578-1"><a href="exiting-a-program.html#cb578-1" aria-hidden="true" tabindex="-1"></a>About to exit...</span>
 <span id="cb578-2"><a href="exiting-a-program.html#cb578-2" aria-hidden="true" tabindex="-1"></a>Exit handler 2 called!</span>
 <span id="cb578-3"><a href="exiting-a-program.html#cb578-3" aria-hidden="true" tabindex="-1"></a>Exit handler 1 called!</span></code></pre></div>
 <p></p>
-<h2 data-number="28.2" id="quicker-exits-with-quick_exit"><span class="header-section-number">28.2</span> Quicker Exits with <code>quick_exit()</code></h2>
+<h2 data-number="28.2" id="quicker-exits-with-quick_exit"><span class="header-section-number">28.2</span> <code>quick_exit()</code> ile Daha Hızlı Çıkışlar</h2>
 <p></p>
-<p>This is similar to a normal exit, except:</p>
+<p>Bu yöntem normal çıkışa benzer, şu istisnalar hariç:</p>
 <ul>
-<li>Open files might not be flushed.</li>
-<li>Temporary files might not be removed.</li>
-<li><code>atexit()</code> handlers won’t be called.</li>
+<li>Açık dosyalar boşaltılmayabilir (flush edilmeyebilir).</li>
+<li>Geçici dosyalar silinmeyebilir.</li>
+<li><code>atexit()</code> işleyicileri çağrılmaz.</li>
 </ul>
-<p>But there is a way to register exit handlers: call <code>at_quick_exit()</code> analogously to how you’d call <code>atexit()</code>.</p>
+<p>Ancak çıkış işleyicileri kaydetmenin bir yolu vardır: Tıpkı <code>atexit()</code> çağırır gibi <code>at_quick_exit()</code> fonksiyonunu çağırabilirsiniz.</p>
 <div class="sourceCode" id="cb579"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb579-1"><a href="exiting-a-program.html#cb579-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb579-2"><a href="exiting-a-program.html#cb579-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb579-3"><a href="exiting-a-program.html#cb579-3"></a></span>
@@ -118,44 +118,44 @@
 <span id="cb579-21"><a href="exiting-a-program.html#cb579-21"></a>    at_quick_exit<span class="op">(</span>on_quick_exit_1<span class="op">);</span></span>
 <span id="cb579-22"><a href="exiting-a-program.html#cb579-22"></a>    at_quick_exit<span class="op">(</span>on_quick_exit_2<span class="op">);</span></span>
 <span id="cb579-23"><a href="exiting-a-program.html#cb579-23"></a></span>
-<span id="cb579-24"><a href="exiting-a-program.html#cb579-24"></a>    atexit<span class="op">(</span>on_exit<span class="op">);</span>  <span class="co">// This won&#39;t be called</span></span>
+<span id="cb579-24"><a href="exiting-a-program.html#cb579-24"></a>    atexit<span class="op">(</span>on_exit<span class="op">);</span>  <span class="co">// Bu çağrılmayacak</span></span>
 <span id="cb579-25"><a href="exiting-a-program.html#cb579-25"></a></span>
 <span id="cb579-26"><a href="exiting-a-program.html#cb579-26"></a>    printf<span class="op">(</span><span class="st">&quot;About to quick exit...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb579-27"><a href="exiting-a-program.html#cb579-27"></a></span>
 <span id="cb579-28"><a href="exiting-a-program.html#cb579-28"></a>    quick_exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
 <span id="cb579-29"><a href="exiting-a-program.html#cb579-29"></a><span class="op">}</span></span></code></pre></div>
-<p>Which gives this output:</p>
+<p>Bu da şu çıktıyı verir:</p>
 <div class="sourceCode" id="cb580"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb580-1"><a href="exiting-a-program.html#cb580-1" aria-hidden="true" tabindex="-1"></a>About to quick exit...</span>
 <span id="cb580-2"><a href="exiting-a-program.html#cb580-2" aria-hidden="true" tabindex="-1"></a>Quick exit handler 2 called!</span>
 <span id="cb580-3"><a href="exiting-a-program.html#cb580-3" aria-hidden="true" tabindex="-1"></a>Quick exit handler 1 called!</span></code></pre></div>
-<p>It works just like <code>exit()</code>/<code>atexit()</code>, except for the fact that file flushing and cleanup might not be done.</p>
+<p>Dosya boşaltma ve temizleme işlemlerinin yapılmayabileceği gerçeği dışında, tıpkı <code>exit()</code>/<code>atexit()</code> gibi çalışır.</p>
 <p></p>
-<h2 data-number="28.3" id="nuke-it-from-orbit-_exit"><span class="header-section-number">28.3</span> Nuke it from Orbit: <code>_Exit()</code></h2>
+<h2 data-number="28.3" id="nuke-it-from-orbit-_exit"><span class="header-section-number">28.3</span> Yörüngeden Bombalamak: <code>_Exit()</code></h2>
 <p></p>
-<p>Calling <code>_Exit()</code> exits immediately, period. No on-exit callback functions are executed. Files won’t be flushed. Temp files won’t be removed.</p>
-<p>Use this if you have to exit <em>right fargin’ now</em>.</p>
-<h2 data-number="28.4" id="exiting-sometimes-assert"><span class="header-section-number">28.4</span> Exiting Sometimes: <code>assert()</code></h2>
-<p>The <code>assert()</code> statement is used to insist that something be true, or else the program will exit.</p>
-<p>Devs often use an assert to catch Should-Never-Happen type errors.</p>
+<p><code>_Exit()</code> fonksiyonunu çağırmak programı derhal sonlandırır, nokta. Hiçbir çıkış geri çağırma (callback) fonksiyonu çalıştırılmaz. Dosyalar boşaltılmaz. Geçici dosyalar silinmez.</p>
+<p>Bunu programdan <em>tam şu anda, gözünün yaşına bakmadan</em> çıkmanız gerekiyorsa kullanın.</p>
+<h2 data-number="28.4" id="exiting-sometimes-assert"><span class="header-section-number">28.4</span> Bazen Çıkış Yapmak: <code>assert()</code></h2>
+<p><code>assert()</code> ifadesi, bir şeyin doğru olmasını ısrarla şart koşmak için kullanılır; aksi takdirde program sonlanır.</p>
+<p>Geliştiriciler genellikle "Asla Yaşanmaması Gereken" türden hataları yakalamak için assert kullanırlar.</p>
 <div class="sourceCode" id="cb581"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb581-1"><a href="exiting-a-program.html#cb581-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define PI </span><span class="fl">3.14159</span></span>
 <span id="cb581-2"><a href="exiting-a-program.html#cb581-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb581-3"><a href="exiting-a-program.html#cb581-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>PI <span class="op">&gt;</span> <span class="dv">3</span><span class="op">);</span>   <span class="co">// Sure enough, it is, so carry on</span></span></code></pre></div>
-<p>versus:</p>
+<span id="cb581-3"><a href="exiting-a-program.html#cb581-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>PI <span class="op">&gt;</span> <span class="dv">3</span><span class="op">);</span>   <span class="co">// Aynen öyle, 3'ten büyük, bu yüzden devam et</span></span></code></pre></div>
+<p>karşılığında:</p>
 <div class="sourceCode" id="cb582"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb582-1"><a href="exiting-a-program.html#cb582-1" aria-hidden="true" tabindex="-1"></a>goats <span class="op">-=</span> <span class="dv">100</span><span class="op">;</span></span>
 <span id="cb582-2"><a href="exiting-a-program.html#cb582-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb582-3"><a href="exiting-a-program.html#cb582-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>goats <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">// Can&#39;t have negative goats</span></span></code></pre></div>
-<p>In that case, if I try to run it and <code>goats</code> falls under <code>0</code>, this happens:</p>
+<span id="cb582-3"><a href="exiting-a-program.html#cb582-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>goats <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">// Negatif keçi olamaz</span></span></code></pre></div>
+<p>Bu durumda, programı çalıştırmayı denersem ve <code>goats</code> değeri <code>0</code>'ın altına düşerse şu gerçekleşir:</p>
 <div class="sourceCode" id="cb583"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb583-1"><a href="exiting-a-program.html#cb583-1" aria-hidden="true" tabindex="-1"></a>goat_counter: goat_counter.c:8: main: Assertion `goats &gt;= 0&#39; failed.</span>
 <span id="cb583-2"><a href="exiting-a-program.html#cb583-2" aria-hidden="true" tabindex="-1"></a>Aborted</span></code></pre></div>
-<p>and I’m dropped back to the command line.</p>
-<p>This isn’t very user-friendly, so it’s only used for things the user will never see. And often people <a href="the-c-preprocessor.html#my-assert">write their own assert macros that can more easily be turned off</a>.</p>
+<p>ve komut satırına geri atılırım.</p>
+<p>Bu pek kullanıcı dostu değildir, bu yüzden yalnızca kullanıcının asla görmeyeceği durumlar için kullanılır. Ayrıca insanlar sıklıkla <a href="the-c-preprocessor.html#my-assert">daha kolay devre dışı bırakılabilen kendi assert makrolarını yazarlar</a>.</p>
 <p></p>
-<h2 data-number="28.5" id="abnormal-exit-abort"><span class="header-section-number">28.5</span> Abnormal Exit: <code>abort()</code></h2>
+<h2 data-number="28.5" id="abnormal-exit-abort"><span class="header-section-number">28.5</span> Anormal Çıkış: <code>abort()</code></h2>
 <p></p>
-<p>You can use this if something has gone horribly wrong and you want to indicate as much to the outside environment. This also won’t necessarily clean up any open files, etc.</p>
-<p>I’ve rarely seen this used.</p>
-<p>Some foreshadowing about <em>signals</em>: this actually works by raising a <code>SIGABRT</code> which will end the process.</p>
-<p>What happens after that is up to the system, but on Unix-likes, it was common to <a href="https://en.wikipedia.org/wiki/Core_dump" target="_blank" rel="noopener noreferrer">dump core</a><a href="function-specifiers-alignment-specifiersoperators.html#fn171" class="footnote-ref" id="fnref171" role="doc-noteref"><sup>171</sup></a> as the program terminated.</p>
+<p>Bir şeyler korkunç derecede ters gittiyse ve bunu dış ortama bu şekilde bildirmek istiyorsanız bunu kullanabilirsiniz. Bu işlem de açık dosyaları vb. temizlemeyi garanti etmez.</p>
+<p>Bunun kullanıldığını çok nadir gördüm.</p>
+<p><em>Sinyaller</em> (signals) hakkında küçük bir ön bilgi: Bu aslında süreci sonlandıracak bir <code>SIGABRT</code> sinyali göndererek çalışır.</p>
+<p>Bundan sonra ne olacağı sisteme bağlıdır, ancak Unix benzeri sistemlerde program sonlanırken <a href="https://en.wikipedia.org/wiki/Core_dump" target="_blank" rel="noopener noreferrer">bellek dökümü (core dump) almak</a><a href="function-specifiers-alignment-specifiersoperators.html#fn171" class="footnote-ref" id="fnref171" role="doc-noteref"><sup>171</sup></a> yaygındı.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

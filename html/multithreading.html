@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,89 +32,89 @@
 </head>
 <body>
 <div class="nav-header"><a href="date-and-time-functionality.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="chapter-atomics.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="39" id="multithreading"><span class="header-section-number">39</span> Multithreading</h1>
+<h1 data-number="39" id="multithreading"><span class="header-section-number">39</span> Çoklu İzlek (Multithreading)</h1>
 <p></p>
-<p>C11 introduced, formally, multithreading to the C language. It’s very eerily similar to <a href="https://en.wikipedia.org/wiki/POSIX_Threads" target="_blank" rel="noopener noreferrer">POSIX threads</a><a href="function-specifiers-alignment-specifiersoperators.html#fn197" class="footnote-ref" id="fnref197" role="doc-noteref"><sup>197</sup></a>, if you’ve ever used those.</p>
-<p>And if you’ve not, no worries. We’ll talk it through.</p>
-<p>Do note, however, that I’m not intending this to be a full-blown classic multithreading how-to<a href="function-specifiers-alignment-specifiersoperators.html#fn198" class="footnote-ref" id="fnref198" role="doc-noteref"><sup>198</sup></a>; you’ll have to pick up a different very thick book for that, specifically. Sorry!</p>
+<p>C11, C diline resmi olarak çoklu izlek (multithreading) desteğini getirdi. Daha önce kullandıysanız, <a href="https://en.wikipedia.org/wiki/POSIX_Threads" target="_blank" rel="noopener noreferrer">POSIX threads</a> yapısına ürpertici derecede benzerdir<a href="function-specifiers-alignment-specifiersoperators.html#fn197" class="footnote-ref" id="fnref197" role="doc-noteref"><sup>197</sup></a>.</p>
+<p>Kullanmadıysanız da endişelenmeyin. Üzerinde ayrıntılı olarak konuşacağız.</p>
+<p>Yine de belirtmek isterim ki bunun tam kapsamlı bir klasik multithreading rehberi olmasını amaçlamıyorum<a href="function-specifiers-alignment-specifiersoperators.html#fn198" class="footnote-ref" id="fnref198" role="doc-noteref"><sup>198</sup></a>; bunun için özellikle başka bir çok kalın kitap edinmeniz gerekecektir. Üzgünüm!</p>
 <p></p>
-<p>Threading is an optional feature. If a C11+ compiler defines <code>__STDC_NO_THREADS__</code>, threads will <strong>not</strong> be present in the library. Why they decided to go with a negative sense in that macro is beyond me, but there we are.</p>
-<p>You can test for it like this:</p>
+<p>İzlekler (threading) isteğe bağlı bir özelliktir. Bir C11+ derleyicisi <code>__STDC_NO_THREADS__</code> tanımlıyorsa, kütüphanede izlekler (threads) <strong>bulunmayacaktır</strong>. O makroda neden olumsuz bir anlam kullanmaya karar verdiler akıl sır erdiremiyorum, ama durum bu.</p>
+<p>Bunu şu şekilde test edebilirsiniz:</p>
 <div class="sourceCode" id="cb745"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb745-1"><a href="multithreading.html#cb745-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef __STDC_NO_THREADS__</span></span>
-<span id="cb745-2"><a href="multithreading.html#cb745-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#error I need threads to build this program!</span></span>
+<span id="cb745-2"><a href="multithreading.html#cb745-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#error Bu programı derlemek için izleklere (threads) ihtiyacım var!</span></span>
 <span id="cb745-3"><a href="multithreading.html#cb745-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
 <p></p>
 <p></p>
-<p>Also, you might need to specify certain linker options when building. In the case of Unix-likes, try appending a <code>-lpthreads</code> to the end of the command line to link the <code>pthreads</code> library<a href="function-specifiers-alignment-specifiersoperators.html#fn199" class="footnote-ref" id="fnref199" role="doc-noteref"><sup>199</sup></a>:</p>
+<p>Ayrıca derlerken belirli bağlayıcı (linker) seçeneklerini belirtmeniz gerekebilir. Unix benzeri sistemlerde <code>pthreads</code> kütüphanesini bağlamak için komut satırının sonuna <code>-lpthreads</code> eklemeyi deneyin<a href="function-specifiers-alignment-specifiersoperators.html#fn199" class="footnote-ref" id="fnref199" role="doc-noteref"><sup>199</sup></a>:</p>
 <div class="sourceCode" id="cb746"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb746-1"><a href="multithreading.html#cb746-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-std</span><span class="op">=</span>c11 <span class="at">-o</span> foo foo.c <span class="at">-lpthreads</span></span></code></pre></div>
 <p></p>
-<p>If you’re getting linker errors on your system, it could be because the appropriate library wasn’t included.</p>
-<h2 data-number="39.1" id="background"><span class="header-section-number">39.1</span> Background</h2>
-<p>Threads are a way to have all those shiny CPU cores you paid for do work for you in the same program.</p>
-<p>Normally, a C program just runs on a single CPU core. But if you know how to split up the work, you can give pieces of it to a number of threads and have them do the work simultaneously.</p>
-<p>Though the spec doesn’t say it, on your system it’s very likely that C (or the OS at its behest) will attempt to balance the threads over all your CPU cores.</p>
-<p>And if you have more threads than cores, that’s OK. You just won’t realize all those gains if they’re all trying to compete for CPU time.</p>
-<h2 data-number="39.2" id="things-you-can-do"><span class="header-section-number">39.2</span> Things You Can Do</h2>
-<p>You can create a thread. It will begin running the function you specify. The parent thread that spawned it will also continue to run.</p>
-<p>And you can wait for the thread to complete. This is called <em>joining</em>.</p>
-<p>Or if you don’t care when the thread completes and don’t want to wait, you can <em>detach it</em>.</p>
-<p>A thread can explicitly <em>exit</em>, or it can implicitly call it quits by returning from its main function.</p>
-<p>A thread can also <em>sleep</em> for a period of time, doing nothing while other threads run.</p>
-<p>The <code>main()</code> program is a thread, as well.</p>
-<p>Additionally, we have thread local storage, mutexes, and conditional variables. But more on those later. Let’s just look at the basics for now.</p>
-<h2 data-number="39.3" id="data-races-and-the-standard-library"><span class="header-section-number">39.3</span> Data Races and the Standard Library</h2>
+<p>Sisteminizde bağlayıcı hataları alıyorsanız, bunun nedeni uygun kütüphanenin dahil edilmemiş olması olabilir.</p>
+<h2 data-number="39.1" id="background"><span class="header-section-number">39.1</span> Arka Plan</h2>
+<p>Thread'ler, parasını ödediğiniz tüm o gıcır gıcır CPU çekirdeklerinin aynı program içinde sizin için çalışmasını sağlamanın bir yoludur.</p>
+<p>Normalde bir C programı sadece tek bir CPU çekirdeğinde çalışır. Ancak işi nasıl böleceğinizi biliyorsanız, parçalarını bir dizi thread'e verebilir ve bunların işi eş zamanlı olarak yapmasını sağlayabilirsiniz.</p>
+<p>Spesifikasyon bunu söylemese de sisteminizde C'nin (veya emri üzerine işletim sisteminin) thread'leri tüm CPU çekirdeklerinize dengelemeye çalışması çok muhtemeldir.</p>
+<p>Ve çekirdeklerinizden daha fazla thread'iniz varsa, bu sorun değil. Hepsi CPU süresi için rekabet etmeye çalışıyorsa tüm o kazançları elde edemezsiniz.</p>
+<h2 data-number="39.2" id="things-you-can-do"><span class="header-section-number">39.2</span> Yapabileceğiniz Şeyler</h2>
+<p>Bir thread oluşturabilirsiniz. Belirttiğiniz fonksiyonu çalıştırmaya başlayacaktır. Onu başlatan parent (üst) thread de çalışmaya devam edecektir.</p>
+<p>Ve thread'in tamamlanmasını bekleyebilirsiniz. Buna <em>katılma/bekleme (joining)</em> denir.</p>
+<p>Veya thread'in ne zaman tamamlandığını umursamıyorsanız ve beklemek istemiyorsanız, onu <em>ayırabilirsiniz (detach)</em>.</p>
+<p>Bir thread açıkça <em>çıkış yapabilir (exit)</em> veya ana fonksiyonundan dönerek zımnen sonlanabilir.</p>
+<p>Bir thread ayrıca diğer thread'ler çalışırken hiçbir şey yapmadan belirli bir süre <em>uyuyabilir (sleep)</em>.</p>
+<p><code>main()</code> programı da bir thread'dir.</p>
+<p>Ayrıca izleğe özel depolama (thread local storage), mutex'ler ve koşul değişkenlerimiz (condition variables) vardır. Ancak bunlara daha sonra değineceğiz. Şimdilik sadece temel bilgilere bakalım.</p>
+<h2 data-number="39.3" id="data-races-and-the-standard-library"><span class="header-section-number">39.3</span> Veri Yarışları (Data Races) ve Standart Kütüphane</h2>
 <p></p>
-<p>Some of the functions in the standard library (e.g. <code>asctime()</code> and <code>strtok()</code>) return or use <code>static</code> data elements that aren’t threadsafe. But in general unless it’s said otherwise, the standard library makes an effort to be so<a href="function-specifiers-alignment-specifiersoperators.html#fn200" class="footnote-ref" id="fnref200" role="doc-noteref"><sup>200</sup></a>.</p>
-<p>But keep an eye out. If a standard library function is maintaining state between calls in a variable you don’t own, or if a function is returning a pointer to a thing that you didn’t pass in, it’s not threadsafe.</p>
+<p>Standart kütüphanedeki bazı fonksiyonlar (örn. <code>asctime()</code> ve <code>strtok()</code>) izlek güvenli (thread-safe) olmayan <code>static</code> veri elemanları döndürür veya kullanır. Ancak genel olarak aksi belirtilmedikçe standart kütüphane izlek güvenli olmaya çaba gösterir<a href="function-specifiers-alignment-specifiersoperators.html#fn200" class="footnote-ref" id="fnref200" role="doc-noteref"><sup>200</sup></a>.</p>
+<p>Ancak gözünüzü dört açın. Bir standart kütüphane fonksiyonu çağrılar arasında sahibi olmadığınız bir değişkende durum koruyorsa veya bir fonksiyon sizin içeri geçirmediğiniz bir şeye pointer döndürüyorsa, thread-safe değildir.</p>
 <p></p>
-<h2 data-number="39.4" id="creating-and-waiting-for-threads"><span class="header-section-number">39.4</span> Creating and Waiting for Threads</h2>
-<p>Let’s hack something up!</p>
-<p>We’ll make some threads (create) and wait for them to complete (join).</p>
-<p>We have a tiny bit to understand first, though.</p>
-<p>Every single thread is identified by an opaque variable of type <code>thrd_t</code>. It’s a unique identifier per thread in your program. When you create a thread, it’s given a new ID.</p>
-<p>Also when you make the thread, you have to give it a pointer to a function to run, and a pointer to an argument to pass to it (or <code>NULL</code> if you don’t have anything to pass).</p>
-<p>The thread will begin execution on the function you specify.</p>
-<p>When you want to wait for a thread to complete, you have to specify its thread ID so C knows which one to wait for.</p>
-<p>So the basic idea is:</p>
+<h2 data-number="39.4" id="creating-and-waiting-for-threads"><span class="header-section-number">39.4</span> Thread Oluşturma ve Bekleme</h2>
+<p>Hadi bir şeyler kodlayalım!</p>
+<p>Bazı thread'ler yapıp (create) tamamlanmalarını bekleyeceğiz (join).</p>
+<p>Yine de önce anlamamız gereken küçük bir şey var.</p>
+<p>Her bir thread, <code>thrd_t</code> türünde opak (opaque) bir değişkenle tanımlanır. Programınızdaki thread başına benzersiz bir tanımlayıcıdır. Bir thread oluşturduğunuzda ona yeni bir ID verilir.</p>
+<p>Ayrıca thread'i oluştururken ona çalıştırılacak bir fonksiyon pointer'ı ve ona geçirilecek bir argüman pointer'ı (veya geçirecek bir şeyiniz yoksa <code>NULL</code>) vermeniz gerekir.</p>
+<p>Thread, belirttiğiniz fonksiyon üzerinde yürütülmeye başlayacaktır.</p>
+<p>Bir thread'in tamamlanmasını beklemek istediğinizde, C'nin hangisini bekleyeceğini bilmesi için o thread'in ID'sini belirtmeniz gerekir.</p>
+<p>Temel fikir şudur:</p>
 <ol type="1">
-<li>Write a function to act as the thread’s “<code>main</code>”. It’s not <code>main()</code>-proper, but analogous to it. The thread will start running there.</li>
-<li>From the main thread, launch a new thread with <code>thrd_create()</code>, and pass it a pointer to the function to run.</li>
-<li>In that function, have the thread do whatever it has to do.</li>
-<li>Meantimes, the main thread can continue doing whatever <em>it</em> has to do.</li>
-<li>When the main thread decides to, it can wait for the child thread to complete by calling <code>thrd_join()</code>. Generally you <strong>must</strong> <code>thrd_join()</code> the thread to clean up after it or else you’ll leak memory<a href="function-specifiers-alignment-specifiersoperators.html#fn201" class="footnote-ref" id="fnref201" role="doc-noteref"><sup>201</sup></a></li>
+<li>Thread'in "<code>main</code>" fonksiyonu olarak hareket edecek bir fonksiyon yazın. Tam olarak <code>main()</code> değildir ancak buna benzerdir. Thread orada çalışmaya başlayacaktır.</li>
+<li>Ana (main) thread'den <code>thrd_create()</code> ile yeni bir thread başlatın ve ona çalıştırılacak fonksiyonun pointer'ını geçirin.</li>
+<li>O fonksiyonda, thread'in ne yapması gerekiyorsa yapmasını sağlayın.</li>
+<li>Bu sırada ana thread yapması gereken ne varsa yapmaya devam edebilir.</li>
+<li>Ana thread karar verdiğinde, <code>thrd_join()</code> çağırarak çocuk thread'in tamamlanmasını bekleyebilir. Genellikle sonradan temizlemek için thread'e <code>thrd_join()</code> yapmanız <strong>gereklidir</strong>, aksi takdirde bellek sızıntısı yaşarsınız<a href="function-specifiers-alignment-specifiersoperators.html#fn201" class="footnote-ref" id="fnref201" role="doc-noteref"><sup>201</sup></a>.</li>
 </ol>
 <p> </p>
-<p><code>thrd_create()</code> takes a pointer to the function to run, and it’s of type <code>thrd_start_t</code>, which is <code>int (*)(void *)</code>. That’s Greek for “a pointer to a function that takes an <code>void*</code> as an argument, and returns an <code>int</code>.”</p>
+<p><code>thrd_create()</code> çalıştırılacak fonksiyonun bir pointer'ını alır ve bu tür <code>thrd_start_t</code>'dir, yani <code>int (*)(void *)</code>. Bu da "argüman olarak bir <code>void*</code> alan ve bir <code>int</code> döndüren bir fonksiyona işaret eden pointer" demektir.</p>
 <p></p>
-<p>Let’s make a thread! We’ll launch it from the main thread with <code>thrd_create()</code> to run a function, do some other things, then wait for it to complete with <code>thrd_join()</code>. I’ve named the thread’s main function <code>run()</code>, but you can name it anything as long as the types match <code>thrd_start_t</code>.</p>
+<p>Bir thread yapalım! Bir fonksiyonu çalıştırmak için <code>thrd_create()</code> ile ana thread'den başlatacağız, başka şeyler yapacağız ve ardından <code>thrd_join()</code> ile tamamlanmasını bekleyeceğiz. Thread'in ana fonksiyonunu <code>run()</code> olarak adlandırdım, ancak türler <code>thrd_start_t</code> ile eşleştiği sürece her şeyi adlandırabilirsiniz.</p>
 <div class="sourceCode" id="cb747"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb747-1"><a href="multithreading.html#cb747-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb747-2"><a href="multithreading.html#cb747-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb747-3"><a href="multithreading.html#cb747-3"></a></span>
-<span id="cb747-4"><a href="multithreading.html#cb747-4"></a><span class="co">// This is the function the thread will run. It can be called anything.</span></span>
+<span id="cb747-4"><a href="multithreading.html#cb747-4"></a><span class="co">// Bu, thread'in çalıştıracağı fonksiyondur. İstenen isim verilebilir.</span></span>
 <span id="cb747-5"><a href="multithreading.html#cb747-5"></a><span class="co">//</span></span>
-<span id="cb747-6"><a href="multithreading.html#cb747-6"></a><span class="co">// arg is the argument pointer passed to `thrd_create()`.</span></span>
+<span id="cb747-6"><a href="multithreading.html#cb747-6"></a><span class="co">// arg, thrd_create()'e geçirilen argüman pointer'ıdır.</span></span>
 <span id="cb747-7"><a href="multithreading.html#cb747-7"></a><span class="co">//</span></span>
-<span id="cb747-8"><a href="multithreading.html#cb747-8"></a><span class="co">// The parent thread will get the return value back from `thrd_join()`&#39;</span></span>
-<span id="cb747-9"><a href="multithreading.html#cb747-9"></a><span class="co">// later.</span></span>
+<span id="cb747-8"><a href="multithreading.html#cb747-8"></a><span class="co">// Üst (parent) thread dönüş değerini daha sonra thrd_join()'den</span></span>
+<span id="cb747-9"><a href="multithreading.html#cb747-9"></a><span class="co">// alacaktır.</span></span>
 <span id="cb747-10"><a href="multithreading.html#cb747-10"></a></span>
 <span id="cb747-11"><a href="multithreading.html#cb747-11"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb747-12"><a href="multithreading.html#cb747-12"></a><span class="op">{</span></span>
-<span id="cb747-13"><a href="multithreading.html#cb747-13"></a>    <span class="dt">int</span> <span class="op">*</span>a <span class="op">=</span> arg<span class="op">;</span>  <span class="co">// We&#39;ll pass in an int* from thrd_create()</span></span>
+<span id="cb747-13"><a href="multithreading.html#cb747-13"></a>    <span class="dt">int</span> <span class="op">*</span>a <span class="op">=</span> arg<span class="op">;</span>  <span class="co">// thrd_create()'den bir int* geçireceğiz</span></span>
 <span id="cb747-14"><a href="multithreading.html#cb747-14"></a></span>
 <span id="cb747-15"><a href="multithreading.html#cb747-15"></a>    printf<span class="op">(</span><span class="st">&quot;THREAD: Running thread with arg </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>a<span class="op">);</span></span>
 <span id="cb747-16"><a href="multithreading.html#cb747-16"></a></span>
-<span id="cb747-17"><a href="multithreading.html#cb747-17"></a>    <span class="cf">return</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// Value to be picked up by thrd_join() (chose 12 at random)</span></span>
+<span id="cb747-17"><a href="multithreading.html#cb747-17"></a>    <span class="cf">return</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// thrd_join() tarafından alınacak değer (rastgele 12 seçildi)</span></span>
 <span id="cb747-18"><a href="multithreading.html#cb747-18"></a><span class="op">}</span></span>
 <span id="cb747-19"><a href="multithreading.html#cb747-19"></a></span>
 <span id="cb747-20"><a href="multithreading.html#cb747-20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb747-21"><a href="multithreading.html#cb747-21"></a><span class="op">{</span></span>
-<span id="cb747-22"><a href="multithreading.html#cb747-22"></a>    thrd_t t<span class="op">;</span>  <span class="co">// t will hold the thread ID</span></span>
+<span id="cb747-22"><a href="multithreading.html#cb747-22"></a>    thrd_t t<span class="op">;</span>  <span class="co">// t, thread ID'sini tutacak</span></span>
 <span id="cb747-23"><a href="multithreading.html#cb747-23"></a>    <span class="dt">int</span> arg <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
 <span id="cb747-24"><a href="multithreading.html#cb747-24"></a></span>
 <span id="cb747-25"><a href="multithreading.html#cb747-25"></a>    printf<span class="op">(</span><span class="st">&quot;Launching a thread</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb747-26"><a href="multithreading.html#cb747-26"></a></span>
-<span id="cb747-27"><a href="multithreading.html#cb747-27"></a>    <span class="co">// Launch a thread to the run() function, passing a pointer to 3490</span></span>
-<span id="cb747-28"><a href="multithreading.html#cb747-28"></a>    <span class="co">// as an argument. Also stored the thread ID in t:</span></span>
+<span id="cb747-27"><a href="multithreading.html#cb747-27"></a>    <span class="co">// 3490'a bir pointer'ı argüman olarak geçirerek run() fonksiyonuna bir thread</span></span>
+<span id="cb747-28"><a href="multithreading.html#cb747-28"></a>    <span class="co">// başlat. Ayrıca thread ID'sini t içinde sakla:</span></span>
 <span id="cb747-29"><a href="multithreading.html#cb747-29"></a></span>
 <span id="cb747-30"><a href="multithreading.html#cb747-30"></a>    thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> <span class="op">&amp;</span>arg<span class="op">);</span></span>
 <span id="cb747-31"><a href="multithreading.html#cb747-31"></a></span>
@@ -122,26 +122,26 @@
 <span id="cb747-33"><a href="multithreading.html#cb747-33"></a></span>
 <span id="cb747-34"><a href="multithreading.html#cb747-34"></a>    printf<span class="op">(</span><span class="st">&quot;Waiting for thread to complete...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb747-35"><a href="multithreading.html#cb747-35"></a></span>
-<span id="cb747-36"><a href="multithreading.html#cb747-36"></a>    <span class="dt">int</span> res<span class="op">;</span>  <span class="co">// Holds return value from the thread exit</span></span>
+<span id="cb747-36"><a href="multithreading.html#cb747-36"></a>    <span class="dt">int</span> res<span class="op">;</span>  <span class="co">// Thread çıkışından dönen değeri tutar</span></span>
 <span id="cb747-37"><a href="multithreading.html#cb747-37"></a></span>
-<span id="cb747-38"><a href="multithreading.html#cb747-38"></a>    <span class="co">// Wait here for the thread to complete; store the return value</span></span>
-<span id="cb747-39"><a href="multithreading.html#cb747-39"></a>    <span class="co">// in res:</span></span>
+<span id="cb747-38"><a href="multithreading.html#cb747-38"></a>    <span class="co">// Thread'in tamamlanması için burada bekle; dönüş değerini</span></span>
+<span id="cb747-39"><a href="multithreading.html#cb747-39"></a>    <span class="co">// res içinde sakla:</span></span>
 <span id="cb747-40"><a href="multithreading.html#cb747-40"></a></span>
 <span id="cb747-41"><a href="multithreading.html#cb747-41"></a>    thrd_join<span class="op">(</span>t<span class="op">,</span> <span class="op">&amp;</span>res<span class="op">);</span></span>
 <span id="cb747-42"><a href="multithreading.html#cb747-42"></a></span>
 <span id="cb747-43"><a href="multithreading.html#cb747-43"></a>    printf<span class="op">(</span><span class="st">&quot;Thread exited with return value </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> res<span class="op">);</span></span>
 <span id="cb747-44"><a href="multithreading.html#cb747-44"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>See how we did the <code>thrd_create()</code> there to call the <code>run()</code> function? Then we did other things in <code>main()</code> and then stopped and waited for the thread to complete with <code>thrd_join()</code>.</p>
+<p><code>run()</code> fonksiyonunu çağırmak için orada <code>thrd_create()</code> işlemini nasıl yaptığımızı gördünüz mü? Ardından <code>main()</code> içinde başka şeyler yaptık ve sonra durup <code>thrd_join()</code> ile thread'in tamamlanmasını bekledik.</p>
 <p> </p>
-<p>Sample output (yours might vary):</p>
+<p>Örnek çıktı (sizinki farklılık gösterebilir):</p>
 <div class="sourceCode" id="cb748"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb748-1"><a href="multithreading.html#cb748-1" aria-hidden="true" tabindex="-1"></a>Launching a thread</span>
 <span id="cb748-2"><a href="multithreading.html#cb748-2" aria-hidden="true" tabindex="-1"></a>Doing other things while the thread runs</span>
 <span id="cb748-3"><a href="multithreading.html#cb748-3" aria-hidden="true" tabindex="-1"></a>Waiting for thread to complete...</span>
 <span id="cb748-4"><a href="multithreading.html#cb748-4" aria-hidden="true" tabindex="-1"></a>THREAD: Running thread with arg 3490</span>
 <span id="cb748-5"><a href="multithreading.html#cb748-5" aria-hidden="true" tabindex="-1"></a>Thread exited with return value 12</span></code></pre></div>
-<p>The <code>arg</code> that you pass to the function has to have a lifetime long enough so that the thread can pick it up before it goes away. Also, it needs to not be overwritten by the main thread before the new thread can use it.</p>
-<p>Let’s look at an example that launches 5 threads. One thing to note here is how we use an array of <code>thrd_t</code>s to keep track of all the thread IDs.</p>
+<p>Fonksiyona geçirdiğiniz <code>arg</code>, thread yok olmadan önce onu alabilsin diye yeterince uzun bir yaşam süresine (lifetime) sahip olmalıdır. Ayrıca yeni thread kullanamadan ana thread tarafından üzerine yazılmaması gerekir.</p>
+<p>5 thread başlatan bir örneğe bakalım. Burada dikkat edilmesi gereken bir nokta, tüm thread ID'lerini takip etmek için nasıl bir <code>thrd_t</code> dizisi kullandığımızdır.</p>
 <p> </p>
 <div class="sourceCode" id="cb749"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb749-1"><a href="multithreading.html#cb749-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb749-2"><a href="multithreading.html#cb749-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
@@ -166,10 +166,10 @@
 <span id="cb749-21"><a href="multithreading.html#cb749-21"></a>    printf<span class="op">(</span><span class="st">&quot;Launching threads...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb749-22"><a href="multithreading.html#cb749-22"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb749-23"><a href="multithreading.html#cb749-23"></a></span>
-<span id="cb749-24"><a href="multithreading.html#cb749-24"></a>        <span class="co">// </span><span class="al">NOTE</span><span class="co">! In the following line, we pass a pointer to i, </span></span>
-<span id="cb749-25"><a href="multithreading.html#cb749-25"></a>        <span class="co">// but each thread sees the same pointer. So they&#39;ll</span></span>
-<span id="cb749-26"><a href="multithreading.html#cb749-26"></a>        <span class="co">// print out weird things as i changes value here in</span></span>
-<span id="cb749-27"><a href="multithreading.html#cb749-27"></a>        <span class="co">// the main thread! (More in the text, below.)</span></span>
+<span id="cb749-24"><a href="multithreading.html#cb749-24"></a>        <span class="co">// NOT! Aşağıdaki satırda i'ye bir pointer geçiriyoruz,</span></span>
+<span id="cb749-25"><a href="multithreading.html#cb749-25"></a>        <span class="co">// ancak her thread aynı pointer'ı görür. Bu yüzden</span></span>
+<span id="cb749-26"><a href="multithreading.html#cb749-26"></a>        <span class="co">// main thread'de i değer değiştirdikçe tuhaf şeyler</span></span>
+<span id="cb749-27"><a href="multithreading.html#cb749-27"></a>        <span class="co">// yazdıracaklar! (Aşağıdaki metinde daha fazlası var.)</span></span>
 <span id="cb749-28"><a href="multithreading.html#cb749-28"></a></span>
 <span id="cb749-29"><a href="multithreading.html#cb749-29"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> <span class="op">&amp;</span>i<span class="op">);</span></span>
 <span id="cb749-30"><a href="multithreading.html#cb749-30"></a></span>
@@ -186,9 +186,9 @@
 <span id="cb749-41"><a href="multithreading.html#cb749-41"></a>    printf<span class="op">(</span><span class="st">&quot;All threads complete!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb749-42"><a href="multithreading.html#cb749-42"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>When I run the threads, I count <code>i</code> up from 0 to 4. And pass a pointer to it to <code>thrd_create()</code>. This pointer ends up in the <code>run()</code> routine where we make a copy of it.</p>
+<p>Thread'leri çalıştırdığımda <code>i</code> değerini 0'dan 4'e kadar sayıyorum. Ve buna bir pointer'ı <code>thrd_create()</code>'e geçiriyorum. Bu pointer, bir kopyasını yaptığımız <code>run()</code> rutininde son bulur.</p>
 <p></p>
-<p>Simple enough? Here’s the output:</p>
+<p>Yeterince basit mi? İşte çıktı:</p>
 <div class="sourceCode" id="cb750"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb750-1"><a href="multithreading.html#cb750-1" aria-hidden="true" tabindex="-1"></a>Launching threads...</span>
 <span id="cb750-2"><a href="multithreading.html#cb750-2" aria-hidden="true" tabindex="-1"></a>THREAD 2: running!</span>
 <span id="cb750-3"><a href="multithreading.html#cb750-3" aria-hidden="true" tabindex="-1"></a>THREAD 3: running!</span>
@@ -203,20 +203,20 @@
 <span id="cb750-12"><a href="multithreading.html#cb750-12" aria-hidden="true" tabindex="-1"></a>Thread 4 complete!</span>
 <span id="cb750-13"><a href="multithreading.html#cb750-13" aria-hidden="true" tabindex="-1"></a>Thread 5 complete!</span>
 <span id="cb750-14"><a href="multithreading.html#cb750-14" aria-hidden="true" tabindex="-1"></a>All threads complete!</span></code></pre></div>
-<p>Whaaa—? Where’s <code>THREAD 0</code>? And why do we have a <code>THREAD 5</code> when clearly <code>i</code> is never more than <code>4</code> when we call <code>thrd_create()</code>? And two <code>THREAD 2</code>s? Madness!</p>
-<p>This is getting into the fun land of <em>race conditions</em>. The main thread is modifying <code>i</code> before the thread has a chance to copy it. Indeed, <code>i</code> makes it all the way to <code>5</code> and ends the loop before the last thread gets a chance to copy it.</p>
-<p>We’ve got to have a per-thread variable that we can refer to so we can pass it in as the <code>arg</code>.</p>
-<p>We could have a big array of them. Or we could <code>malloc()</code> space (and free it somewhere—maybe in the thread itself.)</p>
-<p>Let’s give that a shot:</p>
+<p>Neee—? <code>THREAD 0</code> nerede? Ve <code>thrd_create()</code>'i çağırdığımızda <code>i</code> açıkça hiç <code>4</code>'ten büyük değilken neden bir <code>THREAD 5</code> var? Ve iki tane <code>THREAD 2</code>? Çılgınlık!</p>
+<p>Bu, <em>yarış durumlarının (race conditions)</em> eğlenceli dünyasına girmektir. Main thread, thread'in onu kopyalama fırsatı bulamadan <code>i</code>'yi değiştirmektedir. Nitekim <code>i</code>, son thread kopyalama şansı bulamadan önce <code>5</code>'e kadar ulaşır ve döngüyü sonlandırır.</p>
+<p><code>arg</code> olarak geçirebilmemiz için başvurabileceğimiz thread başına bir değişkene sahip olmalıyız.</p>
+<p>Bunlardan oluşan büyük bir dizimiz olabilir. Veya bellek alanı için <code>malloc()</code> yapabiliriz (ve bunu bir yerde—belki de thread'in kendisinde—serbest bırakabiliriz/free).</p>
+<p>Buna bir şans verelim:</p>
 <div class="sourceCode" id="cb751"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb751-1"><a href="multithreading.html#cb751-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb751-2"><a href="multithreading.html#cb751-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb751-3"><a href="multithreading.html#cb751-3"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb751-4"><a href="multithreading.html#cb751-4"></a></span>
 <span id="cb751-5"><a href="multithreading.html#cb751-5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb751-6"><a href="multithreading.html#cb751-6"></a><span class="op">{</span></span>
-<span id="cb751-7"><a href="multithreading.html#cb751-7"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Copy the arg</span></span>
+<span id="cb751-7"><a href="multithreading.html#cb751-7"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// arg kopyasını al</span></span>
 <span id="cb751-8"><a href="multithreading.html#cb751-8"></a></span>
-<span id="cb751-9"><a href="multithreading.html#cb751-9"></a>    free<span class="op">(</span>arg<span class="op">);</span>  <span class="co">// Done with this</span></span>
+<span id="cb751-9"><a href="multithreading.html#cb751-9"></a>    free<span class="op">(</span>arg<span class="op">);</span>  <span class="co">// Bununla iş bitti</span></span>
 <span id="cb751-10"><a href="multithreading.html#cb751-10"></a></span>
 <span id="cb751-11"><a href="multithreading.html#cb751-11"></a>    printf<span class="op">(</span><span class="st">&quot;THREAD </span><span class="sc">%d</span><span class="st">: running!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
 <span id="cb751-12"><a href="multithreading.html#cb751-12"></a></span>
@@ -234,7 +234,7 @@
 <span id="cb751-24"><a href="multithreading.html#cb751-24"></a>    printf<span class="op">(</span><span class="st">&quot;Launching threads...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb751-25"><a href="multithreading.html#cb751-25"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb751-26"><a href="multithreading.html#cb751-26"></a></span>
-<span id="cb751-27"><a href="multithreading.html#cb751-27"></a>        <span class="co">// Get some space for a per-thread argument:</span></span>
+<span id="cb751-27"><a href="multithreading.html#cb751-27"></a>        <span class="co">// Thread başına bir argüman için alan ayır:</span></span>
 <span id="cb751-28"><a href="multithreading.html#cb751-28"></a></span>
 <span id="cb751-29"><a href="multithreading.html#cb751-29"></a>        <span class="dt">int</span> <span class="op">*</span>arg <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>arg<span class="op">);</span></span>
 <span id="cb751-30"><a href="multithreading.html#cb751-30"></a>        <span class="op">*</span>arg <span class="op">=</span> i<span class="op">;</span></span>
@@ -243,9 +243,9 @@
 <span id="cb751-33"><a href="multithreading.html#cb751-33"></a>    <span class="op">}</span></span>
 <span id="cb751-34"><a href="multithreading.html#cb751-34"></a></span>
 <span id="cb751-35"><a href="multithreading.html#cb751-35"></a>    <span class="co">// ...</span></span></code></pre></div>
-<p>Notice on lines 27-30 we <code>malloc()</code> space for an <code>int</code> and copy the value of <code>i</code> into it. Each new thread gets its own freshly-<code>malloc()</code>d variable and we pass a pointer to that to the <code>run()</code> function.</p>
-<p>Once <code>run()</code> makes its own copy of the <code>arg</code> on line 7, it <code>free()</code>s the <code>malloc()</code>d <code>int</code>. And now that it has its own copy, it can do with it what it pleases.</p>
-<p>And a run shows the result:</p>
+<p>27-30. satırlarda bir <code>int</code> için nasıl <code>malloc()</code> ile alan ayırdığımıza ve <code>i</code> değerini içine kopyaladığımıza dikkat edin. Her yeni thread kendi taze <code>malloc()</code> edilmiş değişkenini alır ve biz bunun bir pointer'ını <code>run()</code> fonksiyonuna geçiririz.</p>
+<p><code>run()</code> 7. satırda <code>arg</code>'nin kendi kopyasını oluşturduğunda, <code>malloc()</code> edilmiş <code>int</code>'i <code>free()</code> ile serbest bırakır. Ve artık kendi kopyasına sahip olduğu için onunla dilediğini yapabilir.</p>
+<p>Ve bir çalıştırma sonucu gösterir:</p>
 <div class="sourceCode" id="cb752"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb752-1"><a href="multithreading.html#cb752-1" aria-hidden="true" tabindex="-1"></a>Launching threads...</span>
 <span id="cb752-2"><a href="multithreading.html#cb752-2" aria-hidden="true" tabindex="-1"></a>THREAD 0: running!</span>
 <span id="cb752-3"><a href="multithreading.html#cb752-3" aria-hidden="true" tabindex="-1"></a>THREAD 1: running!</span>
@@ -260,16 +260,16 @@
 <span id="cb752-12"><a href="multithreading.html#cb752-12" aria-hidden="true" tabindex="-1"></a>THREAD 4: running!</span>
 <span id="cb752-13"><a href="multithreading.html#cb752-13" aria-hidden="true" tabindex="-1"></a>Thread 4 complete!</span>
 <span id="cb752-14"><a href="multithreading.html#cb752-14" aria-hidden="true" tabindex="-1"></a>All threads complete!</span></code></pre></div>
-<p>There we go! Threads 0-4 all in effect!</p>
-<p>Your run might vary—how the threads get scheduled to run is beyond the C spec. We see in the above example that thread 4 didn’t even begin until threads 0-1 had completed. Indeed, if I run this again, I likely get different output. We cannot guarantee a thread execution order.</p>
-<h2 data-number="39.5" id="detaching-threads"><span class="header-section-number">39.5</span> Detaching Threads</h2>
-<p>If you want to fire-and-forget a thread (i.e. so you don’t have to <code>thrd_join()</code> it later), you can do that with <code>thrd_detach()</code>.</p>
-<p>This removes the parent thread’s ability to get the return value from the child thread, but if you don’t care about that and just want threads to clean up nicely on their own, this is the way to go.</p>
-<p>Basically we’re going to do this:</p>
+<p>İşte böyle! 0-4 arası tüm thread'ler aktif!</p>
+<p>Çalıştırmanız farklılık gösterebilir—thread'lerin çalıştırılmak üzere nasıl zamanlandığı C spesifikasyonunun ötesindedir. Yukarıdaki örnekte thread 4'ün, 0-1 thread'leri tamamlanana kadar başlamadığını bile görüyoruz. Nitekim bunu tekrar çalıştırırsam muhtemelen farklı bir çıktı alırım. Bir thread yürütme sırasını garanti edemeyiz.</p>
+<h2 data-number="39.5" id="detaching-threads"><span class="header-section-number">39.5</span> Thread'leri Ayırmak (Detaching Threads)</h2>
+<p>Bir thread'i unutup kendi haline bırakmak istiyorsanız (yani daha sonra <code>thrd_join()</code> yapmak zorunda kalmamak için), bunu <code>thrd_detach()</code> ile yapabilirsiniz.</p>
+<p>Bu, üst (parent) thread'in çocuk (child) thread'den dönüş değerini alma yeteneğini ortadan kaldırır, ancak bunu umursamıyorsanız ve sadece thread'lerin kendi kendilerine düzgünce temizlenmesini istiyorsanız izlenecek yol budur.</p>
+<p>Temel olarak şunu yapacağız:</p>
 <p></p>
 <div class="sourceCode" id="cb753"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb753-1"><a href="multithreading.html#cb753-1" aria-hidden="true" tabindex="-1"></a>thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
 <span id="cb753-2"><a href="multithreading.html#cb753-2" aria-hidden="true" tabindex="-1"></a>thrd_detach<span class="op">(</span>t<span class="op">);</span></span></code></pre></div>
-<p>where the <code>thrd_detach()</code> call is the parent thread saying, “Hey, I’m not going to wait for this child thread to complete with <code>thrd_join()</code>. So go ahead and clean it up on your own when it completes.”</p>
+<p>buradaki <code>thrd_detach()</code> çağrısı üst thread'in "Hey, <code>thrd_join()</code> ile bu çocuk thread'in tamamlanmasını beklemeyeceğim. Tamamlandığında kendi kendine temizlenmeye devam et" demesidir.</p>
 <div class="sourceCode" id="cb754"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb754-1"><a href="multithreading.html#cb754-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb754-2"><a href="multithreading.html#cb754-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb754-3"><a href="multithreading.html#cb754-3"></a></span>
@@ -277,7 +277,7 @@
 <span id="cb754-5"><a href="multithreading.html#cb754-5"></a><span class="op">{</span></span>
 <span id="cb754-6"><a href="multithreading.html#cb754-6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
 <span id="cb754-7"><a href="multithreading.html#cb754-7"></a></span>
-<span id="cb754-8"><a href="multithreading.html#cb754-8"></a>    <span class="co">//printf(&quot;Thread running! %lu\n&quot;, thrd_current()); // non-portable!</span></span>
+<span id="cb754-8"><a href="multithreading.html#cb754-8"></a>    <span class="co">//printf(&quot;Thread running! %lu\n&quot;, thrd_current()); // taşınabilir değil!</span></span>
 <span id="cb754-9"><a href="multithreading.html#cb754-9"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb754-10"><a href="multithreading.html#cb754-10"></a></span>
 <span id="cb754-11"><a href="multithreading.html#cb754-11"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -291,54 +291,54 @@
 <span id="cb754-19"><a href="multithreading.html#cb754-19"></a></span>
 <span id="cb754-20"><a href="multithreading.html#cb754-20"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb754-21"><a href="multithreading.html#cb754-21"></a>        thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
-<span id="cb754-22"><a href="multithreading.html#cb754-22"></a>        thrd_detach<span class="op">(</span>t<span class="op">);</span>               <span class="co">// &lt;-- DETACH!</span></span>
+<span id="cb754-22"><a href="multithreading.html#cb754-22"></a>        thrd_detach<span class="op">(</span>t<span class="op">);</span>               <span class="co">// &lt;-- AYIR (DETACH)!</span></span>
 <span id="cb754-23"><a href="multithreading.html#cb754-23"></a>    <span class="op">}</span></span>
 <span id="cb754-24"><a href="multithreading.html#cb754-24"></a></span>
-<span id="cb754-25"><a href="multithreading.html#cb754-25"></a>    <span class="co">// Sleep for a second to let all the threads finish</span></span>
+<span id="cb754-25"><a href="multithreading.html#cb754-25"></a>    <span class="co">// Tüm thread'lerin bitmesini sağlamak için bir saniye uyu</span></span>
 <span id="cb754-26"><a href="multithreading.html#cb754-26"></a>    thrd_sleep<span class="op">(&amp;(</span><span class="kw">struct</span> timespec<span class="op">){.</span>tv_sec<span class="op">=</span><span class="dv">1</span><span class="op">},</span> NULL<span class="op">);</span></span>
 <span id="cb754-27"><a href="multithreading.html#cb754-27"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>Note that in this code, we put the main thread to sleep for 1 second with <code>thrd_sleep()</code>—more on that later.</p>
-<p>Also in the <code>run()</code> function, I have a commented-out line in there that prints out the thread ID as an <code>unsigned long</code>. This is non-portable, because the spec doesn’t say what type a <code>thrd_t</code> is under the hood—it could be a <code>struct</code> for all we know. But that line works on my system.</p>
-<p>Something interesting I saw when I ran the code, above, and printed out the thread IDs was that some threads had duplicate IDs! This seems like it should be impossible, but C is allowed to <em>reuse</em> thread IDs after the corresponding thread has exited. So what I was seeing was that some threads completed their run before other threads were launched.</p>
-<h2 data-number="39.6" id="thread-local-data"><span class="header-section-number">39.6</span> Thread Local Data</h2>
+<p>Bu kodda main thread'i <code>thrd_sleep()</code> ile 1 saniye uyutmamıza dikkat edin—buna daha sonra değineceğiz.</p>
+<p>Ayrıca <code>run()</code> fonksiyonunda thread ID'sini bir <code>unsigned long</code> olarak yazdıran yorum satırına alınmış bir satırım var. Bu taşınabilir değildir, çünkü spesifikasyon kaputun altında bir <code>thrd_t</code>'nin ne tür bir tip olduğunu söylemez—bildiğimiz kadarıyla bir <code>struct</code> bile olabilir. Ancak o satır benim sistemimde çalışıyor.</p>
+<p>Yukarıdaki kodu çalıştırıp thread ID'lerini yazdırdığımda gördüğüm ilginç bir şey, bazı thread'lerin mükerrer (aynı) ID'lere sahip olmasıydı! Bu imkansız gibi görünse de ilgili thread çıktıktan sonra C'nin thread ID'lerini <em>yeniden kullanmasına (reuse)</em> izin verilir. Dolayısıyla gördüğüm şey, diğer thread'ler başlatılmadan önce bazı thread'lerin çalışmalarını tamamlamış olmasıydı.</p>
+<h2 data-number="39.6" id="thread-local-data"><span class="header-section-number">39.6</span> İzleğe Özel Veri (Thread Local Data)</h2>
 <p></p>
-<p>Threads are interesting because they don’t have their own memory beyond local variables. If you want a <code>static</code> variable or file scope variable, all threads will see that same variable.</p>
-<p>This can lead to race conditions, where you get <em>Weird Things</em>™ happening.</p>
-<p>Check out this example. We have a <code>static</code> variable <code>foo</code> in block scope in <code>run()</code>. This variable will be visible to all threads that pass through the <code>run()</code> function. And the various threads can effectively step on each others toes.</p>
-<p>Each thread copies <code>foo</code> into a local variable <code>x</code> (which is not shared between threads—all the threads have their own call stacks). So they <em>should</em> be the same, right?</p>
-<p>And the first time we print them, they are<a href="function-specifiers-alignment-specifiersoperators.html#fn202" class="footnote-ref" id="fnref202" role="doc-noteref"><sup>202</sup></a>. But then right after that, we check to make sure they’re still the same.</p>
-<p>And they <em>usually</em> are. But not always!</p>
+<p>Thread'ler ilginçtir çünkü yerel değişkenlerin ötesinde kendilerine ait bellekleri yoktur. Bir <code>static</code> değişken veya dosya kapsamlı (file scope) değişken istiyorsanız, tüm thread'ler o aynı değişkeni görecektir.</p>
+<p>Bu, <em>Garip Şeyler</em>™ yaşanabileceği yarış durumlarına (race conditions) yol açabilir.</p>
+<p>Bu örneğe göz atın. <code>run()</code> içinde blok kapsamında <code>static</code> bir <code>foo</code> değişkenimiz var. Bu değişken <code>run()</code> fonksiyonundan geçen tüm thread'lere görünür olacaktır. Ve çeşitli thread'ler etkili bir şekilde birbirlerinin ayağına basabilir.</p>
+<p>Her thread <code>foo</code>'yu yerel bir <code>x</code> değişkenine kopyalar (bu değişken thread'ler arasında paylaşılmaz—tüm thread'lerin kendi çağrı yığınları vardır). Yani aynı <em>olmalılar</em>, değil mi?</p>
+<p>Ve onları ilk yazdırdığımızda öyledirler<a href="function-specifiers-alignment-specifiersoperators.html#fn202" class="footnote-ref" id="fnref202" role="doc-noteref"><sup>202</sup></a>. Ancak hemen ardından hala aynı olduklarından emin olmak için kontrol ediyoruz.</p>
+<p>Ve <em>genellikle</em> öyledirler. Ama her zaman değil!</p>
 <div class="sourceCode" id="cb755"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb755-1"><a href="multithreading.html#cb755-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb755-2"><a href="multithreading.html#cb755-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb755-3"><a href="multithreading.html#cb755-3"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb755-4"><a href="multithreading.html#cb755-4"></a></span>
 <span id="cb755-5"><a href="multithreading.html#cb755-5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb755-6"><a href="multithreading.html#cb755-6"></a><span class="op">{</span></span>
-<span id="cb755-7"><a href="multithreading.html#cb755-7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Thread number for humans to differentiate</span></span>
+<span id="cb755-7"><a href="multithreading.html#cb755-7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// İnsanların ayırt etmesi için thread numarası</span></span>
 <span id="cb755-8"><a href="multithreading.html#cb755-8"></a></span>
 <span id="cb755-9"><a href="multithreading.html#cb755-9"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
 <span id="cb755-10"><a href="multithreading.html#cb755-10"></a></span>
-<span id="cb755-11"><a href="multithreading.html#cb755-11"></a>    <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// Static value shared between threads</span></span>
+<span id="cb755-11"><a href="multithreading.html#cb755-11"></a>    <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// Thread'ler arasında paylaşılan statik değer</span></span>
 <span id="cb755-12"><a href="multithreading.html#cb755-12"></a></span>
-<span id="cb755-13"><a href="multithreading.html#cb755-13"></a>    <span class="dt">int</span> x <span class="op">=</span> foo<span class="op">;</span>  <span class="co">// Automatic local variable--each thread has its own</span></span>
+<span id="cb755-13"><a href="multithreading.html#cb755-13"></a>    <span class="dt">int</span> x <span class="op">=</span> foo<span class="op">;</span>  <span class="co">// Otomatik yerel değişken--her thread kendi değişkenine sahiptir</span></span>
 <span id="cb755-14"><a href="multithreading.html#cb755-14"></a></span>
-<span id="cb755-15"><a href="multithreading.html#cb755-15"></a>    <span class="co">// We just assigned x from foo, so they&#39;d better be equal here.</span></span>
-<span id="cb755-16"><a href="multithreading.html#cb755-16"></a>    <span class="co">// (In all my test runs, they were, but even this isn&#39;t guaranteed!)</span></span>
+<span id="cb755-15"><a href="multithreading.html#cb755-15"></a>    <span class="co">// x'i az önce foo'dan atadık, bu yüzden burada eşit olsalar iyi olur.</span></span>
+<span id="cb755-16"><a href="multithreading.html#cb755-16"></a>    <span class="co">// (Tüm test çalıştırmalarımda öyleydiler, ancak bu bile garanti edilmez!)</span></span>
 <span id="cb755-17"><a href="multithreading.html#cb755-17"></a></span>
 <span id="cb755-18"><a href="multithreading.html#cb755-18"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%d</span><span class="st">: x = </span><span class="sc">%d</span><span class="st">, foo = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">,</span> x<span class="op">,</span> foo<span class="op">);</span></span>
 <span id="cb755-19"><a href="multithreading.html#cb755-19"></a></span>
-<span id="cb755-20"><a href="multithreading.html#cb755-20"></a>    <span class="co">// And they should be equal here, but they&#39;re not always!</span></span>
-<span id="cb755-21"><a href="multithreading.html#cb755-21"></a>    <span class="co">// (Sometimes they were, sometimes they weren&#39;t!)</span></span>
+<span id="cb755-20"><a href="multithreading.html#cb755-20"></a>    <span class="co">// Ve burada eşit olmalılar, ancak her zaman değil!</span></span>
+<span id="cb755-21"><a href="multithreading.html#cb755-21"></a>    <span class="co">// (Bazen öyleydiler, bazen değildiler!)</span></span>
 <span id="cb755-22"><a href="multithreading.html#cb755-22"></a></span>
-<span id="cb755-23"><a href="multithreading.html#cb755-23"></a>    <span class="co">// What happens is another thread gets in and increments foo</span></span>
-<span id="cb755-24"><a href="multithreading.html#cb755-24"></a>    <span class="co">// right now, but this thread&#39;s x remains what it was before!</span></span>
+<span id="cb755-23"><a href="multithreading.html#cb755-23"></a>    <span class="co">// Olan şey başka bir thread'in içeri girmesi ve foo'yu artırmasıdır</span></span>
+<span id="cb755-24"><a href="multithreading.html#cb755-24"></a>    <span class="co">// tam şu anda, ama bu thread'in x'i önceki gibi kalır!</span></span>
 <span id="cb755-25"><a href="multithreading.html#cb755-25"></a></span>
 <span id="cb755-26"><a href="multithreading.html#cb755-26"></a>    <span class="cf">if</span> <span class="op">(</span>x <span class="op">!=</span> foo<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb755-27"><a href="multithreading.html#cb755-27"></a>        printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%d</span><span class="st">: Craziness! x != foo! </span><span class="sc">%d</span><span class="st"> != </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">,</span> x<span class="op">,</span> foo<span class="op">);</span></span>
 <span id="cb755-28"><a href="multithreading.html#cb755-28"></a>    <span class="op">}</span></span>
 <span id="cb755-29"><a href="multithreading.html#cb755-29"></a></span>
-<span id="cb755-30"><a href="multithreading.html#cb755-30"></a>    foo<span class="op">++;</span>  <span class="co">// Increment shared value</span></span>
+<span id="cb755-30"><a href="multithreading.html#cb755-30"></a>    foo<span class="op">++;</span>  <span class="co">// Paylaşılan değeri artır</span></span>
 <span id="cb755-31"><a href="multithreading.html#cb755-31"></a></span>
 <span id="cb755-32"><a href="multithreading.html#cb755-32"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb755-33"><a href="multithreading.html#cb755-33"></a><span class="op">}</span></span>
@@ -350,7 +350,7 @@
 <span id="cb755-39"><a href="multithreading.html#cb755-39"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
 <span id="cb755-40"><a href="multithreading.html#cb755-40"></a></span>
 <span id="cb755-41"><a href="multithreading.html#cb755-41"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb755-42"><a href="multithreading.html#cb755-42"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Holds a thread serial number</span></span>
+<span id="cb755-42"><a href="multithreading.html#cb755-42"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Bir thread seri numarasını tutar</span></span>
 <span id="cb755-43"><a href="multithreading.html#cb755-43"></a>        <span class="op">*</span>n <span class="op">=</span> i<span class="op">;</span></span>
 <span id="cb755-44"><a href="multithreading.html#cb755-44"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> n<span class="op">);</span></span>
 <span id="cb755-45"><a href="multithreading.html#cb755-45"></a>    <span class="op">}</span></span>
@@ -359,51 +359,51 @@
 <span id="cb755-48"><a href="multithreading.html#cb755-48"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
 <span id="cb755-49"><a href="multithreading.html#cb755-49"></a>    <span class="op">}</span></span>
 <span id="cb755-50"><a href="multithreading.html#cb755-50"></a><span class="op">}</span></span></code></pre></div>
-<p>Here’s an example output (though this varies from run to run):</p>
+<p>İşte bir örnek çıktı (çalıştırmadan çalıştırmaya değişse de):</p>
 <div class="sourceCode" id="cb756"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb756-1"><a href="multithreading.html#cb756-1" aria-hidden="true" tabindex="-1"></a>Thread 0: x = 10, foo = 10</span>
 <span id="cb756-2"><a href="multithreading.html#cb756-2" aria-hidden="true" tabindex="-1"></a>Thread 1: x = 10, foo = 10</span>
 <span id="cb756-3"><a href="multithreading.html#cb756-3" aria-hidden="true" tabindex="-1"></a>Thread 1: Craziness! x != foo! 10 != 11</span>
 <span id="cb756-4"><a href="multithreading.html#cb756-4" aria-hidden="true" tabindex="-1"></a>Thread 2: x = 12, foo = 12</span>
 <span id="cb756-5"><a href="multithreading.html#cb756-5" aria-hidden="true" tabindex="-1"></a>Thread 4: x = 13, foo = 13</span>
 <span id="cb756-6"><a href="multithreading.html#cb756-6" aria-hidden="true" tabindex="-1"></a>Thread 3: x = 14, foo = 14</span></code></pre></div>
-<p>In thread 1, between the two <code>printf()</code>s, the value of <code>foo</code> somehow changed from <code>10</code> to <code>11</code>, even though clearly there’s no increment between the <code>printf()</code>s!</p>
-<p>It was another thread that got in there (probably thread 0, from the look of it) and incremented the value of <code>foo</code> behind thread 1’s back!</p>
-<p>Let’s solve this problem two different ways. (If you want all the threads to share the variable <em>and</em> not step on each other’s toes, you’ll have to read on to the <a href="multithreading.html#mutex">mutex</a> section.)</p>
-<h3 data-number="39.6.1" id="thread-local"><span class="header-section-number">39.6.1</span> <code>_Thread_local</code> Storage-Class</h3>
+<p>Thread 1'de iki <code>printf()</code> arasında, <code>printf()</code>'ler arasında açıkça hiçbir artırma olmamasına rağmen <code>foo</code> değeri bir şekilde <code>10</code>'dan <code>11</code>'e değişti!</p>
+<p>İçeri giren (görünüşe bakılırsa muhtemelen thread 0) ve thread 1'in arkasından <code>foo</code> değerini artıran başka bir thread'di!</p>
+<p>Bu sorunu iki farklı şekilde çözelim. (Tüm thread'lerin değişkeni paylaşmasını <em>ve</em> birbirlerinin ayağına basmamasını istiyorsanız, <a href="multithreading.html#mutex">mutex</a> bölümünü okumaya devam etmeniz gerekecek.)</p>
+<h3 data-number="39.6.1" id="thread-local"><span class="header-section-number">39.6.1</span> <code>_Thread_local</code> Depolama Sınıfı</h3>
 <p></p>
-<p>First things first, let’s just look at the easy way around this: the <code>_Thread_local</code> storage-class.</p>
-<p>Basically we’re just going to slap this on the front of our block scope <code>static</code> variable and things will work! It tells C that every thread should have its own version of this variable, so none of them step on each other’s toes.</p>
+<p>İlk iş olarak, bunun etrafından dolanmanın kolay yoluna bakalım: <code>_Thread_local</code> depolama sınıfı.</p>
+<p>Temel olarak bunu blok kapsamındaki <code>static</code> değişkenimizin önüne ekleyeceğiz ve işler yoluna girecek! C'ye her thread'in bu değişkenin kendi sürümüne sahip olması gerektiğini söyler, böylece hiçbiri birbirinin ayağına basmaz.</p>
 <p></p>
-<p>The <code>&lt;threads.h&gt;</code> header defines <code>thread_local</code> as an alias to <code>_Thread_local</code> so your code doesn’t have to look so ugly.</p>
-<p>Let’s take the previous example and make <code>foo</code> into a <code>thread_local</code> variable so that we don’t share that data.</p>
+<p><code>&lt;threads.h&gt;</code> başlık dosyası <code>thread_local</code> sözcüğünü <code>_Thread_local</code> için bir takma ad olarak tanımlar, böylece kodunuz o kadar çirkin görünmek zorunda kalmaz.</p>
+<p>Önceki örneği ele alalım ve <code>foo</code>'yu <code>thread_local</code> bir değişken yapalım, böylece o veriyi paylaşmayalım.</p>
 <div class="sourceCode" id="cb757" data-startfrom="5"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 4;"><span id="cb757-5"><a href="multithreading.html#cb757-5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb757-6"><a href="multithreading.html#cb757-6"></a><span class="op">{</span></span>
-<span id="cb757-7"><a href="multithreading.html#cb757-7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Thread number for humans to differentiate</span></span>
+<span id="cb757-7"><a href="multithreading.html#cb757-7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// İnsanların ayırt etmesi için thread numarası</span></span>
 <span id="cb757-8"><a href="multithreading.html#cb757-8"></a></span>
 <span id="cb757-9"><a href="multithreading.html#cb757-9"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
 <span id="cb757-10"><a href="multithreading.html#cb757-10"></a></span>
-<span id="cb757-11"><a href="multithreading.html#cb757-11"></a>    <span class="dt">thread_local</span> <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// &lt;-- No longer shared!!</span></span></code></pre></div>
-<p>And running we get:</p>
+<span id="cb757-11"><a href="multithreading.html#cb757-11"></a>    <span class="dt">thread_local</span> <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// &lt;-- Artık paylaşılmıyor!!</span></span></code></pre></div>
+<p>Ve çalıştırdığımızda şunu elde ederiz:</p>
 <div class="sourceCode" id="cb758"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb758-1"><a href="multithreading.html#cb758-1" aria-hidden="true" tabindex="-1"></a>Thread 0: x = 10, foo = 10</span>
 <span id="cb758-2"><a href="multithreading.html#cb758-2" aria-hidden="true" tabindex="-1"></a>Thread 1: x = 10, foo = 10</span>
 <span id="cb758-3"><a href="multithreading.html#cb758-3" aria-hidden="true" tabindex="-1"></a>Thread 2: x = 10, foo = 10</span>
 <span id="cb758-4"><a href="multithreading.html#cb758-4" aria-hidden="true" tabindex="-1"></a>Thread 4: x = 10, foo = 10</span>
 <span id="cb758-5"><a href="multithreading.html#cb758-5" aria-hidden="true" tabindex="-1"></a>Thread 3: x = 10, foo = 10</span></code></pre></div>
-<p>No more weird problems!</p>
-<p>One thing: if a <code>thread_local</code> variable is block scope, it <strong>must</strong> be <code>static</code>. Them’s the rules. (But this is OK because non-<code>static</code> variables are per-thread already since each thread has it’s own non-<code>static</code> variables.)</p>
-<p>A bit of a lie there: block scope <code>thread_local</code> variables can also be <code>extern</code>.</p>
+<p>Artık tuhaf sorunlar yok!</p>
+<p>Bir husus: eğer bir <code>thread_local</code> değişken blok kapsamındaysa, <code>static</code> olmak <strong>zorundadır</strong>. Kurallar böyle. (Ancak bu sorun değil çünkü her thread kendi <code>static</code> olmayan değişkenlerine sahip olduğundan, <code>static</code> olmayan değişkenler zaten thread başınadır.)</p>
+<p>Burada küçük bir yalan var: blok kapsamlı <code>thread_local</code> değişkenler <code>extern</code> de olabilir.</p>
 <p> </p>
-<h3 data-number="39.6.2" id="another-option-thread-specific-storage"><span class="header-section-number">39.6.2</span> Another Option: Thread-Specific Storage</h3>
+<h3 data-number="39.6.2" id="another-option-thread-specific-storage"><span class="header-section-number">39.6.2</span> Başka Bir Seçenek: İzleğe Özel Depolama (Thread-Specific Storage)</h3>
 <p></p>
-<p>Thread-specific storage (TSS) is another way of getting per-thread data.</p>
-<p>One additional feature is that these functions allow you to specify a destructor that will be called on the data when the TSS variable is deleted. Commonly this destructor is <code>free()</code> to automatically clean up <code>malloc()</code>d per-thread data. Or <code>NULL</code> if you don’t need to destroy anything.</p>
-<p>The destructor is type <code>tss_dtor_t</code> which is a pointer to a function that returns <code>void</code> and takes a <code>void*</code> as an argument (the <code>void*</code> points to the data stored in the variable). In other words, it’s a <code>void (*)(void*)</code>, if that clears it up. Which I admit it probably doesn’t. Check out the example, below.</p>
-<p>Generally, <code>thread_local</code> is probably your go-to, but if you like the destructor idea, then you can make use of that.</p>
-<p>The usage is a bit weird in that we need a variable of type <code>tss_t</code> to be alive to represent the value on a per thread basis. Then we initialize it with <code>tss_create()</code>. Eventually we get rid of it with <code>tss_delete()</code>. Note that calling <code>tss_delete()</code> doesn’t run all the destructors—it’s <code>thrd_exit()</code> (or returning from the run function) that does that. <code>tss_delete()</code> just releases any memory allocated by <code>tss_create()</code>. </p>
-<p>In the middle, threads can call <code>tss_set()</code> and <code>tss_get()</code> to set and get the value.</p>
-<p>In the following code, we set up the TSS variable before creating the threads, then clean up after the threads.</p>
-<p>In the <code>run()</code> function, the threads <code>malloc()</code> some space for a string and store that pointer in the TSS variable.</p>
-<p>When the thread exits, the destructor function (<code>free()</code> in this case) is called for <em>all</em> the threads.</p>
+<p>İzleğe özel depolama (Thread-Specific Storage - TSS), thread başına veri elde etmenin başka bir yoludur.</p>
+<p>Ek bir özellik, bu fonksiyonların TSS değişkeni silindiğinde veri üzerinde çağrılacak bir yıkıcı (destructor) belirtmenize izin vermesidir. Yaygın olarak bu yıkıcı, <code>malloc()</code> ile ayrılmış thread başına verileri otomatik olarak temizlemek için <code>free()</code>'dir. Veya hiçbir şeyi yok etmeniz gerekmiyorsa <code>NULL</code>'dur.</p>
+<p>Yıkıcı türü <code>tss_dtor_t</code>'dir; bu da <code>void</code> döndüren ve argüman olarak bir <code>void*</code> alan (<code>void*</code> değişkende saklanan veriyi gösterir) bir fonksiyon pointer'ıdır. Başka bir deyişle, netleştirecek olursa <code>void (*)(void*)</code> şeklindedir. Muhtemelen netleştirmediğini kabul ediyorum. Aşağıdaki örneğe göz atın.</p>
+<p>Genellikle <code>thread_local</code> muhtemelen ilk tercihiniz olacaktır, ancak yıkıcı (destructor) fikrini sevdiyseniz bundan yararlanabilirsiniz.</p>
+<p>Kullanım biraz gariptir çünkü değeri thread bazında temsil etmek için <code>tss_t</code> türünde bir değişkenin hayatta kalmasına ihtiyacımız vardır. Ardından onu <code>tss_create()</code> ile ilklendiririz. En sonunda <code>tss_delete()</code> ile ondan kurtuluruz. <code>tss_delete()</code> çağırmanın tüm yıkıcıları çalıştırmadığını unutmayın—bunu yapan <code>thrd_exit()</code> (veya run fonksiyonundan dönmektir). <code>tss_delete()</code> sadece <code>tss_create()</code> tarafından ayrılan belleği serbest bırakır. </p>
+<p>Arada, thread'ler değeri ayarlamak ve almak için <code>tss_set()</code> ve <code>tss_get()</code> çağırabilir.</p>
+<p>Aşağıdaki kodda, thread'leri oluşturmadan önce TSS değişkenini ayarlıyoruz, ardından thread'lerden sonra temizlik yapıyoruz.</p>
+<p><code>run()</code> fonksiyonunda thread'ler bir metin (string) için <code>malloc()</code> ile alan ayırır ve bu pointer'ı TSS değişkeninde saklar.</p>
+<p>Thread çıktığında, yıkıcı fonksiyon (bu durumda <code>free()</code>) <em>tüm</em> thread'ler için çağrılır.</p>
 <p> </p>
 <div class="sourceCode" id="cb759"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb759-1"><a href="multithreading.html#cb759-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb759-2"><a href="multithreading.html#cb759-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
@@ -413,29 +413,29 @@
 <span id="cb759-6"><a href="multithreading.html#cb759-6"></a></span>
 <span id="cb759-7"><a href="multithreading.html#cb759-7"></a><span class="dt">void</span> some_function<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb759-8"><a href="multithreading.html#cb759-8"></a><span class="op">{</span></span>
-<span id="cb759-9"><a href="multithreading.html#cb759-9"></a>    <span class="co">// Retrieve the per-thread value of this string</span></span>
+<span id="cb759-9"><a href="multithreading.html#cb759-9"></a>    <span class="co">// Bu metnin thread bazındaki değerini al</span></span>
 <span id="cb759-10"><a href="multithreading.html#cb759-10"></a>    <span class="dt">char</span> <span class="op">*</span>tss_string <span class="op">=</span> tss_get<span class="op">(</span>str<span class="op">);</span></span>
 <span id="cb759-11"><a href="multithreading.html#cb759-11"></a></span>
-<span id="cb759-12"><a href="multithreading.html#cb759-12"></a>    <span class="co">// And print it</span></span>
+<span id="cb759-12"><a href="multithreading.html#cb759-12"></a>    <span class="co">// Ve yazdır</span></span>
 <span id="cb759-13"><a href="multithreading.html#cb759-13"></a>    printf<span class="op">(</span><span class="st">&quot;TSS string: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> tss_string<span class="op">);</span></span>
 <span id="cb759-14"><a href="multithreading.html#cb759-14"></a><span class="op">}</span></span>
 <span id="cb759-15"><a href="multithreading.html#cb759-15"></a></span>
 <span id="cb759-16"><a href="multithreading.html#cb759-16"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb759-17"><a href="multithreading.html#cb759-17"></a><span class="op">{</span></span>
-<span id="cb759-18"><a href="multithreading.html#cb759-18"></a>    <span class="dt">int</span> serial <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Get this thread&#39;s serial number</span></span>
+<span id="cb759-18"><a href="multithreading.html#cb759-18"></a>    <span class="dt">int</span> serial <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Bu thread'in seri numarasını al</span></span>
 <span id="cb759-19"><a href="multithreading.html#cb759-19"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
 <span id="cb759-20"><a href="multithreading.html#cb759-20"></a></span>
-<span id="cb759-21"><a href="multithreading.html#cb759-21"></a>    <span class="co">// malloc() space to hold the data for this thread</span></span>
+<span id="cb759-21"><a href="multithreading.html#cb759-21"></a>    <span class="co">// Bu thread verisini tutmak için malloc() ile alan ayır</span></span>
 <span id="cb759-22"><a href="multithreading.html#cb759-22"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> malloc<span class="op">(</span><span class="dv">64</span><span class="op">);</span></span>
-<span id="cb759-23"><a href="multithreading.html#cb759-23"></a>    sprintf<span class="op">(</span>s<span class="op">,</span> <span class="st">&quot;thread </span><span class="sc">%d</span><span class="st">! :)&quot;</span><span class="op">,</span> serial<span class="op">);</span>  <span class="co">// Happy little string</span></span>
+<span id="cb759-23"><a href="multithreading.html#cb759-23"></a>    sprintf<span class="op">(</span>s<span class="op">,</span> <span class="st">&quot;thread </span><span class="sc">%d</span><span class="st">! :)&quot;</span><span class="op">,</span> serial<span class="op">);</span>  <span class="co">// Neşeli küçük metin</span></span>
 <span id="cb759-24"><a href="multithreading.html#cb759-24"></a></span>
-<span id="cb759-25"><a href="multithreading.html#cb759-25"></a>    <span class="co">// Set this TSS variable to point at the string</span></span>
+<span id="cb759-25"><a href="multithreading.html#cb759-25"></a>    <span class="co">// Bu TSS değişkenini metne işaret edecek şekilde ayarla</span></span>
 <span id="cb759-26"><a href="multithreading.html#cb759-26"></a>    tss_set<span class="op">(</span>str<span class="op">,</span> s<span class="op">);</span></span>
 <span id="cb759-27"><a href="multithreading.html#cb759-27"></a></span>
-<span id="cb759-28"><a href="multithreading.html#cb759-28"></a>    <span class="co">// Call a function that will get the variable</span></span>
+<span id="cb759-28"><a href="multithreading.html#cb759-28"></a>    <span class="co">// Değişkeni alacak bir fonksiyon çağır</span></span>
 <span id="cb759-29"><a href="multithreading.html#cb759-29"></a>    some_function<span class="op">();</span></span>
 <span id="cb759-30"><a href="multithreading.html#cb759-30"></a></span>
-<span id="cb759-31"><a href="multithreading.html#cb759-31"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Equivalent to thrd_exit(0)</span></span>
+<span id="cb759-31"><a href="multithreading.html#cb759-31"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// thrd_exit(0) eşdeğeri</span></span>
 <span id="cb759-32"><a href="multithreading.html#cb759-32"></a><span class="op">}</span></span>
 <span id="cb759-33"><a href="multithreading.html#cb759-33"></a></span>
 <span id="cb759-34"><a href="multithreading.html#cb759-34"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">15</span></span>
@@ -444,11 +444,11 @@
 <span id="cb759-37"><a href="multithreading.html#cb759-37"></a><span class="op">{</span></span>
 <span id="cb759-38"><a href="multithreading.html#cb759-38"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
 <span id="cb759-39"><a href="multithreading.html#cb759-39"></a></span>
-<span id="cb759-40"><a href="multithreading.html#cb759-40"></a>    <span class="co">// Make a new TSS variable, the free() function is the destructor</span></span>
+<span id="cb759-40"><a href="multithreading.html#cb759-40"></a>    <span class="co">// Yeni bir TSS değişkeni oluştur, free() fonksiyonu yıkıcıdır</span></span>
 <span id="cb759-41"><a href="multithreading.html#cb759-41"></a>    tss_create<span class="op">(&amp;</span>str<span class="op">,</span> free<span class="op">);</span></span>
 <span id="cb759-42"><a href="multithreading.html#cb759-42"></a></span>
 <span id="cb759-43"><a href="multithreading.html#cb759-43"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb759-44"><a href="multithreading.html#cb759-44"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Holds a thread serial number</span></span>
+<span id="cb759-44"><a href="multithreading.html#cb759-44"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Bir thread seri numarasını tutar</span></span>
 <span id="cb759-45"><a href="multithreading.html#cb759-45"></a>        <span class="op">*</span>n <span class="op">=</span> i<span class="op">;</span></span>
 <span id="cb759-46"><a href="multithreading.html#cb759-46"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> n<span class="op">);</span></span>
 <span id="cb759-47"><a href="multithreading.html#cb759-47"></a>    <span class="op">}</span></span>
@@ -457,23 +457,23 @@
 <span id="cb759-50"><a href="multithreading.html#cb759-50"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
 <span id="cb759-51"><a href="multithreading.html#cb759-51"></a>    <span class="op">}</span></span>
 <span id="cb759-52"><a href="multithreading.html#cb759-52"></a></span>
-<span id="cb759-53"><a href="multithreading.html#cb759-53"></a>    <span class="co">// All threads are done, so we&#39;re done with this</span></span>
+<span id="cb759-53"><a href="multithreading.html#cb759-53"></a>    <span class="co">// Tüm thread'lerin işi bitti, bu yüzden bizim de bununla işimiz bitti</span></span>
 <span id="cb759-54"><a href="multithreading.html#cb759-54"></a>    tss_delete<span class="op">(</span>str<span class="op">);</span></span>
 <span id="cb759-55"><a href="multithreading.html#cb759-55"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>Again, this is kind of a painful way of doing things compared to <code>thread_local</code>, so unless you really need that destructor functionality, I’d use that instead.</p>
+<p>Yine bu, <code>thread_local</code> ile karşılaştırıldığında bir tür eziyetli yoldur, bu nedenle yıkıcı (destructor) işlevselliğine gerçekten ihtiyacınız olmadıkça onun yerine <code>thread_local</code> kullanırdım.</p>
 <p></p>
-<h2 data-number="39.7" id="mutex"><span class="header-section-number">39.7</span> Mutexes</h2>
+<h2 data-number="39.7" id="mutex"><span class="header-section-number">39.7</span> Mutex'ler</h2>
 <p></p>
-<p>If you want to only allow a single thread into a critical section of code at a time, you can protect that section with a mutex<a href="function-specifiers-alignment-specifiersoperators.html#fn203" class="footnote-ref" id="fnref203" role="doc-noteref"><sup>203</sup></a>.</p>
-<p>For example, if we had a <code>static</code> variable and we wanted to be able to get and set it in two operations without another thread jumping in the middle and corrupting it, we could use a mutex for that.</p>
-<p>You can acquire a mutex or release it. If you attempt to acquire the mutex and succeed, you may continue execution. If you attempt and fail (because someone else holds it), you will <em>block</em><a href="function-specifiers-alignment-specifiersoperators.html#fn204" class="footnote-ref" id="fnref204" role="doc-noteref"><sup>204</sup></a> until the mutex is released.</p>
-<p>If multiple threads are blocked waiting for a mutex to be released, one of them will be chosen to run (at random, from our perspective), and the others will continue to sleep.</p>
-<p>The gameplan is that first we’ll initialize a mutex variable to make it ready to use with <code>mtx_init()</code>.</p>
-<p>Then subsequent threads can call <code>mtx_lock()</code> and <code>mtx_unlock()</code> to get and release the mutex.</p>
-<p>When we’re completely done with the mutex, we can destroy it with <code>mtx_destroy()</code>, the logical opposite of <code>mtx_init()</code>.</p>
+<p>Kodun kritik bir bölümüne aynı anda yalnızca tek bir thread'in girmesine izin vermek istiyorsanız, o bölümü bir mutex ile koruyabilirsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn203" class="footnote-ref" id="fnref203" role="doc-noteref"><sup>203</sup></a>.</p>
+<p>Örneğin, <code>static</code> bir değişkenimiz olsaydı ve başka bir thread araya girip onu bozmadan iki işlemde alıp ayarlayabilmek isteseydik, bunun için bir mutex kullanabilirdik.</p>
+<p>Bir mutex edinebilir (acquire) veya serbest bırakabilirsiniz (release). Mutex'i edinmeye çalışır ve başarılı olursanız, yürütmeye devam edebilirsiniz. Deneyip başarısız olursanız (başkası tuttuğu için), mutex serbest bırakılana kadar <em>engellenirsiniz (block)</em><a href="function-specifiers-alignment-specifiersoperators.html#fn204" class="footnote-ref" id="fnref204" role="doc-noteref"><sup>204</sup></a>.</p>
+<p>Birden fazla thread bir mutex'in serbest bırakılmasını beklerken engellenmişse, bunlardan biri çalıştırılmak üzere seçilecek (bizim açımızdan rastgele) ve diğerleri uyumaya devam edecektir.</p>
+<p>Oyun planı, önce <code>mtx_init()</code> ile bir mutex değişkenini kullanıma hazır hale getirmek için ilklendireceğimizdir.</p>
+<p>Ardından sonraki thread'ler mutex'i almak ve serbest bırakmak için <code>mtx_lock()</code> ve <code>mtx_unlock()</code> çağırabilir.</p>
+<p>Mutex ile işimiz tamamen bittiğinde, onu <code>mtx_init()</code>'in mantıksal zıttı olan <code>mtx_destroy()</code> ile yok edebiliriz.</p>
 <p></p>
-<p>First, let’s look at some code that does <em>not</em> use a mutex, and endeavors to print out a shared (<code>static</code>) serial number and then increment it. Because we’re not using a mutex over the getting of the value (to print it) and the setting (to increment it), threads might get in each other’s way in that critical section.</p>
+<p>İlk olarak, bir mutex <em>kullanmayan</em> ve paylaşılan (<code>static</code>) bir seri numarasını yazdırıp ardından artırmaya çalışan bir koda bakalım. Değeri alma (yazdırmak için) ve ayarlama (artırmak için) işlemleri üzerinde bir mutex kullanmadığımız için, o kritik bölümde thread'ler birbirinin yoluna çıkabilir.</p>
 <div class="sourceCode" id="cb760"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb760-1"><a href="multithreading.html#cb760-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb760-2"><a href="multithreading.html#cb760-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb760-3"><a href="multithreading.html#cb760-3"></a></span>
@@ -481,7 +481,7 @@
 <span id="cb760-5"><a href="multithreading.html#cb760-5"></a><span class="op">{</span></span>
 <span id="cb760-6"><a href="multithreading.html#cb760-6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
 <span id="cb760-7"><a href="multithreading.html#cb760-7"></a></span>
-<span id="cb760-8"><a href="multithreading.html#cb760-8"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Shared static variable!</span></span>
+<span id="cb760-8"><a href="multithreading.html#cb760-8"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Paylaşılan statik değişken!</span></span>
 <span id="cb760-9"><a href="multithreading.html#cb760-9"></a></span>
 <span id="cb760-10"><a href="multithreading.html#cb760-10"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running! </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
 <span id="cb760-11"><a href="multithreading.html#cb760-11"></a></span>
@@ -504,7 +504,7 @@
 <span id="cb760-28"><a href="multithreading.html#cb760-28"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
 <span id="cb760-29"><a href="multithreading.html#cb760-29"></a>    <span class="op">}</span></span>
 <span id="cb760-30"><a href="multithreading.html#cb760-30"></a><span class="op">}</span></span></code></pre></div>
-<p>When I run this, I get something that looks like this:</p>
+<p>Bunu çalıştırdığımda şöyle görünen bir şey elde ediyorum:</p>
 <div class="sourceCode" id="cb761"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb761-1"><a href="multithreading.html#cb761-1" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
 <span id="cb761-2"><a href="multithreading.html#cb761-2" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
 <span id="cb761-3"><a href="multithreading.html#cb761-3" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
@@ -515,68 +515,66 @@
 <span id="cb761-8"><a href="multithreading.html#cb761-8" aria-hidden="true" tabindex="-1"></a>Thread running! 7</span>
 <span id="cb761-9"><a href="multithreading.html#cb761-9" aria-hidden="true" tabindex="-1"></a>Thread running! 8</span>
 <span id="cb761-10"><a href="multithreading.html#cb761-10" aria-hidden="true" tabindex="-1"></a>Thread running! 9</span></code></pre></div>
-<p>Clearly multiple threads are getting in there and running the <code>printf()</code> before anyone gets a change to update the <code>serial</code> variable.</p>
+<p>Açıkçası, kimse <code>serial</code> değişkenini güncelleme şansı bulamadan önce birden fazla thread içeri giriyor ve <code>printf()</code> çalıştırıyor.</p>
 <p></p>
-<p>What we want to do is wrap the getting of the variable and setting of it into a single mutex-protected stretch of code.</p>
-<p>We’ll add a new variable to represent the mutex of type <code>mtx_t</code> in file scope, initialize it, and then the threads can lock and unlock it in the <code>run()</code> function.</p>
+<p>Yapmak istediğimiz şey, değişkeni alma ve ayarlama işlemlerini mutex korumalı tek bir kod parçası içine sarmaktır.</p>
+<p>Dosya kapsamında <code>mtx_t</code> türündeki mutex'i temsil edecek yeni bir değişken ekleyeceğiz, onu ilklendireceğiz ve ardından thread'ler <code>run()</code> fonksiyonunda onu kilitleyip kilitlerini açabilecek.</p>
 <p> </p>
 <div class="sourceCode" id="cb762"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb762-1"><a href="multithreading.html#cb762-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb762-2"><a href="multithreading.html#cb762-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb762-3"><a href="multithreading.html#cb762-3"></a></span>
-<span id="cb762-4"><a href="multithreading.html#cb762-4"></a>mtx_t serial_mtx<span class="op">;</span>     <span class="co">// &lt;-- MUTEX VARIABLE</span></span>
+<span id="cb762-4"><a href="multithreading.html#cb762-4"></a>mtx_t serial_mtx<span class="op">;</span>     <span class="co">// &lt;-- MUTEX DEĞİŞKENİ</span></span>
 <span id="cb762-5"><a href="multithreading.html#cb762-5"></a></span>
 <span id="cb762-6"><a href="multithreading.html#cb762-6"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb762-7"><a href="multithreading.html#cb762-7"></a><span class="op">{</span></span>
 <span id="cb762-8"><a href="multithreading.html#cb762-8"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
 <span id="cb762-9"><a href="multithreading.html#cb762-9"></a></span>
-<span id="cb762-10"><a href="multithreading.html#cb762-10"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Shared static variable!</span></span>
+<span id="cb762-10"><a href="multithreading.html#cb762-10"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Paylaşılan statik değişken!</span></span>
 <span id="cb762-11"><a href="multithreading.html#cb762-11"></a></span>
-<span id="cb762-12"><a href="multithreading.html#cb762-12"></a>    <span class="co">// Acquire the mutex--all threads will block on this call until</span></span>
-<span id="cb762-13"><a href="multithreading.html#cb762-13"></a>    <span class="co">// they get the lock:</span></span>
-<span id="cb762-14"><a href="multithreading.html#cb762-14"></a></span>
-<span id="cb762-15"><a href="multithreading.html#cb762-15"></a>    mtx_lock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>           <span class="co">// &lt;-- ACQUIRE MUTEX</span></span>
-<span id="cb762-16"><a href="multithreading.html#cb762-16"></a></span>
-<span id="cb762-17"><a href="multithreading.html#cb762-17"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running! </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
-<span id="cb762-18"><a href="multithreading.html#cb762-18"></a></span>
-<span id="cb762-19"><a href="multithreading.html#cb762-19"></a>    serial<span class="op">++;</span></span>
-<span id="cb762-20"><a href="multithreading.html#cb762-20"></a></span>
-<span id="cb762-21"><a href="multithreading.html#cb762-21"></a>    <span class="co">// Done getting and setting the data, so free the lock. This will</span></span>
-<span id="cb762-22"><a href="multithreading.html#cb762-22"></a>    <span class="co">// unblock threads on the mtx_lock() call:</span></span>
-<span id="cb762-23"><a href="multithreading.html#cb762-23"></a></span>
-<span id="cb762-24"><a href="multithreading.html#cb762-24"></a>    mtx_unlock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>         <span class="co">// &lt;-- RELEASE MUTEX</span></span>
-<span id="cb762-25"><a href="multithreading.html#cb762-25"></a></span>
-<span id="cb762-26"><a href="multithreading.html#cb762-26"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb762-27"><a href="multithreading.html#cb762-27"></a><span class="op">}</span></span>
-<span id="cb762-28"><a href="multithreading.html#cb762-28"></a></span>
-<span id="cb762-29"><a href="multithreading.html#cb762-29"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">10</span></span>
-<span id="cb762-30"><a href="multithreading.html#cb762-30"></a></span>
-<span id="cb762-31"><a href="multithreading.html#cb762-31"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb762-32"><a href="multithreading.html#cb762-32"></a><span class="op">{</span></span>
-<span id="cb762-33"><a href="multithreading.html#cb762-33"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
-<span id="cb762-34"><a href="multithreading.html#cb762-34"></a></span>
-<span id="cb762-35"><a href="multithreading.html#cb762-35"></a>    <span class="co">// Initialize the mutex variable, indicating this is a normal</span></span>
-<span id="cb762-36"><a href="multithreading.html#cb762-36"></a>    <span class="co">// no-frills, mutex:</span></span>
+<span id="cb762-12"><a href="multithreading.html#cb762-12"></a>    <span class="co">// Mutex'i edin--tüm thread'ler kilidi alana kadar bu çağrıda engellenir:</span></span>
+<span id="cb762-13"><a href="multithreading.html#cb762-13"></a></span>
+<span id="cb762-14"><a href="multithreading.html#cb762-14"></a>    mtx_lock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>           <span class="co">// &lt;-- MUTEX EDİN (ACQUIRE)</span></span>
+<span id="cb762-15"><a href="multithreading.html#cb762-15"></a></span>
+<span id="cb762-16"><a href="multithreading.html#cb762-16"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running! </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
+<span id="cb762-17"><a href="multithreading.html#cb762-17"></a></span>
+<span id="cb762-18"><a href="multithreading.html#cb762-18"></a>    serial<span class="op">++;</span></span>
+<span id="cb762-19"><a href="multithreading.html#cb762-19"></a></span>
+<span id="cb762-20"><a href="multithreading.html#cb762-20"></a>    <span class="co">// Veriyi alma ve ayarlama bitti, bu yüzden kilidi serbest bırak. Bu,</span></span>
+<span id="cb762-21"><a href="multithreading.html#cb762-21"></a>    <span class="co">// mtx_lock() çağrısındaki thread'lerin engelini kaldırır:</span></span>
+<span id="cb762-22"><a href="multithreading.html#cb762-22"></a></span>
+<span id="cb762-23"><a href="multithreading.html#cb762-23"></a>    mtx_unlock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>         <span class="co">// &lt;-- MUTEX SERBEST BIRAK (RELEASE)</span></span>
+<span id="cb762-24"><a href="multithreading.html#cb762-24"></a></span>
+<span id="cb762-25"><a href="multithreading.html#cb762-25"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb762-26"><a href="multithreading.html#cb762-26"></a><span class="op">}</span></span>
+<span id="cb762-27"><a href="multithreading.html#cb762-27"></a></span>
+<span id="cb762-28"><a href="multithreading.html#cb762-28"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">10</span></span>
+<span id="cb762-29"><a href="multithreading.html#cb762-29"></a></span>
+<span id="cb762-30"><a href="multithreading.html#cb762-30"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb762-31"><a href="multithreading.html#cb762-31"></a><span class="op">{</span></span>
+<span id="cb762-32"><a href="multithreading.html#cb762-32"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb762-33"><a href="multithreading.html#cb762-33"></a></span>
+<span id="cb762-34"><a href="multithreading.html#cb762-34"></a>    <span class="co">// Sade, normal bir mutex olduğunu belirterek mutex değişkenini ilklendir:</span></span>
+<span id="cb762-35"><a href="multithreading.html#cb762-35"></a></span>
+<span id="cb762-36"><a href="multithreading.html#cb762-36"></a>    mtx_init<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> mtx_plain<span class="op">);</span>        <span class="co">// &lt;-- MUTEX OLUŞTUR</span></span>
 <span id="cb762-37"><a href="multithreading.html#cb762-37"></a></span>
-<span id="cb762-38"><a href="multithreading.html#cb762-38"></a>    mtx_init<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> mtx_plain<span class="op">);</span>        <span class="co">// &lt;-- CREATE MUTEX</span></span>
-<span id="cb762-39"><a href="multithreading.html#cb762-39"></a></span>
-<span id="cb762-40"><a href="multithreading.html#cb762-40"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb762-41"><a href="multithreading.html#cb762-41"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
-<span id="cb762-42"><a href="multithreading.html#cb762-42"></a>    <span class="op">}</span></span>
-<span id="cb762-43"><a href="multithreading.html#cb762-43"></a></span>
-<span id="cb762-44"><a href="multithreading.html#cb762-44"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb762-45"><a href="multithreading.html#cb762-45"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
-<span id="cb762-46"><a href="multithreading.html#cb762-46"></a>    <span class="op">}</span></span>
+<span id="cb762-38"><a href="multithreading.html#cb762-38"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb762-39"><a href="multithreading.html#cb762-39"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb762-40"><a href="multithreading.html#cb762-40"></a>    <span class="op">}</span></span>
+<span id="cb762-41"><a href="multithreading.html#cb762-41"></a></span>
+<span id="cb762-42"><a href="multithreading.html#cb762-42"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb762-43"><a href="multithreading.html#cb762-43"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
+<span id="cb762-44"><a href="multithreading.html#cb762-44"></a>    <span class="op">}</span></span>
+<span id="cb762-45"><a href="multithreading.html#cb762-45"></a></span>
+<span id="cb762-46"><a href="multithreading.html#cb762-46"></a>    <span class="co">// Mutex ile iş bitti, onu yok et:</span></span>
 <span id="cb762-47"><a href="multithreading.html#cb762-47"></a></span>
-<span id="cb762-48"><a href="multithreading.html#cb762-48"></a>    <span class="co">// Done with the mutex, destroy it:</span></span>
-<span id="cb762-49"><a href="multithreading.html#cb762-49"></a></span>
-<span id="cb762-50"><a href="multithreading.html#cb762-50"></a>    mtx_destroy<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>                <span class="co">// &lt;-- DESTROY MUTEX</span></span>
-<span id="cb762-51"><a href="multithreading.html#cb762-51"></a><span class="op">}</span></span></code></pre></div>
-<p>See how on lines 38 and 50 of <code>main()</code> we initialize and destroy the mutex.</p>
+<span id="cb762-48"><a href="multithreading.html#cb762-48"></a>    mtx_destroy<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>                <span class="co">// &lt;-- MUTEX YOK ET</span></span>
+<span id="cb762-49"><a href="multithreading.html#cb762-49"></a><span class="op">}</span></span></code></pre></div>
+<p><code>main()</code> fonksiyonunun 38 ve 50. satırlarında mutex'i nasıl ilklendirdiğimizi ve yok ettiğimizi görün.</p>
 <p> </p>
-<p>But each individual thread acquires the mutex on line 15 and releases it on line 24.</p>
-<p>In between the <code>mtx_lock()</code> and <code>mtx_unlock()</code> is the <em>critical section</em>, the area of code where we don’t want multiple threads mucking about at the same time.</p>
+<p>Ancak her bireysel thread 15. satırda mutex'i edinir (acquire) ve 24. satırda serbest bırakır (release).</p>
+<p><code>mtx_lock()</code> ve <code>mtx_unlock()</code> arası, birden fazla thread'in aynı anda kurcalamasını istemediğimiz kod alanı olan <em>kritik bölümdür (critical section)</em>.</p>
 <p> </p>
-<p>And now we get proper output!</p>
+<p>Ve şimdi düzgün bir çıktı alıyoruz!</p>
 <div class="sourceCode" id="cb763"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb763-1"><a href="multithreading.html#cb763-1" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
 <span id="cb763-2"><a href="multithreading.html#cb763-2" aria-hidden="true" tabindex="-1"></a>Thread running! 1</span>
 <span id="cb763-3"><a href="multithreading.html#cb763-3" aria-hidden="true" tabindex="-1"></a>Thread running! 2</span>
@@ -587,56 +585,56 @@
 <span id="cb763-8"><a href="multithreading.html#cb763-8" aria-hidden="true" tabindex="-1"></a>Thread running! 7</span>
 <span id="cb763-9"><a href="multithreading.html#cb763-9" aria-hidden="true" tabindex="-1"></a>Thread running! 8</span>
 <span id="cb763-10"><a href="multithreading.html#cb763-10" aria-hidden="true" tabindex="-1"></a>Thread running! 9</span></code></pre></div>
-<p>If you need multiple mutexes, no problem: just have multiple mutex variables.</p>
-<p>And always remember the Number One Rule of Multiple Mutexes: <em>Unlock mutexes in the opposite order in which you lock them!</em></p>
-<h3 data-number="39.7.1" id="different-mutex-types"><span class="header-section-number">39.7.1</span> Different Mutex Types</h3>
+<p>Birden fazla mutex'e ihtiyacınız varsa, sorun değil: birden fazla mutex değişkenine sahip olmanız yeterlidir.</p>
+<p>Ve Birden Çok Mutex'in Bir Numaralı Kuralını her zaman hatırlayın: <em>Mutex kilitlerini, kilitlediğiniz sıranın tersi sırayla açın!</em></p>
+<h3 data-number="39.7.1" id="different-mutex-types"><span class="header-section-number">39.7.1</span> Farklı Mutex Türleri</h3>
 <p></p>
-<p>As hinted earlier, we have a few mutex types that you can create with <code>mtx_init()</code>. (Some of these types are the result of a bitwise-OR operation, as noted in the table.)</p>
+<p>Daha önce ima edildiği gibi, <code>mtx_init()</code> ile oluşturabileceğiniz birkaç mutex türü vardır. (Tabloda belirtildiği gibi bu türlerin bazıları bit düzeyinde VEYA - bitwise-OR işleminin sonucudur.)</p>
 <p></p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Type</th>
-<th>Description</th>
+<th>Tür</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>mtx_plain</code></td>
-<td>Regular ol’ mutex</td>
+<td>Standart normal mutex</td>
 </tr>
 <tr>
 <td><code>mtx_timed</code></td>
-<td>Mutex that supports timeouts</td>
+<td>Zaman aşımını (timeout) destekleyen mutex</td>
 </tr>
 <tr>
 <td><code>mtx_plain|mtx_recursive</code></td>
-<td>Recursive mutex</td>
+<td>Özyinelemeli (recursive) mutex</td>
 </tr>
 <tr>
 <td><code>mtx_timed|mtx_recursive</code></td>
-<td>Recursive mutex that supports timeouts</td>
+<td>Zaman aşımını destekleyen özyinelemeli mutex</td>
 </tr>
 </tbody>
 </table>
-<p>“Recursive” means that the holder of a lock can call <code>mtx_lock()</code> multiple times on the same lock. (They have to unlock it an equal number of times before anyone else can take the mutex.) This might ease coding from time to time, especially if you call a function that needs to lock the mutex when you already hold the mutex.</p>
-<p>And the timeout gives a thread a chance to <em>try</em> to get the lock for a while, but then bail out if it can’t get it in that timeframe.</p>
+<p>"Recursive (Özyinelemeli)", bir kilidin sahibinin aynı kilit üzerinde birden fazla kez <code>mtx_lock()</code> çağırabileceği anlamına gelir. (Başka biri mutex'i alabilmeden önce eşit sayıda kez kilidini açmaları gerekir.) Bu, özellikle zaten mutex'i tutarken mutex'i kilitlemesi gereken bir fonksiyonu çağırdığınızda zaman zaman kodlamayı kolaylaştırabilir.</p>
+<p>Ve zaman aşımı (timeout), bir thread'e bir süre kilidi almaya <em>çalışma</em> fırsatı verir, ancak o zaman diliminde alamazsa vazgeçmesini (bail out) sağlar.</p>
 <p></p>
-<p>For a timeout mutex, be sure to create it with <code>mtx_timed</code>:</p>
+<p>Zaman aşımı olan bir mutex için, onu <code>mtx_timed</code> ile oluşturduğunuzdan emin olun:</p>
 <div class="sourceCode" id="cb764"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb764-1"><a href="multithreading.html#cb764-1" aria-hidden="true" tabindex="-1"></a>mtx_init<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> mtx_timed<span class="op">);</span></span></code></pre></div>
 <p></p>
-<p>And then when you wait for it, you have to specify a time in UTC when it will unlock<a href="function-specifiers-alignment-specifiersoperators.html#fn205" class="footnote-ref" id="fnref205" role="doc-noteref"><sup>205</sup></a>.</p>
+<p>Ve ardından onu beklediğinizde, kilidinin açılacağı UTC cinsinden bir zaman belirtmeniz gerekir<a href="function-specifiers-alignment-specifiersoperators.html#fn205" class="footnote-ref" id="fnref205" role="doc-noteref"><sup>205</sup></a>.</p>
 <p></p>
-<p>The function <code>timespec_get()</code> from <code>&lt;time.h&gt;</code> can be of assistance here. It’ll get you the current time in UTC in a <code>struct timespec</code> which is just what we need. In fact, it seems to exist merely for this purpose.</p>
-<p>It has two fields: <code>tv_sec</code> has the current time in seconds since epoch, and <code>tv_nsec</code> has the nanoseconds (billionths of a second) as the “fractional” part.</p>
-<p>So you can load that up with the current time, and then add to it to get a specific timeout.</p>
+<p><code>&lt;time.h&gt;</code> içindeki <code>timespec_get()</code> fonksiyonu burada yardımcı olabilir. Tam da ihtiyacımız olan <code>struct timespec</code> yapısında UTC cinsinden geçerli zamanı size verir. Hatta sırf bu amaç için var gibi görünüyor.</p>
+<p>İki alanı vardır: <code>tv_sec</code> epoch'tan bu yana saniye cinsinden geçerli zamanı tutar ve <code>tv_nsec</code> "kesirli" kısım olarak nanosaniyeyi (saniyenin milyarda biri) tutar.</p>
+<p>Böylece bunu geçerli zamanla doldurabilir ve ardından belirli bir zaman aşımı elde etmek için ona ekleme yapabilirsiniz.</p>
 <p></p>
-<p>Then call <code>mtx_timedlock()</code> instead of <code>mtx_lock()</code>. If it returns the value <code>thrd_timedout</code>, it timed out.</p>
+<p>Ardından <code>mtx_lock()</code> yerine <code>mtx_timedlock()</code> çağırın. <code>thrd_timedout</code> değerini döndürürse zaman aşımına uğramıştır.</p>
 <div class="sourceCode" id="cb765"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb765-1"><a href="multithreading.html#cb765-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec timeout<span class="op">;</span></span>
 <span id="cb765-2"><a href="multithreading.html#cb765-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb765-3"><a href="multithreading.html#cb765-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Get current time</span></span>
-<span id="cb765-4"><a href="multithreading.html#cb765-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Timeout 1 second after now</span></span>
+<span id="cb765-3"><a href="multithreading.html#cb765-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Geçerli zamanı al</span></span>
+<span id="cb765-4"><a href="multithreading.html#cb765-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Şu andan 1 saniye sonra zaman aşımı</span></span>
 <span id="cb765-5"><a href="multithreading.html#cb765-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb765-6"><a href="multithreading.html#cb765-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> result <span class="op">=</span> mtx_timedlock<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> <span class="op">&amp;</span>timeout<span class="op">));</span></span>
 <span id="cb765-7"><a href="multithreading.html#cb765-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -644,99 +642,99 @@
 <span id="cb765-9"><a href="multithreading.html#cb765-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Mutex lock timed out!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb765-10"><a href="multithreading.html#cb765-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>Other than that, timed locks are the same as regular locks.</p>
+<p>Bunun dışında, zaman aşımına sahip kilitler normal kilitlerle aynıdır.</p>
 <p> </p>
-<h2 data-number="39.8" id="condition-variables"><span class="header-section-number">39.8</span> Condition Variables</h2>
+<h2 data-number="39.8" id="condition-variables"><span class="header-section-number">39.8</span> Koşul Değişkenleri (Condition Variables)</h2>
 <p></p>
-<p>Condition Variables are the last piece of the puzzle we need to make performant multithreaded applications and to compose more complex multithreaded structures.</p>
-<p>A condition variable provides a way for threads to go to sleep until some event on another thread occurs.</p>
-<p>In other words, we might have a number of threads that are rearing to go, but they have to wait until some event is true before they continue. Basically they’re being told “wait for it!” until they get notified.</p>
-<p>And this works hand-in-hand with mutexes since what we’re going to wait on generally depends on the value of some data, and that data generally needs to be protected by a mutex.</p>
-<p>It’s important to note that the condition variable itself isn’t the holder of any particular data from our perspective. It’s merely the variable by which C keeps track of the waiting/not-waiting status of a particular thread or group of threads.</p>
-<p>Let’s write a contrived program that reads in groups of 5 numbers from the main thread one at a time. Then, when 5 numbers have been entered, the child thread wakes up, sums up those 5 numbers, and prints the result.</p>
-<p>The numbers will be stored in a global, shared array, as will the index into the array of the about-to-be-entered number.</p>
-<p>Since these are shared values, we at least have to hide them behind a mutex for both the main and child threads. (The main will be writing data to them and the child will be reading data from them.)</p>
-<p>But that’s not enough. The child thread needs to block (“sleep”) until 5 numbers have been read into the array. And then the parent thread needs to wake up the child thread so it can do its work.</p>
-<p>And when it wakes up, it needs to be holding that mutex. And it will! When a thread waits on a condition variable, it also acquires a mutex when it wakes up.</p>
-<p>All this takes place around an additional variable of type <code>cnd_t</code> that is the <em>condition variable</em>. We create this variable with the <code>cnd_init()</code> function and destroy it when we’re done with it with the <code>cnd_destroy()</code> function.</p>
-<p>But how’s this all work? Let’s look at the outline of what the child thread will do:</p>
+<p>Koşul Değişkenleri (Condition Variables), performanslı çoklu izlekli uygulamalar yapmak ve daha karmaşık yapılar oluşturmak için ihtiyacımız olan bulmacanın son parçasıdır.</p>
+<p>Bir koşul değişkeni, başka bir thread'de bir olay gerçekleşene kadar thread'lerin uykuya geçmesi için bir yol sağlar.</p>
+<p>Başka bir deyişle, gitmeye can atan bir dizi thread'imiz olabilir, ancak devam etmeden önce bir olayın doğru (true) olmasını beklemeleri gerekir. Temel olarak kendilerine bildirim gelene kadar "bekleyin!" denilmektedir.</p>
+<p>Ve bu, mutex'lerle el ele çalışır çünkü bekleyeceğimiz şey genellikle bir verinin değerine bağlıdır ve o verinin genellikle bir mutex ile korunması gerekir.</p>
+<p>Bizim açımızdan koşul değişkeninin kendisinin belirli bir verinin tutucusu olmadığını unutmamak önemlidir. Bu yalnızca C'nin belirli bir thread'in veya thread grubunun bekleme/beklememe durumunu takip ettiği değişkendir.</p>
+<p>Main thread'den sırayla 5'erli sayı grupları okuyan yapay bir program yazalım. Ardından 5 sayı girildiğinde, çocuk thread uyanır, o 5 sayıyı toplar ve sonucu yazdırır.</p>
+<p>Sayılar, girilmek üzere olan sayının dizideki indeksi gibi küresel, paylaşılan bir dizide saklanacaktır.</p>
+<p>Bunlar paylaşılan değerler olduğundan, hem ana hem de çocuk thread'ler için en azından bir mutex'in arkasına saklamamız gerekir. (Ana thread bunlara veri yazacak ve çocuk thread bunlardan veri okuyacaktır.)</p>
+<p>Fakat bu yeterli değildir. Çocuk thread'in diziye 5 sayı okunana kadar engellenmesi ("uyuması") gerekir. Ve ardından üst thread'in çocuk thread'i uyandırması gerekir ki çocuk thread işini yapabilsin.</p>
+<p>Ve uyandığında o mutex'i tutuyor olması gerekir. Ve tutacaktır da! Bir thread bir koşul değişkenini beklediğinde, uyandığında mutex'i de edinir (acquire).</p>
+<p>Tüm bunlar <em>koşul değişkeni</em> olan <code>cnd_t</code> türündeki ek bir değişken etrafında gerçekleşir. Bu değişkeni <code>cnd_init()</code> fonksiyonu ile oluştururuz ve işimiz bittiğinde <code>cnd_destroy()</code> fonksiyonu ile yok ederiz.</p>
+<p>Peki tüm bunlar nasıl çalışır? Çocuk thread'in ne yapacağının taslağına bakalım:</p>
 <p> </p>
 <ol type="1">
-<li>Lock the mutex with <code>mtx_lock()</code></li>
-<li>If we haven’t entered all the numbers, wait on the condition variable with <code>cnd_wait()</code></li>
-<li>Do the work that needs doing</li>
-<li>Unlock the mutex with <code>mtx_unlock()</code></li>
+<li><code>mtx_lock()</code> ile mutex'i kilitleyin</li>
+<li>Tüm sayıları henüz girmediysek, <code>cnd_wait()</code> ile koşul değişkeninde bekleyin</li>
+<li>Yapılması gereken işi yapın</li>
+<li><code>mtx_unlock()</code> ile mutex'in kilidini açın</li>
 </ol>
-<p>Meanwhile the main thread will be doing this:</p>
+<p>Bu sırada main thread şunları yapıyor olacaktır:</p>
 <ol type="1">
-<li>Lock the mutex with <code>mtx_lock()</code></li>
-<li>Store the recently-read number into the array</li>
-<li>If the array is full, signal the child to wake up with <code>cnd_signal()</code></li>
-<li>Unlock the mutex with <code>mtx_unlock()</code></li>
+<li><code>mtx_lock()</code> ile mutex'i kilitleyin</li>
+<li>Son okunan sayıyı diziye saklayın</li>
+<li>Dizi doluysa, <code>cnd_signal()</code> ile çocuğun uyanması için sinyal verin</li>
+<li><code>mtx_unlock()</code> ile mutex'in kilidini açın</li>
 </ol>
 <p> </p>
-<p>If you didn’t skim that too hard (it’s OK—I’m not offended), you might notice something weird: how can the main thread hold the mutex lock and signal the child, if the child has to hold the mutex lock to wait for the signal? They can’t both hold the lock!</p>
-<p>And indeed they don’t! There’s some behind-the-scenes magic with condition variables: when you <code>cnd_wait()</code>, it releases the mutex that you specify and the thread goes to sleep. And when someone signals that thread to wake up, it reacquires the lock as if nothing had happened.</p>
-<p>It’s a little different on the <code>cnd_signal()</code> side of things. This doesn’t do anything with the mutex. The signaling thread still must manually release the mutex before the waiting threads can wake up.</p>
+<p>Bunu çok hızlı gözden geçirmediyseniz (sorun değil—alınmadım), garip bir şey fark edebilirsiniz: Eğer çocuk sinyali beklemek için mutex kilidini tutmak zorundaysa, main thread nasıl mutex kilidini tutup çocuğa sinyal verebilir? İkisi de aynı anda kilidi tutamaz!</p>
+<p>Ve nitekim tutmazlar! Koşul değişkenlerinde sahne arkasında bazı sihirler vardır: <code>cnd_wait()</code> çağırdığınızda, belirttiğiniz mutex'i serbest bırakır ve thread uykuya geçer. Ve birisi o thread'e uyanması için sinyal verdiğinde, hiçbir şey olmamış gibi kilidi tekrar edinir (re-acquire).</p>
+<p>İşlerin <code>cnd_signal()</code> tarafında biraz farklıdır. Bu, mutex ile ilgili hiçbir şey yapmaz. Sinyal veren thread, bekleyen thread'ler uyanmadan önce mutex'i manuel olarak serbest bırakmalıdır.</p>
 <p></p>
-<p>One more thing on the <code>cnd_wait()</code>. You’ll probably be calling <code>cnd_wait()</code> if some condition<a href="function-specifiers-alignment-specifiersoperators.html#fn206" class="footnote-ref" id="fnref206" role="doc-noteref"><sup>206</sup></a> is not yet met (e.g. in this case, if not all the numbers have yet been entered). Here’s the deal: this condition should be in a <code>while</code> loop, not an <code>if</code> statement. Why?</p>
-<p>It’s because of a mysterious phenomenon called a <em>spurious wakeup</em>. Sometimes, in some implementations, a thread can be woken up out of a <code>cnd_wait()</code> sleep for seemingly <em>no reason</em>. <em>[X-Files music]</em><a href="function-specifiers-alignment-specifiersoperators.html#fn207" class="footnote-ref" id="fnref207" role="doc-noteref"><sup>207</sup></a>. And so we have to check to see that the condition we need is still actually met when we wake up. And if it’s not, back to sleep with us!</p>
+<p><code>cnd_wait()</code> hakkında bir şey daha. Muhtemelen bazı koşullar<a href="function-specifiers-alignment-specifiersoperators.html#fn206" class="footnote-ref" id="fnref206" role="doc-noteref"><sup>206</sup></a> henüz karşılanmadıysa <code>cnd_wait()</code> çağırıyor olacaksınız (örneğin bu durumda, henüz tüm sayılar girilmediyse). Olay şudur: bu koşul bir <code>if</code> ifadesinde değil, bir <code>while</code> döngüsünde olmalıdır. Neden?</p>
+<p>Bunun nedeni <em>sahte uyanma (spurious wakeup)</em> adı verilen gizemli bir fenomendir. Bazen, bazı uygulamalarda, bir thread <code>cnd_wait()</code> uykusundan görünürde <em>hiçbir neden yokken</em> uyandırılabilir. <em>[X-Files müziği]</em><a href="function-specifiers-alignment-specifiersoperators.html#fn207" class="footnote-ref" id="fnref207" role="doc-noteref"><sup>207</sup></a>. Bu yüzden uyandığımızda ihtiyacımız olan koşulun hala gerçekten karşılanıp karşılanmadığını kontrol etmemiz gerekir. Karşılanmamışsa, tekrar uykuya!</p>
 <p></p>
-<p>So let’s do this thing! Starting with the main thread:</p>
+<p>Öyleyse bu işi yapalım! Main thread ile başlayalım:</p>
 <ul>
-<li><p>The main thread will set up the mutex and condition variable, and will launch the child thread.</p></li>
-<li><p>Then it will, in an infinite loop, get numbers as input from the console.</p></li>
-<li><p>It will also acquire the mutex to store the inputted number into a global array.</p></li>
-<li><p>When the array has 5 numbers in it, the main thread will signal the child thread that it’s time to wake up and do its work.</p></li>
-<li><p>Then the main thread will unlock the mutex and go back to reading the next number from the console.</p></li>
+<li><p>Main thread mutex ve koşul değişkenini kuracak ve çocuk thread'i başlatacaktır.</p></li>
+<li><p>Ardından sonsuz bir döngüde konsoldan girdi olarak sayıları alacaktır.</p></li>
+<li><p>Girdisi alınan sayıyı küresel bir dizide saklamak için mutex'i edinecektir.</p></li>
+<li><p>Dizide 5 sayı olduğunda, main thread çocuk thread'e uyanıp işini yapma zamanının geldiğini bildiren sinyali gönderecektir.</p></li>
+<li><p>Ardından main thread mutex kilidini açacak ve konsoldan bir sonraki sayıyı okumaya geri dönecektir.</p></li>
 </ul>
-<p>Meanwhile, the child thread has been up to its own shenanigans:</p>
+<p>Bu sırada çocuk thread kendi işleriyle meşguldür:</p>
 <ul>
-<li><p>The child thread grabs the mutex</p></li>
-<li><p>While the condition is not met (i.e. while the shared array doesn’t yet have 5 numbers in it), the child thread sleeps by waiting on the condition variable. When it waits, it implicitly unlocks the mutex.</p></li>
-<li><p>Once the main thread signals the child thread to wake up, it wakes up to do the work and gets the mutex lock back.</p></li>
-<li><p>The child thread sums the numbers and resets the variable that is the index into the array.</p></li>
-<li><p>It then releases the mutex and runs again in an infinite loop.</p></li>
+<li><p>Çocuk thread mutex'i kapar</p></li>
+<li><p>Koşul karşılanmadığı sürece (yani paylaşılan dizide henüz 5 sayı yokken), çocuk thread koşul değişkeninde bekleyerek uyur. Beklediğinde zımnen mutex kilidini açar.</p></li>
+<li><p>Main thread çocuk thread'e uyanması için sinyal verdiğinde, çocuk thread işi yapmak için uyanır ve mutex kilidini geri alır.</p></li>
+<li><p>Çocuk thread sayıları toplar ve dizinin indeksi olan değişkeni sıfırlar.</p></li>
+<li><p>Ardından mutex'i serbest bırakır ve sonsuz döngüde tekrar çalışır.</p></li>
 </ul>
-<p>And here’s the code! Give it some study so you can see where all the above pieces are being handled:</p>
+<p>Ve işte kod! Yukarıdaki tüm parçaların nerede işlendiğini görebilmek için inceleyin:</p>
 <p> </p>
 <div class="sourceCode" id="cb766"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb766-1"><a href="multithreading.html#cb766-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb766-2"><a href="multithreading.html#cb766-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb766-3"><a href="multithreading.html#cb766-3"></a></span>
 <span id="cb766-4"><a href="multithreading.html#cb766-4"></a><span class="pp">#define VALUE_COUNT_MAX </span><span class="dv">5</span></span>
 <span id="cb766-5"><a href="multithreading.html#cb766-5"></a></span>
-<span id="cb766-6"><a href="multithreading.html#cb766-6"></a><span class="dt">int</span> value<span class="op">[</span>VALUE_COUNT_MAX<span class="op">];</span>  <span class="co">// Shared global</span></span>
-<span id="cb766-7"><a href="multithreading.html#cb766-7"></a><span class="dt">int</span> value_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Shared global, too</span></span>
+<span id="cb766-6"><a href="multithreading.html#cb766-6"></a><span class="dt">int</span> value<span class="op">[</span>VALUE_COUNT_MAX<span class="op">];</span>  <span class="co">// Paylaşılan global</span></span>
+<span id="cb766-7"><a href="multithreading.html#cb766-7"></a><span class="dt">int</span> value_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Bu da paylaşılan global</span></span>
 <span id="cb766-8"><a href="multithreading.html#cb766-8"></a></span>
-<span id="cb766-9"><a href="multithreading.html#cb766-9"></a>mtx_t value_mtx<span class="op">;</span>   <span class="co">// Mutex around value</span></span>
-<span id="cb766-10"><a href="multithreading.html#cb766-10"></a>cnd_t value_cnd<span class="op">;</span>   <span class="co">// Condition variable on value</span></span>
+<span id="cb766-9"><a href="multithreading.html#cb766-9"></a>mtx_t value_mtx<span class="op">;</span>   <span class="co">// value etrafındaki Mutex</span></span>
+<span id="cb766-10"><a href="multithreading.html#cb766-10"></a>cnd_t value_cnd<span class="op">;</span>   <span class="co">// value üzerindeki koşul değişkeni</span></span>
 <span id="cb766-11"><a href="multithreading.html#cb766-11"></a></span>
 <span id="cb766-12"><a href="multithreading.html#cb766-12"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb766-13"><a href="multithreading.html#cb766-13"></a><span class="op">{</span></span>
 <span id="cb766-14"><a href="multithreading.html#cb766-14"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
 <span id="cb766-15"><a href="multithreading.html#cb766-15"></a></span>
 <span id="cb766-16"><a href="multithreading.html#cb766-16"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
-<span id="cb766-17"><a href="multithreading.html#cb766-17"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>      <span class="co">// &lt;-- GRAB THE MUTEX</span></span>
+<span id="cb766-17"><a href="multithreading.html#cb766-17"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>      <span class="co">// &lt;-- MUTEX'İ KAP</span></span>
 <span id="cb766-18"><a href="multithreading.html#cb766-18"></a></span>
 <span id="cb766-19"><a href="multithreading.html#cb766-19"></a>        <span class="cf">while</span> <span class="op">(</span>value_count <span class="op">&lt;</span> VALUE_COUNT_MAX<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb766-20"><a href="multithreading.html#cb766-20"></a>            printf<span class="op">(</span><span class="st">&quot;Thread: is waiting</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb766-21"><a href="multithreading.html#cb766-21"></a>            cnd_wait<span class="op">(&amp;</span>value_cnd<span class="op">,</span> <span class="op">&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- CONDITION WAIT</span></span>
+<span id="cb766-21"><a href="multithreading.html#cb766-21"></a>            cnd_wait<span class="op">(&amp;</span>value_cnd<span class="op">,</span> <span class="op">&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- KOŞUL BEKLEMESİ</span></span>
 <span id="cb766-22"><a href="multithreading.html#cb766-22"></a>        <span class="op">}</span></span>
 <span id="cb766-23"><a href="multithreading.html#cb766-23"></a></span>
 <span id="cb766-24"><a href="multithreading.html#cb766-24"></a>        printf<span class="op">(</span><span class="st">&quot;Thread: is awake!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb766-25"><a href="multithreading.html#cb766-25"></a></span>
 <span id="cb766-26"><a href="multithreading.html#cb766-26"></a>        <span class="dt">int</span> t <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb766-27"><a href="multithreading.html#cb766-27"></a></span>
-<span id="cb766-28"><a href="multithreading.html#cb766-28"></a>        <span class="co">// Add everything up</span></span>
+<span id="cb766-28"><a href="multithreading.html#cb766-28"></a>        <span class="co">// Hepsini topla</span></span>
 <span id="cb766-29"><a href="multithreading.html#cb766-29"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> VALUE_COUNT_MAX<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb766-30"><a href="multithreading.html#cb766-30"></a>            t <span class="op">+=</span> value<span class="op">[</span>i<span class="op">];</span></span>
 <span id="cb766-31"><a href="multithreading.html#cb766-31"></a></span>
 <span id="cb766-32"><a href="multithreading.html#cb766-32"></a>        printf<span class="op">(</span><span class="st">&quot;Thread: total is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span></span>
 <span id="cb766-33"><a href="multithreading.html#cb766-33"></a></span>
-<span id="cb766-34"><a href="multithreading.html#cb766-34"></a>        <span class="co">// Reset input index for main thread</span></span>
+<span id="cb766-34"><a href="multithreading.html#cb766-34"></a>        <span class="co">// Main thread için girdi indeksini sıfırla</span></span>
 <span id="cb766-35"><a href="multithreading.html#cb766-35"></a>        value_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb766-36"><a href="multithreading.html#cb766-36"></a></span>
-<span id="cb766-37"><a href="multithreading.html#cb766-37"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>   <span class="co">// &lt;-- MUTEX UNLOCK</span></span>
+<span id="cb766-37"><a href="multithreading.html#cb766-37"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>   <span class="co">// &lt;-- MUTEX KİLİT AÇMA</span></span>
 <span id="cb766-38"><a href="multithreading.html#cb766-38"></a>    <span class="op">}</span></span>
 <span id="cb766-39"><a href="multithreading.html#cb766-39"></a></span>
 <span id="cb766-40"><a href="multithreading.html#cb766-40"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -746,12 +744,12 @@
 <span id="cb766-44"><a href="multithreading.html#cb766-44"></a><span class="op">{</span></span>
 <span id="cb766-45"><a href="multithreading.html#cb766-45"></a>    thrd_t t<span class="op">;</span></span>
 <span id="cb766-46"><a href="multithreading.html#cb766-46"></a></span>
-<span id="cb766-47"><a href="multithreading.html#cb766-47"></a>    <span class="co">// Spawn a new thread</span></span>
+<span id="cb766-47"><a href="multithreading.html#cb766-47"></a>    <span class="co">// Yeni bir thread başlat</span></span>
 <span id="cb766-48"><a href="multithreading.html#cb766-48"></a></span>
 <span id="cb766-49"><a href="multithreading.html#cb766-49"></a>    thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
 <span id="cb766-50"><a href="multithreading.html#cb766-50"></a>    thrd_detach<span class="op">(</span>t<span class="op">);</span></span>
 <span id="cb766-51"><a href="multithreading.html#cb766-51"></a></span>
-<span id="cb766-52"><a href="multithreading.html#cb766-52"></a>    <span class="co">// Set up the mutex and condition variable</span></span>
+<span id="cb766-52"><a href="multithreading.html#cb766-52"></a>    <span class="co">// Mutex ve koşul değişkenini kur</span></span>
 <span id="cb766-53"><a href="multithreading.html#cb766-53"></a></span>
 <span id="cb766-54"><a href="multithreading.html#cb766-54"></a>    mtx_init<span class="op">(&amp;</span>value_mtx<span class="op">,</span> mtx_plain<span class="op">);</span></span>
 <span id="cb766-55"><a href="multithreading.html#cb766-55"></a>    cnd_init<span class="op">(&amp;</span>value_cnd<span class="op">);</span></span>
@@ -761,26 +759,26 @@
 <span id="cb766-59"><a href="multithreading.html#cb766-59"></a></span>
 <span id="cb766-60"><a href="multithreading.html#cb766-60"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>n<span class="op">);</span></span>
 <span id="cb766-61"><a href="multithreading.html#cb766-61"></a></span>
-<span id="cb766-62"><a href="multithreading.html#cb766-62"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>    <span class="co">// &lt;-- LOCK MUTEX</span></span>
+<span id="cb766-62"><a href="multithreading.html#cb766-62"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>    <span class="co">// &lt;-- MUTEX'İ KİLİTLE</span></span>
 <span id="cb766-63"><a href="multithreading.html#cb766-63"></a></span>
 <span id="cb766-64"><a href="multithreading.html#cb766-64"></a>        value<span class="op">[</span>value_count<span class="op">++]</span> <span class="op">=</span> n<span class="op">;</span></span>
 <span id="cb766-65"><a href="multithreading.html#cb766-65"></a></span>
 <span id="cb766-66"><a href="multithreading.html#cb766-66"></a>        <span class="cf">if</span> <span class="op">(</span>value_count <span class="op">==</span> VALUE_COUNT_MAX<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb766-67"><a href="multithreading.html#cb766-67"></a>            printf<span class="op">(</span><span class="st">&quot;Main: signaling thread</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb766-68"><a href="multithreading.html#cb766-68"></a>            cnd_signal<span class="op">(&amp;</span>value_cnd<span class="op">);</span>  <span class="co">// &lt;-- SIGNAL CONDITION</span></span>
+<span id="cb766-68"><a href="multithreading.html#cb766-68"></a>            cnd_signal<span class="op">(&amp;</span>value_cnd<span class="op">);</span>  <span class="co">// &lt;-- KOŞUL SİNYALİ VER</span></span>
 <span id="cb766-69"><a href="multithreading.html#cb766-69"></a>        <span class="op">}</span></span>
 <span id="cb766-70"><a href="multithreading.html#cb766-70"></a></span>
-<span id="cb766-71"><a href="multithreading.html#cb766-71"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- UNLOCK MUTEX</span></span>
+<span id="cb766-71"><a href="multithreading.html#cb766-71"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- MUTEX'İN KİLİDİNİ AÇ</span></span>
 <span id="cb766-72"><a href="multithreading.html#cb766-72"></a>    <span class="op">}</span></span>
 <span id="cb766-73"><a href="multithreading.html#cb766-73"></a></span>
-<span id="cb766-74"><a href="multithreading.html#cb766-74"></a>    <span class="co">// Clean up (I know that&#39;s an infinite loop above here, but I</span></span>
-<span id="cb766-75"><a href="multithreading.html#cb766-75"></a>    <span class="co">// want to at least pretend to be proper):</span></span>
+<span id="cb766-74"><a href="multithreading.html#cb766-74"></a>    <span class="co">// Temizlik yap (yukarıdakinin sonsuz bir döngü olduğunu biliyorum ama</span></span>
+<span id="cb766-75"><a href="multithreading.html#cb766-75"></a>    <span class="co">// en azından düzgünmüş gibi yapmam gerekiyor):</span></span>
 <span id="cb766-76"><a href="multithreading.html#cb766-76"></a></span>
 <span id="cb766-77"><a href="multithreading.html#cb766-77"></a>    mtx_destroy<span class="op">(&amp;</span>value_mtx<span class="op">);</span></span>
 <span id="cb766-78"><a href="multithreading.html#cb766-78"></a>    cnd_destroy<span class="op">(&amp;</span>value_cnd<span class="op">);</span></span>
 <span id="cb766-79"><a href="multithreading.html#cb766-79"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>And here’s some sample output (individual numbers on lines are my input):</p>
+<p>Ve işte bir örnek çıktı (satırlardaki tekil sayılar benim girdilerimdir):</p>
 <div class="sourceCode" id="cb767"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb767-1"><a href="multithreading.html#cb767-1" aria-hidden="true" tabindex="-1"></a>Thread: is waiting</span>
 <span id="cb767-2"><a href="multithreading.html#cb767-2" aria-hidden="true" tabindex="-1"></a>1</span>
 <span id="cb767-3"><a href="multithreading.html#cb767-3" aria-hidden="true" tabindex="-1"></a>1</span>
@@ -800,19 +798,19 @@
 <span id="cb767-17"><a href="multithreading.html#cb767-17" aria-hidden="true" tabindex="-1"></a>Thread: is awake!</span>
 <span id="cb767-18"><a href="multithreading.html#cb767-18" aria-hidden="true" tabindex="-1"></a>Thread: total is 24</span>
 <span id="cb767-19"><a href="multithreading.html#cb767-19" aria-hidden="true" tabindex="-1"></a>Thread: is waiting</span></code></pre></div>
-<p>It’s a common use of condition variables in producer-consumer situations like this. If we didn’t have a way to put the child thread to sleep while it waited for some condition to be met, it would be force to poll which is a big waste of CPU.</p>
-<h3 data-number="39.8.1" id="timed-condition-wait"><span class="header-section-number">39.8.1</span> Timed Condition Wait</h3>
+<p>Bu tür üretici-tüketici (producer-consumer) durumlarında koşul değişkenlerinin yaygın bir kullanımıdır. Bazı koşulların karşılanmasını beklerken çocuk thread'i uyutmanın bir yolu olmasaydı, büyük bir CPU israfı olan yoklama (poll) yapmaya zorlanırdı.</p>
+<h3 data-number="39.8.1" id="timed-condition-wait"><span class="header-section-number">39.8.1</span> Zaman Ayarlı Koşul Beklemesi (Timed Condition Wait)</h3>
 <p></p>
-<p>There’s a variant of <code>cnd_wait()</code> that allows you to specify a timeout so you can stop waiting.</p>
-<p>Since the child thread must relock the mutex, this doesn’t necessarily mean that you’ll be popping back to life the instant the timeout occurs; you still must wait for any other threads to release the mutex.</p>
-<p>But it does mean that you won’t be waiting until the <code>cnd_signal()</code> happens.</p>
-<p>To make this work, call <code>cnd_timedwait()</code> instead of <code>cnd_wait()</code>. If it returns the value <code>thrd_timedout</code>, it timed out.</p>
-<p>The timestamp is an absolute time in UTC, not a time-from-now. Thankfully the <code>timespec_get()</code> function in <code>&lt;time.h&gt;</code> seems custom-made for exactly this case.</p>
+<p>Beklemeyi durdurabilmeniz için bir zaman aşımı (timeout) belirtmenize olanak tanıyan bir <code>cnd_wait()</code> varyantı vardır.</p>
+<p>Çocuk thread mutex'i tekrar kilitlemek zorunda olduğundan, bu zaman aşımı gerçekleştiği anda hayata geri döneceğiniz anlamına gelmez; diğer thread'lerin mutex'i serbest bırakmasını yine de beklemeniz gerekir.</p>
+<p>Ancak bu, <code>cnd_signal()</code> gerçekleşene kadar beklemeyeceğiniz anlamına gelir.</p>
+<p>Bunu çalıştırmak için <code>cnd_wait()</code> yerine <code>cnd_timedwait()</code> çağırın. <code>thrd_timedout</code> değerini döndürürse zaman aşımına uğramıştır.</p>
+<p>Zaman damgası, şu andan itibaren geçen süre değil, UTC cinsinden mutlak bir zamandır. Neyse ki <code>&lt;time.h&gt;</code> içindeki <code>timespec_get()</code> fonksiyonu tam da bu durum için özel olarak yapılmış gibi görünüyor.</p>
 <p> </p>
 <div class="sourceCode" id="cb768"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb768-1"><a href="multithreading.html#cb768-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec timeout<span class="op">;</span></span>
 <span id="cb768-2"><a href="multithreading.html#cb768-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb768-3"><a href="multithreading.html#cb768-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Get current time</span></span>
-<span id="cb768-4"><a href="multithreading.html#cb768-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Timeout 1 second after now</span></span>
+<span id="cb768-3"><a href="multithreading.html#cb768-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Geçerli zamanı al</span></span>
+<span id="cb768-4"><a href="multithreading.html#cb768-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Şu andan 1 saniye sonra zaman aşımı</span></span>
 <span id="cb768-5"><a href="multithreading.html#cb768-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb768-6"><a href="multithreading.html#cb768-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> result <span class="op">=</span> cnd_timedwait<span class="op">(&amp;</span>condition<span class="op">,</span> <span class="op">&amp;</span>mutex<span class="op">,</span> <span class="op">&amp;</span>timeout<span class="op">));</span></span>
 <span id="cb768-7"><a href="multithreading.html#cb768-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -820,26 +818,26 @@
 <span id="cb768-9"><a href="multithreading.html#cb768-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Condition variable timed out!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb768-10"><a href="multithreading.html#cb768-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<h3 data-number="39.8.2" id="broadcast-wake-up-all-waiting-threads"><span class="header-section-number">39.8.2</span> Broadcast: Wake Up All Waiting Threads</h3>
+<h3 data-number="39.8.2" id="broadcast-wake-up-all-waiting-threads"><span class="header-section-number">39.8.2</span> Yayın (Broadcast): Bekleyen Tüm Thread'leri Uyandırın</h3>
 <p></p>
-<p> <code>cnd_signal()</code> only wakes up one thread to continue working. Depending on how you have your logic done, it might make sense to wake up more than one thread to continue once the condition is met.</p>
-<p>Of course only one of them can grab the mutex, but if you have a situation where:</p>
+<p> <code>cnd_signal()</code> çalışmaya devam etmek için yalnızca tek bir thread'i uyandırır. Mantığınızı nasıl oluşturduğunuza bağlı olarak, koşul karşılandığında devam etmek üzere birden fazla thread'i uyandırmak mantıklı olabilir.</p>
+<p>Elbette bunlardan sadece biri mutex'i kapabilir, ancak şöyle bir durumunuz varsa:</p>
 <ul>
-<li><p>The newly-awoken thread is responsible for waking up the next one, and—</p></li>
-<li><p>There’s a chance the spurious-wakeup loop condition will prevent it from doing so, then—</p></li>
+<li><p>Yeni uyanan thread bir sonrakini uyandırmaktan sorumludur ve—</p></li>
+<li><p>Sahte uyanma (spurious-wakeup) döngü koşulunun bunu yapmasını engelleme ihtimali varsa, o zaman—</p></li>
 </ul>
-<p>you’ll want to broadcast the wake up so that you’re sure to get at least one of the threads out of that loop to launch the next one.</p>
-<p>How, you ask?</p>
+<p>bir sonrakini başlatmak üzere o döngüden en az bir thread'in çıkacağından emin olmak için uyanmayı yayınlamak (broadcast) isteyeceksiniz.</p>
+<p>Nasıl mı, diye soruyorsunuz?</p>
 <p></p>
-<p>Simply use <code>cnd_broadcast()</code> instead of <code>cnd_signal()</code>. Exact same usage, except <code>cnd_broadcast()</code> wakes up <strong>all</strong> the sleeping threads that were waiting on that condition variable.</p>
+<p><code>cnd_signal()</code> yerine sadece <code>cnd_broadcast()</code> kullanın. <code>cnd_broadcast()</code> fonksiyonunun o koşul değişkeninde bekleyen <strong>tüm</strong> uyuyan thread'leri uyandırması dışında kullanımı tamamen aynıdır.</p>
 <p> </p>
-<h2 data-number="39.9" id="running-a-function-one-time"><span class="header-section-number">39.9</span> Running a Function One Time</h2>
+<h2 data-number="39.9" id="running-a-function-one-time"><span class="header-section-number">39.9</span> Bir Fonksiyonu Bir Kez Çalıştırmak</h2>
 <p></p>
-<p>Let’s say you have a function that <em>could</em> be run by many threads, but you don’t know when, and it’s not work trying to write all that logic.</p>
-<p>There’s a way around it: use <code>call_once()</code>. Tons of threads could try to run the function, but only the first one counts<a href="function-specifiers-alignment-specifiersoperators.html#fn208" class="footnote-ref" id="fnref208" role="doc-noteref"><sup>208</sup></a></p>
-<p>To work with this, you need a special flag variable you declare to keep track of whether or not the thing’s been run. And you need a function to run, which takes no parameters and returns no value.</p>
+<p>Diyelim ki birçok thread tarafından çalıştırılabilecek <em>potansiyele</em> sahip bir fonksiyonunuz var, ancak ne zaman olduğunu bilmiyorsunuz ve tüm o mantığı yazmaya çalışmaya değmez.</p>
+<p>Bunun etrafından dolanmanın bir yolu var: <code>call_once()</code> kullanın. Tonla thread fonksiyonu çalıştırmayı deneyebilir, ancak yalnızca ilki sayılır<a href="function-specifiers-alignment-specifiersoperators.html#fn208" class="footnote-ref" id="fnref208" role="doc-noteref"><sup>208</sup></a>.</p>
+<p>Bununla çalışmak için, olayın çalıştırılıp çalıştırılmadığını takip etmek üzere tanımladığınız özel bir bayrak değişkenine ihtiyacınız vardır. Ve parametre almayan ve değer döndürmeyen çalıştırılacak bir fonksiyona ihtiyacınız vardır.</p>
 <p> </p>
-<div class="sourceCode" id="cb769"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb769-1"><a href="multithreading.html#cb769-1" aria-hidden="true" tabindex="-1"></a>once_flag of <span class="op">=</span> ONCE_FLAG_INIT<span class="op">;</span>  <span class="co">// Initialize it like this</span></span>
+<div class="sourceCode" id="cb769"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb769-1"><a href="multithreading.html#cb769-1" aria-hidden="true" tabindex="-1"></a>once_flag of <span class="op">=</span> ONCE_FLAG_INIT<span class="op">;</span>  <span class="co">// Şunun gibi ilklendirin</span></span>
 <span id="cb769-2"><a href="multithreading.html#cb769-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb769-3"><a href="multithreading.html#cb769-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> run_once_function<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb769-4"><a href="multithreading.html#cb769-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
@@ -854,7 +852,7 @@
 <span id="cb769-13"><a href="multithreading.html#cb769-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb769-14"><a href="multithreading.html#cb769-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span></code></pre></div>
 <p> </p>
-<p>In this example, no matter how many threads get to the <code>run()</code> function, the <code>run_once_function()</code> will only be called a single time.</p>
+<p>Bu örnekte, kaç tane thread <code>run()</code> fonksiyonuna ulaşırsa ulaşsın, <code>run_once_function()</code> yalnızca tek bir kez çağrılacaktır.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,32 +32,32 @@
 </head>
 <body>
 <div class="nav-header"><a href="manual-memory-allocation.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="types-ii-way-more-types.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="13" id="scope"><span class="header-section-number">13</span> Scope</h1>
-<p> Scope is all about what variables are visible in what contexts.</p>
-<h2 data-number="13.1" id="block-scope"><span class="header-section-number">13.1</span> Block Scope</h2>
-<p> This is the scope of almost all the variables devs define. It includes what other languages might call “function scope”, i.e. variables that are declared inside functions.</p>
-<p>The basic rule is that if you’ve declared a variable in a block delimited by squirrelly braces, the scope of that variable is that block.</p>
-<p>If there’s a block inside a block, then variables declared in the <em>inner</em> block are local to that block, and cannot be seen in the outer scope.</p>
-<p>Once a variable’s scope ends, that variable can no longer be referenced, and you can consider its value to be gone into the great <a href="https://en.wikipedia.org/wiki/Bit_bucket" target="_blank" rel="noopener noreferrer">bit bucket</a><a href="function-specifiers-alignment-specifiersoperators.html#fn92" class="footnote-ref" id="fnref92" role="doc-noteref"><sup>92</sup></a> in the sky.</p>
-<p>An example with nested scope:</p>
+<h1 data-number="13" id="scope"><span class="header-section-number">13</span> Kapsam (Scope)</h1>
+<p> Kapsam (Scope), hangi değişkenlerin hangi bağlamlarda görünür olduğunu konu alır.</p>
+<h2 data-number="13.1" id="block-scope"><span class="header-section-number">13.1</span> Blok Kapsamı (Block Scope)</h2>
+<p> Bu, geliştiricilerin tanımladığı hemen hemen tüm değişkenlerin kapsamıdır. Başka dillerin "fonksiyon kapsamı" (function scope) dediği şeyi, yani fonksiyonların içinde bildirilen değişkenleri de kapsar.</p>
+<p>Temel kural şudur: Bir değişkeni süslü parantezlerle sınırlandırılmış bir blok içinde bildirdiyseniz, o değişkenin kapsamı o bloktur.</p>
+<p>Bir bloğun içinde başka bir blok varsa, <em>içteki</em> blokta bildirilen değişkenler o bloğa yereldir (local) ve dış kapsamdan görülemez.</p>
+<p>Bir değişkenin kapsamı sona erdiğinde, o değişkene artık başvurulamaz ve değerinin gökyüzündeki o büyük <a href="https://en.wikipedia.org/wiki/Bit_bucket" target="_blank" rel="noopener noreferrer">bit kovasına (bit bucket)</a><a href="function-specifiers-alignment-specifiersoperators.html#fn92" class="footnote-ref" id="fnref92" role="doc-noteref"><sup>92</sup></a> uçup gittiğini düşünebilirsiniz.</p>
+<p>İç içe kapsam içeren bir örnek:</p>
 <div class="sourceCode" id="cb210"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb210-1"><a href="scope.html#cb210-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb210-2"><a href="scope.html#cb210-2"></a></span>
 <span id="cb210-3"><a href="scope.html#cb210-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb210-4"><a href="scope.html#cb210-4"></a><span class="op">{</span></span>
-<span id="cb210-5"><a href="scope.html#cb210-5"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>         <span class="co">// Local to outer block, but visible in inner block</span></span>
+<span id="cb210-5"><a href="scope.html#cb210-5"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>         <span class="co">// Dış bloğa yerel, ama iç blokta görünür</span></span>
 <span id="cb210-6"><a href="scope.html#cb210-6"></a></span>
 <span id="cb210-7"><a href="scope.html#cb210-7"></a>    <span class="cf">if</span>  <span class="op">(</span>a <span class="op">==</span> <span class="dv">12</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb210-8"><a href="scope.html#cb210-8"></a>        <span class="dt">int</span> b <span class="op">=</span> <span class="dv">99</span><span class="op">;</span>     <span class="co">// Local to inner block, not visible in outer block</span></span>
+<span id="cb210-8"><a href="scope.html#cb210-8"></a>        <span class="dt">int</span> b <span class="op">=</span> <span class="dv">99</span><span class="op">;</span>     <span class="co">// İç bloğa yerel, dış blokta görünmez</span></span>
 <span id="cb210-9"><a href="scope.html#cb210-9"></a></span>
 <span id="cb210-10"><a href="scope.html#cb210-10"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">,</span> b<span class="op">);</span>  <span class="co">// OK: &quot;12 99&quot;</span></span>
 <span id="cb210-11"><a href="scope.html#cb210-11"></a>    <span class="op">}</span></span>
 <span id="cb210-12"><a href="scope.html#cb210-12"></a></span>
-<span id="cb210-13"><a href="scope.html#cb210-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// OK, we&#39;re still in a&#39;s scope</span></span>
+<span id="cb210-13"><a href="scope.html#cb210-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// OK, hala a'nın kapsamındayız</span></span>
 <span id="cb210-14"><a href="scope.html#cb210-14"></a></span>
-<span id="cb210-15"><a href="scope.html#cb210-15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">);</span>  <span class="co">// ILLEGAL, out of b&#39;s scope</span></span>
+<span id="cb210-15"><a href="scope.html#cb210-15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">);</span>  <span class="co">// GEÇERSİZ, b'nin kapsamı dışında</span></span>
 <span id="cb210-16"><a href="scope.html#cb210-16"></a><span class="op">}</span></span></code></pre></div>
-<h3 data-number="13.1.1" id="where-to-define-variables"><span class="header-section-number">13.1.1</span> Where To Define Variables</h3>
-<p>Another fun fact is that you can define variables anywhere in the block, within reason—they have the scope of that block, but cannot be used before they are defined.</p>
+<h3 data-number="13.1.1" id="where-to-define-variables"><span class="header-section-number">13.1.1</span> Değişkenler Nerede Tanımlanmalı</h3>
+<p>Diğer eğlenceli bir gerçek de, değişkenleri mantık sınırları dahilinde bloğun herhangi bir yerinde tanımlayabilmenizdir—o bloğun kapsamına sahiptirler, ancak tanımlanmadan önce kullanılamazlar.</p>
 <div class="sourceCode" id="cb211"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb211-1"><a href="scope.html#cb211-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb211-2"><a href="scope.html#cb211-2"></a></span>
 <span id="cb211-3"><a href="scope.html#cb211-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -66,15 +66,15 @@
 <span id="cb211-6"><a href="scope.html#cb211-6"></a></span>
 <span id="cb211-7"><a href="scope.html#cb211-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>     <span class="co">// OK: &quot;0&quot;</span></span>
 <span id="cb211-8"><a href="scope.html#cb211-8"></a></span>
-<span id="cb211-9"><a href="scope.html#cb211-9"></a>    <span class="co">//printf(&quot;%d\n&quot;, j);   // ILLEGAL--can&#39;t use j before it&#39;s defined</span></span>
+<span id="cb211-9"><a href="scope.html#cb211-9"></a>    <span class="co">//printf(&quot;%d\n&quot;, j);   // GEÇERSİZ--j tanımlanmadan önce kullanılamaz</span></span>
 <span id="cb211-10"><a href="scope.html#cb211-10"></a></span>
 <span id="cb211-11"><a href="scope.html#cb211-11"></a>    <span class="dt">int</span> j <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
 <span id="cb211-12"><a href="scope.html#cb211-12"></a></span>
 <span id="cb211-13"><a href="scope.html#cb211-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span>   <span class="co">// OK: &quot;0 5&quot;</span></span>
 <span id="cb211-14"><a href="scope.html#cb211-14"></a><span class="op">}</span></span></code></pre></div>
-<p>Historically, C required all the variables be defined before any code in the block, but this is no longer the case in the C99 standard.</p>
-<h3 data-number="13.1.2" id="variable-hiding"><span class="header-section-number">13.1.2</span> Variable Hiding</h3>
-<p> If you have a variable named the same thing at an inner scope as one at an outer scope, the one at the inner scope takes precedence as long as you’re running in the inner scope. That is, it <em>hides</em> the one at outer scope for the duration of its lifetime.</p>
+<p>Tarihsel olarak C, bloktaki herhangi bir koddan önce tüm değişkenlerin tanımlanmasını gerektiriyordu, ancak C99 standardında durum artık böyle değildir.</p>
+<h3 data-number="13.1.2" id="variable-hiding"><span class="header-section-number">13.1.2</span> Değişken Gizleme (Variable Hiding)</h3>
+<p> İç kapsamda, dış kapsamdaki bir değişkenle aynı ada sahip bir değişkeniniz varsa, iç kapsamda çalıştığınız sürece iç kapsamdaki değişken öncelik alır. Yani yaşam süresi boyunca dış kapsamdaki değişkeni <em>gizler</em> (hides).</p>
 <div class="sourceCode" id="cb212"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb212-1"><a href="scope.html#cb212-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb212-2"><a href="scope.html#cb212-2"></a></span>
 <span id="cb212-3"><a href="scope.html#cb212-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -84,28 +84,28 @@
 <span id="cb212-7"><a href="scope.html#cb212-7"></a>    <span class="op">{</span></span>
 <span id="cb212-8"><a href="scope.html#cb212-8"></a>        <span class="dt">int</span> i <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb212-9"><a href="scope.html#cb212-9"></a></span>
-<span id="cb212-10"><a href="scope.html#cb212-10"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// Inner scope i, 20 (outer i is hidden)</span></span>
+<span id="cb212-10"><a href="scope.html#cb212-10"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// İç kapsamdaki i, 20 (dış kapsamdaki i gizlenir)</span></span>
 <span id="cb212-11"><a href="scope.html#cb212-11"></a>    <span class="op">}</span></span>
 <span id="cb212-12"><a href="scope.html#cb212-12"></a></span>
-<span id="cb212-13"><a href="scope.html#cb212-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// Outer scope i, 10</span></span>
+<span id="cb212-13"><a href="scope.html#cb212-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// Dış kapsamdaki i, 10</span></span>
 <span id="cb212-14"><a href="scope.html#cb212-14"></a><span class="op">}</span></span></code></pre></div>
-<p>You might have noticed in that example that I just threw a block in there at line 7, not so much as a <code>for</code> or <code>if</code> statement to kick it off! This is perfectly legal. Sometimes a dev will want to group a bunch of local variables together for a quick computation and will do this, but it’s rare to see. </p>
-<h2 data-number="13.2" id="file-scope"><span class="header-section-number">13.2</span> File Scope</h2>
-<p> If you define a variable outside of a block, that variable has <em>file scope</em>. It’s visible in all functions in the file that come after it, and shared between them. (An exception is if a block defines a variable of the same name, it would hide the one at file scope.)</p>
-<p>This is closest to what you would consider to be “global” scope in another language.</p>
-<p>For example:</p>
+<p>Bu örnekte, satır 7'de başlatmak için bir <code>for</code> veya <code>if</code> ifadesi bile kullanmadan oraya öylece bir blok koyduğumu fark etmiş olabilirsiniz! Bu tamamen yasaldır. Bazen bir geliştirici hızlı bir hesaplama için bir grup yerel değişkeni bir arada gruplamak ister ve bunu yapar, ancak bunu görmek nadirdir. </p>
+<h2 data-number="13.2" id="file-scope"><span class="header-section-number">13.2</span> Dosya Kapsamı (File Scope)</h2>
+<p> Bir değişkeni bir bloğun dışında tanımlarsanız, o değişken <em>dosya kapsamına</em> (file scope) sahip olur. Kendisinden sonra gelen dosyadaki tüm fonksiyonlarda görünürdür ve aralarında paylaşılır. (Bir istisna: Bir blok aynı isimde bir değişken tanımlarsa, dosya kapsamındakini gizler.)</p>
+<p>Bu, başka bir dilde "küresel" (global) kapsam olarak değerlendirebileceğiniz şeye en yakın olanıdır.</p>
+<p>Örneğin:</p>
 <div class="sourceCode" id="cb213"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb213-1"><a href="scope.html#cb213-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb213-2"><a href="scope.html#cb213-2"></a></span>
-<span id="cb213-3"><a href="scope.html#cb213-3"></a><span class="dt">int</span> shared <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>    <span class="co">// File scope! Visible to the whole file after this!</span></span>
+<span id="cb213-3"><a href="scope.html#cb213-3"></a><span class="dt">int</span> shared <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>    <span class="co">// Dosya kapsamı! Bundan sonra tüm dosyada görünür!</span></span>
 <span id="cb213-4"><a href="scope.html#cb213-4"></a></span>
 <span id="cb213-5"><a href="scope.html#cb213-5"></a><span class="dt">void</span> func1<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb213-6"><a href="scope.html#cb213-6"></a><span class="op">{</span></span>
-<span id="cb213-7"><a href="scope.html#cb213-7"></a>    shared <span class="op">+=</span> <span class="dv">100</span><span class="op">;</span>  <span class="co">// Now shared holds 110</span></span>
+<span id="cb213-7"><a href="scope.html#cb213-7"></a>    shared <span class="op">+=</span> <span class="dv">100</span><span class="op">;</span>  <span class="co">// Artık shared 110 değerini tutar</span></span>
 <span id="cb213-8"><a href="scope.html#cb213-8"></a><span class="op">}</span></span>
 <span id="cb213-9"><a href="scope.html#cb213-9"></a></span>
 <span id="cb213-10"><a href="scope.html#cb213-10"></a><span class="dt">void</span> func2<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb213-11"><a href="scope.html#cb213-11"></a><span class="op">{</span></span>
-<span id="cb213-12"><a href="scope.html#cb213-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> shared<span class="op">);</span>  <span class="co">// Prints &quot;110&quot;</span></span>
+<span id="cb213-12"><a href="scope.html#cb213-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> shared<span class="op">);</span>  <span class="co">// &quot;110&quot; yazdırır</span></span>
 <span id="cb213-13"><a href="scope.html#cb213-13"></a><span class="op">}</span></span>
 <span id="cb213-14"><a href="scope.html#cb213-14"></a></span>
 <span id="cb213-15"><a href="scope.html#cb213-15"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -113,29 +113,29 @@
 <span id="cb213-17"><a href="scope.html#cb213-17"></a>    func1<span class="op">();</span></span>
 <span id="cb213-18"><a href="scope.html#cb213-18"></a>    func2<span class="op">();</span></span>
 <span id="cb213-19"><a href="scope.html#cb213-19"></a><span class="op">}</span></span></code></pre></div>
-<p>Note that if <code>shared</code> were declared at the bottom of the file, it wouldn’t compile. It has to be declared <em>before</em> any functions use it.</p>
-<p>There are ways to further modify items at file scope, namely with <a href="types-iv-qualifiers-and-specifiers.html#static">static</a> and <a href="types-iv-qualifiers-and-specifiers.html#extern">extern</a>, but we’ll talk more about those later. </p>
-<h2 data-number="13.3" id="for-loop-scope"><span class="header-section-number">13.3</span> <code>for</code>-loop Scope</h2>
-<p> I really don’t know what to call this, as C11 §6.8.5.3¶1 doesn’t give it a proper name. We’ve done it already a few times in this guide, as well. It’s when you declare a variable inside the first clause of a <code>for</code>-loop:</p>
+<p>Eğer <code>shared</code> dosyanın en altında bildirilmiş olsaydı, derlenmeyeceğini unutmayın. Herhangi bir fonksiyon onu kullanmadan <em>önce</em> bildirilmiş olması gerekir.</p>
+<p>Dosya kapsamındaki öğeleri daha da değiştirebileceğimiz yollar mevcuttur, özellikle <a href="types-iv-qualifiers-and-specifiers.html#static">static</a> ve <a href="types-iv-qualifiers-and-specifiers.html#extern">extern</a> ile, ancak bunlar hakkında daha sonra daha fazla konuşacağız. </p>
+<h2 data-number="13.3" id="for-loop-scope"><span class="header-section-number">13.3</span> <code>for</code> Döngüsü Kapsamı</h2>
+<p> C11 §6.8.5.3¶1 uygun bir isim vermediği için buna tam olarak ne diyeceğimi bilemiyorum. Bu rehberde zaten birkaç kez bunu yaptık. Bir <code>for</code> döngüsünün ilk tümcesi içinde bir değişken bildirdiğinizde durum böyledir:</p>
 <div class="sourceCode" id="cb214"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb214-1"><a href="scope.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb214-2"><a href="scope.html#cb214-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
 <span id="cb214-3"><a href="scope.html#cb214-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb214-4"><a href="scope.html#cb214-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// ILLEGAL--i is only in scope for the for-loop</span></span></code></pre></div>
-<p>In that example, <code>i</code>’s lifetime begins the moment it is defined, and continues for the duration of the loop.</p>
-<p>If the loop body is enclosed in a block, the variables defined in the <code>for</code>-loop are visible from that inner scope.</p>
-<p>Unless, of course, that inner scope hides them. This crazy example prints <code>999</code> five times:</p>
+<span id="cb214-4"><a href="scope.html#cb214-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>  <span class="co">// GEÇERSİZ--i yalnızca for döngüsü kapsamında geçerlidir</span></span></code></pre></div>
+<p>Bu örnekte <code>i</code>'nin yaşam süresi (lifetime) tanımlandığı anda başlar ve döngü boyunca devam eder.</p>
+<p>Döngü gövdesi bir blok içine alınmışsa, <code>for</code> döngüsünde tanımlanan değişkenler o iç kapsamdan görünürdür.</p>
+<p>Tabii ki iç kapsam onları gizlemediği sürece. Bu çılgın örnek beş kez <code>999</code> yazdırır:</p>
 <div class="sourceCode" id="cb215"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb215-1"><a href="scope.html#cb215-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb215-2"><a href="scope.html#cb215-2"></a></span>
 <span id="cb215-3"><a href="scope.html#cb215-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb215-4"><a href="scope.html#cb215-4"></a><span class="op">{</span></span>
 <span id="cb215-5"><a href="scope.html#cb215-5"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb215-6"><a href="scope.html#cb215-6"></a>        <span class="dt">int</span> i <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>  <span class="co">// Hides the i in the for-loop scope</span></span>
+<span id="cb215-6"><a href="scope.html#cb215-6"></a>        <span class="dt">int</span> i <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>  <span class="co">// for döngüsü kapsamındaki i'yi gizler</span></span>
 <span id="cb215-7"><a href="scope.html#cb215-7"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
 <span id="cb215-8"><a href="scope.html#cb215-8"></a>    <span class="op">}</span></span>
 <span id="cb215-9"><a href="scope.html#cb215-9"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<h2 data-number="13.4" id="a-note-on-function-scope"><span class="header-section-number">13.4</span> A Note on Function Scope</h2>
-<p> The C spec does refer to <em>function scope</em>, but it’s used exclusively with <em>labels</em>, something we haven’t discussed yet. More on that another day. </p>
+<h2 data-number="13.4" id="a-note-on-function-scope"><span class="header-section-number">13.4</span> Fonksiyon Kapsamı Üzerine Bir Not</h2>
+<p> C standardı <em>fonksiyon kapsamına</em> (function scope) değinir, ancak bu yalnızca henüz tartışmadığımız <em>etiketler</em> (labels) ile özel olarak kullanılır. Başka bir gün bunun hakkında daha fazla konuşacağız. </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C
 

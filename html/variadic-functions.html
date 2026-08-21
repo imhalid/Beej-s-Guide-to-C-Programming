@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,42 +32,42 @@
 </head>
 <body>
 <div class="nav-header"><a href="bitwise-operations.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="locale-and-internationalization.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="25" id="variadic-functions"><span class="header-section-number">25</span> Variadic Functions</h1>
+<h1 data-number="25" id="variadic-functions"><span class="header-section-number">25</span> Değişken Sayıda Argüman Alan Fonksiyonlar (Variadic Functions)</h1>
 <p></p>
-<p><em>Variadic</em> is a fancy word for functions that take arbitrary numbers of arguments.</p>
-<p>A regular function takes a specific number of arguments, for example:</p>
+<p><em>Variadic</em> (değişken sayıda argüman alan), rastgele sayıda argüman kabul eden fonksiyonlar için kullanılan havalı bir kelimedir.</p>
+<p>Normal bir fonksiyon belirli sayıda argüman alır, örneğin:</p>
 <div class="sourceCode" id="cb531"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb531-1"><a href="variadic-functions.html#cb531-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
 <span id="cb531-2"><a href="variadic-functions.html#cb531-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb531-3"><a href="variadic-functions.html#cb531-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
 <span id="cb531-4"><a href="variadic-functions.html#cb531-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>You can only call that with exactly two arguments which correspond to parameters <code>x</code> and <code>y</code>.</p>
+<p>Bunu yalnızca <code>x</code> ve <code>y</code> parametrelerine karşılık gelen tam olarak iki argümanla çağırabilirsiniz.</p>
 <div class="sourceCode" id="cb532"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb532-1"><a href="variadic-functions.html#cb532-1" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
 <span id="cb532-2"><a href="variadic-functions.html#cb532-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">5</span><span class="op">,</span> <span class="dv">12</span><span class="op">);</span></span></code></pre></div>
-<p>But if you try it with more, the compiler won’t let you:</p>
-<div class="sourceCode" id="cb533"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb533-1"><a href="variadic-functions.html#cb533-1" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">);</span>  <span class="co">// ERROR</span></span>
-<span id="cb533-2"><a href="variadic-functions.html#cb533-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">5</span><span class="op">);</span>        <span class="co">// ERROR</span></span></code></pre></div>
-<p>Variadic functions get around this limitation to a certain extent.</p>
-<p>We’ve already seen a famous example in <code>printf()</code>! You can pass all kinds of things to it.</p>
+<p>Ancak daha fazlasıyla denerseniz, derleyici buna izin vermeyecektir:</p>
+<div class="sourceCode" id="cb533"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb533-1"><a href="variadic-functions.html#cb533-1" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">);</span>  <span class="co">// HATA</span></span>
+<span id="cb533-2"><a href="variadic-functions.html#cb533-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">5</span><span class="op">);</span>        <span class="co">// HATA</span></span></code></pre></div>
+<p>Değişken argümanlı <em>(variadic)</em> fonksiyonlar bu kısıtlamayı bir dereceye kadar aşarlar.</p>
+<p>Bunun ünlü bir örneğini <code>printf()</code> fonksiyonunda zaten görmüştük! Ona her türlü şeyi geçirebilirsiniz.</p>
 <div class="sourceCode" id="cb534"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb534-1"><a href="variadic-functions.html#cb534-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb534-2"><a href="variadic-functions.html#cb534-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;The number is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
 <span id="cb534-3"><a href="variadic-functions.html#cb534-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;The number is </span><span class="sc">%d</span><span class="st"> and pi is </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="fl">3.14159</span><span class="op">);</span></span></code></pre></div>
-<p>It seems to not care how many arguments you give it!</p>
-<p>Well, that’s not entirely true. Zero arguments will give you an error:</p>
-<div class="sourceCode" id="cb535"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb535-1"><a href="variadic-functions.html#cb535-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">();</span>  <span class="co">// ERROR</span></span></code></pre></div>
-<p>This leads us to one of the limitations of variadic functions in C: they must have at least one argument.</p>
-<p>But aside from that, they’re pretty flexible, even allows arguments to have different types just like <code>printf()</code> does.</p>
-<p>Let’s see how they work!</p>
-<h2 data-number="25.1" id="ellipses-in-function-signatures"><span class="header-section-number">25.1</span> Ellipses in Function Signatures</h2>
-<p>So how does it work, syntactically?</p>
+<p>Ona kaç tane argüman verdiğinizi umursamıyor gibi görünüyor!</p>
+<p>Şey, bu tamamen doğru değil. Sıfır argüman vermek size bir hata verecektir:</p>
+<div class="sourceCode" id="cb535"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb535-1"><a href="variadic-functions.html#cb535-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">();</span>  <span class="co">// HATA</span></span></code></pre></div>
+<p>Bu bizi C dilindeki variadic fonksiyonların kısıtlamalarından birine götürür: en az bir argümana sahip olmalıdırlar.</p>
+<p>Ancak bunun haricinde oldukça esnektirler, hatta tıpkı <code>printf()</code> fonksiyonunun yaptığı gibi argümanların farklı türlere sahip olmasına bile izin verirler.</p>
+<p>Nasıl çalıştıklarını görelim!</p>
+<h2 data-number="25.1" id="ellipses-in-function-signatures"><span class="header-section-number">25.1</span> Fonksiyon İmzalarında Üç Nokta (Ellipses)</h2>
+<p>Peki sözdizimsel <em>(syntactically)</em> olarak nasıl çalışır?</p>
 <p></p>
-<p>What you do is put all the arguments that <em>must</em> be passed first (and remember there has to be at least one) and after that, you put <code>...</code>. Just like this:</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb536-1"><a href="variadic-functions.html#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="op">...)</span>   <span class="co">// Literally 3 dots here</span></span></code></pre></div>
-<p>Here’s some code to demo that:</p>
+<p>Yapacağınız şey, önce geçirilmesi <em>zorunlu</em> olan tüm argümanları koymaktır (ve en az bir tane olması gerektiğini unutmayın) ve bundan sonra <code>...</code> koyarsınız. Tıpkı şöyle:</p>
+<div class="sourceCode" id="cb536"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb536-1"><a href="variadic-functions.html#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="op">...)</span>   <span class="co">// Kelimenin tam anlamıyla burada 3 nokta var</span></span></code></pre></div>
+<p>Bunu gösteren bazı kodlar:</p>
 <div class="sourceCode" id="cb537"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb537-1"><a href="variadic-functions.html#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb537-2"><a href="variadic-functions.html#cb537-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb537-3"><a href="variadic-functions.html#cb537-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="op">...)</span></span>
 <span id="cb537-4"><a href="variadic-functions.html#cb537-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb537-5"><a href="variadic-functions.html#cb537-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;a is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Prints &quot;a is 2&quot;</span></span>
+<span id="cb537-5"><a href="variadic-functions.html#cb537-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;a is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// &quot;a is 2&quot; yazdırır</span></span>
 <span id="cb537-6"><a href="variadic-functions.html#cb537-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb537-7"><a href="variadic-functions.html#cb537-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb537-8"><a href="variadic-functions.html#cb537-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -75,17 +75,17 @@
 <span id="cb537-10"><a href="variadic-functions.html#cb537-10" aria-hidden="true" tabindex="-1"></a>    func<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">6</span><span class="op">);</span></span>
 <span id="cb537-11"><a href="variadic-functions.html#cb537-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>So, great, we can get that first argument that’s in variable <code>a</code>, but what about the rest of the arguments? How do you get to them?</p>
-<p>Here’s where the fun begins!</p>
-<h2 data-number="25.2" id="getting-the-extra-arguments"><span class="header-section-number">25.2</span> Getting the Extra Arguments</h2>
-<p>You’re going to want to include <code>&lt;stdarg.h&gt;</code> to make any of this work.</p>
+<p>Harika, <code>a</code> değişkenindeki o ilk argümanı alabiliyoruz, peki ya diğer argümanlar? Onlara nasıl ulaşırsınız?</p>
+<p>Eğlence işte burada başlıyor!</p>
+<h2 data-number="25.2" id="getting-the-extra-arguments"><span class="header-section-number">25.2</span> Ek Argümanları Alma</h2>
+<p>Tüm bunların çalışması için <code>&lt;stdarg.h&gt;</code> başlık dosyasını dahil etmek isteyeceksiniz.</p>
 <p></p>
-<p>First things first, we’re going to use a special variable of type <code>va_list</code> (variable argument list) to keep track of which variable we’re accessing at a time.</p>
+<p>İlk olarak, bir seferde hangi değişkene eriştiğimizi takip etmek için <code>va_list</code> (değişken argüman listesi) türünde özel bir değişken kullanacağız.</p>
 <p> </p>
-<p>The idea is that we first start processing arguments with a call to <code>va_start()</code>, process each argument in turn with <code>va_arg()</code>, and then, when done, wrap it up with <code>va_end()</code>.</p>
-<p>When you call <code>va_start()</code>, you need to pass in the <em>last named parameter</em> (the one just before the <code>...</code>) so it knows where to start looking for the additional arguments.</p>
-<p>And when you call <code>va_arg()</code> to get the next argument, you have to tell it the type of argument to get next.</p>
-<p>Here’s a demo that adds together an arbitrary number of integers. The first argument is the number of integers to add together. We’ll make use of that to figure out how many times we have to call <code>va_arg()</code>.</p>
+<p>Fikir şudur: önce <code>va_start()</code> çağrısıyla argümanları işlemeye başlarız, sırasıyla her argümanı <code>va_arg()</code> ile işleriz ve ardından bittiğinde <code>va_end()</code> ile işlemi tamamlarız.</p>
+<p><code>va_start()</code> fonksiyonunu çağırdığınızda, ek argümanları nerede aramaya başlayacağını bilmesi için <em>en son isimlendirilmiş parametreyi</em> (tam olarak <code>...</code> öncesindeki parametreyi) geçirmelisiniz.</p>
+<p>Ve bir sonraki argümanı almak için <code>va_arg()</code> fonksiyonunu çağırdığınızda, bir sonraki alınacak argümanın türünü söylemeniz gerekir.</p>
+<p>İşte rastgele sayıda tamsayıyı toplayan bir gösterim. İlk argüman toplanacak tamsayıların sayısıdır. <code>va_arg()</code> fonksiyonunu kaç kez çağırmamız gerektiğini anlamak için bundan yararlanacağız.</p>
 <div class="sourceCode" id="cb538"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb538-1"><a href="variadic-functions.html#cb538-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb538-2"><a href="variadic-functions.html#cb538-2"></a><span class="pp">#include </span><span class="im">&lt;stdarg.h&gt;</span></span>
 <span id="cb538-3"><a href="variadic-functions.html#cb538-3"></a></span>
@@ -94,15 +94,15 @@
 <span id="cb538-6"><a href="variadic-functions.html#cb538-6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb538-7"><a href="variadic-functions.html#cb538-7"></a>    <span class="dt">va_list</span> va<span class="op">;</span></span>
 <span id="cb538-8"><a href="variadic-functions.html#cb538-8"></a></span>
-<span id="cb538-9"><a href="variadic-functions.html#cb538-9"></a>    va_start<span class="op">(</span>va<span class="op">,</span> count<span class="op">);</span>   <span class="co">// Start with arguments after &quot;count&quot;</span></span>
+<span id="cb538-9"><a href="variadic-functions.html#cb538-9"></a>    va_start<span class="op">(</span>va<span class="op">,</span> count<span class="op">);</span>   <span class="co">// &quot;count&quot; sonrasındaki argümanlarla başla</span></span>
 <span id="cb538-10"><a href="variadic-functions.html#cb538-10"></a></span>
 <span id="cb538-11"><a href="variadic-functions.html#cb538-11"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb538-12"><a href="variadic-functions.html#cb538-12"></a>        <span class="dt">int</span> n <span class="op">=</span> va_arg<span class="op">(</span>va<span class="op">,</span> <span class="dt">int</span><span class="op">);</span>   <span class="co">// Get the next int</span></span>
+<span id="cb538-12"><a href="variadic-functions.html#cb538-12"></a>        <span class="dt">int</span> n <span class="op">=</span> va_arg<span class="op">(</span>va<span class="op">,</span> <span class="dt">int</span><span class="op">);</span>   <span class="co">// Bir sonraki int değerini al</span></span>
 <span id="cb538-13"><a href="variadic-functions.html#cb538-13"></a></span>
 <span id="cb538-14"><a href="variadic-functions.html#cb538-14"></a>        total <span class="op">+=</span> n<span class="op">;</span></span>
 <span id="cb538-15"><a href="variadic-functions.html#cb538-15"></a>    <span class="op">}</span></span>
 <span id="cb538-16"><a href="variadic-functions.html#cb538-16"></a></span>
-<span id="cb538-17"><a href="variadic-functions.html#cb538-17"></a>    va_end<span class="op">(</span>va<span class="op">);</span>  <span class="co">// All done</span></span>
+<span id="cb538-17"><a href="variadic-functions.html#cb538-17"></a>    va_end<span class="op">(</span>va<span class="op">);</span>  <span class="co">// Hepsi bitti</span></span>
 <span id="cb538-18"><a href="variadic-functions.html#cb538-18"></a></span>
 <span id="cb538-19"><a href="variadic-functions.html#cb538-19"></a>    <span class="cf">return</span> total<span class="op">;</span></span>
 <span id="cb538-20"><a href="variadic-functions.html#cb538-20"></a><span class="op">}</span></span>
@@ -113,36 +113,36 @@
 <span id="cb538-25"><a href="variadic-functions.html#cb538-25"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">44</span><span class="op">));</span>        <span class="co">// 22 + 44 = 66</span></span>
 <span id="cb538-26"><a href="variadic-functions.html#cb538-26"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>(Note that when <code>printf()</code> is called, it uses the number of <code>%d</code>s (or whatever) in the format string to know how many more arguments there are!)</p>
-<p>If the syntax of <code>va_arg()</code> is looking strange to you (because of that loose type name floating around in there), you’re not alone. These are implemented with preprocessor macros in order to get all the proper magic in there.</p>
-<h2 data-number="25.3" id="va_list-functionality"><span class="header-section-number">25.3</span> <code>va_list</code> Functionality</h2>
-<p>What is that <code>va_list</code> variable we’re using up there? It’s an opaque variable<a href="function-specifiers-alignment-specifiersoperators.html#fn154" class="footnote-ref" id="fnref154" role="doc-noteref"><sup>154</sup></a> that holds information about which argument we’re going to get next with <code>va_arg()</code>. You see how we just call <code>va_arg()</code> over and over? The <code>va_list</code> variable is a placeholder that’s keeping track of progress so far.</p>
+<p>(<code>printf()</code> çağrıldığında, kaç tane daha argüman olduğunu bilmek için biçim metnindeki <code>%d</code> (veya her neyse) sayısını kullandığına dikkat edin!)</p>
+<p>Eğer <code>va_arg()</code> sözdizimi size garip görünüyorsa (içeride dolaşan o bağımsız tür adı yüzünden), yalnız değilsiniz. İçerideki tüm o sihirli işleri yapmak için bunlar ön işlemci makroları <em>(preprocessor macros)</em> ile uygulanmıştır.</p>
+<h2 data-number="25.3" id="va_list-functionality"><span class="header-section-number">25.3</span> <code>va_list</code> İşlevselliği</h2>
+<p>Yukarıda kullandığımız o <code>va_list</code> değişkeni nedir? <code>va_arg()</code> ile bir sonraki aşamada hangi argümanı alacağımız bilgisini tutan opak <em>(opaque)</em> bir değişkendir<a href="function-specifiers-alignment-specifiersoperators.html#fn154" class="footnote-ref" id="fnref154" role="doc-noteref"><sup>154</sup></a>. Nasıl tekrar tekrar <code>va_arg()</code> çağırdığımızı görüyorsunuz değil mi? <code>va_list</code> değişkeni, şimdiye kadarki ilerlemeyi takip eden bir yer tutucudur <em>(placeholder)</em>.</p>
 <p></p>
-<p>But we have to initialize that variable to some sensible value. That’s where <code>va_start()</code> comes into play.</p>
-<p>When we called <code>va_start(va, count)</code>, above, we were saying, “Initialize the <code>va</code> variable to point to the variable argument <em>immediately after</em> <code>count</code>.”</p>
+<p>Ancak bu değişkeni mantıklı bir değere ilklendirmemiz gerekiyor. İşte <code>va_start()</code> burada devreye girer.</p>
+<p>Yukarıda <code>va_start(va, count)</code> çağırdığımızda, “<code>va</code> değişkenini, <code>count</code> parametresinden <em>hemen sonraki</em> değişken argümanı gösterecek şekilde ilklendir” demiş oluyorduk.</p>
 <p></p>
-<p>And that’s <em>why</em> we need to have at least one named variable in our argument list<a href="function-specifiers-alignment-specifiersoperators.html#fn155" class="footnote-ref" id="fnref155" role="doc-noteref"><sup>155</sup></a>.</p>
-<p>Once you have that pointer to the initial parameter, you can easily get subsequent argument values by calling <code>va_arg()</code> repeatedly. When you do, you have to pass in your <code>va_list</code> variable (so it can keep on keeping track of where you are), as well as the type of argument you’re about to copy off.</p>
-<p>It’s up to you as a programmer to figure out which type you’re going to pass to <code>va_arg()</code>. In the above example, we just did <code>int</code>s. But in the case of <code>printf()</code>, it uses the format specifier to determine which type to pull off next.</p>
-<p>And when you’re done, call <code>va_end()</code> to wrap it up. You <strong>must</strong> (the spec says) call this on a particular <code>va_list</code> variable before you decide to call either <code>va_start()</code> or <code>va_copy()</code> on it again. I know we haven’t talked about <code>va_copy()</code> yet.</p>
-<p>So the standard progression is:</p>
+<p>Ve argüman listemizde <em>neden</em> en az bir isimlendirilmiş değişkene sahip olmamız gerektiğinin sebebi de tam olarak budur<a href="function-specifiers-alignment-specifiersoperators.html#fn155" class="footnote-ref" id="fnref155" role="doc-noteref"><sup>155</sup></a>.</p>
+<p>İlk parametreye olan o göstericiye sahip olduğunuzda, tekrar tekrar <code>va_arg()</code> çağırarak sonraki argüman değerlerini kolayca alabilirsiniz. Bunu yaptığınızda, <code>va_list</code> değişkeninizi (nerede olduğunuzu takip etmeye devam edebilmesi için) ve kopyalamak üzere olduğunuz argümanın türünü geçirmelisiniz.</p>
+<p><code>va_arg()</code> fonksiyonuna hangi türü geçireceğinizi bulmak bir programcı olarak size kalmıştır. Yukarıdaki örnekte sadece <code>int</code> türlerini kullandık. Ancak <code>printf()</code> durumunda, bir sonraki aşamada hangi türün çekileceğini belirlemek için biçim belirteçlerini <em>(format specifiers)</em> kullanır.</p>
+<p>Ve bittiğinde, işlemi sonlandırmak için <code>va_end()</code> fonksiyonunu çağırın. O <code>va_list</code> değişkeni üzerinde tekrar <code>va_start()</code> veya <code>va_copy()</code> çağırmaya karar vermeden önce bunu o değişken üzerinde <strong>çağırmalısınız</strong> (standart spesifikasyonu öyle söylüyor). Henüz <code>va_copy()</code> konusundan bahsetmediğimizi biliyorum.</p>
+<p>Yani standart ilerleyiş şöyledir:</p>
 <ul>
-<li><code>va_start()</code> to initialize your <code>va_list</code> variable</li>
-<li>Repeatedly <code>va_arg()</code> to get the values</li>
-<li><code>va_end()</code> to deinitialize your <code>va_list</code> variable</li>
+<li><code>va_list</code> değişkeninizi ilklendirmek için <code>va_start()</code></li>
+<li>Değerleri almak için tekrar tekrar <code>va_arg()</code></li>
+<li><code>va_list</code> değişkeninizi sonlandırmak için <code>va_end()</code></li>
 </ul>
 <p> </p>
 <p></p>
-<p>I also mentioned <code>va_copy()</code> up there; it makes a copy of your <code>va_list</code> variable in the exact same state. That is, if you haven’t started with <code>va_arg()</code> with the source variable, the new one won’t be started, either. If you’ve consumed 5 variables with <code>va_arg()</code> so far, the copy will also reflect that.</p>
-<p><code>va_copy()</code> can be useful if you need to scan ahead through the arguments but need to also remember your current place.</p>
+<p>Yukarıda <code>va_copy()</code> fonksiyonundan da bahsetmiştim; bu, <code>va_list</code> değişkeninizin birebir aynı durumdaki bir kopyasını oluşturur. Yani kaynak değişkenle henüz <code>va_arg()</code> işlemine başlamadıysanız yeni olan da başlamamış olacaktır. Şimdiye kadar <code>va_arg()</code> ile 5 değişken tükettiyseniz kopya da bunu yansıtacaktır.</p>
+<p><code>va_copy()</code>, argümanları önceden taramanız gerektiğinde ancak mevcut yerinizi de hatırlamanız gerekiyorsa yararlı olabilir.</p>
 <p></p>
-<h2 data-number="25.4" id="library-functions-that-use-va_lists"><span class="header-section-number">25.4</span> Library Functions That Use <code>va_list</code>s</h2>
+<h2 data-number="25.4" id="library-functions-that-use-va_lists"><span class="header-section-number">25.4</span> <code>va_list</code> Kullanan Kütüphane Fonksiyonları</h2>
 <p></p>
-<p>One of the other uses for these is pretty cool: writing your own custom <code>printf()</code> variant. It would be a pain to have to handle all those format specifiers right? All zillion of them?</p>
-<p>Luckily, there are <code>printf()</code> variants that accept a working <code>va_list</code> as an argument. You can use these to wrap up and make your own custom <code>printf()</code>s!</p>
+<p>Bunların diğer kullanımlarından biri oldukça havalıdır: kendi özel <code>printf()</code> varyantınızı yazmak. Tüm o biçim belirteçlerini tek tek işlemek zorunda kalmak bir eziyet olurdu değil mi? O milyarlarca belirteci?</p>
+<p>Neyse ki, çalışan bir <code>va_list</code> yapısını argüman olarak kabul eden <code>printf()</code> varyantları vardır. Kendi özel <code>printf()</code> fonksiyonlarınızı sarmalamak ve oluşturmak için bunları kullanabilirsiniz!</p>
 <p></p>
-<p>These functions start with the letter <code>v</code>, such as <code>vprintf()</code>, <code>vfprintf()</code>, <code>vsprintf()</code>, and <code>vsnprintf()</code>. Basically all your <code>printf()</code> golden oldies except with a <code>v</code> in front.</p>
-<p>Let’s make a function <code>my_printf()</code> that works just like <code>printf()</code> except it takes an extra argument up front.</p>
+<p>Bu fonksiyonlar <code>vprintf()</code>, <code>vfprintf()</code>, <code>vsprintf()</code> ve <code>vsnprintf()</code> gibi <code>v</code> harfi ile başlar. Temel olarak önünde bir <code>v</code> olan tüm o bildiğiniz klasikler.</p>
+<p>En başta ekstra bir argüman alması dışında tıpkı <code>printf()</code> gibi çalışan bir <code>my_printf()</code> fonksiyonu yapalım.</p>
 <div class="sourceCode" id="cb539"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb539-1"><a href="variadic-functions.html#cb539-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb539-2"><a href="variadic-functions.html#cb539-2"></a><span class="pp">#include </span><span class="im">&lt;stdarg.h&gt;</span></span>
 <span id="cb539-3"><a href="variadic-functions.html#cb539-3"></a></span>
@@ -151,10 +151,10 @@
 <span id="cb539-6"><a href="variadic-functions.html#cb539-6"></a>    <span class="dt">va_list</span> va<span class="op">;</span></span>
 <span id="cb539-7"><a href="variadic-functions.html#cb539-7"></a>    <span class="dt">int</span> rv<span class="op">;</span></span>
 <span id="cb539-8"><a href="variadic-functions.html#cb539-8"></a></span>
-<span id="cb539-9"><a href="variadic-functions.html#cb539-9"></a>    <span class="co">// Do my custom work</span></span>
+<span id="cb539-9"><a href="variadic-functions.html#cb539-9"></a>    <span class="co">// Kendi özel işimi yapıyorum</span></span>
 <span id="cb539-10"><a href="variadic-functions.html#cb539-10"></a>    printf<span class="op">(</span><span class="st">&quot;The serial number is: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
 <span id="cb539-11"><a href="variadic-functions.html#cb539-11"></a></span>
-<span id="cb539-12"><a href="variadic-functions.html#cb539-12"></a>    <span class="co">// Then pass the rest off to vprintf()</span></span>
+<span id="cb539-12"><a href="variadic-functions.html#cb539-12"></a>    <span class="co">// Ardından gerisini vprintf() fonksiyonuna devret</span></span>
 <span id="cb539-13"><a href="variadic-functions.html#cb539-13"></a>    va_start<span class="op">(</span>va<span class="op">,</span> format<span class="op">);</span></span>
 <span id="cb539-14"><a href="variadic-functions.html#cb539-14"></a>    rv <span class="op">=</span> vprintf<span class="op">(</span>format<span class="op">,</span> va<span class="op">);</span></span>
 <span id="cb539-15"><a href="variadic-functions.html#cb539-15"></a>    va_end<span class="op">(</span>va<span class="op">);</span></span>
@@ -169,20 +169,20 @@
 <span id="cb539-24"><a href="variadic-functions.html#cb539-24"></a></span>
 <span id="cb539-25"><a href="variadic-functions.html#cb539-25"></a>    my_printf<span class="op">(</span><span class="dv">3490</span><span class="op">,</span> <span class="st">&quot;x is </span><span class="sc">%d</span><span class="st">, y is </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">);</span></span>
 <span id="cb539-26"><a href="variadic-functions.html#cb539-26"></a><span class="op">}</span></span></code></pre></div>
-<p>See what we did there? On lines 12-14 we started a new <code>va_list</code> variable, and then just passed it right into <code>vprintf()</code>. And it knows just want to do with it, because it has all the <code>printf()</code> smarts built-in.</p>
+<p>Orada ne yaptığımızı gördünüz mü? 13-15. satırlarda yeni bir <code>va_list</code> değişkeni başlattık ve sonra onu doğrudan <code>vprintf()</code> fonksiyonuna geçirdik. Ve o bununla ne yapacağını çok iyi biliyor, çünkü tüm o <code>printf()</code> zekası içinde yerleşik olarak geliyor.</p>
 <p></p>
-<p>We still have to call <code>va_end()</code> when we’re done, though, so don’t forget that!</p>
+<p>Yine de işimiz bittiğinde <code>va_end()</code> çağırmamız gerekiyor, bu yüzden bunu unutmayın!</p>
 <p> </p>
-<h2 data-number="25.5" id="variadic-macro-gotchas"><span class="header-section-number">25.5</span> Variadic Macro Gotchas</h2>
-<p>Like I’ve mentioned, <code>va_start()</code> and <code>va_end()</code> could be macros. One of the consequences of this might be that they could potentially introduce a new local scope. (That is, if <code>va_start()</code> has <code>{</code> and <code>va_end()</code> contains <code>}</code>.)</p>
+<h2 data-number="25.5" id="variadic-macro-gotchas"><span class="header-section-number">25.5</span> Variadic Makro Püf Noktaları ve Tuzakları</h2>
+<p>Bahsettiğim gibi, <code>va_start()</code> ve <code>va_end()</code> makrolar olabilir. Bunun sonuçlarından biri, potansiyel olarak yeni bir yerel kapsam <em>(local scope)</em> başlatabilecek olmalarıdır. (Yani <code>va_start()</code> açılış parantezi <code>{</code> içeriyorsa ve <code>va_end()</code> kapanış parantezi <code>}</code> içeriyorsa.)</p>
 <p></p>
-<p>So we need to watch out for potential scoping issues. Take the following example:</p>
-<div class="sourceCode" id="cb540"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb540-1"><a href="variadic-functions.html#cb540-1" aria-hidden="true" tabindex="-1"></a>va_start<span class="op">(</span>va<span class="op">,</span> format<span class="op">);</span>          <span class="co">// may contain {</span></span>
+<p>Bu nedenle potansiyel kapsam sorunlarına dikkat etmemiz gerekiyor. Şu örneği ele alalım:</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb540-1"><a href="variadic-functions.html#cb540-1" aria-hidden="true" tabindex="-1"></a>va_start<span class="op">(</span>va<span class="op">,</span> format<span class="op">);</span>          <span class="co">// { içerebilir</span></span>
 <span id="cb540-2"><a href="variadic-functions.html#cb540-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> rv <span class="op">=</span> vprintf<span class="op">(</span>format<span class="op">,</span> va<span class="op">);</span></span>
-<span id="cb540-3"><a href="variadic-functions.html#cb540-3" aria-hidden="true" tabindex="-1"></a>va_end<span class="op">(</span>va<span class="op">);</span>                    <span class="co">// may contain }</span></span>
+<span id="cb540-3"><a href="variadic-functions.html#cb540-3" aria-hidden="true" tabindex="-1"></a>va_end<span class="op">(</span>va<span class="op">);</span>                    <span class="co">// } içerebilir</span></span>
 <span id="cb540-4"><a href="variadic-functions.html#cb540-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb540-5"><a href="variadic-functions.html#cb540-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> rv<span class="op">;</span></span></code></pre></div>
-<p>If <code>va_start()</code> opens a new scope, <code>rv</code> will be local to that scope and then the <code>return</code> statement will fail. But this will insidiously only happen on compilers that happen to do that with the <code>va</code> macros.</p>
+<p>Eğer <code>va_start()</code> yeni bir kapsam açarsa, <code>rv</code> o kapsama yerel olacak ve ardından <code>return</code> ifadesi başarısız olacaktır. Ancak bu sinsi durum yalnızca <code>va</code> makrolarını o şekilde uygulayan derleyicilerde gerçekleşecektir.</p>
 <p></p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

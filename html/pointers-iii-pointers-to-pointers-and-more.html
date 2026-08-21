@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,118 +32,118 @@
 </head>
 <body>
 <div class="nav-header"><a href="enumerated-types-enum.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="bitwise-operations.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="23" id="pointers-iii-pointers-to-pointers-and-more"><span class="header-section-number">23</span> Pointers III: Pointers to Pointers and More</h1>
-<p>Here’s where we cover some intermediate and advanced pointer usage. If you don’t have pointers down well, review the previous chapters on <a href="pointers.html#pointers">pointers</a> and <a href="pointers2.html#pointers2">pointer arithmetic</a> before starting on this stuff.</p>
-<h2 data-number="23.1" id="pointers-to-pointers"><span class="header-section-number">23.1</span> Pointers to Pointers</h2>
+<h1 data-number="23" id="pointers-iii-pointers-to-pointers-and-more"><span class="header-section-number">23</span> Pointer'lar III: Pointer'lara Pointer'lar ve Daha Fazlası</h1>
+<p>Burada bazı orta ve ileri düzey pointer kullanımlarını ele alıyoruz. Pointer konusunu henüz tam kavrayamadıysanız, bu konulara başlamadan önce <a href="pointers.html#pointers">pointer'lar</a> ve <a href="pointers2.html#pointers2">pointer aritmetiği</a> hakkındaki önceki bölümleri gözden geçirin.</p>
+<h2 data-number="23.1" id="pointers-to-pointers"><span class="header-section-number">23.1</span> Pointer'lara Pointer'lar</h2>
 <p></p>
-<p>If you can have a pointer to a variable, and a variable can be a pointer, can you have a pointer to a variable that it itself a pointer?</p>
-<p>Yes! This is a pointer to a pointer, and it’s held in variable of type pointer-pointer.</p>
-<p>Before we tear into that, I want to try for a <em>gut feel</em> for how pointers to pointers work.</p>
-<p>Remember that a pointer is just a number. It’s a number that represents an index in computer memory, typically one that holds a value we’re interested in for some reason.</p>
-<p>That pointer, which is a number, has to be stored somewhere. And that place is memory, just like everything else<a href="function-specifiers-alignment-specifiersoperators.html#fn141" class="footnote-ref" id="fnref141" role="doc-noteref"><sup>141</sup></a>.</p>
-<p>But because it’s stored in memory, it must have an index it’s stored at, right? The pointer must have an index in memory where it is stored. And that index is a number. It’s the address of the pointer. It’s a pointer to the pointer.</p>
-<p>Let’s start with a regular pointer to an <code>int</code>, back from the earlier chapters:</p>
+<p>Bir değişkene işaret eden bir pointer'ınız olabiliyorsa ve bir değişken de bir pointer olabiliyorsa, kendisi de bir pointer olan bir değişkene işaret eden bir pointer'ınız olabilir mi?</p>
+<p>Evet! Bu bir pointer'a işaret eden pointer'dır (pointer-to-pointer) ve pointer-pointer türündeki bir değişkende tutulur.</p>
+<p>Buna daldırmadan önce, pointer'lara pointer'ların nasıl çalıştığına dair <em>sezgisel bir his</em> edinmenizi istiyorum.</p>
+<p>Bir pointer'ın sadece bir sayı olduğunu unutmayın. Bilgisayar belleğindeki bir indeksi temsil eden bir sayıdır; genellikle bir nedenden ötürü ilgilendiğimiz bir değeri tutan bir adrestir.</p>
+<p>Bir sayı olan o pointer'ın bir yerde saklanması gerekir. Ve o yer, diğer her şey gibi bellektir<a href="function-specifiers-alignment-specifiersoperators.html#fn141" class="footnote-ref" id="fnref141" role="doc-noteref"><sup>141</sup></a>.</p>
+<p>Fakat bellekte saklandığı için, saklandığı bir indeks de olmalı, değil mi? Pointer'ın saklandığı bellekte bir indeksi olmalıdır. Ve bu indeks bir sayıdır. O, pointer'ın adresidir. Yani pointer'a işaret eden bir pointer'dır.</p>
+<p>Önceki bölümlere dönüp bir <code>int</code> değişkenine işaret eden normal bir pointer ile başlayalım:</p>
 <div class="sourceCode" id="cb505"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb505-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb505-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-2"></a></span>
 <span id="cb505-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb505-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-4"></a><span class="op">{</span></span>
-<span id="cb505-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Type: int</span></span>
-<span id="cb505-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Type: pointer to an int</span></span>
+<span id="cb505-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tür: int</span></span>
+<span id="cb505-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tür: int'e pointer</span></span>
 <span id="cb505-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-7"></a></span>
 <span id="cb505-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-8"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// 3490</span></span>
 <span id="cb505-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb505-9"></a><span class="op">}</span></span></code></pre></div>
-<p>Straightforward enough, right? We have two types represented: <code>int</code> and <code>int*</code>, and we set up <code>p</code> to point to <code>x</code>. Then we can dereference <code>p</code> on line 8 and print out the value <code>3490</code>.</p>
-<p>But, like we said, we can have a pointer to any variable… so does that mean we can have a pointer to <code>p</code>?</p>
-<p>In other words, what type is this expression?</p>
-<div class="sourceCode" id="cb506"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb506-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Type: int</span></span>
-<span id="cb506-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Type: pointer to an int</span></span>
+<p>Yeterince açık, değil mi? Temsil edilen iki türümüz var: <code>int</code> ve <code>int*</code>; ve <code>p</code>'yi <code>x</code>'i gösterecek şekilde ayarlıyoruz. Ardından 8. satırda <code>p</code>'nin değerini alabilir (dereference) ve <code>3490</code> değerini yazdırabiliriz.</p>
+<p>Ancak söylediğimiz gibi, herhangi bir değişkene işaret eden bir pointer'ımız olabilir… yani bu <code>p</code>'ye işaret eden bir pointer'ımız olabileceği anlamına mı gelir?</p>
+<p>Başka bir deyişle, bu ifadenin türü nedir?</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb506-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tür: int</span></span>
+<span id="cb506-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tür: int'e pointer</span></span>
 <span id="cb506-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb506-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-4" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span>p  <span class="co">// &lt;-- What type is the address of p? AKA a pointer to p?</span></span></code></pre></div>
-<p>If <code>x</code> is an <code>int</code>, then <code>&amp;x</code> is a pointer to an <code>int</code> that we’ve stored in <code>p</code> which is type <code>int*</code>. Follow? (Repeat this paragraph until you do!)</p>
-<p>And therefore <code>&amp;p</code> is a pointer to an <code>int*</code>, AKA a “pointer to a pointer to an <code>int</code>”. AKA “<code>int</code>-pointer-pointer”.</p>
-<p>Got it? (Repeat the previous paragraph until you do!)</p>
-<p>We write this type with two asterisks: <code>int **</code>. Let’s see it in action.</p>
+<span id="cb506-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb506-4" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span>p  <span class="co">// &lt;-- p'nin adresi hangi türdedir? Yani p'ye işaret eden bir pointer?</span></span></code></pre></div>
+<p>Eğer <code>x</code> bir <code>int</code> ise, <code>&amp;x</code> bir <code>int</code> pointer'ıdır ve bunu <code>int*</code> türündeki <code>p</code> içinde sakladık. Anlaşıldı mı? (Anlayana kadar bu paragrafı tekrar okuyun!)</p>
+<p>Ve bu nedenle <code>&amp;p</code>, bir <code>int*</code> pointer'ına işaret eder; yani "bir <code>int</code> pointer'ına işaret eden pointer". Yani "<code>int</code>-pointer-pointer".</p>
+<p>Kavradınız mı? (Kavrayana kadar önceki paragrafı tekrarlayın!)</p>
+<p>Bu türü iki yıldız işaretiyle yazarız: <code>int **</code>. Şimdi bunu eylem halinde görelim.</p>
 <div class="sourceCode" id="cb507"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb507-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb507-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-2"></a></span>
 <span id="cb507-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb507-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-4"></a><span class="op">{</span></span>
-<span id="cb507-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Type: int</span></span>
-<span id="cb507-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Type: pointer to an int</span></span>
-<span id="cb507-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-7"></a>    <span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// Type: pointer to pointer to int</span></span>
+<span id="cb507-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tür: int</span></span>
+<span id="cb507-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tür: int'e pointer</span></span>
+<span id="cb507-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-7"></a>    <span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// Tür: int'e pointer'a pointer</span></span>
 <span id="cb507-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-8"></a></span>
 <span id="cb507-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">,</span> <span class="op">**</span>q<span class="op">);</span>  <span class="co">// 3490 3490</span></span>
 <span id="cb507-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb507-10"></a><span class="op">}</span></span></code></pre></div>
-<p>Let’s make up some pretend addresses for the above values as examples and see what these three variables might look like in memory. The address values, below are just made up by me for example purposes:</p>
+<p>Örnek olarak yukarıdaki değerler için uydurma bazı adresler oluşturalım ve bu üç değişkenin bellekte nasıl görünebileceğine bakalım. Aşağıdaki adres değerleri yalnızca örnek amacıyla tarafımdan uydurulmuştur:</p>
 <table>
 <thead>
 <tr>
-<th>Variable</th>
-<th>Stored at Address</th>
-<th>Value Stored There</th>
+<th>Değişken</th>
+<th>Saklandığı Adres</th>
+<th>Orada Saklanan Değer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>x</code></td>
 <td><code>28350</code></td>
-<td><code>3490</code>—the value from the code</td>
+<td><code>3490</code>—koddan gelen değer</td>
 </tr>
 <tr>
 <td><code>p</code></td>
 <td><code>29122</code></td>
-<td><code>28350</code>—the address of <code>x</code>!</td>
+<td><code>28350</code>—<code>x</code>'in adresi!</td>
 </tr>
 <tr>
 <td><code>q</code></td>
 <td><code>30840</code></td>
-<td><code>29122</code>—the address of <code>p</code>!</td>
+<td><code>29122</code>—<code>p</code>'nin adresi!</td>
 </tr>
 </tbody>
 </table>
-<p>Indeed, let’s try it for real on my computer<a href="function-specifiers-alignment-specifiersoperators.html#fn142" class="footnote-ref" id="fnref142" role="doc-noteref"><sup>142</sup></a> and print out the pointer values with <code>%p</code> and I’ll do the same table again with actual references (printed in hex).</p>
+<p>Nitekim, bunu bilgisayarımda gerçek olarak deneyelim<a href="function-specifiers-alignment-specifiersoperators.html#fn142" class="footnote-ref" id="fnref142" role="doc-noteref"><sup>142</sup></a> ve <code>%p</code> ile pointer değerlerini yazdıralım; ben de gerçek referanslarla (onaltılık/hex olarak yazdırılmış) aynı tabloyu tekrar yapayım.</p>
 <table>
 <thead>
 <tr>
-<th>Variable</th>
-<th>Stored at Address</th>
-<th>Value Stored There</th>
+<th>Değişken</th>
+<th>Saklandığı Adres</th>
+<th>Orada Saklanan Değer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>x</code></td>
 <td><code>0x7ffd96a07b94</code></td>
-<td><code>3490</code>—the value from the code</td>
+<td><code>3490</code>—koddan gelen değer</td>
 </tr>
 <tr>
 <td><code>p</code></td>
 <td><code>0x7ffd96a07b98</code></td>
-<td><code>0x7ffd96a07b94</code>—the address of <code>x</code>!</td>
+<td><code>0x7ffd96a07b94</code>—<code>x</code>'in adresi!</td>
 </tr>
 <tr>
 <td><code>q</code></td>
 <td><code>0x7ffd96a07ba0</code></td>
-<td><code>0x7ffd96a07b98</code>—the address of <code>p</code>!</td>
+<td><code>0x7ffd96a07b98</code>—<code>p</code>'nin adresi!</td>
 </tr>
 </tbody>
 </table>
-<p>You can see those addresses are the same except the last byte, so just focus on those.</p>
-<p>On my system, <code>int</code>s are 4 bytes, which is why we’re seeing the address go up by 4 from <code>x</code> to <code>p</code><a href="function-specifiers-alignment-specifiersoperators.html#fn143" class="footnote-ref" id="fnref143" role="doc-noteref"><sup>143</sup></a> and then goes up by 8 from <code>p</code> to <code>q</code>. On my system, all pointers are 8 bytes.</p>
-<p>Does it matter if it’s an <code>int*</code> or an <code>int**</code>? Is one more bytes than the other? Nope! Remember that all pointers are addresses, that is indexes into memory. And on my machine you can represent an index with 8 bytes… doesn’t matter what’s stored at that index.</p>
-<p>Now check out what we did there on line 9 of the previous example: we <em>double dereferenced</em> <code>q</code> to get back to our <code>3490</code>.</p>
-<p>This is the important bit about pointers and pointers to pointers:</p>
+<p>Bu adreslerin son bayt haricinde aynı olduğunu görebilirsiniz, bu yüzden sadece onlara odaklanın.</p>
+<p>Benim sistemimde <code>int</code>'ler 4 bayttır, bu yüzden adresin <code>x</code>'ten <code>p</code>'ye 4 arttığını<a href="function-specifiers-alignment-specifiersoperators.html#fn143" class="footnote-ref" id="fnref143" role="doc-noteref"><sup>143</sup></a> ve ardından <code>p</code>'den <code>q</code>'ya 8 arttığını görüyoruz. Benim sistemimde tüm pointer'lar 8 bayttır.</p>
+<p><code>int*</code> veya <code>int**</code> olması fark eder mi? Biri diğerinden daha mı fazla bayttır? Hayır! Tüm pointer'ların adresler, yani bellekteki indeksler olduğunu unutmayın. Ve benim makinemde bir indeksi 8 bayt ile temsil edebilirsiniz… o indekste neyin saklandığı önemli değildir.</p>
+<p>Şimdi önceki örneğin 9. satırında ne yaptığımıza bakın: <code>3490</code> değerimize geri dönmek için <code>q</code>'yu <em>çifte dereference</em> ettik (değerini iki kez çıkardık).</p>
+<p>Pointer'lar ve pointer'lara pointer'lar hakkında önemli kısım şudur:</p>
 <ul>
-<li>You can get a pointer to anything with <code>&amp;</code> (including to a pointer!)</li>
-<li>You can get the thing a pointer points to with <code>*</code> (including a pointer!)</li>
+<li><code>&amp;</code> ile herhangi bir şeyin pointer'ını alabilirsiniz (bir pointer dahil!)</li>
+<li><code>*</code> ile bir pointer'ın işaret ettiği şeyi alabilirsiniz (bir pointer dahil!)</li>
 </ul>
-<p>So you can think of <code>&amp;</code> as being used to make pointers, and <code>*</code> being the inverse—it goes the opposite direction of <code>&amp;</code>—to get to the thing pointed to.</p>
-<p>In terms of type, each time you <code>&amp;</code>, that adds another pointer level to the type.</p>
+<p>Yani <code>&amp;</code> işaretinin pointer oluşturmak için kullanıldığını, <code>*</code> işaretinin ise bunun tersi olduğunu—<code>&amp;</code> işaretinin ters yönünde hareket ettiğini—ve işaret edilen şeye ulaşmayı sağladığını düşünebilirsiniz.</p>
+<p>Tür açısından, her <code>&amp;</code> kullandığınızda bu tür seviyesine yeni bir pointer katmanı ekler.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">If you have</th>
-<th style="text-align: center;">Then you run</th>
-<th style="text-align: left;">The result type is</th>
+<th style="text-align: left;">Elinizde bu varsa</th>
+<th style="text-align: center;">Bunu çalıştırdığınızda</th>
+<th style="text-align: left;">Sonuç türü şudur</th>
 </tr>
 </thead>
 <tbody>
@@ -169,13 +169,13 @@
 </tr>
 </tbody>
 </table>
-<p>And each time you use dereference (<code>*</code>), it does the opposite:</p>
+<p>Ve dereference (<code>*</code>) her kullandığınızda, bunun tersini yapar:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">If you have</th>
-<th style="text-align: center;">Then you run</th>
-<th style="text-align: left;">The result type is</th>
+<th style="text-align: left;">Elinizde bu varsa</th>
+<th style="text-align: center;">Bunu çalıştırdığınızda</th>
+<th style="text-align: left;">Sonuç türü şudur</th>
 </tr>
 </thead>
 <tbody>
@@ -201,13 +201,13 @@
 </tr>
 </tbody>
 </table>
-<p>Note that you can use multiple <code>*</code>s in a row to quickly dereference, just like we saw in the example code with <code>**q</code>, above. Each one strips away one level of indirection.</p>
+<p>Yukarıdaki <code>**q</code> örnek kodunda gördüğümüz gibi, hızlı bir şekilde dereference etmek için üst üste birden fazla <code>*</code> kullanabileceğinizi unutmayın. Her biri bir dolaylı erişim (indirection) seviyesini kaldırır.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">If you have</th>
-<th style="text-align: center;">Then you run</th>
-<th style="text-align: left;">The result type is</th>
+<th style="text-align: left;">Elinizde bu varsa</th>
+<th style="text-align: center;">Bunu çalıştırdığınızda</th>
+<th style="text-align: left;">Sonuç türü şudur</th>
 </tr>
 </thead>
 <tbody>
@@ -228,76 +228,75 @@
 </tr>
 </tbody>
 </table>
-<p>In general, <code>&amp;*E == E</code><a href="function-specifiers-alignment-specifiersoperators.html#fn144" class="footnote-ref" id="fnref144" role="doc-noteref"><sup>144</sup></a>. The dereference “undoes” the address-of.</p>
-<p>But <code>&amp;</code> doesn’t work the same way—you can only do those one at a time, and have to store the result in an intermediate variable:</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb508-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>     <span class="co">// Type: int</span></span>
-<span id="cb508-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>      <span class="co">// Type: int *, pointer to an int</span></span>
-<span id="cb508-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>     <span class="co">// Type: int **, pointer to pointer to int</span></span>
-<span id="cb508-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">***</span>r <span class="op">=</span> <span class="op">&amp;</span>q<span class="op">;</span>    <span class="co">// Type: int ***, pointer to pointer to pointer to int</span></span>
-<span id="cb508-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">****</span>s <span class="op">=</span> <span class="op">&amp;</span>r<span class="op">;</span>   <span class="co">// Type: int ****, you get the idea</span></span>
-<span id="cb508-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*****</span>t <span class="op">=</span> <span class="op">&amp;</span>s<span class="op">;</span>  <span class="co">// Type: int *****</span></span></code></pre></div>
+<p>Genel olarak, <code>&amp;*E == E</code> geçerlidir<a href="function-specifiers-alignment-specifiersoperators.html#fn144" class="footnote-ref" id="fnref144" role="doc-noteref"><sup>144</sup></a>. Dereference işlemi, adres alma (address-of) işlemini "geri alır".</p>
+<p>Ancak <code>&amp;</code> aynı şekilde çalışmaz—bunları yalnızca tek tek yapabilirsiniz ve sonucu ara bir değişkende saklamanız gerekir:</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb508-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>     <span class="co">// Tür: int</span></span>
+<span id="cb508-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>      <span class="co">// Tür: int *, int'e pointer</span></span>
+<span id="cb508-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>     <span class="co">// Tür: int **, int'e pointer'a pointer</span></span>
+<span id="cb508-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">***</span>r <span class="op">=</span> <span class="op">&amp;</span>q<span class="op">;</span>    <span class="co">// Tür: int ***, int'e pointer'a pointer'a pointer</span></span>
+<span id="cb508-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">****</span>s <span class="op">=</span> <span class="op">&amp;</span>r<span class="op">;</span>   <span class="co">// Tür: int ****, fikri anladınız</span></span>
+<span id="cb508-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb508-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*****</span>t <span class="op">=</span> <span class="op">&amp;</span>s<span class="op">;</span>  <span class="co">// Tür: int *****</span></span></code></pre></div>
 <p></p>
-<h3 data-number="23.1.1" id="pointer-pointers-and-const"><span class="header-section-number">23.1.1</span> Pointer Pointers and <code>const</code></h3>
+<h3 data-number="23.1.1" id="pointer-pointers-and-const"><span class="header-section-number">23.1.1</span> Pointer Pointer'lar ve <code>const</code></h3>
 <p></p>
-<p>If you recall, declaring a pointer like this:</p>
+<p>Hatırlayacağınız üzere, bir pointer'ı şu şekilde tanımlamak:</p>
 <div class="sourceCode" id="cb509"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb509-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb509-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span></span></code></pre></div>
-<p>means that you can’t modify <code>p</code>. Trying to <code>p++</code> would give you a compile-time error.</p>
-<p>But how does that work with <code>int **</code> or <code>int ***</code>? Where does the <code>const</code> go, and what does it mean?</p>
-<p>Let’s start with the simple bit. The <code>const</code> right next to the variable name refers to that variable. So if you want an <code>int***</code> that you can’t change, you can do this:</p>
+<p><code>p</code>'yi değiştiremeyeceğiniz anlamına gelir. <code>p++</code> yapmaya çalışmak bir derleme zamanı hatası verir.</p>
+<p>Peki bu <code>int **</code> veya <code>int ***</code> ile nasıl çalışır? <code>const</code> nereye gider ve ne anlama gelir?</p>
+<p>Basit kısımla başlayalım. Değişken adının hemen yanındaki <code>const</code> o değişkeni ifade eder. Bu yüzden değiştiremeyeceğiniz bir <code>int***</code> istiyorsanız, şunu yapabilirsiniz:</p>
 <div class="sourceCode" id="cb510"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb510-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb510-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">***</span><span class="dt">const</span> p<span class="op">;</span></span>
 <span id="cb510-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb510-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb510-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb510-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Not allowed</span></span></code></pre></div>
-<p>But here’s where things get a little weird.</p>
-<p>What if we had this situation:</p>
+<span id="cb510-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb510-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// İzin verilmez</span></span></code></pre></div>
+<p>Ancak işlerin biraz garipleştiği yer burasıdır.</p>
+<p>Ya şöyle bir durumumuz olsaydı:</p>
 <div class="sourceCode" id="cb511"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb511-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb511-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-2"></a><span class="op">{</span></span>
 <span id="cb511-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-3"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
 <span id="cb511-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-4"></a>    <span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
 <span id="cb511-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-5"></a>    <span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span></span>
 <span id="cb511-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb511-6"></a><span class="op">}</span></span></code></pre></div>
-<p>When I build that, I get a warning:</p>
+<p>Bunu derlediğimde bir uyarı alıyorum:</p>
 <div class="sourceCode" id="cb512"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb512-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb512-1" aria-hidden="true" tabindex="-1"></a>warning: initialization discards ‘const’ qualifier from pointer target type</span>
 <span id="cb512-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb512-2" aria-hidden="true" tabindex="-1"></a>    7 |     int **q = &amp;p;</span>
 <span id="cb512-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb512-3" aria-hidden="true" tabindex="-1"></a>      |               ^</span></code></pre></div>
-<p>What’s going on? The compiler is telling us here that we had a variable that was <code>const</code>, and we’re assigning its value into another variable that is not <code>const</code> in the same way. The “<code>const</code>ness” is discarded, which probably isn’t what we wanted to do.</p>
-<p>The type of <code>p</code> is <code>int *const p</code>, and so <code>&amp;p</code> is type <code>int *const *</code>. And we try to assign that into <code>q</code>.</p>
-<p>But <code>q</code> is <code>int **</code>! A type with different <code>const</code>ness on the first <code>*</code>! So we get a warning that the <code>const</code> in <code>p</code>’s <code>int *const *</code> is being ignored and thrown away.</p>
-<p>We can fix that by making sure <code>q</code>’s type is at least as <code>const</code> as <code>p</code>.</p>
+<p>Neler oluyor? Derleyici burada bize <code>const</code> olan bir değişkenimiz olduğunu ve değerini aynı şekilde <code>const</code> olmayan başka bir değişkene atadığımızı söylüyor. "<code>const</code>'luk" niteliği atılıyor ki bu muhtemelen yapmak istediğimiz şey değildir.</p>
+<p><code>p</code>'nin türü <code>int *const p</code>'dir, dolayısıyla <code>&amp;p</code> türü <code>int *const *</code> olur. Ve bunu <code>q</code> içine atamaya çalışıyoruz.</p>
+<p>Ancak <code>q</code>, <code>int **</code> türündedir! İlk <code>*</code> üzerinde farklı bir <code>const</code> niteliğine sahip bir tür! Bu nedenle <code>p</code>'nin <code>int *const *</code> türündeki <code>const</code> niteliğinin göz ardı edildiği ve çöpe atıldığı konusunda bir uyarı alıyoruz.</p>
+<p><code>q</code>'nun türünün en az <code>p</code> kadar <code>const</code> olduğundan emin olarak bunu düzeltebiliriz.</p>
 <div class="sourceCode" id="cb513"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb513-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
 <span id="cb513-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb513-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
 <span id="cb513-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb513-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span></span></code></pre></div>
-<p>And now we’re happy.</p>
-<p>We could make <code>q</code> even more <code>const</code>. As it is, above, we’re saying, “<code>q</code> isn’t itself <code>const</code>, but the thing it points to is <code>const</code>.” But we could make them both <code>const</code>:</p>
+<p>Ve şimdi mutluyuz.</p>
+<p><code>q</code>'yu daha da <code>const</code> yapabilirdik. Yukarıdaki haliyle, "<code>q</code>'nun kendisi <code>const</code> değil, ancak gösterdiği şey <code>const</code>" diyoruz. Ancak ikisini de <code>const</code> yapabiliriz:</p>
 <div class="sourceCode" id="cb514"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb514-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
 <span id="cb514-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb514-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
-<span id="cb514-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb514-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span><span class="dt">const</span> q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// More const!</span></span></code></pre></div>
-<p>And that works, too. Now we can’t modify <code>q</code>, or the pointer <code>q</code> points to.</p>
+<span id="cb514-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb514-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span><span class="dt">const</span> q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// Daha fazla const!</span></span></code></pre></div>
+<p>Ve bu da çalışır. Artık <code>q</code>'yu veya <code>q</code>'nun işaret ettiği pointer'ı değiştiremeyiz.</p>
 <p></p>
-<h2 data-number="23.2" id="multibyte-values"><span class="header-section-number">23.2</span> Multibyte Values</h2>
+<h2 data-number="23.2" id="multibyte-values"><span class="header-section-number">23.2</span> Çoklu Bayt Değerler</h2>
 <p></p>
-<p>We kinda hinted at this in a variety of places earlier, but clearly not every value can be stored in a single byte of memory. Things take up multiple bytes of memory (assuming they’re not <code>char</code>s). You can tell how many bytes by using <code>sizeof</code>. And you can tell which address in memory is the <em>first</em> byte of the object by using the standard <code>&amp;</code> operator, which always returns the address of the first byte.</p>
-<p>And here’s another fun fact! If you iterate over the bytes of any object, you get its <em>object representation</em>. Two things with the same object representation in memory are equal.</p>
-<p>If you want to iterate over the object representation, you should do it with pointers to <code>unsigned char</code>.</p>
-<p>Let’s make our own version of <a href="https://beej.us/guide/bgclr/html/split/stringref.html#man-memcpy" target="_blank" rel="noopener noreferrer"><code>memcpy()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn145" class="footnote-ref" id="fnref145" role="doc-noteref"><sup>145</sup></a> that does exactly this:</p>
+<p>Daha önce çeşitli yerlerde buna biraz değinmiştik, ancak açıktır ki her değer belleğin tek bir baytında saklanamaz. Nesneler bellekte birden fazla bayt kaplar (<code>char</code> olmadıkları varsayımıyla). <code>sizeof</code> kullanarak kaç bayt olduğunu anlayabilirsiniz. Ve her zaman ilk baytın adresini döndüren standart <code>&amp;</code> operatörünü kullanarak bellekteki hangi adresin nesnenin <em>ilk</em> baytı olduğunu anlayabilirsiniz.</p>
+<p>İşte eğlenceli bir bilgi daha! Herhangi bir nesnenin baytları üzerinde gezinirseniz, onun <em>nesne temsilini (object representation)</em> elde edersiniz. Bellekte aynı nesne temsiline sahip iki şey birbirine eşittir.</p>
+<p>Nesne temsili üzerinde gezinmek istiyorsanız, bunu <code>unsigned char</code> pointer'ları ile yapmalısınız.</p>
+<p>Tam da bunu yapan kendi <a href="https://beej.us/guide/bgclr/html/split/stringref.html#man-memcpy" target="_blank" rel="noopener noreferrer"><code>memcpy()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn145" class="footnote-ref" id="fnref145" role="doc-noteref"><sup>145</sup></a> sürümümüzü oluşturalım:</p>
 <div class="sourceCode" id="cb515"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb515-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>my_memcpy<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">)</span></span>
 <span id="cb515-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb515-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Make local variables for src and dest, but of type unsigned char</span></span>
+<span id="cb515-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// src ve dest için unsigned char türünde yerel değişkenler oluştur</span></span>
 <span id="cb515-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb515-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> src<span class="op">;</span></span>
 <span id="cb515-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>d <span class="op">=</span> dest<span class="op">;</span></span>
 <span id="cb515-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb515-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>n<span class="op">--</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>   <span class="co">// For the given number of bytes</span></span>
-<span id="cb515-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>d<span class="op">++</span> <span class="op">=</span> <span class="op">*</span>s<span class="op">++;</span>  <span class="co">// Copy source byte to dest byte</span></span>
+<span id="cb515-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>n<span class="op">--</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>   <span class="co">// Verilen bayt sayısı için</span></span>
+<span id="cb515-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>d<span class="op">++</span> <span class="op">=</span> <span class="op">*</span>s<span class="op">++;</span>  <span class="co">// Kaynak baytı hedef bayta kopyala</span></span>
 <span id="cb515-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb515-11"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Most copy functions return a pointer to the dest as a convenience</span></span>
-<span id="cb515-12"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// to the caller</span></span>
-<span id="cb515-13"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb515-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest<span class="op">;</span></span>
-<span id="cb515-15"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>(There are some good examples of post-increment and post-decrement in there for you to study, as well.)</p>
-<p>It’s important to note that the version, above, is probably less efficient than the one that comes with your system.</p>
-<p>But you can pass pointers to anything into it, and it’ll copy those objects. Could be <code>int*</code>, <code>struct animal*</code>, or anything.</p>
-<p>Let’s do another example that prints out the object representation bytes of a <code>struct</code> so we can see if there’s any padding in there and what values it has<a href="function-specifiers-alignment-specifiersoperators.html#fn146" class="footnote-ref" id="fnref146" role="doc-noteref"><sup>146</sup></a>.</p>
+<span id="cb515-11"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Çoğu kopyalama fonksiyonu çağıran kişiye kolaylık olsun diye dest pointer'ı döndürür</span></span>
+<span id="cb515-12"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-13"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest<span class="op">;</span></span>
+<span id="cb515-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb515-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(İncelemeniz için orada sonradan artırma (post-increment) ve sonradan azaltmaya (post-decrement) dair güzel örnekler de var.)</p>
+<p>Yukarıdaki sürümün muhtemelen sisteminizle birlikte gelenden daha az verimli olduğunu unutmamak önemlidir.</p>
+<p>Ancak içine herhangi bir şeyin pointer'ını geçirebilirsiniz ve o nesneleri kopyalar. <code>int*</code>, <code>struct animal*</code> veya herhangi bir şey olabilir.</p>
+<p>İçinde herhangi bir dolgu baytı (padding) olup olmadığını ve hangi değerlere sahip olduğunu görebilmemiz için bir <code>struct</code> yapısının nesne temsil baytlarını yazdıran başka bir örnek yapalım<a href="function-specifiers-alignment-specifiersoperators.html#fn146" class="footnote-ref" id="fnref146" role="doc-noteref"><sup>146</sup></a>.</p>
 <div class="sourceCode" id="cb516"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb516-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb516-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-2"></a></span>
 <span id="cb516-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
@@ -314,71 +313,71 @@
 <span id="cb516-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-14"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%02X\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb516-15"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-15"></a>    <span class="op">}</span></span>
 <span id="cb516-16"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb516-16"></a><span class="op">}</span></span></code></pre></div>
-<p>What we have there is a <code>struct foo</code> that’s built in such a way that should encourage a compiler to inject padding bytes (though it doesn’t have to). And then we get an <code>unsigned char *</code> to the first byte of the <code>struct foo</code> variable <code>x</code>.</p>
-<p>From there, all we need to know is the <code>sizeof x</code> and we can loop through that many bytes, printing out the values (in hex for ease).</p>
-<p>Running this gives a bunch of numbers as output. I’ve annotated it below to identify where the values were stored:</p>
+<p>Burada elimizde bir derleyiciyi dolgu baytları (padding) eklemeye teşvik edecek şekilde inşa edilmiş bir <code>struct foo</code> var (eklemek zorunda olmasa da). Ve ardından <code>struct foo</code> türündeki <code>x</code> değişkeninin ilk baytına işaret eden bir <code>unsigned char *</code> alıyoruz.</p>
+<p>Oradan itibaren tek bilmemiz gereken <code>sizeof x</code> değeridir ve o kadar bayt boyunca döngü kurup değerleri (kolaylık olsun diye hex olarak) yazdırabiliriz.</p>
+<p>Bunu çalıştırmak çıktı olarak bir sürü sayı verir. Değerlerin nerede saklandığını belirlemek için aşağıda açıklama ekledim:</p>
 <div class="sourceCode" id="cb517"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb517-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-1" aria-hidden="true" tabindex="-1"></a>12  | x.a == 0x12</span>
 <span id="cb517-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb517-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-3" aria-hidden="true" tabindex="-1"></a>AB  |</span>
-<span id="cb517-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-4" aria-hidden="true" tabindex="-1"></a>BF  | padding bytes with &quot;random&quot; value</span>
+<span id="cb517-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-4" aria-hidden="true" tabindex="-1"></a>BF  | "rastgele" değerli dolgu baytları (padding)</span>
 <span id="cb517-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-5" aria-hidden="true" tabindex="-1"></a>26  |</span>
 <span id="cb517-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb517-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-7" aria-hidden="true" tabindex="-1"></a>78  | x.b == 0x12345678</span>
 <span id="cb517-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-8" aria-hidden="true" tabindex="-1"></a>56  |</span>
 <span id="cb517-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-9" aria-hidden="true" tabindex="-1"></a>34  |</span>
 <span id="cb517-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb517-10" aria-hidden="true" tabindex="-1"></a>12  |</span></code></pre></div>
-<p>On all systems, <code>sizeof(char)</code> is 1, and we see that first byte at the top of the output holding the value <code>0x12</code> that we stored there.</p>
-<p>Then we have some padding bytes—for me, these varied from run to run.</p>
-<p>Finally, on my system, <code>sizeof(int)</code> is 4, and we can see those 4 bytes at the end. Notice how they’re the same bytes as are in the hex value <code>0x12345678</code>, but strangely in reverse order<a href="function-specifiers-alignment-specifiersoperators.html#fn147" class="footnote-ref" id="fnref147" role="doc-noteref"><sup>147</sup></a>.</p>
-<p>So that’s a little peek under the hood at the bytes of a more complex entity in memory.</p>
+<p>Tüm sistemlerde <code>sizeof(char)</code> 1'dir ve çıktının en üstünde oraya sakladığımız <code>0x12</code> değerini tutan ilk baytı görürüz.</p>
+<p>Ardından bazı dolgu baytları var—bende bunlar çalıştırılmadan çalıştırılmaya değişti.</p>
+<p>Son olarak benim sistemimde <code>sizeof(int)</code> 4'tür ve sondaki o 4 baytı görebiliriz. <code>0x12345678</code> hex değerindeki baytlarla aynı olduklarına, ancak garip bir şekilde ters sırada olduklarına dikkat edin<a href="function-specifiers-alignment-specifiersoperators.html#fn147" class="footnote-ref" id="fnref147" role="doc-noteref"><sup>147</sup></a>.</p>
+<p>Bu, bellekteki daha karmaşık bir yapının baytlarına kaputun altından küçük bir bakıştır.</p>
 <p></p>
-<h2 data-number="23.3" id="the-null-pointer-and-zero"><span class="header-section-number">23.3</span> The <code>NULL</code> Pointer and Zero</h2>
+<h2 data-number="23.3" id="the-null-pointer-and-zero"><span class="header-section-number">23.3</span> <code>NULL</code> Pointer ve Sıfır</h2>
 <p></p>
-<p>These things can be used interchangeably:</p>
+<p>Şu ögeler birbirinin yerine kullanılabilir:</p>
 <ul>
 <li><code>NULL</code></li>
 <li><code>0</code></li>
 <li><code>'\0'</code></li>
 <li><code>(void *)0</code></li>
 </ul>
-<p>Personally, I always use <code>NULL</code> when I mean <code>NULL</code>, but you might see some other variants from time to time. Though <code>'\0'</code> (a byte with all bits set to zero) will also compare equal, it’s <em>weird</em> to compare it to a pointer; you should compare <code>NULL</code> against the pointer. (Of course, lots of times in string processing, you’re comparing <em>the thing the pointer points to</em> to <code>'\0'</code>, and that’s right.)</p>
-<p><code>0</code> is called the <em>null pointer constant</em>, and, when compared to or assigned into another pointer, it is converted to a null pointer of the same type.</p>
+<p>Şahsen ben <code>NULL</code> kastettiğimde her zaman <code>NULL</code> kullanırım, ancak zaman zaman başka varyantlar da görebilirsiniz. <code>'\0'</code> (tüm bitleri sıfır olan bir bayt) eşitlik karşılaştırmasında doğru çıksa da, onu bir pointer ile karşılaştırmak <em>gariptir</em>; pointer ile <code>NULL</code> karşılaştırmalısınız. (Elbette metin işleme yaparken çoğu zaman <em>pointer'ın gösterdiği şeyi</em> <code>'\0'</code> ile karşılaştırırsınız ki bu doğrudur.)</p>
+<p><code>0</code> değerine <em>boş gösterici sabiti (null pointer constant)</em> denir ve başka bir pointer ile karşılaştırıldığında veya atandığında, aynı türden bir boş göstericiye <em>(null pointer)</em> dönüştürülür.</p>
 <p></p>
-<h2 data-number="23.4" id="pointers-as-integers"><span class="header-section-number">23.4</span> Pointers as Integers</h2>
+<h2 data-number="23.4" id="pointers-as-integers"><span class="header-section-number">23.4</span> Tam Sayı Olarak Pointer'lar</h2>
 <p></p>
-<p>You can cast pointers to integers and vice-versa (since a pointer is just an index into memory), but you probably only ever need to do this if you’re doing some low-level hardware stuff. The results of such machinations are implementation-defined, so they aren’t portable. And <em>weird things</em> could happen.</p>
-<p>C does make one guarantee, though: you can convert a pointer to a <code>uintptr_t</code> type and you’ll be able to convert it back to a pointer without losing any data.</p>
-<p><code>uintptr_t</code> is defined in <code>&lt;stdint.h&gt;</code><a href="function-specifiers-alignment-specifiersoperators.html#fn148" class="footnote-ref" id="fnref148" role="doc-noteref"><sup>148</sup></a>.</p>
-<p>Additionally, if you feel like being signed, you can use <code>intptr_t</code> to the same effect.</p>
+<p>Pointer'ları tam sayılara ve tam tersine tür dönüşümüne <em>(cast)</em> tabi tutabilirsiniz (çünkü bir pointer yalnızca bellekteki bir indekstir), ancak muhtemelen yalnızca bazı alt seviye donanım işleri yapıyorsanız buna ihtiyaç duyarsınız. Bu tür işlemlerin sonuçları uygulamaya bağlı davranıştır <em>(implementation-defined)</em>, dolayısıyla taşınabilir değildir. Ve <em>garip şeyler</em> yaşanabilir.</p>
+<p>Yine de C bir garanti verir: bir pointer'ı <code>uintptr_t</code> türüne dönüştürebilir ve herhangi bir veri kaybetmeden tekrar bir pointer'a dönüştürebilirsiniz.</p>
+<p><code>uintptr_t</code>, <code>&lt;stdint.h&gt;</code> içinde tanımlanmıştır<a href="function-specifiers-alignment-specifiersoperators.html#fn148" class="footnote-ref" id="fnref148" role="doc-noteref"><sup>148</sup></a>.</p>
+<p>Ayrıca, işaretli (signed) kullanmak isterseniz, aynı etki için <code>intptr_t</code> kullanabilirsiniz.</p>
 <p></p>
-<h2 data-number="23.5" id="casting-pointers-to-other-pointers"><span class="header-section-number">23.5</span> Casting Pointers to other Pointers</h2>
+<h2 data-number="23.5" id="casting-pointers-to-other-pointers"><span class="header-section-number">23.5</span> Pointer'ları Başka Pointer'lara Dönüştürmek (Cast)</h2>
 <p></p>
-<p>There’s only one safe pointer conversion:</p>
+<p>Yalnızca tek bir güvenli pointer dönüşümü vardır:</p>
 <ol type="1">
-<li>Converting to <code>intptr_t</code> or <code>uintptr_t</code>.</li>
-<li>Converting to and from <code>void*</code>.</li>
+<li><code>intptr_t</code> veya <code>uintptr_t</code> türüne dönüştürmek.</li>
+<li><code>void*</code> türüne ve türünden dönüştürmek.</li>
 </ol>
-<p>TWO! Two safe pointer conversions.</p>
+<p>İKİ! İki güvenli pointer dönüşümü.</p>
 <ol start="3" type="1">
-<li>Converting to and from <code>char*</code> (or <code>signed char*</code>/<code>unsigned char*</code>).</li>
+<li><code>char*</code> (veya <code>signed char*</code>/<code>unsigned char*</code>) türüne ve türünden dönüştürmek.</li>
 </ol>
-<p>THREE! Three safe conversions!</p>
+<p>ÜÇ! Üç güvenli dönüşüm!</p>
 <ol start="4" type="1">
-<li>Converting to and from a pointer to a <code>struct</code> and a pointer to its first member, and vice-versa.</li>
+<li>Bir <code>struct</code> pointer'ından ilk üyesinin pointer'ına ve tam tersine dönüştürmek.</li>
 </ol>
-<p>FOUR! Four safe conversions!</p>
-<p>If you cast to a pointer of another type and then access the object it points to, the behavior is undefined due to something called <em>strict aliasing</em>.</p>
-<p>Plain old <em>aliasing</em> refers to the ability to have more than one way to access the same object. The access points are aliases for each other.</p>
-<p><em>Strict aliasing</em> says you are only allowed to access an object via pointers to <em>compatible types</em> to that object.</p>
-<p>For example, this is definitely allowed:</p>
+<p>DÖRT! Dört güvenli dönüşüm!</p>
+<p>Başka bir türün pointer'ına dönüşüm yapıp ardından gösterdiği nesneye erişirseniz, <em>kesin takma adlandırma (strict aliasing)</em> adı verilen bir şey nedeniyle davranış tanımsızdır <em>(undefined behavior)</em>.</p>
+<p>Sade <em>aliasing (takma adlandırma)</em>, aynı nesneye erişmek için birden fazla yola sahip olma yeteneğini ifade eder. Erişim noktaları birbirinin takma adıdır (alias).</p>
+<p><em>Strict aliasing</em>, bir nesneye yalnızca o nesneyle <em>uyumlu türdeki</em> pointer'lar aracılığıyla erişmenize izin verildiğini söyler.</p>
+<p>Örneğin, buna kesinlikle izin verilir:</p>
 <div class="sourceCode" id="cb518"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb518-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb518-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb518-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb518-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span></span></code></pre></div>
-<p><code>p</code> is a pointer to an <code>int</code>, and it points to a compatible type—namely <code>int</code>—so we’re golden.</p>
-<p>But the following isn’t good because <code>int</code> and <code>float</code> are not compatible types:</p>
+<p><code>p</code> bir <code>int</code> pointer'ıdır ve uyumlu bir türü—yani <code>int</code>—gösterir, dolayısıyla harikayız.</p>
+<p>Ancak aşağıdakisi iyi değildir çünkü <code>int</code> ve <code>float</code> uyumlu türler değildir:</p>
 <div class="sourceCode" id="cb519"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb519-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb519-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb519-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="dt">float</span> <span class="op">*)&amp;</span>a<span class="op">;</span></span></code></pre></div>
-<p>Here’s a demo program that does some aliasing. It takes a variable <code>v</code> of type <code>int32_t</code> and aliases it to a pointer to a <code>struct words</code>. That <code>struct</code> has two <code>int16_t</code>s in it. These types are incompatible, so we’re in violation of strict aliasing rules. The compiler will assume that these two pointers never point to the same object… but we’re making it so they do. Which is naughty of us.</p>
-<p>Let’s see if we can break something.</p>
+<p>İşte aliasing yapan bir gösteri programı. <code>int32_t</code> türündeki bir <code>v</code> değişkenini alır ve onu bir <code>struct words</code> pointer'ına takma ad olarak bağlar. O <code>struct</code> içinde iki adet <code>int16_t</code> barındırır. Bu türler uyumsuzdur, dolayısıyla strict aliasing kurallarını ihlal ediyoruz. Derleyici bu iki pointer'ın asla aynı nesneyi göstermediğini varsayacaktır… ama biz ikisinin de aynı yeri göstermesini sağlıyoruz. Ki bu yaramaz bir davranıştır.</p>
+<p>Gelin bir şeyleri bozup bozamayacağımıza bakalım.</p>
 <div class="sourceCode" id="cb520"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb520-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb520-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-2"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
 <span id="cb520-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-3"></a></span>
@@ -391,7 +390,7 @@
 <span id="cb520-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-10"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb520-11"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-11"></a>        <span class="op">(*</span>pv<span class="op">)++;</span></span>
 <span id="cb520-12"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-12"></a></span>
-<span id="cb520-13"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-13"></a>        <span class="co">// Print the 32-bit value and the 16-bit values:</span></span>
+<span id="cb520-13"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-13"></a>        <span class="co">// 32-bitlik değeri ve 16-bitlik değerleri yazdır:</span></span>
 <span id="cb520-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-14"></a></span>
 <span id="cb520-15"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-15"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x</span><span class="st">, </span><span class="sc">%x</span><span class="st">-</span><span class="sc">%x\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>pv<span class="op">,</span> pw<span class="op">-&gt;</span>v<span class="op">[</span><span class="dv">1</span><span class="op">],</span> pw<span class="op">-&gt;</span>v<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
 <span id="cb520-16"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-16"></a>    <span class="op">}</span></span>
@@ -401,76 +400,76 @@
 <span id="cb520-20"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-20"></a><span class="op">{</span></span>
 <span id="cb520-21"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-21"></a>    <span class="dt">int32_t</span> v <span class="op">=</span> <span class="bn">0x12345678</span><span class="op">;</span></span>
 <span id="cb520-22"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-22"></a></span>
-<span id="cb520-23"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-23"></a>    <span class="kw">struct</span> words <span class="op">*</span>pw <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> words <span class="op">*)&amp;</span>v<span class="op">;</span>  <span class="co">// Violates strict aliasing</span></span>
+<span id="cb520-23"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-23"></a>    <span class="kw">struct</span> words <span class="op">*</span>pw <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> words <span class="op">*)&amp;</span>v<span class="op">;</span>  <span class="co">// Strict aliasing kuralını ihlal eder</span></span>
 <span id="cb520-24"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-24"></a></span>
 <span id="cb520-25"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-25"></a>    fun<span class="op">(&amp;</span>v<span class="op">,</span> pw<span class="op">);</span></span>
 <span id="cb520-26"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb520-26"></a><span class="op">}</span></span></code></pre></div>
-<p>See how I pass in the two incompatible pointers to <code>fun()</code>? One of the types is <code>int32_t*</code> and the other is <code>struct words*</code>.</p>
-<p>But they both point to the same object: the 32-bit value initialized to <code>0x12345678</code>.</p>
-<p>So if we look at the fields in the <code>struct words</code>, we should see the two 16-bit halves of that number. Right?</p>
-<p>And in the <code>fun()</code> loop, we increment the pointer to the <code>int32_t</code>. That’s it. But since the <code>struct</code> points to that same memory, it, too, should be updated to the same value.</p>
-<p>So let’s run it and get this, with the 32-bit value on the left and the two 16-bit portions on the right. It should match<a href="function-specifiers-alignment-specifiersoperators.html#fn149" class="footnote-ref" id="fnref149" role="doc-noteref"><sup>149</sup></a>:</p>
+<p><code>fun()</code> fonksiyonuna iki uyumsuz pointer'ı nasıl geçirdiğimi gördünüz mü? Türlerden biri <code>int32_t*</code>, diğeri ise <code>struct words*</code>.</p>
+<p>Ancak ikisi de aynı nesneyi gösterir: <code>0x12345678</code> olarak ilklendirilmiş 32-bitlik değer.</p>
+<p>Yani <code>struct words</code> içindeki alanlara bakarsak, o sayının 16-bitlik iki yarısını görmeliyiz. Değil mi?</p>
+<p>Ve <code>fun()</code> döngüsünde <code>int32_t</code> pointer'ını artırıyoruz. Bu kadar. Ancak <code>struct</code> aynı belleği gösterdiğinden, o da aynı değere güncellenmelidir.</p>
+<p>O halde çalıştıralım ve sol tarafta 32-bitlik değer ve sağ tarafta 16-bitlik iki kısım olacak şekilde bunu elde edelim. Eşleşmesi gerekir<a href="function-specifiers-alignment-specifiersoperators.html#fn149" class="footnote-ref" id="fnref149" role="doc-noteref"><sup>149</sup></a>:</p>
 <div class="sourceCode" id="cb521"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb521-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb521-1" aria-hidden="true" tabindex="-1"></a>12345679, 1234-5679</span>
 <span id="cb521-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb521-2" aria-hidden="true" tabindex="-1"></a>1234567a, 1234-567a</span>
 <span id="cb521-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb521-3" aria-hidden="true" tabindex="-1"></a>1234567b, 1234-567b</span>
 <span id="cb521-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb521-4" aria-hidden="true" tabindex="-1"></a>1234567c, 1234-567c</span>
 <span id="cb521-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb521-5" aria-hidden="true" tabindex="-1"></a>1234567d, 1234-567d</span></code></pre></div>
-<p>and it does… <em>UNTIL TOMORROW!</em></p>
-<p>Let’s try it compiling GCC with <code>-O3</code> and <code>-fstrict-aliasing</code>:</p>
+<p>ve eşleşir… <em>YARINA KADAR!</em></p>
+<p>GCC'yi <code>-O3</code> ve <code>-fstrict-aliasing</code> ile derlemeyi deneyelim:</p>
 <div class="sourceCode" id="cb522"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb522-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb522-1" aria-hidden="true" tabindex="-1"></a>12345679, 1234-5678</span>
 <span id="cb522-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb522-2" aria-hidden="true" tabindex="-1"></a>1234567a, 1234-5679</span>
 <span id="cb522-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb522-3" aria-hidden="true" tabindex="-1"></a>1234567b, 1234-567a</span>
 <span id="cb522-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb522-4" aria-hidden="true" tabindex="-1"></a>1234567c, 1234-567b</span>
 <span id="cb522-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb522-5" aria-hidden="true" tabindex="-1"></a>1234567d, 1234-567c</span></code></pre></div>
-<p>They’re off by one! But they point to the same memory! How could this be? Answer: it’s undefined behavior to alias memory like that. <em>Anything is possible</em>, except not in a good way.</p>
-<p>If your code violates strict aliasing rules, whether it works or not depends on how someone decides to compile it. And that’s a bummer since that’s beyond your control. Unless you’re some kind of omnipotent deity.</p>
-<p>Unlikely, sorry.</p>
-<p>GCC can be forced to not use the strict aliasing rules with <code>-fno-strict-aliasing</code>. Compiling the demo program, above, with <code>-O3</code> and this flag causes the output to be as expected.</p>
-<p>Lastly, <em>type punning</em> is using pointers of different types to look at the same data. Before strict aliasing, this kind of things was fairly common:</p>
+<p>Bir farkla kaçıyorlar! Ama aynı belleği gösteriyorlar! Bu nasıl olabilir? Cevap: Belleği bu şekilde takma adlandırmak tanımsız davranıştır <em>(undefined behavior)</em>. <em>Her şey mümkündür</em>, ancak iyi anlamda değil.</p>
+<p>Kodunuz strict aliasing kurallarını ihlal ediyorsa, çalışıp çalışmaması birinin onu nasıl derlemeye karar verdiğine bağlıdır. Ve bu sizin kontrolünüz dışında olduğu için can sıkıcıdır. Tabii her şeye gücü yeten bir ilah değilseniz.</p>
+<p>Pek olası değil, üzgünüm.</p>
+<p>GCC, <code>-fno-strict-aliasing</code> bayrağı ile strict aliasing kurallarını kullanmamaya zorlanabilir. Yukarıdaki gösteri programını <code>-O3</code> ve bu bayrakla derlemek, çıktının beklendiği gibi olmasına neden olur.</p>
+<p>Son olarak, <em>type punning (tür manipülasyonu)</em>, aynı veriye bakmak için farklı türdeki pointer'ları kullanmaktır. Strict aliasing öncesinde bu tür şeyler oldukça yaygındı:</p>
 <div class="sourceCode" id="cb523"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb523-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb523-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">0x12345678</span><span class="op">;</span></span>
-<span id="cb523-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb523-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> b <span class="op">=</span> <span class="op">*((</span><span class="dt">short</span> <span class="op">*)&amp;</span>a<span class="op">);</span>   <span class="co">// Violates strict aliasing</span></span></code></pre></div>
-<p>If you want to do type punning (relatively) safely, see the section on <a href="structs-ii-more-fun-with-structs.html#union-type-punning">Unions and Type Punning</a>.</p>
+<span id="cb523-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb523-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> b <span class="op">=</span> <span class="op">*((</span><span class="dt">short</span> <span class="op">*)&amp;</span>a<span class="op">);</span>   <span class="co">// Strict aliasing kuralını ihlal eder</span></span></code></pre></div>
+<p>Type punning işlemini (nispeten) güvenli bir şekilde yapmak istiyorsanız, <a href="structs-ii-more-fun-with-structs.html#union-type-punning">Union'lar ve Type Punning</a> bölümüne bakın.</p>
 <p></p>
-<h2 data-number="23.6" id="ptr_differences"><span class="header-section-number">23.6</span> Pointer Differences</h2>
+<h2 data-number="23.6" id="ptr_differences"><span class="header-section-number">23.6</span> Pointer Farkları</h2>
 <p></p>
-<p>As you know from the section on pointer arithmetic, you can subtract one pointer from another<a href="function-specifiers-alignment-specifiersoperators.html#fn150" class="footnote-ref" id="fnref150" role="doc-noteref"><sup>150</sup></a> to get the difference between them in count of array elements.</p>
-<p>Now the <em>type of that difference</em> is something that’s up to the implementation, so it could vary from system to system.</p>
+<p>Pointer aritmetiği bölümünden bildiğiniz gibi, dizi eleman sayısı cinsinden aralarındaki farkı bulmak için bir pointer'ı diğerinden çıkarabilirsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn150" class="footnote-ref" id="fnref150" role="doc-noteref"><sup>150</sup></a>.</p>
+<p>Şimdi <em>o farkın türü</em> uygulamaya bağlı (implementation) bir şeydir, bu yüzden sistemden sisteme değişebilir.</p>
 <p></p>
-<p>To be more portable, you can store the result in a variable of type <code>ptrdiff_t</code> defined in <code>&lt;stddef.h&gt;</code>.</p>
+<p>Daha taşınabilir olması için sonucu <code>&lt;stddef.h&gt;</code> içinde tanımlanan <code>ptrdiff_t</code> türünde bir değişkende saklayabilirsiniz.</p>
 <div class="sourceCode" id="cb524"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb524-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> cats<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
 <span id="cb524-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb524-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>f <span class="op">=</span> cats <span class="op">+</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb524-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>g <span class="op">=</span> cats <span class="op">+</span> <span class="dv">60</span><span class="op">;</span></span>
 <span id="cb524-5"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb524-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ptrdiff_t</span> d <span class="op">=</span> g <span class="op">-</span> f<span class="op">;</span>  <span class="co">// difference is 40</span></span></code></pre></div>
-<p> And you can print it by prefixing the integer format specifier with <code>t</code>:</p>
-<div class="sourceCode" id="cb525"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb525-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb525-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%td\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Print decimal: 40</span></span>
-<span id="cb525-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb525-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%tX\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Print hex:     28</span></span></code></pre></div>
+<span id="cb524-6"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb524-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ptrdiff_t</span> d <span class="op">=</span> g <span class="op">-</span> f<span class="op">;</span>  <span class="co">// fark 40'tır</span></span></code></pre></div>
+<p> Ve tam sayı format belirtecinin önüne <code>t</code> ekleyerek bunu yazdırabilirsiniz:</p>
+<div class="sourceCode" id="cb525"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb525-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb525-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%td\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Onluk tabanda yazdır: 40</span></span>
+<span id="cb525-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb525-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%tX\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Hex tabanında yazdır:   28</span></span></code></pre></div>
 <p> </p>
-<h2 data-number="23.7" id="pointers-to-functions"><span class="header-section-number">23.7</span> Pointers to Functions</h2>
+<h2 data-number="23.7" id="pointers-to-functions"><span class="header-section-number">23.7</span> Fonksiyon Pointer'ları</h2>
 <p></p>
-<p>Functions are just collections of machine instructions in memory, so there’s no reason we can’t get a pointer to the first instruction of the function.</p>
-<p>And then call it.</p>
-<p>This can be useful for passing a pointer to a function into another function as an argument. Then the second one could call whatever was passed in.</p>
-<p>The tricky part with these, though, is that C needs to know the type of the variable that is the pointer to the function.</p>
-<p>And it would really like to know all the details.</p>
-<p>Like “this is a pointer to a function that takes two <code>int</code> arguments and returns <code>void</code>”.</p>
-<p>How do you write all that down so you can declare a variable?</p>
-<p>Well, it turns out it looks very much like a function prototype, except with some extra parentheses:</p>
-<div class="sourceCode" id="cb526"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb526-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Declare p to be a pointer to a function.</span></span>
-<span id="cb526-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-2" aria-hidden="true" tabindex="-1"></a><span class="co">// This function returns a float, and takes two ints as arguments.</span></span>
+<p>Fonksiyonlar bellekteki makine talimatları koleksiyonudur, bu nedenle fonksiyonun ilk talimatına bir pointer alamamamız için hiçbir neden yoktur.</p>
+<p>Ve ardından onu çağırabiliriz.</p>
+<p>Bu, bir fonksiyona pointer'ı başka bir fonksiyona argüman olarak geçirmek için yararlı olabilir. Böylece ikincisi içine geçirilen neyse onu çağırabilir.</p>
+<p>Ancak bunlarla ilgili çetrefilli kısım, C'nin fonksiyona işaret eden pointer değişkeninin türünü bilmesinin gerekmesidir.</p>
+<p>Ve tüm detayları gerçekten bilmek ister.</p>
+<p>"Bu, iki <code>int</code> argümanı alan ve <code>void</code> döndüren bir fonksiyona işaret eden pointer'dır" gibi.</p>
+<p>Bir değişken tanımlayabilmek için tüm meblağı nasıl yazarsınız?</p>
+<p>Görünüşe göre, bazı ekstra parantezler dışında bir fonksiyon prototipine çok benziyor:</p>
+<div class="sourceCode" id="cb526"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb526-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-1" aria-hidden="true" tabindex="-1"></a><span class="co">// p'yi bir fonksiyon pointer'ı olarak tanımla.</span></span>
+<span id="cb526-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Bu fonksiyon float döndürür ve argüman olarak iki int alır.</span></span>
 <span id="cb526-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb526-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb526-4" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span></span></code></pre></div>
-<p>Also notice that you don’t have to give the parameters names. But you can if you want; they’re just ignored.</p>
-<div class="sourceCode" id="cb527"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb527-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Declare p to be a pointer to a function.</span></span>
-<span id="cb527-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-2" aria-hidden="true" tabindex="-1"></a><span class="co">// This function returns a float, and takes two ints as arguments.</span></span>
+<p>Ayrıca parametrelere isim vermek zorunda olmadığınıza da dikkat edin. Ancak isterseniz verebilirsiniz; sadece göz ardı edilirler.</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb527-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-1" aria-hidden="true" tabindex="-1"></a><span class="co">// p'yi bir fonksiyon pointer'ı olarak tanımla.</span></span>
+<span id="cb527-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Bu fonksiyon float döndürür ve argüman olarak iki int alır.</span></span>
 <span id="cb527-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb527-4"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb527-4" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
-<p>So now that we know how to declare a variable, how do we know what to assign into it? How do we get the address of a function?</p>
-<p>Turns out there’s a shortcut just like with getting a pointer to an array: you can just refer to the bare function name without parens. (You can put an <code>&amp;</code> in front of this if you like, but it’s unnecessary and not idiomatic.)</p>
-<p>Once you have a pointer to a function, you can call it just by adding parens and an argument list.</p>
-<p>Let’s do a simple example where I effectively make an alias for a function by setting a pointer to it. Then we’ll call it.</p>
-<p>This code prints out <code>3490</code>:</p>
+<p>Şimdi bir değişkeni nasıl tanımlayacağımızı bildiğimize göre, içine ne atayacağımızı nasıl biliriz? Bir fonksiyonun adresini nasıl alırız?</p>
+<p>Bir dizinin pointer'ını almaya benzer bir kısayol olduğu ortaya çıkıyor: parantezler olmadan sadece yalın fonksiyon adına başvurabilirsiniz. (İsterseniz önüne bir <code>&amp;</code> koyabilirsiniz, ancak bu gereksizdir ve deyimsel/idiomatic değildir.)</p>
+<p>Bir fonksiyon pointer'ına sahip olduğunuzda, sadece parantezler ve bir argüman listesi ekleyerek onu çağırabilirsiniz.</p>
+<p>Bir fonksiyona pointer ayarlayarak ona etkili bir şekilde takma ad (alias) oluşturduğum basit bir örnek yapalım. Ardından onu çağıracağız.</p>
+<p>Bu kod <code>3490</code> yazdırır:</p>
 <div class="sourceCode" id="cb528"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb528-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb528-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-2"></a></span>
 <span id="cb528-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-3"></a><span class="dt">void</span> print_int<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span></span>
@@ -480,15 +479,15 @@
 <span id="cb528-7"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-7"></a></span>
 <span id="cb528-8"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb528-9"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-9"></a><span class="op">{</span></span>
-<span id="cb528-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-10"></a>    <span class="co">// Assign p to point to print_int:</span></span>
+<span id="cb528-10"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-10"></a>    <span class="co">// p'yi print_int'i gösterecek şekilde ata:</span></span>
 <span id="cb528-11"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-11"></a></span>
 <span id="cb528-12"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-12"></a>    <span class="dt">void</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span><span class="op">)</span> <span class="op">=</span> print_int<span class="op">;</span></span>
 <span id="cb528-13"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-13"></a></span>
-<span id="cb528-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-14"></a>    p<span class="op">(</span><span class="dv">3490</span><span class="op">);</span>          <span class="co">// Call print_int via the pointer</span></span>
+<span id="cb528-14"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-14"></a>    p<span class="op">(</span><span class="dv">3490</span><span class="op">);</span>          <span class="co">// Pointer aracılığıyla print_int'i çağır</span></span>
 <span id="cb528-15"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb528-15"></a><span class="op">}</span></span></code></pre></div>
-<p>Notice how the type of <code>p</code> represents the return value and parameter types of <code>print_int</code>. It has to, or else C will complain about incompatible pointer types.</p>
-<p>One more example here shows how we might pass a pointer to a function as an argument to another function.</p>
-<p>We’ll write a function that takes a couple integer arguments, plus a pointer to a function that operates on those two arguments. Then it prints the result.</p>
+<p><code>p</code> türünün <code>print_int</code>'in dönüş değerini ve parametre türlerini nasıl temsil ettiğine dikkat edin. Temsil etmek zorundadır, aksi takdirde C uyumsuz pointer türleri hakkında şikayet eder.</p>
+<p>Buradaki bir başka örnek, bir fonksiyona işaret eden pointer'ı başka bir fonksiyona nasıl argüman olarak geçirebileceğimizi gösteriyor.</p>
+<p>Birkaç tam sayı argümanı ve bu iki argüman üzerinde işlem yapan bir fonksiyon pointer'ı alan bir fonksiyon yazacağız. Ardından sonucu yazdırır.</p>
 <div class="sourceCode" id="cb529"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb529-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb529-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-2"></a></span>
 <span id="cb529-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-3"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
@@ -513,17 +512,17 @@
 <span id="cb529-22"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-22"></a>    print_math<span class="op">(</span>add<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">7</span><span class="op">);</span>   <span class="co">// 12</span></span>
 <span id="cb529-23"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-23"></a>    print_math<span class="op">(</span>mult<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">7</span><span class="op">);</span>  <span class="co">// 35</span></span>
 <span id="cb529-24"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb529-24"></a><span class="op">}</span></span></code></pre></div>
-<p>Take a moment to digest that. The idea here is that we’re going to pass a pointer to a function to <code>print_math()</code>, and it’s going to call that function to do some math.</p>
-<p>This way we can change the behavior of <code>print_math()</code> by passing another function into it. You can see we do that on lines 22-23 when we pass in pointers to functions <code>add</code> and <code>mult</code>, respectively.</p>
-<p>Now, on line 13, I think we can all agree the function signature of <code>print_math()</code> is a sight to behold. And, if you can believe it, this one is actually pretty straight-forward compared to some things you can construct<a href="function-specifiers-alignment-specifiersoperators.html#fn151" class="footnote-ref" id="fnref151" role="doc-noteref"><sup>151</sup></a>.</p>
-<p>But let’s digest it. Turns out there are only three parameters, but they’re a little hard to see:</p>
+<p>Bunu sindirmek için bir dakikanızı ayırın. Buradaki fikir, <code>print_math()</code> fonksiyonuna bir fonksiyon pointer'ı geçirecek olmamız ve onun da bazı matematiksel işlemler yapmak için o fonksiyonu çağıracak olmasıdır.</p>
+<p>Bu şekilde içine başka bir fonksiyon geçirerek <code>print_math()</code> davranışını değiştirebiliriz. 22-23. satırlarda sırasıyla <code>add</code> ve <code>mult</code> fonksiyonlarının pointer'larını geçirdiğimizde bunu yaptığımızı görebilirsiniz.</p>
+<p>Şimdi, 13. satırda, sanırım hepimiz <code>print_math()</code> fonksiyon imzasının görülmeye değer bir manzara olduğu konusunda hemfikiriz. Ve inanırsanız, bu aslında inşa edebileceğiniz bazı şeylere kıyasla oldukça anlaşılırdır<a href="function-specifiers-alignment-specifiersoperators.html#fn151" class="footnote-ref" id="fnref151" role="doc-noteref"><sup>151</sup></a>.</p>
+<p>Fakat gelin bunu sindirelim. Görünüşe göre yalnızca üç parametre var, ancak bunları görmek biraz zor:</p>
 <div class="sourceCode" id="cb530"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb530-1"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb530-1" aria-hidden="true" tabindex="-1"></a><span class="co">//                      op             x      y</span></span>
 <span id="cb530-2"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb530-2" aria-hidden="true" tabindex="-1"></a><span class="co">//              |-----------------|  |---|  |---|</span></span>
 <span id="cb530-3"><a href="pointers-iii-pointers-to-pointers-and-more.html#cb530-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_math<span class="op">(</span><span class="dt">int</span> <span class="op">(*</span>op<span class="op">)(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">),</span> <span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span></code></pre></div>
-<p>The first, <code>op</code>, is a pointer to a function that takes two <code>int</code>s as arguments and returns an <code>int</code>. This matches the signatures for both <code>add()</code> and <code>mult()</code>.</p>
-<p>The second and third, <code>x</code> and <code>y</code>, are just standard <code>int</code> parameters.</p>
-<p>Slowly and deliberately let your eyes play over the signature while you identify the working parts. One thing that always stands out for me is the sequence <code>(*op)(</code>, the parens and the asterisk. That’s the giveaway it’s a pointer to a function.</p>
-<p>Finally, jump back to the <em>Pointers II</em> chapter for a pointer-to-function <a href="pointers2.html#qsort-example">example using the built-in <code>qsort()</code></a>.</p>
+<p>İlki, <code>op</code>, argüman olarak iki <code>int</code> alan ve bir <code>int</code> döndüren bir fonksiyona işaret eden pointer'dır. Bu hem <code>add()</code> hem de <code>mult()</code> imzalarıyla eşleşir.</p>
+<p>İkinci ve üçüncü, <code>x</code> ve <code>y</code>, yalnızca standart <code>int</code> parametreleridir.</p>
+<p>Çalışan parçaları tespit ederken gözlerinizi yavaşça ve bilinçli bir şekilde imzanın üzerinde gezdirin. Benim için her zaman öne çıkan şey <code>(*op)(</code> dizilimi, parantezler ve yıldız işaretidir. Bunun bir fonksiyon pointer'ı olduğunu ele veren şey budur.</p>
+<p>Son olarak, yerleşik <code>qsort()</code> kullanan <a href="pointers2.html#qsort-example">fonksiyon pointer'ı örneği</a> için <em>Pointer'lar II</em> bölümüne geri dönün.</p>
 <p></p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -26,24 +26,24 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Beej's Guide to C Programming</title>
+  <title>Beej's C Programlama Rehberi</title>
   <link rel="stylesheet" href="../style.css" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="nav-header"><a href="arrays-part-ii.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="incomplete-types.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="34" id="setjmp-longjmp"><span class="header-section-number">34</span> Long Jumps with <code>setjmp</code>, <code>longjmp</code></h1>
+<h1 data-number="34" id="setjmp-longjmp"><span class="header-section-number">34</span> <code>setjmp</code>, <code>longjmp</code> ile Uzak Atlamalar (Long Jumps)</h1>
 <p></p>
-<p>We’ve already seen <code>goto</code>, which jumps in function scope. But <code>longjmp()</code> allows you to jump back to an earlier point in execution, back to a function that called this one.</p>
-<p>There are a lot of limitations and caveats, but this can be a useful function for bailing out from deep in the call stack back up to an earlier state.</p>
-<p>In my experience, this is very rarely-used functionality.</p>
-<h2 data-number="34.1" id="using-setjmp-and-longjmp"><span class="header-section-number">34.1</span> Using <code>setjmp</code> and <code>longjmp</code></h2>
+<p>Fonksiyon kapsamında atlama yapan <code>goto</code> ifadesini zaten görmüştük. Ancak <code>longjmp()</code>, yürütme sürecinde daha önceki bir noktaya, bu fonksiyonu çağıran fonksiyona geri atlamanıza olanak tanır.</p>
+<p>Birçok sınırlama ve dikkat edilmesi gereken nokta (caveat) vardır, ancak bu fonksiyon, çağrı yığınının <em>(call stack)</em> derinliklerinden daha önceki bir duruma güvenli bir şekilde dönmek (çıkmak) için oldukça kullanışlı olabilir.</p>
+<p>Benim deneyimlerime göre, bu çok nadir kullanılan bir işlevselliktir.</p>
+<h2 data-number="34.1" id="using-setjmp-and-longjmp"><span class="header-section-number">34.1</span> <code>setjmp</code> ve <code>longjmp</code> Kullanımı</h2>
 <p> </p>
-<p>The dance we’re going to do here is to basically put a bookmark in execution with <code>setjmp()</code>. Later on, we’ll call <code>longjmp()</code> and it’ll jump back to the earlier point in execution where we set the bookmark with <code>setjmp()</code>.</p>
-<p>And it can do this even if you’ve called subfunctions.</p>
-<p>Here’s a quick demo where we call into functions a couple levels deep and then bail out of it.</p>
-<p>We’re going to use a file scope variable <code>env</code> to keep the <em>state</em> of things when we call <code>setjmp()</code> so we can restore them when we call <code>longjmp()</code> later. This is the variable in which we remember our “place”.</p>
-<p>The variable <code>env</code> is of type <code>jmp_buf</code>, an opaque type declared in <code>&lt;setjmp.h&gt;</code>.</p>
+<p>Burada yapacağımız dans, temel olarak <code>setjmp()</code> ile yürütme sürecine bir yer imi (bookmark) koymaktır. Daha sonra <code>longjmp()</code> fonksiyonunu çağıracağız ve bu, yürütmede <code>setjmp()</code> ile yer imini koyduğumuz önceki noktaya geri atlayacak.</p>
+<p>Ve bunu alt fonksiyonları çağırmış olsanız bile yapabilir.</p>
+<p>İşte birkaç seviye derinlikteki fonksiyonları çağırdığımız ve ardından oradan çıkış yaptığımız hızlı bir gösterim.</p>
+<p><code>setjmp()</code> fonksiyonunu çağırdığımızda durumların <em>durumunu (state)</em> korumak için dosya kapsamlı <em>(file scope)</em> bir <code>env</code> değişkeni kullanacağız, böylece daha sonra <code>longjmp()</code> çağırdığımızda bunları geri yükleyebiliriz. Bu, "yerimizi" hatırladığımız değişkendir.</p>
+<p><code>env</code> değişkeni, <code>&lt;setjmp.h&gt;</code> başlık dosyasında tanımlanan opak <em>(opaque)</em> bir tür olan <code>jmp_buf</code> türündendir.</p>
 <div class="sourceCode" id="cb676"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb676-1"><a href="setjmp-longjmp.html#cb676-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb676-2"><a href="setjmp-longjmp.html#cb676-2"></a><span class="pp">#include </span><span class="im">&lt;setjmp.h&gt;</span></span>
 <span id="cb676-3"><a href="setjmp-longjmp.html#cb676-3"></a></span>
@@ -52,15 +52,15 @@
 <span id="cb676-6"><a href="setjmp-longjmp.html#cb676-6"></a><span class="dt">void</span> depth2<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb676-7"><a href="setjmp-longjmp.html#cb676-7"></a><span class="op">{</span></span>
 <span id="cb676-8"><a href="setjmp-longjmp.html#cb676-8"></a>    printf<span class="op">(</span><span class="st">&quot;Entering depth 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb676-9"><a href="setjmp-longjmp.html#cb676-9"></a>    longjmp<span class="op">(</span>env<span class="op">,</span> <span class="dv">3490</span><span class="op">);</span>           <span class="co">// Bail out</span></span>
-<span id="cb676-10"><a href="setjmp-longjmp.html#cb676-10"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// This won&#39;t happen</span></span>
+<span id="cb676-9"><a href="setjmp-longjmp.html#cb676-9"></a>    longjmp<span class="op">(</span>env<span class="op">,</span> <span class="dv">3490</span><span class="op">);</span>           <span class="co">// Çıkış yap / Erken dön</span></span>
+<span id="cb676-10"><a href="setjmp-longjmp.html#cb676-10"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Bu çalışmayacak</span></span>
 <span id="cb676-11"><a href="setjmp-longjmp.html#cb676-11"></a><span class="op">}</span></span>
 <span id="cb676-12"><a href="setjmp-longjmp.html#cb676-12"></a></span>
 <span id="cb676-13"><a href="setjmp-longjmp.html#cb676-13"></a><span class="dt">void</span> depth1<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb676-14"><a href="setjmp-longjmp.html#cb676-14"></a><span class="op">{</span></span>
 <span id="cb676-15"><a href="setjmp-longjmp.html#cb676-15"></a>    printf<span class="op">(</span><span class="st">&quot;Entering depth 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb676-16"><a href="setjmp-longjmp.html#cb676-16"></a>    depth2<span class="op">();</span></span>
-<span id="cb676-17"><a href="setjmp-longjmp.html#cb676-17"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// This won&#39;t happen</span></span>
+<span id="cb676-17"><a href="setjmp-longjmp.html#cb676-17"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Bu çalışmayacak</span></span>
 <span id="cb676-18"><a href="setjmp-longjmp.html#cb676-18"></a><span class="op">}</span></span>
 <span id="cb676-19"><a href="setjmp-longjmp.html#cb676-19"></a></span>
 <span id="cb676-20"><a href="setjmp-longjmp.html#cb676-20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -69,7 +69,7 @@
 <span id="cb676-23"><a href="setjmp-longjmp.html#cb676-23"></a>      <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
 <span id="cb676-24"><a href="setjmp-longjmp.html#cb676-24"></a>          printf<span class="op">(</span><span class="st">&quot;Calling into functions, setjmp() returned 0</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb676-25"><a href="setjmp-longjmp.html#cb676-25"></a>          depth1<span class="op">();</span></span>
-<span id="cb676-26"><a href="setjmp-longjmp.html#cb676-26"></a>          printf<span class="op">(</span><span class="st">&quot;Returned from functions</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// This won&#39;t happen</span></span>
+<span id="cb676-26"><a href="setjmp-longjmp.html#cb676-26"></a>          printf<span class="op">(</span><span class="st">&quot;Returned from functions</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Bu çalışmayacak</span></span>
 <span id="cb676-27"><a href="setjmp-longjmp.html#cb676-27"></a>          <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb676-28"><a href="setjmp-longjmp.html#cb676-28"></a></span>
 <span id="cb676-29"><a href="setjmp-longjmp.html#cb676-29"></a>      <span class="cf">case</span> <span class="dv">3490</span><span class="op">:</span></span>
@@ -77,34 +77,34 @@
 <span id="cb676-31"><a href="setjmp-longjmp.html#cb676-31"></a>          <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb676-32"><a href="setjmp-longjmp.html#cb676-32"></a>    <span class="op">}</span></span>
 <span id="cb676-33"><a href="setjmp-longjmp.html#cb676-33"></a><span class="op">}</span></span></code></pre></div>
-<p>When run, this outputs:</p>
+<p>Çalıştırıldığında şu çıktıyı verir:</p>
 <div class="sourceCode" id="cb677"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb677-1"><a href="setjmp-longjmp.html#cb677-1" aria-hidden="true" tabindex="-1"></a>Calling into functions, setjmp() returned 0</span>
 <span id="cb677-2"><a href="setjmp-longjmp.html#cb677-2" aria-hidden="true" tabindex="-1"></a>Entering depth 1</span>
 <span id="cb677-3"><a href="setjmp-longjmp.html#cb677-3" aria-hidden="true" tabindex="-1"></a>Entering depth 2</span>
 <span id="cb677-4"><a href="setjmp-longjmp.html#cb677-4" aria-hidden="true" tabindex="-1"></a>Bailed back to main, setjmp() returned 3490</span></code></pre></div>
-<p>If you try to take that output and match it up with the code, it’s clear there’s some really <em>funky</em> stuff going on.</p>
-<p>One of the most notable things is that <code>setjmp()</code> returns <em>twice</em>. What the actual frank? What is this sorcery?!</p>
-<p>So here’s the deal: if <code>setjmp()</code> returns <code>0</code>, it means that you’ve successfully set the “bookmark” at that point.</p>
-<p>If it returns non-zero, it means you’ve just returned to the “bookmark” set earlier. (And the value returned is the one you pass to <code>longjmp()</code>.)</p>
-<p>This way you can tell the difference between setting the bookmark and returning to it later.</p>
-<p>So when the code, above, calls <code>setjmp()</code> the first time, <code>setjmp()</code> <em>stores</em> the state in the <code>env</code> variable and returns <code>0</code>. Later when we call <code>longjmp()</code> with that same <code>env</code>, it restores the state and <code>setjmp()</code> returns the value <code>longjmp()</code> was passed.</p>
+<p>Bu çıktıyı alıp kodla eşleştirmeye çalışırsanız, ortalıkta gerçekten <em>tuhaf (funky)</em> şeylerin döndüğü açıktır.</p>
+<p>En dikkat çekici şeylerden biri <code>setjmp()</code> fonksiyonunun <em>iki kez</em> değer döndürmesidir. Ne oluyor orada? Bu nasıl bir büyü?!</p>
+<p>İşte durum şu: Eğer <code>setjmp()</code> <code>0</code> döndürürse, bu, o noktada "yer imini" başarıyla oluşturduğunuz anlamına gelir.</p>
+<p>Sıfır dışında bir değer döndürürse, daha önce ayarlanan "yer imine" yeni döndüğünüz anlamına gelir. (Ve dönen değer, <code>longjmp()</code> fonksiyonuna ilettiğiniz değerdir.)</p>
+<p>Bu sayede yer imini ayarlamak ile daha sonra ona geri dönmek arasındaki farkı anlayabilirsiniz.</p>
+<p>Böylece yukarıdaki kod <code>setjmp()</code> fonksiyonunu ilk kez çağırdığında, <code>setjmp()</code> durumu <code>env</code> değişkeninde <em>saklar</em> ve <code>0</code> döndürür. Daha sonra aynı <code>env</code> ile <code>longjmp()</code> çağırdığımızda, durumu geri yükler ve <code>setjmp()</code>, <code>longjmp()</code> fonksiyonuna geçirilen değeri döndürür.</p>
 <p> </p>
-<h2 data-number="34.2" id="pitfalls"><span class="header-section-number">34.2</span> Pitfalls</h2>
-<p>Under the hood, this is pretty straightforward. Typically the <em>stack pointer</em> keeps track of the locations in memory that local variables are stored, and the <em>program counter</em> keeps track of the address of the currently-executing instruction<a href="function-specifiers-alignment-specifiersoperators.html#fn181" class="footnote-ref" id="fnref181" role="doc-noteref"><sup>181</sup></a>.</p>
-<p>So if we want to jump back to an earlier function, it’s basically only a matter of restoring the stack pointer and program counter to the values kept in the <code>jmp_buf</code> variable, and making sure the return value is set correctly. And then execution will resume there.</p>
-<p>But a variety of factors confound this, making a significant number of undefined behavior traps.</p>
-<h3 data-number="34.2.1" id="the-values-of-local-variables"><span class="header-section-number">34.2.1</span> The Values of Local Variables</h3>
+<h2 data-number="34.2" id="pitfalls"><span class="header-section-number">34.2</span> Tuzaklar ve Dikkat Edilmesi Gerekenler</h2>
+<p>İşin mutfağında (arka planında) bu oldukça basittir. Tipik olarak <em>yığın göstericisi (stack pointer)</em> yerel değişkenlerin saklandığı bellek konumlarını takip eder ve <em>program sayacı (program counter)</em> o anda yürütülen talimatın adresini takip eder<a href="function-specifiers-alignment-specifiersoperators.html#fn181" class="footnote-ref" id="fnref181" role="doc-noteref"><sup>181</sup></a>.</p>
+<p>Dolayısıyla daha önceki bir fonksiyona geri atlamak istiyorsak, bu temel olarak yalnızca yığın göstericisini ve program sayacını <code>jmp_buf</code> değişkeninde tutulan değerlere geri yükleme ve dönüş değerinin doğru ayarlandığından emin olma meselesidir. Ardından yürütme oradan devam edecektir.</p>
+<p>Ancak çeşitli faktörler bunu karmaşıklaştırarak önemli sayıda Tanımsız Davranış <em>(Undefined Behavior)</em> tuzaklarına yol açar.</p>
+<h3 data-number="34.2.1" id="the-values-of-local-variables"><span class="header-section-number">34.2.1</span> Yerel Değişkenlerin Değerleri</h3>
 <p></p>
-<p>If you want the values of automatic (non-<code>static</code> and non-<code>extern</code>) local variables to persist in the function that called <code>setjmp()</code> after a <code>longjmp()</code> happens, you must declare those variables to be <code>volatile</code>.</p>
-<p>Technically, they only have to be <code>volatile</code> if they change between the time <code>setjmp()</code> is called and <code>longjmp()</code> is called<a href="function-specifiers-alignment-specifiersoperators.html#fn182" class="footnote-ref" id="fnref182" role="doc-noteref"><sup>182</sup></a>.</p>
-<p>For example, if we run this code:</p>
+<p>Bir <code>longjmp()</code> gerçekleştikten sonra <code>setjmp()</code> fonksiyonunu çağıran fonksiyondaki otomatik (<code>static</code> olmayan ve <code>extern</code> olmayan) yerel değişkenlerin değerlerinin korunmasını istiyorsanız, bu değişkenleri <code>volatile</code> olarak bildirmeniz gerekir.</p>
+<p>Teknik olarak, yalnızca <code>setjmp()</code>'in çağrıldığı an ile <code>longjmp()</code>'in çağrıldığı an arasında değişiyorlarsa <code>volatile</code> olmaları gerekir<a href="function-specifiers-alignment-specifiersoperators.html#fn182" class="footnote-ref" id="fnref182" role="doc-noteref"><sup>182</sup></a>.</p>
+<p>Örneğin, bu kodu çalıştırırsak:</p>
 <div class="sourceCode" id="cb678"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb678-1"><a href="setjmp-longjmp.html#cb678-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb678-2"><a href="setjmp-longjmp.html#cb678-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb678-3"><a href="setjmp-longjmp.html#cb678-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb678-4"><a href="setjmp-longjmp.html#cb678-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
 <span id="cb678-5"><a href="setjmp-longjmp.html#cb678-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>and then later <code>longjmp()</code> back, the value of <code>x</code> will be indeterminate.</p>
-<p>If we want to fix this, <code>x</code> must be <code>volatile</code>:</p>
+<p>ve ardından daha sonra <code>longjmp()</code> ile geri dönersek, <code>x</code> değeri belirsiz (indeterminate) olacaktır.</p>
+<p>Bunu düzeltmek istiyorsak, <code>x</code> değişkeni <code>volatile</code> olmalıdır:</p>
 <div class="sourceCode" id="cb679"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb679-1"><a href="setjmp-longjmp.html#cb679-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb679-2"><a href="setjmp-longjmp.html#cb679-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb679-3"><a href="setjmp-longjmp.html#cb679-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
@@ -112,58 +112,58 @@
 <span id="cb679-5"><a href="setjmp-longjmp.html#cb679-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
 <p></p>
-<p>Now the value will be the correct <code>30</code> after a <code>longjmp()</code> returns us to this point.</p>
-<h3 data-number="34.2.2" id="how-much-state-is-saved"><span class="header-section-number">34.2.2</span> How Much State is Saved?</h3>
+<p>Artık bir <code>longjmp()</code> bizi bu noktaya geri döndürdükten sonra değer doğru şekilde <code>30</code> olacaktır.</p>
+<h3 data-number="34.2.2" id="how-much-state-is-saved"><span class="header-section-number">34.2.2</span> Ne Kadar Durum Saklanır?</h3>
 <p> </p>
-<p>When you <code>longjmp()</code>, execution resumes at the point of the corresponding <code>setjmp()</code>. And that’s it.</p>
+<p><code>longjmp()</code> yaptığınızda, yürütme karşılık gelen <code>setjmp()</code> noktasında yeniden başlar. Hepsi bu kadar.</p>
 <p></p>
-<p>The spec points out that it’s just as if you’d jumped back into the function at that point with local variables set to whatever values they had when the <code>longjmp()</code> call was made.</p>
+<p>Standart (spesifikasyon), yerel değişkenlerin <code>longjmp()</code> çağrısı yapıldığında hangi değerlere sahipse o değerlerle sanki o noktada fonksiyona geri atlamışsınız gibi olduğunu belirtir.</p>
 <p></p>
-<p>Things that aren’t restored include, paraphrasing the spec:</p>
+<p>Standarttan özetlersek, geri yüklenmeyen şeyler şunları içerir:</p>
 <ul>
-<li>Floating point status flags</li>
-<li>Open files</li>
-<li>Any other component of the abstract machine</li>
+<li>Kayan nokta (floating point) durum bayrakları</li>
+<li>Açık dosyalar</li>
+<li>Soyut makinenin (abstract machine) diğer herhangi bir bileşeni</li>
 </ul>
-<h3 data-number="34.2.3" id="you-cant-name-anything-setjmp"><span class="header-section-number">34.2.3</span> You Can’t Name Anything <code>setjmp</code></h3>
-<p>You can’t have any <code>extern</code> identifiers with the name <code>setjmp</code>. Or, if <code>setjmp</code> is a macro, you can’t undefine it.</p>
-<p>Both are undefined behavior.</p>
-<h3 data-number="34.2.4" id="you-cant-setjmp-in-a-larger-expression"><span class="header-section-number">34.2.4</span> You Can’t <code>setjmp()</code> in a Larger Expression</h3>
+<h3 data-number="34.2.3" id="you-cant-name-anything-setjmp"><span class="header-section-number">34.2.3</span> Hiçbir Şeyi <code>setjmp</code> Olarak Adlandıramazsınız</h3>
+<p><code>setjmp</code> adında herhangi bir <code>extern</code> tanımlayıcıya sahip olamazsınız. Veya <code>setjmp</code> bir makro ise, onun tanımını kaldıramazsınız (<code>#undef</code> yapamazsınız).</p>
+<p>Her ikisi de Tanımsız Davranıştır <em>(Undefined Behavior)</em>.</p>
+<h3 data-number="34.2.4" id="you-cant-setjmp-in-a-larger-expression"><span class="header-section-number">34.2.4</span> Daha Büyük Bir İfade İçinde <code>setjmp()</code> Kullanamazsınız</h3>
 <p></p>
-<p>That is, you can’t do something like this:</p>
+<p>Yani şu şekilde bir şey yapamazsınız:</p>
 <div class="sourceCode" id="cb680"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb680-1"><a href="setjmp-longjmp.html#cb680-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">12</span> <span class="op">&amp;&amp;</span> setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
-<p>That’s too complex to be allowed by the spec due to the machinations that must occur when unrolling the stack and all that. We can’t <code>longjmp()</code> back into some complex expression that’s only been partially executed.</p>
-<p>So there are limits on the complexity of that expression.</p>
+<p>Yığını geri sararken (stack unrolling) ve benzeri durumlarda gerçekleşmesi gereken işlemler nedeniyle bu, standardın izin veremeyeceği kadar karmaşıktır. Yalnızca kısmen yürütülmüş karmaşık bir ifadenin içine <code>longjmp()</code> ile geri dönemeyiz.</p>
+<p>Bu nedenle bu ifadenin karmaşıklığı üzerinde sınırlar vardır.</p>
 <ul>
-<li><p>It can be the entire controlling expression of the conditional.</p>
+<li><p>Koşulun tüm kontrol ifadesi olabilir.</p>
 <div class="sourceCode" id="cb681"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb681-1"><a href="setjmp-longjmp.html#cb681-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div>
 <div class="sourceCode" id="cb682"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb682-1"><a href="setjmp-longjmp.html#cb682-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div></li>
-<li><p>It can be part of a relational or equality expression, as long as the other operand is an integer constant. And the whole thing is the controlling expression of the conditional.</p>
+<li><p>Diğer işlenen bir tamsayı sabiti olduğu sürece, bağıntısal veya eşitlik ifadesinin bir parçası olabilir. Ve bütün ifade koşulun kontrol ifadesidir.</p>
 <div class="sourceCode" id="cb683"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb683-1"><a href="setjmp-longjmp.html#cb683-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{...}</span></span></code></pre></div></li>
-<li><p>The operand to a logical NOT (<code>!</code>) operation, being the entire controlling expression.</p>
+<li><p>Tüm kontrol ifadesi olmak kaydıyla, mantıksal DEĞİL (<code>!</code>) işleminin işleneni olabilir.</p>
 <div class="sourceCode" id="cb684"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb684-1"><a href="setjmp-longjmp.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div></li>
-<li><p>A standalone expression, possibly cast to <code>void</code>.</p>
+<li><p>Muhtemelen <code>void</code> türüne dönüştürülmüş (cast) tek başına bir ifade.</p>
 <div class="sourceCode" id="cb685"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb685-1"><a href="setjmp-longjmp.html#cb685-1" aria-hidden="true" tabindex="-1"></a>setjmp<span class="op">(</span>env<span class="op">);</span></span></code></pre></div>
 <div class="sourceCode" id="cb686"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb686-1"><a href="setjmp-longjmp.html#cb686-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="dt">void</span><span class="op">)</span>setjmp<span class="op">(</span>env<span class="op">);</span></span></code></pre></div></li>
 </ul>
 <p></p>
-<h3 data-number="34.2.5" id="when-cant-you-longjmp"><span class="header-section-number">34.2.5</span> When Can’t You <code>longjmp()</code>?</h3>
+<h3 data-number="34.2.5" id="when-cant-you-longjmp"><span class="header-section-number">34.2.5</span> Ne Zaman <code>longjmp()</code> Yapamazsınız?</h3>
 <p></p>
-<p>It’s undefined behavior if:</p>
+<p>Şu durumlarda Tanımsız Davranıştır <em>(Undefined Behavior)</em>:</p>
 <ul>
-<li>You didn’t call <code>setjmp()</code> earlier</li>
-<li>You called <code>setjmp()</code> from another thread</li>
-<li>You called <code>setjmp()</code> in the scope of a variable length array (VLA), and execution left the scope of that VLA before <code>longjmp()</code> was called.</li>
-<li>The function containing the <code>setjmp()</code> exited before <code>longjmp()</code> was called.</li>
+<li>Daha önce <code>setjmp()</code> çağrısı yapmadıysanız</li>
+<li><code>setjmp()</code> fonksiyonunu başka bir izlekten <em>(thread)</em> çağırdıysanız</li>
+<li><code>setjmp()</code> fonksiyonunu bir değişken uzunluklu dizinin <em>(VLA)</em> kapsamında çağırdıysanız ve <code>longjmp()</code> çağrılmadan önce yürütme o VLA'nın kapsamından çıktıysa.</li>
+<li><code>setjmp()</code> içeren fonksiyon <code>longjmp()</code> çağrılmadan önce sonlandıysa.</li>
 </ul>
-<p>On that last one, “exited” includes normal returns from the function, as well as the case if another <code>longjmp()</code> jumped back to “earlier” in the call stack than the function in question.</p>
-<h3 data-number="34.2.6" id="you-cant-pass-0-to-longjmp"><span class="header-section-number">34.2.6</span> You Can’t Pass <code>0</code> to <code>longjmp()</code></h3>
-<p>If you try to pass the value <code>0</code> to <code>longjmp()</code>, it will silently change that value to <code>1</code>.</p>
-<p>Since <code>setjmp()</code> ultimately returns this value, and having <code>setjmp()</code> return <code>0</code> has special meaning, returning <code>0</code> is prohibited.</p>
-<h3 data-number="34.2.7" id="longjmp-and-variable-length-arrays"><span class="header-section-number">34.2.7</span> <code>longjmp()</code> and Variable Length Arrays</h3>
-<p>If you are in scope of a VLA and <code>longjmp()</code> out there, the memory allocated to the VLA could leak<a href="function-specifiers-alignment-specifiersoperators.html#fn183" class="footnote-ref" id="fnref183" role="doc-noteref"><sup>183</sup></a>.</p>
-<p>Same thing happens if you <code>longjmp()</code> back over any earlier functions that had VLAs still in scope.</p>
-<p>This is one thing that really bugged me about VLAs—that you could write perfectly legitimate C code that squandered memory. But, hey—I’m not in charge of the spec.</p>
+<p>Bu son maddede, "sonlanma", fonksiyondan normal dönüşlerin yanı sıra, başka bir <code>longjmp()</code> çağrısının söz konusu fonksiyondan çağrı yığınında daha "önceki" bir noktaya geri atlaması durumunu da kapsar.</p>
+<h3 data-number="34.2.6" id="you-cant-pass-0-to-longjmp"><span class="header-section-number">34.2.6</span> <code>longjmp()</code> Fonksiyonuna <code>0</code> Geçiremezsiniz</h3>
+<p><code>longjmp()</code> fonksiyonuna <code>0</code> değerini geçirmeye çalışırsanız, bu değeri sessizce <code>1</code> olarak değiştirecektir.</p>
+<p>Çünkü <code>setjmp()</code> nihayetinde bu değeri döndürür ve <code>setjmp()</code>'in <code>0</code> döndürmesinin özel bir anlamı olduğundan, <code>0</code> döndürmek yasaklanmıştır.</p>
+<h3 data-number="34.2.7" id="longjmp-and-variable-length-arrays"><span class="header-section-number">34.2.7</span> <code>longjmp()</code> ve Değişken Uzunluklu Diziler</h3>
+<p>Bir VLA kapsamında bulunuyorsanız ve oradan <code>longjmp()</code> ile dışarı atlarsanız, VLA'ya ayrılan bellek sızabilir<a href="function-specifiers-alignment-specifiersoperators.html#fn183" class="footnote-ref" id="fnref183" role="doc-noteref"><sup>183</sup></a>.</p>
+<p>Hala kapsamında VLA olan daha önceki fonksiyonların üzerinden <code>longjmp()</code> ile geriye atladığınızda da aynı şey olur.</p>
+<p>Bu, VLA'lar hakkında beni gerçekten rahatsız eden şeylerden biriydi—belleği boşa harcayan tamamen geçerli C kodları yazabilmeniz. Ama hey—standarttan ben sorumlu değilim.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

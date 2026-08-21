@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,30 +32,30 @@
 </head>
 <body>
 <div class="nav-header"><a href="scope.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="types-iii-conversions.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="14" id="types-ii-way-more-types"><span class="header-section-number">14</span> Types II: Way More Types!</h1>
-<p>We’re used to <code>char</code>, <code>int</code>, and <code>float</code> types, but it’s now time to take that stuff to the next level and see what else we have out there in the types department!</p>
-<h2 data-number="14.1" id="signed-and-unsigned-integers"><span class="header-section-number">14.1</span> Signed and Unsigned Integers</h2>
-<p> So far we’ve used <code>int</code> as a <em>signed</em> type, that is, a value that can be either negative or positive. But C also has specific <em>unsigned</em> integer types that can only hold positive numbers.</p>
-<p>These types are prefaced by the keyword <code>unsigned</code>.</p>
+<h1 data-number="14" id="types-ii-way-more-types"><span class="header-section-number">14</span> Türler II: Çok Daha Fazla Tür!</h1>
+<p><code>char</code>, <code>int</code> ve <code>float</code> türlerine alışkınız, ancak artık bu konuyu bir üst seviyeye taşıma ve türler kulvarında başka nelerin olduğunu görme zamanı!</p>
+<h2 data-number="14.1" id="signed-and-unsigned-integers"><span class="header-section-number">14.1</span> İşaretli ve İşaretsiz Tamsayılar (Signed & Unsigned)</h2>
+<p> Şu ana kadar <code>int</code> türünü <em>işaretli</em> (signed) bir tür olarak kullandık; yani hem negatif hem de pozitif olabilen bir değer. Ancak C'de yalnızca pozitif sayıları tutabilen özel <em>işaretsiz</em> (unsigned) tamsayı türleri de vardır.</p>
+<p>Bu türlerin önüne <code>unsigned</code> anahtar kelimesi getirilir.</p>
 <div class="sourceCode" id="cb216"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb216-1"><a href="types-ii-way-more-types.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">;</span>           <span class="co">// signed</span></span>
 <span id="cb216-2"><a href="types-ii-way-more-types.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> <span class="dt">int</span> a<span class="op">;</span>    <span class="co">// signed</span></span>
-<span id="cb216-3"><a href="types-ii-way-more-types.html#cb216-3" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> a<span class="op">;</span>        <span class="co">// signed, &quot;shorthand&quot; for &quot;int&quot; or &quot;signed int&quot;, rare</span></span>
+<span id="cb216-3"><a href="types-ii-way-more-types.html#cb216-3" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> a<span class="op">;</span>        <span class="co">// signed, &quot;int&quot; veya &quot;signed int&quot; için nadir kullanılan &quot;kısaltma&quot;</span></span>
 <span id="cb216-4"><a href="types-ii-way-more-types.html#cb216-4" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span>  <span class="co">// unsigned</span></span>
-<span id="cb216-5"><a href="types-ii-way-more-types.html#cb216-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> c<span class="op">;</span>      <span class="co">// unsigned, shorthand for &quot;unsigned int&quot;</span></span></code></pre></div>
-<p>Why? Why would you decide you only wanted to hold positive numbers?</p>
-<p>Answer: you can get larger numbers in an unsigned variable than you can in a signed ones.</p>
-<p>But why is that?</p>
-<p>You can think of integers being represented by a certain number of <em>bits</em><a href="function-specifiers-alignment-specifiersoperators.html#fn93" class="footnote-ref" id="fnref93" role="doc-noteref"><sup>93</sup></a>. On my computer, an <code>int</code> is represented by 64 bits.</p>
-<p>And each permutation of bits that are either <code>1</code> or <code>0</code> represents a number. We can decide how to divvy up these numbers.</p>
-<p>With signed numbers, we use (roughly) half the permutations to represent negative numbers, and the other half to represent positive numbers.</p>
-<p>With unsigned, we use <em>all</em> the permutations to represent positive numbers.</p>
-<p>On my computer with 64-bit <code>int</code>s using <a href="https://en.wikipedia.org/wiki/Two%27s_complement" target="_blank" rel="noopener noreferrer">two’s complement</a><a href="function-specifiers-alignment-specifiersoperators.html#fn94" class="footnote-ref" id="fnref94" role="doc-noteref"><sup>94</sup></a> to represent unsigned numbers, I have the following limits on integer range:</p>
+<span id="cb216-5"><a href="types-ii-way-more-types.html#cb216-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> c<span class="op">;</span>      <span class="co">// unsigned, &quot;unsigned int&quot; için kısaltma</span></span></code></pre></div>
+<p>Neden? Neden yalnızca pozitif sayıları tutmak isteyesiniz ki?</p>
+<p>Cevap: İşaretsiz (unsigned) bir değişkende, işaretli (signed) bir değişkene kıyasla daha büyük sayılar elde edebilirsiniz.</p>
+<p>Peki bu neden böyledir?</p>
+<p>Tamsayıların belirli sayıda <em>bit</em> ile temsil edildiğini düşünebilirsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn93" class="footnote-ref" id="fnref93" role="doc-noteref"><sup>93</sup></a>. Benim bilgisayarımda bir <code>int</code> 64 bit ile temsil edilir.</p>
+<p>Ve <code>1</code> veya <code>0</code> olan bitlerin her permütasyonu bir sayıyı temsil eder. Bu sayıları nasıl bölüştüreceğimize karar verebiliriz.</p>
+<p>İşaretli (signed) sayılarda, negatif sayıları temsil etmek için permütasyonların (yaklaşık) yarısını, pozitif sayıları temsil etmek için ise diğer yarısını kullanırız.</p>
+<p>İşaretsiz (unsigned) sayılarda ise pozitif sayıları temsil etmek için <em>tüm</em> permütasyonları kullanırız.</p>
+<p>İşaretsiz sayıları temsil etmek için <a href="https://en.wikipedia.org/wiki/Two%27s_complement" target="_blank" rel="noopener noreferrer">ikiye tümleyen (two's complement)</a><a href="function-specifiers-alignment-specifiersoperators.html#fn94" class="footnote-ref" id="fnref94" role="doc-noteref"><sup>94</sup></a> yöntemini kullanan 64-bit <code>int</code>'li bilgisayarımda, tamsayı aralığı üzerinde şu limitlere sahibim:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: right;">Minimum</th>
-<th style="text-align: right;">Maximum</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: right;">En Küçük</th>
+<th style="text-align: right;">En Büyük</th>
 </tr>
 </thead>
 <tbody>
@@ -71,37 +71,37 @@
 </tr>
 </tbody>
 </table>
-<p>Notice that the largest positive <code>unsigned int</code> is approximately twice as large as the largest positive <code>int</code>. So you can get some flexibility there. </p>
-<h2 data-number="14.2" id="character-types"><span class="header-section-number">14.2</span> Character Types</h2>
-<p> Remember <code>char</code>? The type we can use to hold a single character?</p>
+<p>En büyük pozitif <code>unsigned int</code> değerinin, en büyük pozitif <code>int</code> değerinin yaklaşık iki katı büyüklüğünde olduğuna dikkat edin. Böylece orada biraz esneklik elde edebilirsiniz. </p>
+<h2 data-number="14.2" id="character-types"><span class="header-section-number">14.2</span> Karakter Türleri</h2>
+<p> <code>char</code> türünü hatırlıyor musunuz? Tek bir karakteri tutmak için kullanabileceğimiz tür?</p>
 <div class="sourceCode" id="cb217"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb217-1"><a href="types-ii-way-more-types.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span></span>
 <span id="cb217-2"><a href="types-ii-way-more-types.html#cb217-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb217-3"><a href="types-ii-way-more-types.html#cb217-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// &quot;B&quot;</span></span></code></pre></div>
-<p>I have a shocker for you: it’s actually an integer.</p>
+<p>Sizi şaşırtacak bir haberim var: Aslında o bir tamsayıdır.</p>
 <div class="sourceCode" id="cb218"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb218-1"><a href="types-ii-way-more-types.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span></span>
 <span id="cb218-2"><a href="types-ii-way-more-types.html#cb218-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb218-3"><a href="types-ii-way-more-types.html#cb218-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Change this from %c to %d:</span></span>
+<span id="cb218-3"><a href="types-ii-way-more-types.html#cb218-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Bunu %c yerine %d olarak değiştirin:</span></span>
 <span id="cb218-4"><a href="types-ii-way-more-types.html#cb218-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// 66 (!!)</span></span></code></pre></div>
-<p>Deep down, <code>char</code> is just a small <code>int</code>, namely an integer that uses just a single byte of space, limiting its range to…</p>
-<p>Here the C spec gets just a little funky. It assures us that a <code>char</code> is a single byte, i.e. <code>sizeof(char) == 1</code>. But then in C11 §3.6¶3 it goes out of its way to say:</p>
+<p>Derinlerde <code>char</code> yalnızca küçük bir <code>int</code>'tir, yani sadece tek bir bayt alan kullanan ve aralığını şuna sınırlayan bir tamsayıdır…</p>
+<p>Burada C standardı biraz tuhaflaşır. Bir <code>char</code>'ın tek bir bayt olduğunu garanti eder, yani <code>sizeof(char) == 1</code>. Ancak C11 §3.6¶3 standardında ayrıca özel olarak şunu belirtir:</p>
 <blockquote>
-<p>A byte is composed of a contiguous sequence of bits, <em>the number of which is implementation-defined.</em></p>
+<p>Bir bayt, <em>sayısı uygulamaya bağlı olan (implementation-defined)</em> ardışık bir bit dizisinden oluşur.</p>
 </blockquote>
-<p>Wait—what? Some of you might be used to the notion that a byte is 8 bits, right? I mean, that’s what it is, right? And the answer is, “Almost certainly.”<a href="function-specifiers-alignment-specifiersoperators.html#fn95" class="footnote-ref" id="fnref95" role="doc-noteref"><sup>95</sup></a> But C is an old language, and machines back in the day had, shall we say, a more <em>relaxed</em> opinion over how many bits were in a byte. And through the years, C has retained this flexibility.</p>
-<p>But assuming your bytes in C are 8 bits, like they are for virtually all machines in the world that you’ll ever see, the range of a <code>char</code> is…</p>
-<p> —So before I can tell you, it turns out that <code>char</code>s might be signed or unsigned depending on your compiler. Unless you explicitly specify.</p>
-<p>In many cases, just having <code>char</code> is fine because you don’t care about the sign of the data. But if you need signed or unsigned <code>char</code>s, you <em>must</em> be specific:</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb219-1"><a href="types-ii-way-more-types.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a<span class="op">;</span>           <span class="co">// Could be signed or unsigned</span></span>
-<span id="cb219-2"><a href="types-ii-way-more-types.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> <span class="dt">char</span> b<span class="op">;</span>    <span class="co">// Definitely signed</span></span>
-<span id="cb219-3"><a href="types-ii-way-more-types.html#cb219-3" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">char</span> c<span class="op">;</span>  <span class="co">// Definitely unsigned</span></span></code></pre></div>
-<p>OK, now, finally, we can figure out the range of numbers if we assume that a <code>char</code> is 8 bits and your system uses the virtually universal two’s complement representation for signed and unsigned<a href="function-specifiers-alignment-specifiersoperators.html#fn96" class="footnote-ref" id="fnref96" role="doc-noteref"><sup>96</sup></a>.</p>
-<p>So, assuming those constraints, we can finally figure our ranges:</p>
+<p>Bekleyin—ne? Bazılarınız bir baytın 8 bit olduğu düşüncesine alışkın olabilir, değil mi? Yani öyle değil mi? Cevap: "Neredeyse kesinlikle evet."<a href="function-specifiers-alignment-specifiersoperators.html#fn95" class="footnote-ref" id="fnref95" role="doc-noteref"><sup>95</sup></a> Ancak C eski bir dildir ve o zamanların makineleri, deyim yerindeyse bir baytta kaç bit olduğu konusunda daha <em>rahat</em> bir fikre sahipti. Ve yıllar boyunca C bu esnekliği korumuştur.</p>
+<p>Ancak C'deki baytlarınızın, dünyada karşılaşacağınız hemen hemen tüm makinelerde olduğu gibi 8 bit olduğunu varsayarsak, bir <code>char</code> aralığı…</p>
+<p> —Bunu size söylemeden önce, derleyicinize bağlı olarak <code>char</code> türünün işaretli (signed) veya işaretsiz (unsigned) olabileceği ortaya çıkıyor. Siz açıkça belirtmediğiniz sürece.</p>
+<p>Pek çok durumda sadece <code>char</code> kullanmak yeterlidir çünkü verinin işaretiyle ilgilenmezsiniz. Ancak işaretli veya işaretsiz <code>char</code> türlerine ihtiyacınız varsa, açıkça <em>belirtmelisiniz</em>:</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb219-1"><a href="types-ii-way-more-types.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a<span class="op">;</span>           <span class="co">// İşaretli veya işaretsiz olabilir</span></span>
+<span id="cb219-2"><a href="types-ii-way-more-types.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> <span class="dt">char</span> b<span class="op">;</span>    <span class="co">// Kesinlikle işaretli (signed)</span></span>
+<span id="cb219-3"><a href="types-ii-way-more-types.html#cb219-3" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">char</span> c<span class="op">;</span>  <span class="co">// Kesinlikle işaretsiz (unsigned)</span></span></code></pre></div>
+<p>Tamam, şimdi nihayet, bir <code>char</code>'ın 8 bit olduğunu ve sisteminizin işaretli ve işaretsiz sayılar için neredeyse evrensel olan ikiye tümleyen (two's complement) gösterimini kullandığını varsayarsak sayılarımızın aralığını bulabiliriz<a href="function-specifiers-alignment-specifiersoperators.html#fn96" class="footnote-ref" id="fnref96" role="doc-noteref"><sup>96</sup></a>.</p>
+<p>Böylece, bu kısıtlamaları varsayarak nihayet aralıklarımızı hesaplayabiliriz:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;"><code>char</code> type</th>
-<th style="text-align: right;">Minimum</th>
-<th style="text-align: right;">Maximum</th>
+<th style="text-align: left;"><code>char</code> Türü</th>
+<th style="text-align: right;">En Küçük</th>
+<th style="text-align: right;">En Büyük</th>
 </tr>
 </thead>
 <tbody>
@@ -117,9 +117,9 @@
 </tr>
 </tbody>
 </table>
-<p>And the ranges for <code>char</code> are implementation-defined. </p>
-<p>Let me get this straight. <code>char</code> is actually a number, so can we do math on it?</p>
-<p>Yup! Just remember to keep things in the range of a <code>char</code>!</p>
+<p>Ve <code>char</code> için aralıklar uygulamaya bağlıdır (implementation-defined). </p>
+<p>Şunu bir netleştireyim: <code>char</code> aslında bir sayı olduğuna göre, onun üzerinde matematik yapabilir miyiz?</p>
+<p>Evet! Sadece değerleri bir <code>char</code> aralığında tutmayı unutmayın!</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb220-1"><a href="types-ii-way-more-types.html#cb220-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb220-2"><a href="types-ii-way-more-types.html#cb220-2"></a></span>
 <span id="cb220-3"><a href="types-ii-way-more-types.html#cb220-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -128,38 +128,38 @@
 <span id="cb220-6"><a href="types-ii-way-more-types.html#cb220-6"></a></span>
 <span id="cb220-7"><a href="types-ii-way-more-types.html#cb220-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>  <span class="co">// 30!</span></span>
 <span id="cb220-8"><a href="types-ii-way-more-types.html#cb220-8"></a><span class="op">}</span></span></code></pre></div>
-<p> What about those constant characters in single quotes, like <code>'B'</code>? How does that have a numeric value?</p>
-<p>The spec is also hand-wavey here, since C isn’t designed to run on a single type of underlying system.</p>
-<p>But let’s just assume for the moment that your character set is based on <a href="https://en.wikipedia.org/wiki/ASCII" target="_blank" rel="noopener noreferrer">ASCII</a><a href="function-specifiers-alignment-specifiersoperators.html#fn97" class="footnote-ref" id="fnref97" role="doc-noteref"><sup>97</sup></a> for at least the first 128 characters. In that case, the character constant will be converted to a <code>char</code> whose value is the same as the ASCII value of the character.</p>
-<p>That was a mouthful. Let’s just have an example:</p>
+<p> Peki <code>'B'</code> gibi tek tırnak içindeki sabit karakterlere ne demeli? Onlar nasıl sayısal bir değere sahip olur?</p>
+<p>Standart burada da biraz muğlaktır, çünkü C tek bir tür temel sistem üzerinde çalışacak şekilde tasarlanmamıştır.</p>
+<p>Ancak şimdilik karakter kümenizin en azından ilk 128 karakter için <a href="https://en.wikipedia.org/wiki/ASCII" target="_blank" rel="noopener noreferrer">ASCII</a> tabanlı olduğunu varsayalım<a href="function-specifiers-alignment-specifiersoperators.html#fn97" class="footnote-ref" id="fnref97" role="doc-noteref"><sup>97</sup></a>. Bu durumda, karakter sabiti değeri karakterin ASCII değeriyle aynı olan bir <code>char</code>'a dönüştürülecektir.</p>
+<p>Bu biraz karmaşık oldu. Hemen bir örnek verelim:</p>
 <div class="sourceCode" id="cb221"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb221-1"><a href="types-ii-way-more-types.html#cb221-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb221-2"><a href="types-ii-way-more-types.html#cb221-2"></a></span>
 <span id="cb221-3"><a href="types-ii-way-more-types.html#cb221-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb221-4"><a href="types-ii-way-more-types.html#cb221-4"></a><span class="op">{</span></span>
 <span id="cb221-5"><a href="types-ii-way-more-types.html#cb221-5"></a>    <span class="dt">char</span> a <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
-<span id="cb221-6"><a href="types-ii-way-more-types.html#cb221-6"></a>    <span class="dt">char</span> b <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span>  <span class="co">// ASCII value 66</span></span>
+<span id="cb221-6"><a href="types-ii-way-more-types.html#cb221-6"></a>    <span class="dt">char</span> b <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span>  <span class="co">// ASCII değeri 66</span></span>
 <span id="cb221-7"><a href="types-ii-way-more-types.html#cb221-7"></a></span>
 <span id="cb221-8"><a href="types-ii-way-more-types.html#cb221-8"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>  <span class="co">// 76!</span></span>
 <span id="cb221-9"><a href="types-ii-way-more-types.html#cb221-9"></a><span class="op">}</span></span></code></pre></div>
-<p>This depends on your execution environment and the <a href="https://en.wikipedia.org/wiki/List_of_information_system_character_sets" target="_blank" rel="noopener noreferrer">character set used</a><a href="function-specifiers-alignment-specifiersoperators.html#fn98" class="footnote-ref" id="fnref98" role="doc-noteref"><sup>98</sup></a>. One of the most popular character sets today is <a href="https://en.wikipedia.org/wiki/Unicode" target="_blank" rel="noopener noreferrer">Unicode</a><a href="function-specifiers-alignment-specifiersoperators.html#fn99" class="footnote-ref" id="fnref99" role="doc-noteref"><sup>99</sup></a> (which is a superset of ASCII), so for your basic 0-9, A-Z, a-z and punctuation, you’ll almost certainly get the ASCII values out of them. </p>
-<h2 data-number="14.3" id="more-integer-types-short-long-long-long"><span class="header-section-number">14.3</span> More Integer Types: <code>short</code>, <code>long</code>, <code>long long</code></h2>
-<p>So far we’ve just generally been using two integer types:</p>
+<p>Bu, çalışma ortamınıza ve <a href="https://en.wikipedia.org/wiki/List_of_information_system_character_sets" target="_blank" rel="noopener noreferrer">kullanılan karakter kümesine</a> bağlıdır<a href="function-specifiers-alignment-specifiersoperators.html#fn98" class="footnote-ref" id="fnref98" role="doc-noteref"><sup>98</sup></a>. Günümüzdeki en popüler karakter kümelerinden biri <a href="https://en.wikipedia.org/wiki/Unicode" target="_blank" rel="noopener noreferrer">Unicode</a>'dur<a href="function-specifiers-alignment-specifiersoperators.html#fn99" class="footnote-ref" id="fnref99" role="doc-noteref"><sup>99</sup></a> (ASCII'nin üst kümesidir), bu nedenle temel 0-9, A-Z, a-z ve noktalama işaretleri için neredeyse kesinlikle ASCII değerlerini elde edersiniz. </p>
+<h2 data-number="14.3" id="more-integer-types-short-long-long-long"><span class="header-section-number">14.3</span> Daha Fazla Tamsayı Türü: <code>short</code>, <code>long</code>, <code>long long</code></h2>
+<p>Şu ana kadar genelde iki tamsayı türü kullandık:</p>
 <ul>
 <li><code>char</code></li>
 <li><code>int</code></li>
 </ul>
-<p>and we recently learned about the unsigned variants of the integer types. And we learned that <code>char</code> was secretly a small <code>int</code> in disguise. So we know the <code>int</code>s can come in multiple bit sizes.</p>
-<p>But there are a couple more integer types we should look at, and the minimum ranges they can hold. (Your implementation probably has wider ranges than the spec requires, but the ranges here are the ones you can be <strong>certain</strong> are portably available.)</p>
-<p>The header file <code>&lt;limits.h&gt;</code> defines macros that hold the ranges for various types; rely on that to be sure, and <em>never hardcode or assume these values</em>.</p>
-<p> These additional types are <code>short int</code>, <code>long int</code>, and <code>long long int</code>. Commonly, when using these types, C developers leave the <code>int</code> part off (e.g. <code>long long</code>), and the compiler is perfectly happy.</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb222-1"><a href="types-ii-way-more-types.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="co">// These two lines are equivalent:</span></span>
+<p>ve yakın zamanda tamsayı türlerinin işaretsiz (unsigned) varyasyonlarını öğrendik. Ve <code>char</code> türünün gizlenmiş küçük bir <code>int</code> olduğunu öğrendik. Dolayısıyla <code>int</code>'lerin birden fazla bit boyutunda gelebileceğini biliyoruz.</p>
+<p>Ancak incelememiz gereken birkaç tamsayı türü daha var ve tutabilecekleri en küçük aralıklar şunlardır. (Sisteminiz muhtemelen standardın gerektirdiğinden daha geniş aralıklara sahiptir, ancak buradaki aralıklar taşınabilir şekilde kullanılabilirliğinden <strong>emin</strong> olabileceğiniz aralıklardır.)</p>
+<p>Başlık dosyası <code>&lt;limits.h&gt;</code> çeşitli türler için aralıkları tutan makrolar tanımlar; emin olmak için buna güvenin ve <em>bu değerleri asla sabit kodlamayın (hardcode) veya varsaymayın</em>.</p>
+<p> Bu ek türler <code>short int</code>, <code>long int</code> ve <code>long long int</code> türleridir. Genellikle C geliştiricileri bu türleri kullanırken <code>int</code> kısmını bırakırlar (örneğin <code>long long</code>) ve derleyici bundan tamamen memnundur.</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb222-1"><a href="types-ii-way-more-types.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Bu iki satır eşdeğerdir:</span></span>
 <span id="cb222-2"><a href="types-ii-way-more-types.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> x<span class="op">;</span></span>
 <span id="cb222-3"><a href="types-ii-way-more-types.html#cb222-3" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> x<span class="op">;</span></span>
 <span id="cb222-4"><a href="types-ii-way-more-types.html#cb222-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb222-5"><a href="types-ii-way-more-types.html#cb222-5" aria-hidden="true" tabindex="-1"></a><span class="co">// And so are these:</span></span>
+<span id="cb222-5"><a href="types-ii-way-more-types.html#cb222-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Ve bunlar da öyle:</span></span>
 <span id="cb222-6"><a href="types-ii-way-more-types.html#cb222-6" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> <span class="dt">int</span> x<span class="op">;</span></span>
 <span id="cb222-7"><a href="types-ii-way-more-types.html#cb222-7" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> x<span class="op">;</span></span></code></pre></div>
-<p>Let’s take a look at the integer data types and sizes in ascending order, grouped by signedness. Again, these minimum and maximum limits are what you are portably guaranteed by the spec; your system probably has wider ranges.</p>
+<p>İşaretliliğe göre gruplandırılmış olarak artan sırada tamsayı veri türlerine ve boyutlarına bir göz atalım. Yine, bu en küçük ve en büyük limitler standardın size taşınabilir şekilde garanti ettiği limitlerdir; sisteminizin muhtemelen daha geniş aralıkları vardır.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -169,18 +169,18 @@
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: right;">Minimum Bytes</th>
-<th style="text-align: right;">Minimum Value</th>
-<th style="text-align: right;">Maximum Value</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: right;">En Az Bayt</th>
+<th style="text-align: right;">En Küçük Değer</th>
+<th style="text-align: right;">En Büyük Değer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;"><code>char</code></td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">-128 or 0</td>
-<td style="text-align: right;">127 or 255<a href="function-specifiers-alignment-specifiersoperators.html#fn100" class="footnote-ref" id="fnref100" role="doc-noteref"><sup>100</sup></a></td>
+<td style="text-align: right;">-128 veya 0</td>
+<td style="text-align: right;">127 veya 255<a href="function-specifiers-alignment-specifiersoperators.html#fn100" class="footnote-ref" id="fnref100" role="doc-noteref"><sup>100</sup></a></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>signed char</code></td>
@@ -244,18 +244,18 @@
 </tr>
 </tbody>
 </table>
-<p>There is no <code>long long long</code> type. You can’t just keep adding <code>long</code>s like that. Don’t be silly.</p>
+<p><code>long long long</code> diye bir tür yoktur. Öyle sürekli <code>long</code> ekleyip duramazsınız. Saçmalamayın.</p>
 <blockquote>
-<p>Two’s complement fans might have noticed something funny about those numbers. Why does, for example, the <code>signed char</code> stop at -127 instead of -128? Remember: these are only the minimums required by the spec. Some number representations (like <a href="https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation" target="_blank" rel="noopener noreferrer">sign and magnitude</a><a href="function-specifiers-alignment-specifiersoperators.html#fn101" class="footnote-ref" id="fnref101" role="doc-noteref"><sup>101</sup></a>) top off at ±127.</p>
+<p>İkiye tümleyen hayranları bu sayılarda komik bir şey fark etmiş olabilir. Örneğin <code>signed char</code> neden -128 yerine -127'de duruyor? Unutmayın: Bunlar yalnızca standart tarafından gereken minimum değerlerdir. Bazı sayı gösterimleri (örneğin <a href="https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation" target="_blank" rel="noopener noreferrer">işaret ve büyüklük - sign and magnitude</a><a href="function-specifiers-alignment-specifiersoperators.html#fn101" class="footnote-ref" id="fnref101" role="doc-noteref"><sup>101</sup></a>) ±127 değerinde sınırla kalır.</p>
 </blockquote>
-<p>Let’s run the same table on my 64-bit, two’s complement system and see what comes out:</p>
+<p>Aynı tabloyu 64-bit ikiye tümleyen sistemimde çalıştıralım ve ne çıkacağını görelim:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: right;">My Bytes</th>
-<th style="text-align: right;">Minimum Value</th>
-<th style="text-align: right;">Maximum Value</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: right;">Benim Bayt Sayım</th>
+<th style="text-align: right;">En Küçük Değer</th>
+<th style="text-align: right;">En Büyük Değer</th>
 </tr>
 </thead>
 <tbody>
@@ -327,14 +327,14 @@
 </tr>
 </tbody>
 </table>
-<p>That’s a little more sensible, but we can see how my system has larger limits than the minimums in the specification.</p>
-<p><span id="limits-macros">So what are the macros in <code>&lt;limits.h&gt;</code>?</span></p>
+<p>Bu biraz daha mantıklı, ama sistemimin özellikteki minimumlardan daha büyük limitlere sahip olduğunu görebiliriz.</p>
+<p><span id="limits-macros">Peki <code>&lt;limits.h&gt;</code> içindeki makrolar nelerdir?</span></p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Min Macro</th>
-<th style="text-align: left;">Max Macro</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: left;">En Küçük Makrosu</th>
+<th style="text-align: left;">En Büyük Makrosu</th>
 </tr>
 </thead>
 <tbody>
@@ -395,12 +395,11 @@
 </tr>
 </tbody>
 </table>
-<p>Notice there’s a way hidden in there to determine if a system uses signed or unsigned <code>char</code>s. If <code>CHAR_MAX == UCHAR_MAX</code>, it must be unsigned.</p>
-<p>Also notice there’s no minimum macro for the <code>unsigned</code> variants—they’re just <code>0</code>. </p>
-<h2 data-number="14.4" id="more-float-double-and-long-double"><span class="header-section-number">14.4</span> More Float: <code>double</code> and <code>long double</code></h2>
-<p>Let’s see what the spec has to say about floating point numbers in §5.2.4.2.2¶1-2:</p>
-<blockquote>
-<p>The following parameters are used to define the model for each floating-point type:</p>
+<p>Bir sistemin işaretli mi yoksa işaretsiz mi <code>char</code> kullandığını belirlemek için orada gizli bir yol olduğuna dikkat edin. Eğer <code>CHAR_MAX == UCHAR_MAX</code> ise işaretsiz olmak zorundadır.</p>
+<p>Ayrıca <code>unsigned</code> varyantlar için en küçük değer makrosunun olmadığına dikkat edin—onlar sadece <code>0</code>'dır. </p>
+<h2 data-number="14.4" id="more-float-double-and-long-double"><span class="header-section-number">14.4</span> Daha Fazla Kayal Nokta: <code>double</code> ve <code>long double</code></h2>
+<p>Standardın §5.2.4.2.2¶1-2 bölümünde kayan noktalı (floating point) sayılar hakkında ne söylediğine bakalım:</p>
+<p>Her bir kayan noktalı tür için modeli tanımlamak üzere aşağıdaki parametreler kullanılır:</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -408,59 +407,58 @@
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Parameter</th>
-<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Parametre</th>
+<th style="text-align: left;">Tanım</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;"><span class="math inline">\(s\)</span></td>
-<td style="text-align: left;">sign (<span class="math inline">\(\pm1\)</span>)</td>
+<td style="text-align: left;">işaret (<span class="math inline">\(\pm1\)</span>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><span class="math inline">\(b\)</span></td>
-<td style="text-align: left;">base or radix of exponent representation (an integer <span class="math inline">\(&gt; 1\)</span>)</td>
+<td style="text-align: left;">taban veya üst gösteriminin tabanı (<span class="math inline">\(&gt; 1\)</span> olan bir tamsayı)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><span class="math inline">\(e\)</span></td>
-<td style="text-align: left;">exponent (an integer between a minimum <span class="math inline">\(e_{min}\)</span> and a maximum <span class="math inline">\(e_{max}\)</span>)</td>
+<td style="text-align: left;">üs (en küçük <span class="math inline">\(e_{min}\)</span> ve en büyük <span class="math inline">\(e_{max}\)</span> arasında bir tamsayı)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><span class="math inline">\(p\)</span></td>
-<td style="text-align: left;">precision (the number of base-<span class="math inline">\(b\)</span> digits in the significand)</td>
+<td style="text-align: left;">hassasiyet (anlamlı kısımdaki taban-<span class="math inline">\(b\)</span> basamaklarının sayısı)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><span class="math inline">\(f_k\)</span></td>
-<td style="text-align: left;">nonnegative integers less than <span class="math inline">\(b\)</span> (the significand digits)</td>
+<td style="text-align: left;"><span class="math inline">\(b\)</span>'den küçük negatif olmayan tamsayılar (anlamlı kısım basamakları)</td>
 </tr>
 </tbody>
 </table>
-<p>A <em>floating-point number</em> (<span class="math inline">\(x\)</span>) is defined by the following model:</p>
+<p>Bir <em>kayan noktalı sayı</em> (<span class="math inline">\(x\)</span>) aşağıdaki modelle tanımlanır:</p>
 <blockquote>
 <p><span class="math inline">\(x=sb^e\sum\limits_{k=1}^p f_kb^{-k},\)</span>    <span class="math inline">\(e_{min}\le e\le e_{max}\)</span></p>
 </blockquote>
-</blockquote>
-<p>I hope that cleared it right up for you.</p>
-<p>Okay, fine. Let’s step back a bit and see what’s practical.</p>
-<p>Note: we refer to a bunch of macros in this section. They can be found in the header <code>&lt;float.h&gt;</code>.</p>
-<p>Floating point number are encoded in a specific sequence of bits (<a href="https://en.wikipedia.org/wiki/IEEE_754" target="_blank" rel="noopener noreferrer">IEEE-754 format</a><a href="function-specifiers-alignment-specifiersoperators.html#fn103" class="footnote-ref" id="fnref103" role="doc-noteref"><sup>103</sup></a> is tremendously popular) in bytes.</p>
-<p>Diving in a bit more, the number is basically represented as the <em>significand</em> (which is the number part—the significant digits themselves, also sometimes referred to as the <em>mantissa</em>) and the <em>exponent</em>, which is what power to raise the digits to. Recall that a negative exponent can make a number smaller.</p>
-<p>Imagine we’re using <span class="math inline">\(10\)</span> as a number to raise by an exponent. We could represent the following numbers by using a significand of <span class="math inline">\(12345\)</span>, and exponents of <span class="math inline">\(-3\)</span>, <span class="math inline">\(4\)</span>, and <span class="math inline">\(0\)</span> to encode the following floating point values:</p>
+<p>Umarım bu konu kafanızda netleşmiştir.</p>
+<p>Tamam, peki. Biraz geri çekilelim ve pratik olarak ne olduğuna bakalım.</p>
+<p>Not: Bu bölümde bir sürü makrodan bahsediyoruz. Bunlar <code>&lt;float.h&gt;</code> başlık dosyasında bulunabilir.</p>
+<p>Kayan noktalı sayılar, baytlar içindeki belirli bir bit dizisinde kodlanır (<a href="https://en.wikipedia.org/wiki/IEEE_754" target="_blank" rel="noopener noreferrer">IEEE-754 formatı</a> son derece popülerdir)<a href="function-specifiers-alignment-specifiersoperators.html#fn103" class="footnote-ref" id="fnref103" role="doc-noteref"><sup>103</sup></a>.</p>
+<p>Biraz daha derine inersek, sayı temel olarak <em>anlamlı kısım</em> (significand veya bazen <em>mantis</em> olarak da adlandırılır — basamakların kendisi) ve basamakların hangi kuvvete yükseltileceğini belirten <em>üs</em> (exponent) olarak temsil edilir. Negatif bir üssün bir sayıyı küçültebileceğini hatırlayın.</p>
+<p>Üssü alınacak sayı olarak <span class="math inline">\(10\)</span> kullandığımızı hayal edin. Anlamlı kısım olarak <span class="math inline">\(12345\)</span> ve üs olarak <span class="math inline">\(-3\)</span>, <span class="math inline">\(4\)</span> ve <span class="math inline">\(0\)</span> kullanarak aşağıdaki kayan noktalı değerleri temsil edebiliriz:</p>
 <p><span class="math inline">\(12345\times10^{-3}=12.345\)</span></p>
 <p><span class="math inline">\(12345\times10^4=123450000\)</span></p>
 <p><span class="math inline">\(12345\times10^0=12345\)</span></p>
-<p>For all those numbers, the significand stays the same. The only difference is the exponent.</p>
-<p>On your machine, the base for the exponent is probably <span class="math inline">\(2\)</span>, not <span class="math inline">\(10\)</span>, since computers like binary. You can check it by printing the <code>FLT_RADIX</code> macro.</p>
-<p>So we have a number that’s represented by a number of bytes, encoded in some way. Because there are a limited number of bit patterns, a limited number of floating point numbers can be represented.</p>
-<p>But more particularly, only a certain number of significant decimal digits can be represented accurately.</p>
-<p>How can you get more? You can use larger data types!</p>
-<p>And we have a couple of them. We know about <code>float</code> already, but for more precision we have <code>double</code>. And for even more precision, we have <code>long double</code> (unrelated to <code>long int</code> except by name).</p>
-<p>The spec doesn’t go into how many bytes of storage each type should take, but on my system, we can see the relative size increases:</p>
+<p>Tüm bu sayılar için anlamlı kısım aynı kalır. Tek fark üsdür.</p>
+<p>Makinenizde, bilgisayarlar ikili (binary) sistemi sevdiği için üssün tabanı muhtemelen <span class="math inline">\(10\)</span> değil <span class="math inline">\(2\)</span>'dir. <code>FLT_RADIX</code> makrosunu yazdırarak bunu kontrol edebilirsiniz.</p>
+<p>Böylece elimizde belirli bir şekilde kodlanmış, birkaç bayt ile temsil edilen bir sayı var. Sınırlı sayıda bit deseni olduğu için sınırlı sayıda kayan noktalı sayı temsil edilebilir.</p>
+<p>Ancak daha özel olarak, yalnızca belirli bir sayıda anlamlı ondalık basamak doğru bir şekilde temsil edilebilir.</p>
+<p>Nasıl daha fazlasını elde edebilirsiniz? Daha büyük veri türleri kullanabilirsiniz!</p>
+<p>Ve elimizde bunlardan birkaçı var. <code>float</code> türünü zaten biliyoruz, ancak daha fazla hassasiyet için <code>double</code> türümüz var. Ve daha da fazla hassasiyet için <code>long double</code> türümüz var (ismi dışında <code>long int</code> ile ilgisizdir).</p>
+<p>Standart her türün kaç bayt depolama alanı kaplaması gerektiğine değinmez, ancak benim sistemimde görece boyut artışlarını görebiliriz:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Tür</th>
 <th style="text-align: right;"><code>sizeof</code></th>
 </tr>
 </thead>
@@ -479,20 +477,20 @@
 </tr>
 </tbody>
 </table>
-<p>So each of the types (on my system) uses those additional bits for more precision.</p>
-<p>But <em>how much</em> precision are we talking, here? How many decimal numbers can be represented by these values?</p>
-<p>Well, C provides us with a bunch of macros in <code>&lt;float.h&gt;</code> to help us figure that out.</p>
-<p>It gets a little wonky if you are using a base-2 (binary) system for storing the numbers (which is virtually everyone on the planet, probably including you), but bear with me while we figure it out. </p>
-<h3 data-number="14.4.1" id="how-many-decimal-digits"><span class="header-section-number">14.4.1</span> How Many Decimal Digits?</h3>
-<p> The million dollar question is, “How many significant decimal digits can I store in a given floating point type so that I get out the same decimal number when I print it?”</p>
-<p>The number of decimal digits you can store in a floating point type and surely get the same number back out when you print it is given by these macros:</p>
+<p>Böylece (benim sistemimde) türlerin her biri bu ek bitleri daha fazla hassasiyet için kullanır.</p>
+<p>Peki burada <em>ne kadar</em> hassasiyetten bahsediyoruz? Bu değerlerle kaç tane ondalık sayı temsil edilebilir?</p>
+<p>C, bunu anlamamıza yardımcı olmak için <code>&lt;float.h&gt;</code> içinde bize bir sürü makro sunar.</p>
+<p>Sayıları saklamak için ikilik (base-2) bir sistem kullanıyorsanız (ki gezegendeki neredeyse herkes, muhtemelen siz de dahil) işler biraz tuhaflaşır, ama bunu çözerken bana katlanın. </p>
+<h3 data-number="14.4.1" id="how-many-decimal-digits"><span class="header-section-number">14.4.1</span> Kaç Ondalık Basamak?</h3>
+<p> Milyon dolarlık soru şudur: "Yazdırdığımda aynı ondalık sayıyı elde edebilmek için verilen bir kayan noktalı türe kaç tane anlamlı ondalık basamak saklayabilirim?"</p>
+<p>Bir kayan noktalı türde saklayabileceğiniz ve yazdırdığınızda kesinlikle aynı sayıyı geri alabileceğiniz ondalık basamak sayısı şu makrolarla verilir:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: right;">Decimal Digits You Can Store</th>
-<th style="text-align: right;">Minimum</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: right;">Saklayabileceğiniz Ondalık Basamak Sayısı</th>
+<th style="text-align: right;">En Az</th>
 </tr>
 </thead>
 <tbody>
@@ -514,47 +512,47 @@
 </tbody>
 </table>
 <p> </p>
-<p>On my system, <code>FLT_DIG</code> is 6, so I can be sure that if I print out a 6 digit <code>float</code>, I’ll get the same thing back. (It could be more digits—some numbers will come back correctly with more digits. But 6 is definitely coming back.)</p>
-<p>For example, printing out <code>float</code>s following this pattern of increasing digits, we apparently make it to 8 digits before something goes wrong, but after that we’re back to 7 correct digits.</p>
+<p>Benim sistemimde <code>FLT_DIG</code> 6'dır, böylece 6 basamaklı bir <code>float</code> yazdırırsam aynı şeyi geri alacağımdan emin olabilirim. (Daha fazla basamak da olabilir—bazı sayılar daha fazla basamakla doğru şekilde geri gelir. Ancak 6 basamak kesinlikle doğru gelir.)</p>
+<p>Örneğin, bu artan basamak desenini takip eden <code>float</code>'ları yazdırırken, işler ters gitmeden önce görünüşe göre 8 basamağa kadar ulaşıyoruz, ancak sonrasında tekrar 7 doğru basamağa dönüyoruz.</p>
 <div class="sourceCode" id="cb223"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb223-1"><a href="types-ii-way-more-types.html#cb223-1" aria-hidden="true" tabindex="-1"></a>0.12345</span>
 <span id="cb223-2"><a href="types-ii-way-more-types.html#cb223-2" aria-hidden="true" tabindex="-1"></a>0.123456</span>
 <span id="cb223-3"><a href="types-ii-way-more-types.html#cb223-3" aria-hidden="true" tabindex="-1"></a>0.1234567</span>
 <span id="cb223-4"><a href="types-ii-way-more-types.html#cb223-4" aria-hidden="true" tabindex="-1"></a>0.12345678</span>
-<span id="cb223-5"><a href="types-ii-way-more-types.html#cb223-5" aria-hidden="true" tabindex="-1"></a>0.123456791  &lt;-- Things start going wrong</span>
+<span id="cb223-5"><a href="types-ii-way-more-types.html#cb223-5" aria-hidden="true" tabindex="-1"></a>0.123456791  &lt;-- İşler ters gitmeye başlar</span>
 <span id="cb223-6"><a href="types-ii-way-more-types.html#cb223-6" aria-hidden="true" tabindex="-1"></a>0.1234567910</span></code></pre></div>
-<p>Let’s do another demo. In this code we’ll have two <code>float</code>s that both hold numbers that have <code>FLT_DIG</code> significant decimal digits<a href="function-specifiers-alignment-specifiersoperators.html#fn104" class="footnote-ref" id="fnref104" role="doc-noteref"><sup>104</sup></a>. Then we add those together, for what should be 12 significant decimal digits. But that’s more than we can store in a <code>float</code> and correctly recover as a string—so we see when we print it out, things start going wrong after the 7th significant digit.</p>
+<p>Başka bir gösterim yapalım. Bu kodda her ikisi de <code>FLT_DIG</code> kadar anlamlı ondalık basamağa sahip sayıları tutan iki <code>float</code> değişkenimiz olacak<a href="function-specifiers-alignment-specifiersoperators.html#fn104" class="footnote-ref" id="fnref104" role="doc-noteref"><sup>104</sup></a>. Sonra bunları toplayacağız ve normalde 12 anlamlı ondalık basamak olması gerekir. Ancak bu bir <code>float</code> içinde saklayabileceğimiz ve bir string olarak doğru bir şekilde geri elde edebileceğimizden daha fazlasıdır—böylece yazdırdığımızda 7. anlamlı basamaktan sonra işlerin bozulmaya başladığını görürüz.</p>
 <div class="sourceCode" id="cb224"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb224-1"><a href="types-ii-way-more-types.html#cb224-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb224-2"><a href="types-ii-way-more-types.html#cb224-2"></a><span class="pp">#include </span><span class="im">&lt;float.h&gt;</span></span>
 <span id="cb224-3"><a href="types-ii-way-more-types.html#cb224-3"></a></span>
 <span id="cb224-4"><a href="types-ii-way-more-types.html#cb224-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb224-5"><a href="types-ii-way-more-types.html#cb224-5"></a><span class="op">{</span></span>
-<span id="cb224-6"><a href="types-ii-way-more-types.html#cb224-6"></a>    <span class="co">// Both these numbers have 6 significant digits, so they can be</span></span>
-<span id="cb224-7"><a href="types-ii-way-more-types.html#cb224-7"></a>    <span class="co">// stored accurately in a float:</span></span>
+<span id="cb224-6"><a href="types-ii-way-more-types.html#cb224-6"></a>    <span class="co">// Bu sayıların her ikisi de 6 anlamlı basamağa sahiptir, bu nedenle bir</span></span>
+<span id="cb224-7"><a href="types-ii-way-more-types.html#cb224-7"></a>    <span class="co">// float içinde doğru bir şekilde saklanabilirler:</span></span>
 <span id="cb224-8"><a href="types-ii-way-more-types.html#cb224-8"></a></span>
 <span id="cb224-9"><a href="types-ii-way-more-types.html#cb224-9"></a>    <span class="dt">float</span> f <span class="op">=</span> <span class="fl">3.14159</span><span class="bu">f</span><span class="op">;</span></span>
 <span id="cb224-10"><a href="types-ii-way-more-types.html#cb224-10"></a>    <span class="dt">float</span> g <span class="op">=</span> <span class="fl">0.00000265358</span><span class="bu">f</span><span class="op">;</span></span>
 <span id="cb224-11"><a href="types-ii-way-more-types.html#cb224-11"></a></span>
-<span id="cb224-12"><a href="types-ii-way-more-types.html#cb224-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.5f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>   <span class="co">// 3.14159       -- correct!</span></span>
-<span id="cb224-13"><a href="types-ii-way-more-types.html#cb224-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> g<span class="op">);</span>  <span class="co">// 0.00000265358 -- correct!</span></span>
+<span id="cb224-12"><a href="types-ii-way-more-types.html#cb224-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.5f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>   <span class="co">// 3.14159       -- doğru!</span></span>
+<span id="cb224-13"><a href="types-ii-way-more-types.html#cb224-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> g<span class="op">);</span>  <span class="co">// 0.00000265358 -- doğru!</span></span>
 <span id="cb224-14"><a href="types-ii-way-more-types.html#cb224-14"></a></span>
-<span id="cb224-15"><a href="types-ii-way-more-types.html#cb224-15"></a>    <span class="co">// Now add them up</span></span>
-<span id="cb224-16"><a href="types-ii-way-more-types.html#cb224-16"></a>    f <span class="op">+=</span> g<span class="op">;</span>                <span class="co">// 3.14159265358 is what f _should_ be</span></span>
+<span id="cb224-15"><a href="types-ii-way-more-types.html#cb224-15"></a>    <span class="co">// Şimdi onları toplayalım</span></span>
+<span id="cb224-16"><a href="types-ii-way-more-types.html#cb224-16"></a>    f <span class="op">+=</span> g<span class="op">;</span>                <span class="co">// f'nin olması gereken değer 3.14159265358</span></span>
 <span id="cb224-17"><a href="types-ii-way-more-types.html#cb224-17"></a></span>
-<span id="cb224-18"><a href="types-ii-way-more-types.html#cb224-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>  <span class="co">// 3.14159274101 -- wrong!</span></span>
+<span id="cb224-18"><a href="types-ii-way-more-types.html#cb224-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>  <span class="co">// 3.14159274101 -- yanlış!</span></span>
 <span id="cb224-19"><a href="types-ii-way-more-types.html#cb224-19"></a><span class="op">}</span></span></code></pre></div>
-<p>(The above code has an <code>f</code> after the numeric constants—this indicates that the constant is type <code>float</code>, as opposed to the default of <code>double</code>. More on this later.)</p>
-<p>Remember that <code>FLT_DIG</code> is the safe number of digits you can store in a <code>float</code> and retrieve correctly.</p>
-<p>Sometimes you might get one or two more out of it. But sometimes you’ll only get <code>FLT_DIG</code> digits back. The sure thing: if you store any number of digits up to and including <code>FLT_DIG</code> in a <code>float</code>, you’re sure to get them back correctly.</p>
-<p>So that’s the story. <code>FLT_DIG</code>. The End.</p>
+<p>(Yukarıdaki kodda sayısal sabitlerden sonra bir <code>f</code> vardır—bu, sabitin varsayılan olan <code>double</code> yerine <code>float</code> türünde olduğunu gösterir. Bununla ilgili daha fazlası ileride.)</p>
+<p><code>FLT_DIG</code> makrosunun bir <code>float</code> içinde saklayıp doğru şekilde geri alabileceğiniz güvenli basamak sayısı olduğunu unutmayın.</p>
+<p>Bazen bundan bir veya iki basamak daha fazlasını elde edebilirsiniz. Ancak bazen yalnızca <code>FLT_DIG</code> kadar basamak alırsınız. Kesin olan şey: Bir <code>float</code> içinde <code>FLT_DIG</code> değerine kadar (dahil) herhangi bir sayıda basamak saklarsanız, bunları doğru şekilde geri alacağınızdan emin olabilirsiniz.</p>
+<p>İşte hikaye böyle. <code>FLT_DIG</code>. Son.</p>
 <p></p>
-<p>…Or is it?</p>
-<h3 data-number="14.4.2" id="converting-to-decimal-and-back"><span class="header-section-number">14.4.2</span> Converting to Decimal and Back</h3>
-<p>But storing a base 10 number in a floating point number and getting it back out is only half the story.</p>
-<p>Turns out floating point numbers can encode numbers that require more decimal places to print out completely. It’s just that your big decimal number might not map to one of those numbers.</p>
-<p>That is, when you look at floating point numbers from one to the next, there’s a gap. If you try to encode a decimal number in that gap, it’ll use the closest floating point number. That’s why you can only encode <code>FLT_DIG</code> for a <code>float</code>.</p>
-<p>But what about those floating point numbers that <em>aren’t</em> in the gap? How many places do you need to print those out accurately?</p>
-<p>Another way to phrase this question is for any given floating point number, how many decimal digits do I have to preserve if I want to convert the decimal number back into an identical floating point number? That is, how many digits do I have to print in base 10 to recover <strong>all</strong> the digits in base 2 in the original number?</p>
-<p>Sometimes it might only be a few. But to be sure, you’ll want to convert to decimal with a certain safe number of decimal places. That number is encoded in the following macros:</p>
+<p>…Yoksa öyle değil mi?</p>
+<h3 data-number="14.4.2" id="converting-to-decimal-and-back"><span class="header-section-number">14.4.2</span> Ondalığa Dönüştürme ve Geri Alma</h3>
+<p>Ancak 10 tabanındaki bir sayıyı kayan noktalı sayıya saklamak ve onu geri almak hikayenin yalnızca yarısıdır.</p>
+<p>Meğer kayan noktalı sayılar tamamen yazdırılabilmek için daha fazla ondalık basamak gerektiren sayıları kodlayabiliyormuş. Yalnızca büyük ondalık sayınız o sayılardan birine eşleşmeyebilir.</p>
+<p>Yani bir kayan noktalı sayıdan diğerine baktığınızda bir boşluk vardır. O boşluğa bir ondalık sayı kodlamaya çalışırsanız en yakın kayan noktalı sayıyı kullanır. Bir <code>float</code> için yalnızca <code>FLT_DIG</code> kadar kodlayabilmenizin nedeni budur.</p>
+<p>Peki boşlukta <em>olmayan</em> kayan noktalı sayılar ne olacak? Bunları doğru bir şekilde yazdırmak için kaç basamağa ihtiyacınız var?</p>
+<p>Bu soruyu ifade etmenin başka bir yolu şudur: Verilen herhangi bir kayan noktalı sayı için, ondalık sayıyı tekrar birebir aynı kayan noktalı sayıya dönüştürmek istiyorsam kaç tane ondalık basamağı korumam gerekir? Yani orijinal sayıdaki 2 tabanındaki <strong>tüm</strong> basamakları geri elde etmek için 10 tabanında kaç basamak yazdırmalıyım?</p>
+<p>Bazen yalnızca birkaç tane olabilir. Ancak emin olmak için belirli sayıda güvenli ondalık basamakla ondalığa dönüştürmek istersiniz. Bu sayı aşağıdaki makrolarda kodlanmıştır:</p>
 <p> </p>
 <table>
 <colgroup>
@@ -563,76 +561,74 @@
 </colgroup>
 <thead>
 <tr>
-<th>Macro</th>
-<th>Description</th>
+<th>Makro</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>FLT_DECIMAL_DIG</code></td>
-<td>Number of decimal digits encoded in a <code>float</code>.</td>
+<td>Bir <code>float</code> içinde kodlanan ondalık basamak sayısı.</td>
 </tr>
 <tr>
 <td><code>DBL_DECIMAL_DIG</code></td>
-<td>Number of decimal digits encoded in a <code>double</code>.</td>
+<td>Bir <code>double</code> içinde kodlanan ondalık basamak sayısı.</td>
 </tr>
 <tr>
 <td><code>LDBL_DECIMAL_DIG</code></td>
-<td>Number of decimal digits encoded in a <code>long double</code>.</td>
+<td>Bir <code>long double</code> içinde kodlanan ondalık basamak sayısı.</td>
 </tr>
 <tr>
 <td><code>DECIMAL_DIG</code></td>
-<td>Same as the widest encoding, <code>LDBL_DECIMAL_DIG</code>.</td>
+<td>En geniş kodlama olan <code>LDBL_DECIMAL_DIG</code> ile aynı.</td>
 </tr>
 </tbody>
 </table>
 <p> </p>
-<p>Let’s see an example where <code>DBL_DIG</code> is 15 (so that’s all we can have in a constant), but <code>DBL_DECIMAL_DIG</code> is 17 (so we have to convert to 17 decimal numbers to preserve all the bits of the original <code>double</code>).</p>
-<p>Let’s assign the 15 significant digit number <code>0.123456789012345</code> to <code>x</code>, and let’s assign the 1 significant digit number <code>0.0000000000000006</code> to <code>y</code>.</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb225-1"><a href="types-ii-way-more-types.html#cb225-1" aria-hidden="true" tabindex="-1"></a>x is exact: 0.12345678901234500    Printed to 17 decimal places</span>
-<span id="cb225-2"><a href="types-ii-way-more-types.html#cb225-2" aria-hidden="true" tabindex="-1"></a>y is exact: 0.00000000000000060</span></code></pre></div>
-<p>But let’s add them together. This should give <code>0.1234567890123456</code>, but that’s more than <code>DBL_DIG</code>, so strange things might happen… let’s look:</p>
-<div class="sourceCode" id="cb226"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb226-1"><a href="types-ii-way-more-types.html#cb226-1" aria-hidden="true" tabindex="-1"></a>x + y not quite right: 0.12345678901234559    Should end in 4560!</span></code></pre></div>
-<p>That’s what we get for printing more than <code>DBL_DIG</code>, right? But check this out… that number, above, is exactly representable as it is!</p>
-<p>If we assign <code>0.12345678901234559</code> (17 digits) to <code>z</code> and print it, we get:</p>
-<div class="sourceCode" id="cb227"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb227-1"><a href="types-ii-way-more-types.html#cb227-1" aria-hidden="true" tabindex="-1"></a>z is exact: 0.12345678901234559   17 digits correct! More than DBL_DIG!</span></code></pre></div>
-<p>If we’d truncated <code>z</code> down to 15 digits, it wouldn’t have been the same number. That’s why to preserve all the bits of a <code>double</code>, we need <code>DBL_DECIMAL_DIG</code> and not just the lesser <code>DBL_DIG</code>.</p>
+<p><code>DBL_DIG</code> makrosunun 15 olduğu (böylece bir sabitte sahip olabileceğimiz tek şey budur), ancak <code>DBL_DECIMAL_DIG</code> makrosunun 17 olduğu (böylece orijinal <code>double</code> türünün tüm bitlerini korumak için 17 ondalık sayıya dönüştürmemiz gerektiği) bir örneğe bakalım.</p>
+<p>15 anlamlı basamağa sahip <code>0.123456789012345</code> sayısını <code>x</code> değişkenine ve 1 anlamlı basamağa sahip <code>0.0000000000000006</code> sayısını <code>y</code> değişkenine atayalım.</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb225-1"><a href="types-ii-way-more-types.html#cb225-1" aria-hidden="true" tabindex="-1"></a>x tam olarak: 0.12345678901234500    17 ondalık basamağa yazdırıldı</span>
+<span id="cb225-2"><a href="types-ii-way-more-types.html#cb225-2" aria-hidden="true" tabindex="-1"></a>y tam olarak: 0.00000000000000060</span></code></pre></div>
+<p>Ancak bunları toplayalım. Bu <code>0.1234567890123456</code> sonucunu vermelidir, ancak bu <code>DBL_DIG</code> değerinden fazladır, dolayısıyla garip şeyler olabilir… bakalım:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb226-1"><a href="types-ii-way-more-types.html#cb226-1" aria-hidden="true" tabindex="-1"></a>x + y pek doğru değil: 0.12345678901234559    4560 ile bitmeliydi!</span></code></pre></div>
+<p><code>DBL_DIG</code> değerinden fazlasını yazdırdığımızda elde ettiğimiz şey budur, değil mi? Ama şuna bakın… yukarıdaki o sayı tam olarak olduğu gibi temsil edilebilir durumdadır!</p>
+<p><code>0.12345678901234559</code> (17 basamak) sayısını <code>z</code> değişkenine atayıp yazdırırsak şunu elde ederiz:</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb227-1"><a href="types-ii-way-more-types.html#cb227-1" aria-hidden="true" tabindex="-1"></a>z tam olarak: 0.12345678901234559   17 basamak doğru! DBL_DIG değerinden fazla!</span></code></pre></div>
+<p>Eğer <code>z</code> değerini 15 basamağa budamış olsaydık aynı sayı olmayacaktı. İşte bir <code>double</code> türünün tüm bitlerini korumak için sadece daha küçük olan <code>DBL_DIG</code> değerine değil, <code>DBL_DECIMAL_DIG</code> değerine ihtiyacımız olmasının nedeni budur.</p>
 <p></p>
-<p>All that being said, it’s clear that when we’re messing with decimal numbers in general, it’s not safe to print more than <code>FLT_DIG</code>, <code>DBL_DIG</code>, or <code>LDBL_DIG</code> digits to be sensible in relation to the original base 10 numbers and any subsequent math.</p>
-<p>But when converting from <code>float</code> to a decimal representation and <em>back</em> to <code>float</code>, definitely use <code>FLT_DECIMAL_DIG</code> to do that so that all the bits are preserved exactly. </p>
+<p>Tüm bunlar söylendiğine göre, genel olarak ondalık sayılarla uğraşırken, orijinal 10 tabanındaki sayılar ve sonraki matematiksel işlemlerle mantıklı olması açısından <code>FLT_DIG</code>, <code>DBL_DIG</code> veya <code>LDBL_DIG</code> basamaklarından fazlasını yazdırmanın güvenli olmadığı açıktır.</p>
+<p>Ancak <code>float</code> türünden bir ondalık gösterime ve <em>tekrar</em> <code>float</code> türüne dönüştürürken, tüm bitlerin tam olarak korunması için bunu kesinlikle <code>FLT_DECIMAL_DIG</code> kullanarak yapın. </p>
 <p></p>
-<h2 data-number="14.5" id="constant-numeric-types"><span class="header-section-number">14.5</span> Constant Numeric Types</h2>
-<p>When you write down a constant number, like <code>1234</code>, it has a type. But what type is it? Let’s look at how C decides what type the constant is, and how to force it to choose a specific type.</p>
-<h3 data-number="14.5.1" id="hexadecimal-and-octal"><span class="header-section-number">14.5.1</span> Hexadecimal and Octal</h3>
-<p>In addition to good ol’ decimal like Grandma used to bake, C also supports constants of different bases.</p>
-<p></p>
-<p>If you lead a number with <code>0x</code>, it is read as a hex number:</p>
-<div class="sourceCode" id="cb228"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb228-1"><a href="types-ii-way-more-types.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">0x1A2B</span><span class="op">;</span>   <span class="co">// Hexadecimal</span></span>
-<span id="cb228-2"><a href="types-ii-way-more-types.html#cb228-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="bn">0x1a2b</span><span class="op">;</span>   <span class="co">// Case doesn&#39;t matter for hex digits</span></span>
+<h2 data-number="14.5" id="constant-numeric-types"><span class="header-section-number">14.5</span> Sabit Sayısal Türler</h2>
+<p><code>1234</code> gibi sabit bir sayı yazdığınızda onun bir türü vardır. Peki hangi türdedir? C'nin sabitin hangi türde olduğuna nasıl karar verdiğine ve onu belirli bir tür seçmeye nasıl zorlayacağınıza bakalım.</p>
+<h3 data-number="14.5.1" id="hexadecimal-and-octal"><span class="header-section-number">14.5.1</span> Onaltılık (Hexadecimal) ve Sekizlik (Octal)</h3>
+<p>Eski güzel ondalık sayılara ek olarak C, onaltılık (hexadecimal - taban 16) ve sekizlik (octal - taban 8) sayıları belirtmenize de olanak tanır.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb228-1"><a href="types-ii-way-more-types.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">0x1a2b</span><span class="op">;</span>   <span class="co">// Hexadecimal (Onaltılık)</span></span>
+<span id="cb228-2"><a href="types-ii-way-more-types.html#cb228-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="bn">0x1a2b</span><span class="op">;</span>   <span class="co">// Hex basamakları için harf büyüklüğü fark etmez</span></span>
 <span id="cb228-3"><a href="types-ii-way-more-types.html#cb228-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb228-4"><a href="types-ii-way-more-types.html#cb228-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Print a hex number, &quot;1a2b&quot;</span></span></code></pre></div>
+<span id="cb228-4"><a href="types-ii-way-more-types.html#cb228-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Hex bir sayı yazdırın, &quot;1a2b&quot;</span></span></code></pre></div>
 <p></p>
-<p> If you lead a number with a <code>0</code>, it is read as an octal number:</p>
+<p> Bir sayının başına <code>0</code> koyarsanız, o sekizlik (octal) bir sayı olarak okunur:</p>
 <div class="sourceCode" id="cb229"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb229-1"><a href="types-ii-way-more-types.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">012</span><span class="op">;</span></span>
 <span id="cb229-2"><a href="types-ii-way-more-types.html#cb229-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb229-3"><a href="types-ii-way-more-types.html#cb229-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%o\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Print an octal number, &quot;12&quot;</span></span></code></pre></div>
-<p>This is particularly problematic for beginner programmers who try to pad decimal numbers on the left with <code>0</code> to line things up nice and pretty, inadvertently changing the base of the number:</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb230-1"><a href="types-ii-way-more-types.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">11111</span><span class="op">;</span>  <span class="co">// Decimal 11111</span></span>
-<span id="cb230-2"><a href="types-ii-way-more-types.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y <span class="op">=</span> <span class="bn">00111</span><span class="op">;</span>  <span class="co">// Decimal 73 (Octal 111)</span></span>
-<span id="cb230-3"><a href="types-ii-way-more-types.html#cb230-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> z <span class="op">=</span> <span class="bn">01111</span><span class="op">;</span>  <span class="co">// Decimal 585 (Octal 1111)</span></span></code></pre></div>
+<span id="cb229-3"><a href="types-ii-way-more-types.html#cb229-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%o\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Sekizlik bir sayı yazdırın, &quot;12&quot;</span></span></code></pre></div>
+<p>Bu durum, şeyleri güzelce hizalamak için ondalık sayıların soluna <code>0</code> eklemeye çalışan ve yanlışlıkla sayının tabanını değiştiren yeni başlayan programcılar için özellikle sorun teşkil eder:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb230-1"><a href="types-ii-way-more-types.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">11111</span><span class="op">;</span>  <span class="co">// Ondalık 11111</span></span>
+<span id="cb230-2"><a href="types-ii-way-more-types.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y <span class="op">=</span> <span class="bn">00111</span><span class="op">;</span>  <span class="co">// Ondalık 73 (Sekizlik 111)</span></span>
+<span id="cb230-3"><a href="types-ii-way-more-types.html#cb230-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> z <span class="op">=</span> <span class="bn">01111</span><span class="op">;</span>  <span class="co">// Ondalık 585 (Sekizlik 1111)</span></span></code></pre></div>
 <p></p>
-<h4 data-number="14.5.1.1" id="a-note-on-binary"><span class="header-section-number">14.5.1.1</span> A Note on Binary</h4>
+<h4 data-number="14.5.1.1" id="a-note-on-binary"><span class="header-section-number">14.5.1.1</span> İkili (Binary) Sistem Üzerine Bir Not</h4>
 <p></p>
-<p>An unofficial extension<a href="function-specifiers-alignment-specifiersoperators.html#fn105" class="footnote-ref" id="fnref105" role="doc-noteref"><sup>105</sup></a> in many C compilers allows you to represent a binary number with a <code>0b</code> prefix:</p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb231-1"><a href="types-ii-way-more-types.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="bn">0b101010</span><span class="op">;</span>    <span class="co">// Binary 101010</span></span>
+<p>Pek çok C derleyicisindeki resmi olmayan bir uzantı<a href="function-specifiers-alignment-specifiersoperators.html#fn105" class="footnote-ref" id="fnref105" role="doc-noteref"><sup>105</sup></a>, bir ikili sayıyı <code>0b</code> önekiyle temsil etmenize olanak tanır:</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb231-1"><a href="types-ii-way-more-types.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="bn">0b101010</span><span class="op">;</span>    <span class="co">// İkili (Binary) 101010</span></span>
 <span id="cb231-2"><a href="types-ii-way-more-types.html#cb231-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb231-3"><a href="types-ii-way-more-types.html#cb231-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>   <span class="co">// Prints 42 decimal</span></span></code></pre></div>
-<p>There’s no <code>printf()</code> format specifier for printing a binary number. You have to do it a character at a time with bitwise operators.</p>
+<span id="cb231-3"><a href="types-ii-way-more-types.html#cb231-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>   <span class="co">// Ondalık 42 yazdırır</span></span></code></pre></div>
+<p>İkili bir sayıyı yazdırmak için bir <code>printf()</code> format belirteci yoktur. Bit düzeyinde (bitwise) operatörlerle bunu her seferinde bir karakter olarak yapmanız gerekir.</p>
 <p></p>
-<h3 data-number="14.5.2" id="integer-constants"><span class="header-section-number">14.5.2</span> Integer Constants</h3>
+<h3 data-number="14.5.2" id="integer-constants"><span class="header-section-number">14.5.2</span> Tamsayı Sabitleri</h3>
 <p></p>
-<p>You can force a constant integer to be a certain type by appending a suffix to it that indicates the type.</p>
-<p>We’ll do some assignments to demo, but most often devs leave off the suffixes unless needed to be precise. The compiler is pretty good at making sure the types are compatible.</p>
+<p>Sabit bir tamsayıya türünü belirten bir sonek ekleyerek onu belirli bir türde olmaya zorlayabilirsiniz.</p>
+<p>Gösterim amacıyla bazı atamalar yapacağız, ancak geliştiriciler kesin olması gerekmediği sürece çoğu zaman sonekleri bırakırlar. Derleyici türlerin uyumlu olmasını sağlama konusunda oldukça iyidir.</p>
 <p> </p>
 <div class="sourceCode" id="cb232"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb232-1"><a href="types-ii-way-more-types.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>           x <span class="op">=</span> <span class="dv">1234</span><span class="op">;</span></span>
 <span id="cb232-2"><a href="types-ii-way-more-types.html#cb232-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">int</span>      x <span class="op">=</span> <span class="dv">1234</span><span class="bu">L</span><span class="op">;</span></span>
@@ -641,18 +637,18 @@
 <span id="cb232-5"><a href="types-ii-way-more-types.html#cb232-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span>           x <span class="op">=</span> <span class="dv">1234</span><span class="bu">U</span><span class="op">;</span></span>
 <span id="cb232-6"><a href="types-ii-way-more-types.html#cb232-6" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span>      x <span class="op">=</span> <span class="dv">1234</span><span class="bu">UL</span><span class="op">;</span></span>
 <span id="cb232-7"><a href="types-ii-way-more-types.html#cb232-7" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">1234</span><span class="bu">ULL</span><span class="op">;</span></span></code></pre></div>
-<p>The suffix can be uppercase or lowercase. And the <code>U</code> and <code>L</code> or <code>LL</code> can appear either one first.</p>
+<p>Sonek büyük veya küçük harf olabilir. Ve <code>U</code> ile <code>L</code> veya <code>LL</code> herhangi biri önce gelebilir.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Suffix</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: left;">Sonek</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">None</td>
+<td style="text-align: left;">Yok</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>long int</code></td>
@@ -676,15 +672,15 @@
 </tr>
 </tbody>
 </table>
-<p>I mentioned in the table that “no suffix” means <code>int</code>… but it’s actually more complex than that.</p>
-<p>So what happens when you have an unsuffixed number like:</p>
+<p>Tabloda "sonek yok" ifadesinin <code>int</code> anlamına geldiğini belirtmiştim… ama aslında durum bundan daha karmaşıktır.</p>
+<p>Peki şöyle soneksiz bir sayınız olduğunda ne olur:</p>
 <div class="sourceCode" id="cb233"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb233-1"><a href="types-ii-way-more-types.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">1234</span><span class="op">;</span></span></code></pre></div>
-<p>What type is it?</p>
-<p>What C will generally do is choose the smallest type from <code>int</code> up that can hold the value.</p>
-<p>But specifically, that depends on the number’s base (decimal, hex, or octal), as well.</p>
-<p>The spec has a great table indicating which type gets used for what unsuffixed value. In fact, I’m just going to copy it wholesale right here.</p>
-<p>C11 §6.4.4.1¶5 reads, “The type of an integer constant is the first of the first of the corresponding list in which its value can be represented.”</p>
-<p>And then goes on to show this table:</p>
+<p>Hangi türdedir?</p>
+<p>C'nin genel olarak yapacağı şey, <code>int</code> türünden başlayarak değeri tutabilen en küçük türü seçmektir.</p>
+<p>Ancak özel olarak bu, sayının tabanına da (ondalık, hex veya sekizlik) bağlıdır.</p>
+<p>Standartta, soneksiz hangi değer için hangi türün kullanılacağını gösteren harika bir tablo vardır. Hatta onu aynen buraya kopyalayacağım.</p>
+<p>C11 §6.4.4.1¶5 şöyle der: "Bir tamsayı sabitinin türü, değerinin temsil edilebildiği karşılık gelen listedeki ilk türdür."</p>
+<p>Ve ardından şu tabloyu gösterir:</p>
 <table style="width:94%;">
 <colgroup>
 <col style="width: 23%" />
@@ -693,15 +689,15 @@
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Suffix</th>
-<th style="text-align: left;">Decimal Constant</th>
-<th style="text-align: left;">Octal or Hexadecimal<br />
-Constant</th>
+<th style="text-align: left;">Sonek</th>
+<th style="text-align: left;">Ondalık Sabit</th>
+<th style="text-align: left;">Sekizlik veya Onaltılık<br />
+Sabit</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">none</td>
+<td style="text-align: left;">yok</td>
 <td style="text-align: left;"><code>int</code><br />
 <code>long int</code></td>
 <td style="text-align: left;"><code>int</code><br />
@@ -713,7 +709,7 @@ Constant</th>
 </td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>u</code> or <code>U</code></td>
+<td style="text-align: left;"><code>u</code> veya <code>U</code></td>
 <td style="text-align: left;"><code>unsigned int</code><br />
 <code>unsigned long int</code><br />
 <code>unsigned long long int</code></td>
@@ -723,7 +719,7 @@ Constant</th>
 </td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>l</code> or <code>L</code></td>
+<td style="text-align: left;"><code>l</code> veya <code>L</code></td>
 <td style="text-align: left;"><code>long int</code><br />
 <code>long long int</code></td>
 <td style="text-align: left;"><code>long int</code><br />
@@ -733,8 +729,8 @@ Constant</th>
 </td>
 </tr>
 <tr>
-<td style="text-align: left;">Both <code>u</code> or <code>U</code><br />
-and <code>l</code> or <code>L</code></td>
+<td style="text-align: left;">Hem <code>u</code> veya <code>U</code><br />
+hem <code>l</code> veya <code>L</code></td>
 <td style="text-align: left;"><code>unsigned long int</code><br />
 <code>unsigned long long int</code></td>
 <td style="text-align: left;"><code>unsigned long int</code><br />
@@ -742,35 +738,35 @@ and <code>l</code> or <code>L</code></td>
 </td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>ll</code> or <code>LL</code></td>
+<td style="text-align: left;"><code>ll</code> veya <code>LL</code></td>
 <td style="text-align: left;"><code>long long int</code></td>
 <td style="text-align: left;"><code>long long int</code><br />
 <code>unsigned long long int</code><br />
 </td>
 </tr>
 <tr>
-<td style="text-align: left;">Both <code>u</code> or <code>U</code><br />
-and <code>ll</code> or <code>LL</code></td>
+<td style="text-align: left;">Hem <code>u</code> veya <code>U</code><br />
+hem <code>ll</code> veya <code>LL</code></td>
 <td style="text-align: left;"><code>unsigned long long int</code></td>
 <td style="text-align: left;"><code>unsigned long long int</code></td>
 </tr>
 </tbody>
 </table>
 <p> </p>
-<p>What that’s saying is that, for example, if you specify a number like <code>123456789U</code>, first C will see if it can be <code>unsigned int</code>. If it doesn’t fit there, it’ll try <code>unsigned long int</code>. And then <code>unsigned long long int</code>. It’ll use the smallest type that can hold the number.</p>
+<p>Bunun söylediği şey, örneğin <code>123456789U</code> gibi bir sayı belirtirseniz, C önce onun <code>unsigned int</code> olup olamayacağına bakar. Oraya sığmazsa <code>unsigned long int</code> dener. Ve ardından <code>unsigned long long int</code>. Sayıyı tutabilen en küçük türü kullanır.</p>
 <p></p>
 <p></p>
-<h3 data-number="14.5.3" id="floating-point-constants"><span class="header-section-number">14.5.3</span> Floating Point Constants</h3>
+<h3 data-number="14.5.3" id="floating-point-constants"><span class="header-section-number">14.5.3</span> Kayan Noktalı Sayı Sabitleri</h3>
 <p></p>
-<p>You’d think that a floating point constant like <code>1.23</code> would have a default type of <code>float</code>, right?</p>
-<p>Surprise! Turns out unsuffiexed floating point numbers are type <code>double</code>! Happy belated birthday!</p>
+<p><code>1.23</code> gibi kayan noktalı bir sabitin varsayılan türünün <code>float</code> olacağını düşünürsünüz, değil mi?</p>
+<p>Sürpriz! Soneksiz kayan noktalı sayıların türünün <code>double</code> olduğu ortaya çıkıyor! Gecikmiş doğum gününüz kutlu olsun!</p>
 <p> </p>
-<p>You can force it to be of type <code>float</code> by appending an <code>f</code> (or <code>F</code>—it’s case-insensitive). You can force it to be of type <code>long double</code> by appending <code>l</code> (or <code>L</code>).</p>
+<p>Sonuna bir <code>f</code> (veya <code>F</code> — büyük/küçük harfe duyarsızdır) ekleyerek onu <code>float</code> türünde olmaya zorlayabilirsiniz. Sonuna <code>l</code> (veya <code>L</code>) ekleyerek <code>long double</code> türünde olmaya zorlayabilirsiniz.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Suffix</th>
+<th style="text-align: left;">Tür</th>
+<th style="text-align: left;">Sonek</th>
 </tr>
 </thead>
 <tbody>
@@ -780,7 +776,7 @@ and <code>ll</code> or <code>LL</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>double</code></td>
-<td style="text-align: left;">None</td>
+<td style="text-align: left;">Yok</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>long double</code></td>
@@ -788,26 +784,26 @@ and <code>ll</code> or <code>LL</code></td>
 </tr>
 </tbody>
 </table>
-<p>For example:</p>
+<p>Örneğin:</p>
 <div class="sourceCode" id="cb234"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb234-1"><a href="types-ii-way-more-types.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> x       <span class="op">=</span> <span class="fl">3.14</span><span class="bu">f</span><span class="op">;</span></span>
 <span id="cb234-2"><a href="types-ii-way-more-types.html#cb234-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x      <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span>
 <span id="cb234-3"><a href="types-ii-way-more-types.html#cb234-3" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">double</span> x <span class="op">=</span> <span class="fl">3.14</span><span class="bu">L</span><span class="op">;</span></span></code></pre></div>
 <p> </p>
-<p>This whole time, though, we’ve just been doing this, right?</p>
+<p>Bunca zamandır sadece şunu yapıyorduk, değil mi?</p>
 <div class="sourceCode" id="cb235"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb235-1"><a href="types-ii-way-more-types.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> x <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span></code></pre></div>
-<p>Isn’t the left a <code>float</code> and the right a <code>double</code>? Yes! But C’s pretty good with automatic numeric conversions, so it’s more common to have an unsuffixed floating point constant than not. More on that later.</p>
+<p>Soldaki bir <code>float</code> ve sağdaki bir <code>double</code> değil mi? Evet! Ancak C otomatik sayısal dönüşümlerde oldukça iyidir, bu nedenle soneksiz kayan noktalı sabite sahip olmak daha yaygındır. Bununla ilgili daha fazlası ileride.</p>
 <p></p>
-<h4 data-number="14.5.3.1" id="scientific-notation"><span class="header-section-number">14.5.3.1</span> Scientific Notation</h4>
+<h4 data-number="14.5.3.1" id="scientific-notation"><span class="header-section-number">14.5.3.1</span> Bilimsel Gösterim (Scientific Notation)</h4>
 <p></p>
-<p>Remember earlier when we talked about how a floating point number can be represented by a significand, base, and exponent?</p>
-<p>Well, there’s a common way of writing such a number, shown here followed by it’s more recognizable equivalent which is what you get when you actually run the math:</p>
+<p>Daha önce kayan noktalı bir sayının anlamlı kısım, taban ve üs ile nasıl temsil edilebileceğinden bahsettiğimizi hatırlıyor musunuz?</p>
+<p>İşte böyle bir sayıyı yazmanın yaygın bir yolu vardır; burada gösterilen ve matematiği çalıştırdığınızda elde ettiğiniz daha tanınabilir eşdeğeri izler:</p>
 <p><span class="math inline">\(1.2345\times10^3 = 1234.5\)</span></p>
-<p>Writing numbers in the form <span class="math inline">\(s\times b^e\)</span> is called <a href="https://en.wikipedia.org/wiki/Scientific_notation" target="_blank" rel="noopener noreferrer"><em>scientific notation</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn106" class="footnote-ref" id="fnref106" role="doc-noteref"><sup>106</sup></a>. In C, these are written using “E notation”, so these are equivalent:</p>
+<p>Sayıları <span class="math inline">\(s\times b^e\)</span> biçiminde yazmaya <a href="https://en.wikipedia.org/wiki/Scientific_notation" target="_blank" rel="noopener noreferrer"><em>bilimsel gösterim</em> (scientific notation)</a> denir<a href="function-specifiers-alignment-specifiersoperators.html#fn106" class="footnote-ref" id="fnref106" role="doc-noteref"><sup>106</sup></a>. C'de bunlar "E gösterimi" kullanılarak yazılır, bu nedenle şunlar eşdeğerdir:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Scientific Notation</th>
-<th style="text-align: left;">E notation</th>
+<th style="text-align: left;">Bilimsel Gösterim</th>
+<th style="text-align: left;">E gösterimi</th>
 </tr>
 </thead>
 <tbody>
@@ -821,29 +817,29 @@ and <code>ll</code> or <code>LL</code></td>
 </tr>
 </tbody>
 </table>
-<p>You can print a number in this notation with <code>%e</code>:</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb236-1"><a href="types-ii-way-more-types.html#cb236-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%e\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="fl">123456.0</span><span class="op">);</span>  <span class="co">// Prints 1.234560e+05</span></span></code></pre></div>
-<p>A couple little fun facts about scientific notation:</p>
+<p>Bu gösterimdeki bir sayıyı <code>%e</code> ile yazdırabilirsiniz:</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb236-1"><a href="types-ii-way-more-types.html#cb236-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%e\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="fl">123456.0</span><span class="op">);</span>  <span class="co">// 1.234560e+05 yazdırır</span></span></code></pre></div>
+<p>Bilimsel gösterim hakkında birkaç küçük eğlenceli gerçek:</p>
 <ul>
-<li><p>You don’t have to write them with a single leading digit before the decimal point. Any number of numbers can go in front.</p>
+<li><p>Bunları ondalık noktadan önce tek bir baştaki basamakla yazmak zorunda değilsiniz. Ön tarafa herhangi bir sayıda sayı gelebilir.</p>
 <div class="sourceCode" id="cb237"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb237-1"><a href="types-ii-way-more-types.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x <span class="op">=</span> <span class="fl">123.456e+3</span><span class="op">;</span>  <span class="co">// 123456</span></span></code></pre></div>
-<p>However, when you print it, it will change the exponent so there is only one digit in front of the decimal point.</p></li>
-<li><p>The plus can be left off the exponent, as it’s default, but this is uncommon in practice from what I’ve seen.</p>
+<p>Ancak yazdırdığınızda, ondalık noktasının önünde yalnızca bir basamak kalacak şekilde üssü değiştirecektir.</p></li>
+<li><p>Artı işareti varsayılan olduğu için üsten çıkarılabilir, ancak gördüğüm kadarıyla pratikte bu pek yaygın değildir.</p>
 <div class="sourceCode" id="cb238"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb238-1"><a href="types-ii-way-more-types.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span> <span class="op">==</span> <span class="fl">1.2345e+10</span></span></code></pre></div></li>
-<li><p>You can apply the <code>F</code> or <code>L</code> suffixes to E-notation constants:</p>
+<li><p>E-gösterimi sabitlerine <code>F</code> veya <code>L</code> soneklerini uygulayabilirsiniz:</p>
 <div class="sourceCode" id="cb239"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb239-1"><a href="types-ii-way-more-types.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span><span class="bu">F</span></span>
 <span id="cb239-2"><a href="types-ii-way-more-types.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span><span class="bu">L</span></span></code></pre></div></li>
 </ul>
 <p></p>
-<h4 data-number="14.5.3.2" id="hexadecimal-floating-point-constants"><span class="header-section-number">14.5.3.2</span> Hexadecimal Floating Point Constants</h4>
+<h4 data-number="14.5.3.2" id="hexadecimal-floating-point-constants"><span class="header-section-number">14.5.3.2</span> Onaltılık (Hexadecimal) Kayan Noktalı Sayı Sabitleri</h4>
 <p></p>
-<p>But wait, there’s more floating to be done!</p>
-<p>Turns out there are hexadecimal floating point constants, as well!</p>
-<p>These work similar to decimal floating point numbers, but they begin with a <code>0x</code> just like integer numbers.</p>
-<p>The catch is that you <em>must</em> specify an exponent, and this exponent produces a power of 2. That is: <span class="math inline">\(2^x\)</span>.</p>
-<p>And then you use a <code>p</code> instead of an <code>e</code> when writing the number:</p>
-<p>So <code>0xa.1p3</code> is <span class="math inline">\(10.0625\times2^3 == 80.5\)</span>.</p>
-<p>When using floating point hex constants, We can print hex scientific notation with <code>%a</code>:</p>
+<p>Ama bekleyin, yapılacak daha çok kaydırma var!</p>
+<p>Meğer onaltılık kayan noktalı sayı sabitleri de varmış!</p>
+<p>Bunlar ondalık kayan noktalı sayılara benzer şekilde çalışır, ancak tamsayılar gibi <code>0x</code> ile başlarlar.</p>
+<p>Püf noktası, bir üs belirtmeniz <em>zorunlu</em> olmasıdır ve bu üs 2'nin bir kuvvetini üretir. Yani: <span class="math inline">\(2^x\)</span>.</p>
+<p>Ve sonra sayıyı yazarken <code>e</code> yerine <code>p</code> kullanırsınız:</p>
+<p>Yani <code>0xa.1p3</code> ifadesi <span class="math inline">\(10.0625\times2^3 == 80.5\)</span> olur.</p>
+<p>Kayan noktalı hex sabitlerini kullanırken, hex bilimsel gösterimini <code>%a</code> ile yazdırabiliriz:</p>
 <div class="sourceCode" id="cb240"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb240-1"><a href="types-ii-way-more-types.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x <span class="op">=</span> <span class="fl">0xa.1p3</span><span class="op">;</span></span>
 <span id="cb240-2"><a href="types-ii-way-more-types.html#cb240-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb240-3"><a href="types-ii-way-more-types.html#cb240-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%a\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 0x1.42p+6</span></span>

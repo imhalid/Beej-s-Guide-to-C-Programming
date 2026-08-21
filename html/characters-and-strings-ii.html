@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,28 +32,28 @@
 </head>
 <body>
 <div class="nav-header"><a href="structs-ii-more-fun-with-structs.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="enumerated-types-enum.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="21" id="characters-and-strings-ii"><span class="header-section-number">21</span> Characters and Strings II</h1>
-<p>We’ve talked about how <code>char</code> types are actually just small integer types… but it’s the same for a character in single quotes.</p>
-<p>But a string in double quotes is type <code>const char *</code>.</p>
-<p>Turns out there are few more types of strings and characters, and it leads down one of the most infamous rabbit holes in the language: the whole multibyte/wide/Unicode/localization thingy.</p>
-<p>We’re going to peer into that rabbit hole, but not go in. …Yet!</p>
-<h2 data-number="21.1" id="escape-sequences"><span class="header-section-number">21.1</span> Escape Sequences</h2>
+<h1 data-number="21" id="characters-and-strings-ii"><span class="header-section-number">21</span> Karakterler ve Metin Dizileri II</h1>
+<p><code>char</code> türlerinin aslında küçük tamsayı türleri olduğundan bahsetmiştik… ancak tek tırnak içindeki bir karakter için de durum aynıdır.</p>
+<p>Fakat çift tırnak içindeki bir metin dizisi <em>(string)</em> <code>const char *</code> türündedir.</p>
+<p>Görünüşe göre birkaç farklı metin dizisi ve karakter türü daha var ve bu da dildeki en meşhur tavşan deliklerinden birine yol açıyor: tüm o çok baytlı/geniş/Unicode/yerelleştirme muhabbeti.</p>
+<p>O tavşan deliğine şöyle bir göz atacağız ama içine girmeyeceğiz. …Henüz!</p>
+<h2 data-number="21.1" id="escape-sequences"><span class="header-section-number">21.1</span> Kaçış Dizileri (Escape Sequences)</h2>
 <p></p>
-<p>We’re used to strings and characters with regular letters, punctuation, and numbers:</p>
+<p>Normal harfler, noktalama işaretleri ve sayılar içeren metin dizilerine ve karakterlere alışkınız:</p>
 <div class="sourceCode" id="cb479"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb479-1"><a href="characters-and-strings-ii.html#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello!&quot;</span><span class="op">;</span></span>
 <span id="cb479-2"><a href="characters-and-strings-ii.html#cb479-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t <span class="op">=</span> <span class="ch">&#39;c&#39;</span><span class="op">;</span></span></code></pre></div>
-<p>But what if we want some special characters in there that we can’t type on the keyboard because they don’t exist (e.g. “€”), or even if we want a character that’s a single quote? We clearly can’t do this:</p>
+<p>Peki ya içinde klavyede yazamadığımız çünkü var olmayan bazı özel karakterler istemişsek (örneğin “€”) ya da tek tırnak olan bir karakter istiyorsak? Açıkça görülüyor ki şunu yapamayız:</p>
 <div class="sourceCode" id="cb480"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb480-1"><a href="characters-and-strings-ii.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t <span class="op">=</span> <span class="ch">&#39;</span><span class="er">&#39;</span><span class="ch">&#39;;</span></span></code></pre></div>
 <p></p>
-<p>To do these things, we use something called <em>escape sequences</em>. These are the backslash character (<code>\</code>) followed by another character. The two (or more) characters together have special meaning.</p>
-<p>For our single quote character example, we can put an escape (that is, <code>\</code>) in front of the central single quote to solve it:</p>
+<p>Bu şeyleri yapmak için <em>kaçış dizileri (escape sequences)</em> adını verdiğimiz bir şey kullanırız. Bunlar, ters eğik çizgi <em>(backslash)</em> karakterini (<code>\</code>) takip eden başka bir karakterden oluşur. İki (veya daha fazla) karakter birlikte özel bir anlama sahiptir.</p>
+<p>Tek tırnak karakteri örneğimiz için, bunu çözmek amacıyla ortadaki tek tırnağın önüne bir kaçış karakteri (yani <code>\</code>) koyabiliriz:</p>
 <p></p>
 <div class="sourceCode" id="cb481"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb481-1"><a href="characters-and-strings-ii.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t <span class="op">=</span> <span class="ch">&#39;</span><span class="sc">\&#39;</span><span class="ch">&#39;</span><span class="op">;</span></span></code></pre></div>
-<p>Now C knows that <code>\'</code> means just a regular quote we want to print, not the end of the character sequence.</p>
+<p>Artık C, <code>\'</code> ifadesinin karakter dizisinin sonu değil, yalnızca yazdırmak istediğimiz sıradan bir tırnak işareti anlamına geldiğini bilir.</p>
 <p></p>
-<p>You can say either “backslash” or “escape” in this context (“escape that quote”) and C devs will know what you’re talking about. Also, “escape” in this context is different than your <code>Esc</code> key or the ASCII <code>ESC</code> code.</p>
-<h3 data-number="21.1.1" id="frequently-used-escapes"><span class="header-section-number">21.1.1</span> Frequently-used Escapes</h3>
-<p>In my humble opinion, these escape characters make up 99.2%<a href="function-specifiers-alignment-specifiersoperators.html#fn140" class="footnote-ref" id="fnref140" role="doc-noteref"><sup>140</sup></a> of all escapes.</p>
+<p>Bu bağlamda "ters eğik çizgi" <em>(backslash)</em> veya "kaçış" <em>(escape)</em> diyebilirsiniz ("o tırnağı kaçır / escape et") ve C geliştiricileri neyden bahsettiğinizi anlayacaktır. Ayrıca bu bağlamdaki "escape", klavyenizdeki <code>Esc</code> tuşundan veya ASCII <code>ESC</code> kodundan farklıdır.</p>
+<h3 data-number="21.1.1" id="frequently-used-escapes"><span class="header-section-number">21.1.1</span> Sık Kullanılan Kaçış İfadeleri</h3>
+<p>Benim mütevazı görüşüme göre, bu kaçış karakterleri tüm kaçış ifadelerinin %99.2'sini<a href="function-specifiers-alignment-specifiersoperators.html#fn140" class="footnote-ref" id="fnref140" role="doc-noteref"><sup>140</sup></a> oluşturur.</p>
 <p> </p>
 <table>
 <colgroup>
@@ -62,35 +62,35 @@
 </colgroup>
 <thead>
 <tr>
-<th>Code</th>
-<th>Description</th>
+<th>Kod</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>\n</code></td>
-<td>Newline character—when printing, continue subsequent output on the next line</td>
+<td>Yeni satır karakteri—yazdırırken, sonraki çıktıyı bir sonraki satırdan devam ettirir</td>
 </tr>
 <tr>
 <td><code>\'</code></td>
-<td>Single quote—used for a single quote character constant</td>
+<td>Tek tırnak—tek tırnak karakter sabiti için kullanılır</td>
 </tr>
 <tr>
 <td><code>\"</code></td>
-<td>Double quote—used for a double quote in a string literal</td>
+<td>Çift tırnak—bir metin sabiti içindeki çift tırnak için kullanılır</td>
 </tr>
 <tr>
 <td><code>\\</code></td>
-<td>Backslash—used for a literal <code>\</code> in a string or character</td>
+<td>Ters eğik çizgi—bir metin dizisi veya karakter içinde düz <code>\</code> için kullanılır</td>
 </tr>
 </tbody>
 </table>
-<p>Here are some examples of the escapes and what they output when printed.</p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb482-1"><a href="characters-and-strings-ii.html#cb482-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Use </span><span class="sc">\\</span><span class="st">n for newline</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Use \n for newline</span></span>
-<span id="cb482-2"><a href="characters-and-strings-ii.html#cb482-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Say </span><span class="sc">\&quot;</span><span class="st">hello</span><span class="sc">\&quot;</span><span class="st">!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>       <span class="co">// Say &quot;hello&quot;!</span></span>
+<p>İşte kaçış ifadelerine ve yazdırıldıklarında ne çıktı verdiklerine dair bazı örnekler.</p>
+<div class="sourceCode" id="cb482"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb482-1"><a href="characters-and-strings-ii.html#cb482-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Use </span><span class="sc">\\</span><span class="st">n for newline</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Yeni satır için \n kullanın</span></span>
+<span id="cb482-2"><a href="characters-and-strings-ii.html#cb482-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Say </span><span class="sc">\&quot;</span><span class="st">hello</span><span class="sc">\&quot;</span><span class="st">!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>       <span class="co">// &quot;hello&quot; deyin!</span></span>
 <span id="cb482-3"><a href="characters-and-strings-ii.html#cb482-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="ch">&#39;</span><span class="sc">\&#39;</span><span class="ch">&#39;</span><span class="op">);</span>             <span class="co">// &#39;</span></span></code></pre></div>
-<h3 data-number="21.1.2" id="rarely-used-escapes"><span class="header-section-number">21.1.2</span> Rarely-used Escapes</h3>
-<p>But there are more escapes! You just don’t see these as often.</p>
+<h3 data-number="21.1.2" id="rarely-used-escapes"><span class="header-section-number">21.1.2</span> Nadir Kullanılan Kaçış İfadeleri</h3>
+<p>Ancak daha fazla kaçış ifadesi var! Sadece bunları o kadar sık görmezsiniz.</p>
 <p> </p>
 <table>
 <colgroup>
@@ -99,44 +99,44 @@
 </colgroup>
 <thead>
 <tr>
-<th>Code</th>
-<th>Description</th>
+<th>Kod</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>\a</code></td>
-<td>Alert. This makes the terminal make a sound or flash, or both!</td>
+<td>Uyarı (Alert). Terminalin ses çıkarmasını veya yanıp sönmesini (ya da her ikisini) sağlar!</td>
 </tr>
 <tr>
 <td><code>\b</code></td>
-<td>Backspace. Moves the cursor back a character. Doesn’t delete the character.</td>
+<td>Geri al (Backspace). İmleci bir karakter geriye taşır. Karakteri silmez.</td>
 </tr>
 <tr>
 <td><code>\f</code></td>
-<td>Formfeed. This moves to the next “page”, but that doesn’t have much modern meaning. On my system, this behaves like <code>\v</code>.</td>
+<td>Sayfa ilerletme (Formfeed). Bir sonraki "sayfaya" geçer, ancak bunun modern zamanlarda pek bir anlamı yoktur. Benim sistemimde bu <code>\v</code> gibi davranır.</td>
 </tr>
 <tr>
 <td><code>\r</code></td>
-<td>Return. Move to the beginning of the same line.</td>
+<td>Satır başı (Return). Aynı satırın başına taşır.</td>
 </tr>
 <tr>
 <td><code>\t</code></td>
-<td>Horizontal tab. Moves to the next horizontal tab stop. On my machine, this lines up on columns that are multiples of 8, but YMMV.</td>
+<td>Yatay sekme (Horizontal tab). Bir sonraki yatay sekme durağına geçer. Benim makinemde bu 8'in katları olan sütunlarda hizalanır, ancak sizde farklılık gösterebilir.</td>
 </tr>
 <tr>
 <td><code>\v</code></td>
-<td>Vertical tab. Moves to the next vertical tab stop. On my machine, this moves to the same column on the next line.</td>
+<td>Dikey sekme (Vertical tab). Bir sonraki dikey sekme durağına geçer. Benim makinemde bu bir sonraki satırda aynı sütuna geçer.</td>
 </tr>
 <tr>
 <td><code>\?</code></td>
-<td>Literal question mark. Sometimes you need this to avoid trigraphs, as shown below.</td>
+<td>Düz soru işareti. Aşağıda gösterildiği gibi bazen üçlü harflerden (trigraphs) kaçınmak için buna ihtiyaç duyarsınız.</td>
 </tr>
 </tbody>
 </table>
-<h4 data-number="21.1.2.1" id="single-line-status-updates"><span class="header-section-number">21.1.2.1</span> Single Line Status Updates</h4>
+<h4 data-number="21.1.2.1" id="single-line-status-updates"><span class="header-section-number">21.1.2.1</span> Tek Satırlık Durum Güncellemeleri</h4>
 <p> </p>
-<p>A use case for <code>\b</code> or <code>\r</code> is to show status updates that appear on the same line on the screen and don’t cause the display to scroll. Here’s an example that does a countdown from 10. (If your compiler doesn’t support threading, you can use the non-standard POSIX function <code>sleep()</code> from <code>&lt;unistd.h&gt;</code>—if you’re not on a Unix-like, search for your platform and <code>sleep</code> for the equivalent.)</p>
+<p><code>\b</code> veya <code>\r</code> için bir kullanım alanı, ekranda aynı satırda görünen ve ekranın kaymasına neden olmayan durum güncellemelerini göstermektir. İşte 10'dan geriye doğru sayan bir örnek. (Eğer derleyiciniz izlekleri <em>(threading)</em> desteklemiyorsa, <code>&lt;unistd.h&gt;</code> içindeki standart dışı POSIX fonksiyonu <code>sleep()</code> kullanabilirsiniz—Unix benzeri bir sistemde değilseniz, platformunuzu ve eşdeğeri için <code>sleep</code> fonksiyonunu arayın.)</p>
 <div class="sourceCode" id="cb483"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb483-1"><a href="characters-and-strings-ii.html#cb483-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb483-2"><a href="characters-and-strings-ii.html#cb483-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb483-3"><a href="characters-and-strings-ii.html#cb483-3"></a></span>
@@ -145,49 +145,49 @@
 <span id="cb483-6"><a href="characters-and-strings-ii.html#cb483-6"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> i<span class="op">--)</span> <span class="op">{</span></span>
 <span id="cb483-7"><a href="characters-and-strings-ii.html#cb483-7"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\r</span><span class="st">T minus </span><span class="sc">%d</span><span class="st"> second</span><span class="sc">%s</span><span class="st">... </span><span class="sc">\b</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> i <span class="op">!=</span> <span class="dv">1</span><span class="op">?</span> <span class="st">&quot;s&quot;</span><span class="op">:</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
 <span id="cb483-8"><a href="characters-and-strings-ii.html#cb483-8"></a></span>
-<span id="cb483-9"><a href="characters-and-strings-ii.html#cb483-9"></a>        fflush<span class="op">(</span>stdout<span class="op">);</span>  <span class="co">// Force output to update</span></span>
+<span id="cb483-9"><a href="characters-and-strings-ii.html#cb483-9"></a>        fflush<span class="op">(</span>stdout<span class="op">);</span>  <span class="co">// Çıktıyı güncellenmeye zorla</span></span>
 <span id="cb483-10"><a href="characters-and-strings-ii.html#cb483-10"></a></span>
-<span id="cb483-11"><a href="characters-and-strings-ii.html#cb483-11"></a>        <span class="co">// Sleep for 1 second</span></span>
+<span id="cb483-11"><a href="characters-and-strings-ii.html#cb483-11"></a>        <span class="co">// 1 saniye uyu</span></span>
 <span id="cb483-12"><a href="characters-and-strings-ii.html#cb483-12"></a>        thrd_sleep<span class="op">(&amp;(</span><span class="kw">struct</span> timespec<span class="op">){.</span>tv_sec<span class="op">=</span><span class="dv">1</span><span class="op">},</span> NULL<span class="op">);</span></span>
 <span id="cb483-13"><a href="characters-and-strings-ii.html#cb483-13"></a>    <span class="op">}</span></span>
 <span id="cb483-14"><a href="characters-and-strings-ii.html#cb483-14"></a></span>
 <span id="cb483-15"><a href="characters-and-strings-ii.html#cb483-15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\r</span><span class="st">Liftoff!             </span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb483-16"><a href="characters-and-strings-ii.html#cb483-16"></a><span class="op">}</span></span></code></pre></div>
-<p>Quite a few things are happening on line 7. First of all, we lead with a <code>\r</code> to get us to the beginning of the current line, then we overwrite whatever’s there with the current countdown. (There’s ternary operator out there to make sure we print <code>1 second</code> instead of <code>1 seconds</code>.)</p>
-<p>Also, there’s a space after the <code>...</code> That’s so that we properly overwrite the last <code>.</code> when <code>i</code> drops from <code>10</code> to <code>9</code> and we get a column narrower. Try it without the space to see what I mean.</p>
-<p>And we wrap it up with a <code>\b</code> to back up over that space so the cursor sits at the exact end of the line in an aesthetically-pleasing way.</p>
+<p>7. satırda epeyce şey oluyor. İlk olarak bizi mevcut satırın başına getirmesi için <code>\r</code> ile başlıyoruz, ardından orada ne varsa üzerine mevcut geri sayımı yazıyoruz. (<code>1 seconds</code> yerine <code>1 second</code> yazdırdığımızdan emin olmak için orada bir üçlü operatör <em>(ternary operator)</em> var.)</p>
+<p>Ayrıca <code>...</code> ifadesinden sonra bir boşluk var. Bu, <code>i</code> <code>10</code>'dan <code>9</code>'a düştüğünde ve bir sütun daraldığında son <code>.</code> karakterinin üzerine düzgünce yazabilmemiz içindir. Ne demek istediğimi görmek için boşluk olmadan deneyin.</p>
+<p>Ve imlecin estetik açıdan hoş bir şekilde tam satır sonunda durması için o boşluğun üzerinden geriye gitmek üzere <code>\b</code> ile bitiriyoruz.</p>
 <p></p>
-<p>Note that line 15 also has a lot of spaces at the end to overwrite the characters that were already there from the countdown.</p>
-<p>Finally, we have a weird <code>fflush(stdout)</code> in there, whatever that means. Short answer is that most terminals are <em>line buffered</em> by default, meaning they don’t actually display anything until a newline character is encountered. Since we don’t have a newline (we just have <code>\r</code>), without this line, the program would just sit there until <code>Liftoff!</code> and then print everything all in one instant. <code>fflush()</code> overrides this behavior and forces output to happen <em>right now</em>.</p>
+<p>15. satırın sonunda da geri sayımdan zaten orada kalan karakterlerin üzerine yazmak için bir sürü boşluk olduğuna dikkat edin.</p>
+<p>Son olarak, ne anlama geliyorsa orada garip bir <code>fflush(stdout)</code> var. Kısa cevap, çoğu terminalin varsayılan olarak <em>satır tamponlamalı (line buffered)</em> olmasıdır; yani bir yeni satır karakteriyle karşılaşılana kadar aslında hiçbir şey görüntülemezler. Yeni bir satırımız olmadığından (yalnızca <code>\r</code> var), bu satır olmasaydı program <code>Liftoff!</code> ifadesine kadar öylece bekler ve ardından her şeyi bir anda yazdırırdı. <code>fflush()</code> bu davranışı geçersiz kılar ve çıktının <em>hemen şimdi</em> gerçekleşmesini sağlar.</p>
 <p></p>
-<h4 data-number="21.1.2.2" id="the-question-mark-escape"><span class="header-section-number">21.1.2.2</span> The Question Mark Escape</h4>
+<h4 data-number="21.1.2.2" id="the-question-mark-escape"><span class="header-section-number">21.1.2.2</span> Soru İşareti Kaçışı</h4>
 <p></p>
-<p>Why bother with this? After all, this works just fine:</p>
+<p>Neden bunula uğraşasınız ki? Ne de olsa bu gayet güzel çalışıyor:</p>
 <div class="sourceCode" id="cb484"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb484-1"><a href="characters-and-strings-ii.html#cb484-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Doesn&#39;t it?</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
-<p>And it works fine with the escape, too:</p>
-<div class="sourceCode" id="cb485"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb485-1"><a href="characters-and-strings-ii.html#cb485-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Doesn&#39;t it</span><span class="sc">\?\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">// Note \?</span></span></code></pre></div>
-<p>So what’s the point??!</p>
+<p>Ve kaçış ifadesiyle de gayet güzel çalışıyor:</p>
+<div class="sourceCode" id="cb485"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb485-1"><a href="characters-and-strings-ii.html#cb485-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Doesn&#39;t it</span><span class="sc revival">\?\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">// \? ifadesine dikkat</span></span></code></pre></div>
+<p>O halde amaç ne??!</p>
 <p></p>
-<p>Let’s get more emphatic with another question mark and an exclamation point:</p>
+<p>Başka bir soru işareti ve bir ünlem işaretiyle durumu daha da vurgulu hale getirelim:</p>
 <div class="sourceCode" id="cb486"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb486-1"><a href="characters-and-strings-ii.html#cb486-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Doesn&#39;t it??!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
-<p>When I compile this, I get this warning:</p>
+<p>Bunu derlediğimde şu uyarıyı alıyorum:</p>
 <div class="sourceCode" id="cb487"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb487-1"><a href="characters-and-strings-ii.html#cb487-1" aria-hidden="true" tabindex="-1"></a><span class="ex">foo.c:</span> In function ‘main’:</span>
 <span id="cb487-2"><a href="characters-and-strings-ii.html#cb487-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foo.c:5:23:</span> warning: trigraph <span class="pp">??</span>! converted to <span class="kw">|</span> <span class="ex">[-Wtrigraphs]</span></span>
 <span id="cb487-3"><a href="characters-and-strings-ii.html#cb487-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">5</span> <span class="kw">|</span>     <span class="bu">printf</span><span class="op">(</span><span class="st">&quot;Doesn&#39;t it??!\n&quot;</span><span class="op">)</span><span class="kw">;</span></span>
 <span id="cb487-4"><a href="characters-and-strings-ii.html#cb487-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">|</span>    </span></code></pre></div>
-<p>And running it gives this unlikely result:</p>
+<p>Ve çalıştırmak şu pek olası görünmeyen sonucu veriyor:</p>
 <div class="sourceCode" id="cb488"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb488-1"><a href="characters-and-strings-ii.html#cb488-1" aria-hidden="true" tabindex="-1"></a>Doesn&#39;t it|</span></code></pre></div>
-<p>So <em>trigraphs</em>? What the heck is this??!</p>
-<p>I’m sure we’ll revisit this dusty corner of the language later, but the short of it is the compiler looks for certain triplets of characters starting with <code>??</code> and it substitutes other characters in their place. So if you’re on some ancient terminal without a pipe symbol (<code>|</code>) on the keyboard, you can type <code>??!</code> instead.</p>
-<p>You can fix this by escaping the second question mark, like so:</p>
+<p>Yani <em>üçlü harfler (trigraphs)</em> mı? Bu da neyin nesi??!</p>
+<p>Dilin bu tozlu köşesini daha sonra tekrar ziyaret edeceğimizden eminim, ancak özetle derleyici <code>??</code> ile başlayan belirli üçlü karakter dizilerini arar ve bunların yerine başka karakterler koyar. Yani klavyesinde dikey çizgi / pipe sembolü (<code>|</code>) olmayan antik bir terminaldeyseniz, bunun yerine <code>??!</code> yazabilirsiniz.</p>
+<p>İkinci soru işaretinden kaçış <em>(escape)</em> yaparak bunu düzeltebilirsiniz, şöyle ki:</p>
 <div class="sourceCode" id="cb489"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb489-1"><a href="characters-and-strings-ii.html#cb489-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Doesn&#39;t it?</span><span class="sc">\?</span><span class="st">!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
-<p>And then it compiles and works as-expected.</p>
-<p>These days, of course, no one ever uses trigraphs. But that whole <code>??!</code> does sometimes appear if you decide to use it in a string for emphasis.</p>
+<p>Ve sonra beklediğiniz gibi derlenir ve çalışır.</p>
+<p>Bugünlerde elbette kimse trigraph kullanmıyor. Ancak vurgu yapmak için bir metin dizisinde kullanmaya karar verirseniz o <code>??!</code> ifadesi bazen karşınıza çıkabilir.</p>
 <p> </p>
-<h3 data-number="21.1.3" id="numeric-escapes"><span class="header-section-number">21.1.3</span> Numeric Escapes</h3>
-<p>In addition, there are ways to specify numeric constants or other character values inside strings or character constants.</p>
-<p>If you know an octal or hexadecimal representation of a byte, you can include that in a string or character constant.</p>
-<p>The following table has example numbers, but any hex or octal numbers may be used. Pad with leading zeros if necessary to read the proper digit count.</p>
+<h3 data-number="21.1.3" id="numeric-escapes"><span class="header-section-number">21.1.3</span> Sayısal Kaçış İfadeleri</h3>
+<p>Buna ek olarak, metin dizileri veya karakter sabitleri içinde sayısal sabitleri veya diğer karakter değerlerini belirtmenin yolları vardır.</p>
+<p>Bir baytın sekizli <em>(octal)</em> veya onaltılı <em>(hexadecimal)</em> gösterimini biliyorsanız, bunu bir metin dizisine veya karakter sabitine dahil edebilirsiniz.</p>
+<p>Aşağıdaki tabloda örnek sayılar yer almaktadır, ancak herhangi bir hex veya octal sayı kullanılabilir. Doğru basamak sayısını okumak için gerekiyorsa başına sıfır ekleyin.</p>
 <p> </p>
 <table>
 <colgroup>
@@ -196,55 +196,55 @@
 </colgroup>
 <thead>
 <tr>
-<th>Code</th>
-<th>Description</th>
+<th>Kod</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>\123</code></td>
-<td>Embed the byte with octal value <code>123</code>, 3 digits exactly.</td>
+<td>Octal değeri <code>123</code> olan baytı gömer, tam olarak 3 basamak.</td>
 </tr>
 <tr>
 <td><code>\x4D</code></td>
-<td>Embed the byte with hex value <code>4D</code>, 2 digits.</td>
+<td>Hex değeri <code>4D</code> olan baytı gömer, 2 basamak.</td>
 </tr>
 <tr>
 <td><code>\u2620</code></td>
-<td>Embed the Unicode character at code point with hex value <code>2620</code>, 4 digits.</td>
+<td>Hex değeri <code>2620</code> olan kod noktasındaki Unicode karakterini gömer, 4 basamak.</td>
 </tr>
 <tr>
 <td><code>\U0001243F</code></td>
-<td>Embed the Unicode character at code point with hex value <code>1243F</code>, 8 digits.</td>
+<td>Hex değeri <code>1243F</code> olan kod noktasındaki Unicode karakterini gömer, 8 basamak.</td>
 </tr>
 </tbody>
 </table>
-<p>Here’s an example of the less-commonly used octal notation to represent the letter <code>B</code> in between <code>A</code> and <code>C</code>. Normally this would be used for some kind of special unprintable character, but we have other ways to do that, below, and this is just an octal demo:</p>
+<p>İşte <code>A</code> ile <code>C</code> arasında <code>B</code> harfini temsil etmek için daha az kullanılan octal notasyonunun bir örneği. Normalde bu, basılamayan özel bir karakter türü için kullanılırdı, ancak aşağıda bunu yapmanın başka yolları var ve bu sadece bir octal gösterimidir:</p>
 <p></p>
-<div class="sourceCode" id="cb490"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb490-1"><a href="characters-and-strings-ii.html#cb490-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;A</span><span class="er">\1</span><span class="st">02C</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// 102 is `B` in ASCII/UTF-8</span></span></code></pre></div>
-<p>Note there’s no leading zero on the octal number when you include it this way. But it does need to be three characters, so pad with leading zeros if you need to.</p>
+<div class="sourceCode" id="cb490"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb490-1"><a href="characters-and-strings-ii.html#cb490-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;A</span><span class="er">\1</span><span class="st">02C</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// 102, ASCII/UTF-8 içinde &#39;B&#39;dir</span></span></code></pre></div>
+<p>Bu şekilde dahil ettiğinizde octal sayının başında sıfır olmadığına dikkat edin. Ancak üç karakterden oluşması gerekir, bu nedenle gerekiyorsa başına sıfır ekleyin.</p>
 <p></p>
 <p></p>
-<p>But far more common is to use hex constants these days. Here’s a demo that you shouldn’t use, but it demos embedding the UTF-8 bytes 0xE2, 0x80, and 0xA2 in a string, which corresponds to the Unicode “bullet” character (•).</p>
+<p>Fakat bugünlerde hex sabitlerini kullanmak çok daha yaygındır. İşte kullanmamanız gereken ama bir metin dizisi içine Unicode “mermi / madde işareti” karakterine (•) karşılık gelen 0xE2, 0x80 ve 0xA2 UTF-8 baytlarını gömmeyi gösteren bir demo:</p>
 <div class="sourceCode" id="cb491"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb491-1"><a href="characters-and-strings-ii.html#cb491-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\xE2\x80\xA2</span><span class="st"> Bullet 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb491-2"><a href="characters-and-strings-ii.html#cb491-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\xE2\x80\xA2</span><span class="st"> Bullet 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb491-3"><a href="characters-and-strings-ii.html#cb491-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\xE2\x80\xA2</span><span class="st"> Bullet 3</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
-<p>Produces the following output if you’re on a UTF-8 console (or probably garbage if you’re not):</p>
+<p>UTF-8 bir konsoldaysanız aşağıdaki çıktıyı verir (değilseniz muhtemelen anlamsız karakterler gösterir):</p>
 <div class="sourceCode" id="cb492"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb492-1"><a href="characters-and-strings-ii.html#cb492-1" aria-hidden="true" tabindex="-1"></a>• Bullet 1</span>
 <span id="cb492-2"><a href="characters-and-strings-ii.html#cb492-2" aria-hidden="true" tabindex="-1"></a>• Bullet 2</span>
 <span id="cb492-3"><a href="characters-and-strings-ii.html#cb492-3" aria-hidden="true" tabindex="-1"></a>• Bullet 3</span></code></pre></div>
 <p></p>
 <p> </p>
-<p>But that’s a crummy way to do Unicode. You can use the escapes <code>\u</code> (16-bit) or <code>\U</code> (32-bit) to just refer to Unicode by code point number. The bullet is <code>2022</code> (hex) in Unicode, so you can do this and get more portable results:</p>
+<p>Fakat bu Unicode yapmak için uyduruk bir yoldur. Unicode'a doğrudan kod noktası <em>(code point)</em> numarasıyla başvurmak için <code>\u</code> (16-bit) veya <code>\U</code> (32-bit) kaçış ifadelerini kullanabilirsiniz. Madde işareti Unicode'da <code>2022</code> (hex) değerindedir, dolayısıyla bunu yapabilir ve daha taşınabilir sonuçlar elde edebilirsiniz:</p>
 <div class="sourceCode" id="cb493"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb493-1"><a href="characters-and-strings-ii.html#cb493-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\u2022</span><span class="st"> Bullet 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb493-2"><a href="characters-and-strings-ii.html#cb493-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\u2022</span><span class="st"> Bullet 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb493-3"><a href="characters-and-strings-ii.html#cb493-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\u2022</span><span class="st"> Bullet 3</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
-<p>Be sure to pad <code>\u</code> with enough leading zeros to get to four characters, and <code>\U</code> with enough to get to eight.</p>
+<p><code>\u</code> ifadesini dört karaktere, <code>\U</code> ifadesini ise sekiz karaktere tamamlayacak kadar başına sıfır eklediğinizden emin olun.</p>
 <p></p>
-<p>For example, that bullet could be done with <code>\U</code> and four leading zeros:</p>
+<p>Örneğin, bu madde işareti <code>\U</code> ve başında dört sıfır ile yapılabilirdi:</p>
 <div class="sourceCode" id="cb494"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb494-1"><a href="characters-and-strings-ii.html#cb494-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\U00002022</span><span class="st"> Bullet 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
 <p></p>
-<p>But who has time to be that verbose?</p>
+<p>Ama kimin bu kadar uzun uzadıya yazmaya vakti var ki?</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,18 +32,18 @@
 </head>
 <body>
 <div class="nav-header"><a href="the-c-preprocessor.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="characters-and-strings-ii.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="20" id="structs-ii-more-fun-with-structs"><span class="header-section-number">20</span> <code>struct</code>s II: More Fun with <code>struct</code>s</h1>
+<h1 data-number="20" id="structs-ii-more-fun-with-structs"><span class="header-section-number">20</span> <code>struct</code> II: <code>struct</code> Yapıları ile Daha Fazla Eğlence</h1>
 <p></p>
-<p>Turns out there’s a lot more you can do with <code>struct</code>s than we’ve talked about, but it’s just a big pile of miscellaneous things. So we’ll throw them in this chapter.</p>
-<p>If you’re good with <code>struct</code> basics, you can round out your knowledge here.</p>
-<h2 data-number="20.1" id="initializers-of-nested-structs-and-arrays"><span class="header-section-number">20.1</span> Initializers of Nested <code>struct</code>s and Arrays</h2>
+<p>Görünen o ki <code>struct</code> yapılarıyla yapabileceğiniz şeylerin sayısı şimdiye kadar bahsettiğimizden çok daha fazla; ancak bunlar çeşitli konuların bir araya geldiği bir yığın. Bu yüzden hepsini bu bölümde toplayacağız.</p>
+<p>Eğer <code>struct</code> temellerine hakimseniz, bilginizi burada tamamlayabilirsiniz.</p>
+<h2 data-number="20.1" id="initializers-of-nested-structs-and-arrays"><span class="header-section-number">20.1</span> İç İçe Geçmiş <code>struct</code> Yapılarının ve Dizilerin İlklendiricileri</h2>
 <p></p>
-<p>Remember how you could <a href="structs.html#struct-initializers">initialize structure members along these lines</a>?</p>
+<p>Yapı üyelerini <a href="structs.html#struct-initializers">şu şekilde ilklendirebildiğinizi <em>(initialize)</em></a> hatırlıyor musunuz?</p>
 <div class="sourceCode" id="cb428"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb428-1"><a href="structs-ii-more-fun-with-structs.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo x <span class="op">=</span> <span class="op">{.</span>a<span class="op">=</span><span class="dv">12</span><span class="op">,</span> <span class="op">.</span>b<span class="op">=</span><span class="fl">3.14</span><span class="op">};</span></span></code></pre></div>
-<p>Turns out we have more power in these initializers than we’d originally shared. Exciting!</p>
-<p>For one thing, if you have a nested substructure like the following, you can initialize members of that substructure by following the variable names down the line:</p>
+<p>Meğer bu ilklendiricilerde başlangıçta paylaştığımızdan çok daha fazla güce sahipmişiz. Heyecan verici!</p>
+<p>Birincisi, aşağıdaki gibi iç içe geçmiş bir alt yapınız <em>(substructure)</em> varsa, değişken adlarını sırayla takip ederek o alt yapının üyelerini ilklendirebilirsiniz:</p>
 <div class="sourceCode" id="cb429"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb429-1"><a href="structs-ii-more-fun-with-structs.html#cb429-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo x <span class="op">=</span> <span class="op">{.</span>a<span class="op">.</span>b<span class="op">.</span>c<span class="op">=</span><span class="dv">12</span><span class="op">};</span></span></code></pre></div>
-<p>Let’s look at an example:</p>
+<p>Bir örneğe bakalım:</p>
 <div class="sourceCode" id="cb430"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb430-1"><a href="structs-ii-more-fun-with-structs.html#cb430-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb430-2"><a href="structs-ii-more-fun-with-structs.html#cb430-2"></a></span>
 <span id="cb430-3"><a href="structs-ii-more-fun-with-structs.html#cb430-3"></a><span class="kw">struct</span> cabin_information <span class="op">{</span></span>
@@ -60,15 +60,15 @@
 <span id="cb430-14"><a href="structs-ii-more-fun-with-structs.html#cb430-14"></a><span class="op">{</span></span>
 <span id="cb430-15"><a href="structs-ii-more-fun-with-structs.html#cb430-15"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb430-16"><a href="structs-ii-more-fun-with-structs.html#cb430-16"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
-<span id="cb430-17"><a href="structs-ii-more-fun-with-structs.html#cb430-17"></a>        <span class="op">.</span>ci<span class="op">.</span>window_count <span class="op">=</span> <span class="dv">8</span><span class="op">,</span>   <span class="co">// &lt;-- NESTED INITIALIZER!</span></span>
+<span id="cb430-17"><a href="structs-ii-more-fun-with-structs.html#cb430-17"></a>        <span class="op">.</span>ci<span class="op">.</span>window_count <span class="op">=</span> <span class="dv">8</span><span class="op">,</span>   <span class="co">// &lt;-- İÇ İÇE GEÇMİŞ İLKLENDİRİCİ!</span></span>
 <span id="cb430-18"><a href="structs-ii-more-fun-with-structs.html#cb430-18"></a>        <span class="op">.</span>ci<span class="op">.</span>o2level <span class="op">=</span> <span class="dv">21</span></span>
 <span id="cb430-19"><a href="structs-ii-more-fun-with-structs.html#cb430-19"></a>    <span class="op">};</span></span>
 <span id="cb430-20"><a href="structs-ii-more-fun-with-structs.html#cb430-20"></a></span>
 <span id="cb430-21"><a href="structs-ii-more-fun-with-structs.html#cb430-21"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">: </span><span class="sc">%d</span><span class="st"> seats, </span><span class="sc">%d%%</span><span class="st"> oxygen</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb430-22"><a href="structs-ii-more-fun-with-structs.html#cb430-22"></a>        s<span class="op">.</span>manufacturer<span class="op">,</span> s<span class="op">.</span>ci<span class="op">.</span>window_count<span class="op">,</span> s<span class="op">.</span>ci<span class="op">.</span>o2level<span class="op">);</span></span>
 <span id="cb430-23"><a href="structs-ii-more-fun-with-structs.html#cb430-23"></a><span class="op">}</span></span></code></pre></div>
-<p>Check out lines 16-17! That’s where we’re initializing members of the <code>struct cabin_information</code> in the definition of <code>s</code>, our <code>struct spaceship</code>.</p>
-<p>And here is another option for that same initializer—this time we’ll do something more standard-looking, but either approach works:</p>
+<p>17-18. satırlara göz atın! <code>struct spaceship</code> türündeki <code>s</code> değişkenimizin tanımı içinde <code>struct cabin_information</code> üyelerini tam orada ilklendiriyoruz.</p>
+<p>Ve işte aynı ilklendirici için başka bir seçenek—bu sefer daha standart görünen bir şey yapacağız, ancak her iki yaklaşım da çalışır:</p>
 <div class="sourceCode" id="cb431" data-startfrom="15"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 14;"><span id="cb431-15"><a href="structs-ii-more-fun-with-structs.html#cb431-15"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb431-16"><a href="structs-ii-more-fun-with-structs.html#cb431-16"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
 <span id="cb431-17"><a href="structs-ii-more-fun-with-structs.html#cb431-17"></a>        <span class="op">.</span>ci<span class="op">={</span></span>
@@ -76,13 +76,13 @@
 <span id="cb431-19"><a href="structs-ii-more-fun-with-structs.html#cb431-19"></a>            <span class="op">.</span>o2level <span class="op">=</span> <span class="dv">21</span></span>
 <span id="cb431-20"><a href="structs-ii-more-fun-with-structs.html#cb431-20"></a>        <span class="op">}</span></span>
 <span id="cb431-21"><a href="structs-ii-more-fun-with-structs.html#cb431-21"></a>    <span class="op">};</span></span></code></pre></div>
-<p>Now, as if the above information isn’t spectacular enough, we can also mix in array initializers in there, too.</p>
-<p>Let’s change this up to get an array of passenger information in there, and we can check out how the initializers work in there, too.</p>
+<p>Şimdi, yukarıdaki bilgiler yeterince muhteşem değilmiş gibi, işin içine dizi ilklendiricilerini de katabiliriz.</p>
+<p>Araya bir yolcu bilgisi dizisi eklemek için bunu biraz değiştirelim ve ilklendiricilerin burada da nasıl çalıştığını görelim.</p>
 <div class="sourceCode" id="cb432"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb432-1"><a href="structs-ii-more-fun-with-structs.html#cb432-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb432-2"><a href="structs-ii-more-fun-with-structs.html#cb432-2"></a></span>
 <span id="cb432-3"><a href="structs-ii-more-fun-with-structs.html#cb432-3"></a><span class="kw">struct</span> passenger <span class="op">{</span></span>
 <span id="cb432-4"><a href="structs-ii-more-fun-with-structs.html#cb432-4"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
-<span id="cb432-5"><a href="structs-ii-more-fun-with-structs.html#cb432-5"></a>    <span class="dt">int</span> covid_vaccinated<span class="op">;</span> <span class="co">// Boolean</span></span>
+<span id="cb432-5"><a href="structs-ii-more-fun-with-structs.html#cb432-5"></a>    <span class="dt">int</span> covid_vaccinated<span class="op">;</span> <span class="co">// Mantıksal (Boolean)</span></span>
 <span id="cb432-6"><a href="structs-ii-more-fun-with-structs.html#cb432-6"></a><span class="op">};</span></span>
 <span id="cb432-7"><a href="structs-ii-more-fun-with-structs.html#cb432-7"></a></span>
 <span id="cb432-8"><a href="structs-ii-more-fun-with-structs.html#cb432-8"></a><span class="pp">#define MAX_PASSENGERS </span><span class="dv">8</span></span>
@@ -97,11 +97,11 @@
 <span id="cb432-17"><a href="structs-ii-more-fun-with-structs.html#cb432-17"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb432-18"><a href="structs-ii-more-fun-with-structs.html#cb432-18"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
 <span id="cb432-19"><a href="structs-ii-more-fun-with-structs.html#cb432-19"></a>        <span class="op">.</span>passenger <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb432-20"><a href="structs-ii-more-fun-with-structs.html#cb432-20"></a>            <span class="co">// Initialize a field at a time</span></span>
+<span id="cb432-20"><a href="structs-ii-more-fun-with-structs.html#cb432-20"></a>            <span class="co">// Her seferinde bir alanı ilklendir</span></span>
 <span id="cb432-21"><a href="structs-ii-more-fun-with-structs.html#cb432-21"></a>            <span class="op">[</span><span class="dv">0</span><span class="op">].</span>name <span class="op">=</span> <span class="st">&quot;Gridley, Lewis&quot;</span><span class="op">,</span></span>
 <span id="cb432-22"><a href="structs-ii-more-fun-with-structs.html#cb432-22"></a>            <span class="op">[</span><span class="dv">0</span><span class="op">].</span>covid_vaccinated <span class="op">=</span> <span class="dv">0</span><span class="op">,</span></span>
 <span id="cb432-23"><a href="structs-ii-more-fun-with-structs.html#cb432-23"></a></span>
-<span id="cb432-24"><a href="structs-ii-more-fun-with-structs.html#cb432-24"></a>            <span class="co">// Or all at once</span></span>
+<span id="cb432-24"><a href="structs-ii-more-fun-with-structs.html#cb432-24"></a>            <span class="co">// Veya hepsini tek seferde</span></span>
 <span id="cb432-25"><a href="structs-ii-more-fun-with-structs.html#cb432-25"></a>            <span class="op">[</span><span class="dv">7</span><span class="op">]</span> <span class="op">=</span> <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Brown, Teela&quot;</span><span class="op">,</span> <span class="op">.</span>covid_vaccinated<span class="op">=</span><span class="dv">1</span><span class="op">},</span></span>
 <span id="cb432-26"><a href="structs-ii-more-fun-with-structs.html#cb432-26"></a>        <span class="op">}</span></span>
 <span id="cb432-27"><a href="structs-ii-more-fun-with-structs.html#cb432-27"></a>    <span class="op">};</span></span>
@@ -115,54 +115,54 @@
 <span id="cb432-35"><a href="structs-ii-more-fun-with-structs.html#cb432-35"></a>                s<span class="op">.</span>passenger<span class="op">[</span>i<span class="op">].</span>covid_vaccinated<span class="op">?</span> <span class="st">&quot;&quot;</span><span class="op">:</span> <span class="st">&quot;not &quot;</span><span class="op">);</span></span>
 <span id="cb432-36"><a href="structs-ii-more-fun-with-structs.html#cb432-36"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<h2 data-number="20.2" id="anonymous-structs"><span class="header-section-number">20.2</span> Anonymous <code>struct</code>s</h2>
+<h2 data-number="20.2" id="anonymous-structs"><span class="header-section-number">20.2</span> Adsız (Anonim) <code>struct</code> Yapıları</h2>
 <p></p>
-<p>These are “the <code>struct</code> with no name”. We also mention these in the <a href="typedef-making-new-types.html#typedef-struct"><code>typedef</code></a> section, but we’ll refresh here.</p>
-<p>Here’s a regular <code>struct</code>:</p>
+<p>Bunlar “adı olmayan <code>struct</code>” yapılarıdır. Bunlardan <a href="typedef-making-new-types.html#typedef-struct"><code>typedef</code></a> bölümünde de bahsetmiştik, ama burada hafızamızı tazeleyeceğiz.</p>
+<p>İşte normal bir <code>struct</code>:</p>
 <div class="sourceCode" id="cb433"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb433-1"><a href="structs-ii-more-fun-with-structs.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> animal <span class="op">{</span></span>
 <span id="cb433-2"><a href="structs-ii-more-fun-with-structs.html#cb433-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
 <span id="cb433-3"><a href="structs-ii-more-fun-with-structs.html#cb433-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
 <span id="cb433-4"><a href="structs-ii-more-fun-with-structs.html#cb433-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>And here’s the anonymous equivalent:</p>
-<div class="sourceCode" id="cb434"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb434-1"><a href="structs-ii-more-fun-with-structs.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>              <span class="co">// &lt;-- No name!</span></span>
+<p>Ve işte anonim karşılığı:</p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb434-1"><a href="structs-ii-more-fun-with-structs.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>              <span class="co">// &lt;-- Adı yok!</span></span>
 <span id="cb434-2"><a href="structs-ii-more-fun-with-structs.html#cb434-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
 <span id="cb434-3"><a href="structs-ii-more-fun-with-structs.html#cb434-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
 <span id="cb434-4"><a href="structs-ii-more-fun-with-structs.html#cb434-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>Okaaaaay. So we have a <code>struct</code>, but it has no name, so we have no way of using it later? Seems pretty pointless.</p>
-<p>Admittedly, in that example, it is. But we can still make use of it a couple ways.</p>
-<p>One is rare, but since the anonymous <code>struct</code> represents a type, we can just put some variable names after it and use them.</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb435-1"><a href="structs-ii-more-fun-with-structs.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- No name!</span></span>
+<p>Tamammm. Yani bir <code>struct</code> yapımız var ama adı yok, bu yüzden daha sonra kullanmamızın bir yolu yok mu? Oldukça anlamsız görünüyor.</p>
+<p>Kabul etmek gerekir ki, bu örnekte gerçekten de öyle. Ancak yine de ondan birkaç farklı şekilde yararlanabiliriz.</p>
+<p>Biri nadir kullanılır, ancak anonim <code>struct</code> bir türü temsil ettiği için, hemen arkasına bazı değişken adları koyup bunları kullanabiliriz.</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb435-1"><a href="structs-ii-more-fun-with-structs.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- Adı yok!</span></span>
 <span id="cb435-2"><a href="structs-ii-more-fun-with-structs.html#cb435-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
 <span id="cb435-3"><a href="structs-ii-more-fun-with-structs.html#cb435-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
-<span id="cb435-4"><a href="structs-ii-more-fun-with-structs.html#cb435-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span>                 <span class="co">// 3 variables of this struct type</span></span>
+<span id="cb435-4"><a href="structs-ii-more-fun-with-structs.html#cb435-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span>                 <span class="co">// Bu struct türünde 3 değişken</span></span>
 <span id="cb435-5"><a href="structs-ii-more-fun-with-structs.html#cb435-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb435-6"><a href="structs-ii-more-fun-with-structs.html#cb435-6" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;antelope&quot;</span><span class="op">;</span></span>
-<span id="cb435-7"><a href="structs-ii-more-fun-with-structs.html#cb435-7" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// for example</span></span></code></pre></div>
-<p>But that’s still not that useful.</p>
-<p>Far more common is use of anonymous <code>struct</code>s with a <code>typedef</code> so that we can use it later (e.g. to pass variables to functions).</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb436-1"><a href="structs-ii-more-fun-with-structs.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- No name!</span></span>
+<span id="cb435-7"><a href="structs-ii-more-fun-with-structs.html#cb435-7" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// örneğin</span></span></code></pre></div>
+<p>Fakat bu da hâlâ o kadar kullanışlı değil.</p>
+<p>Çok daha yaygın olanı, daha sonra kullanabilmemiz için (örneğin değişkenleri fonksiyonlara geçirmek amacıyla) <code>typedef</code> ile birlikte anonim <code>struct</code> yapıları kullanmaktır.</p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb436-1"><a href="structs-ii-more-fun-with-structs.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- Adı yok!</span></span>
 <span id="cb436-2"><a href="structs-ii-more-fun-with-structs.html#cb436-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
 <span id="cb436-3"><a href="structs-ii-more-fun-with-structs.html#cb436-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
-<span id="cb436-4"><a href="structs-ii-more-fun-with-structs.html#cb436-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> animal<span class="op">;</span>                          <span class="co">// New type: animal</span></span>
+<span id="cb436-4"><a href="structs-ii-more-fun-with-structs.html#cb436-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> animal<span class="op">;</span>                          <span class="co">// Yeni tür: animal</span></span>
 <span id="cb436-5"><a href="structs-ii-more-fun-with-structs.html#cb436-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb436-6"><a href="structs-ii-more-fun-with-structs.html#cb436-6" aria-hidden="true" tabindex="-1"></a>animal a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
 <span id="cb436-7"><a href="structs-ii-more-fun-with-structs.html#cb436-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb436-8"><a href="structs-ii-more-fun-with-structs.html#cb436-8" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;antelope&quot;</span><span class="op">;</span></span>
-<span id="cb436-9"><a href="structs-ii-more-fun-with-structs.html#cb436-9" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// for example</span></span></code></pre></div>
-<p>Personally, I don’t use many anonymous <code>struct</code>s. I think it’s more pleasant to see the entire <code>struct animal</code> before the variable name in a declaration.</p>
-<p>But that’s just, like, my opinion, man.</p>
+<span id="cb436-9"><a href="structs-ii-more-fun-with-structs.html#cb436-9" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// örneğin</span></span></code></pre></div>
+<p>Şahsen ben pek fazla anonim <code>struct</code> kullanmam. Bir bildirimde değişken adından önce tüm <code>struct animal</code> ifadesini görmenin daha hoş olduğunu düşünüyorum.</p>
+<p>Ama hey, bu sadece benim fikrim dostum.</p>
 <p></p>
-<h2 data-number="20.3" id="self-referential-structs"><span class="header-section-number">20.3</span> Self-Referential <code>struct</code>s</h2>
+<h2 data-number="20.3" id="self-referential-structs"><span class="header-section-number">20.3</span> Öz-Referanslı (Self-Referential) <code>struct</code> Yapıları</h2>
 <p></p>
-<p>For any graph-like data structure, it’s useful to be able to have pointers to the connected nodes/vertices. But this means that in the definition of a node, you need to have a pointer to a node. It’s chicken and eggy!</p>
-<p>But it turns out you can do this in C with no problem whatsoever.</p>
-<p>For example, here’s a linked list node:</p>
+<p>Graf benzeri herhangi bir veri yapısı için, bağlı düğümlere/köşelere <em>(nodes/vertices)</em> göstericilere <em>(pointers)</em> sahip olmak kullanışlıdır. Ancak bu, bir düğümün tanımı içinde yine bir düğüme gösterici bulundurmanız gerektiği anlamına gelir. Tam bir tavuk mu yumurtadan yumurta mı tavuktan durumu!</p>
+<p>Fakat görünüşe göre C dilinde bunu hiçbir sorun yaşamadan yapabilirsiniz.</p>
+<p>Örneğin, işte bir bağlı liste <em>(linked list)</em> düğümü:</p>
 <div class="sourceCode" id="cb437"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb437-1"><a href="structs-ii-more-fun-with-structs.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> node <span class="op">{</span></span>
 <span id="cb437-2"><a href="structs-ii-more-fun-with-structs.html#cb437-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> data<span class="op">;</span></span>
 <span id="cb437-3"><a href="structs-ii-more-fun-with-structs.html#cb437-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> node <span class="op">*</span>next<span class="op">;</span></span>
 <span id="cb437-4"><a href="structs-ii-more-fun-with-structs.html#cb437-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>It’s important to note that <code>next</code> is a pointer. This is what allows the whole thing to even build. Even though the compiler doesn’t know what the entire <code>struct node</code> looks like yet, all pointers are the same size.</p>
-<p>Here’s a cheesy linked list program to test it out:</p>
+<p><code>next</code> elemanının bir gösterici olduğunu unutmamak önemlidir. Tüm yapının derlenebilmesini sağlayan şey de budur. Derleyici henüz <code>struct node</code> yapısının tamamının neye benzediğini bilmese bile, tüm göstericiler aynı boyuttadır.</p>
+<p>Bunu test etmek için basit bir bağlı liste programı:</p>
 <div class="sourceCode" id="cb438"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb438-1"><a href="structs-ii-more-fun-with-structs.html#cb438-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb438-2"><a href="structs-ii-more-fun-with-structs.html#cb438-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb438-3"><a href="structs-ii-more-fun-with-structs.html#cb438-3"></a></span>
@@ -175,7 +175,7 @@
 <span id="cb438-10"><a href="structs-ii-more-fun-with-structs.html#cb438-10"></a><span class="op">{</span></span>
 <span id="cb438-11"><a href="structs-ii-more-fun-with-structs.html#cb438-11"></a>    <span class="kw">struct</span> node <span class="op">*</span>head<span class="op">;</span></span>
 <span id="cb438-12"><a href="structs-ii-more-fun-with-structs.html#cb438-12"></a></span>
-<span id="cb438-13"><a href="structs-ii-more-fun-with-structs.html#cb438-13"></a>    <span class="co">// Hackishly set up a linked list (11)-&gt;(22)-&gt;(33)</span></span>
+<span id="cb438-13"><a href="structs-ii-more-fun-with-structs.html#cb438-13"></a>    <span class="co">// Hızlıca bir bağlı liste oluştur: (11)-&gt;(22)-&gt;(33)</span></span>
 <span id="cb438-14"><a href="structs-ii-more-fun-with-structs.html#cb438-14"></a>    head <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> node<span class="op">));</span></span>
 <span id="cb438-15"><a href="structs-ii-more-fun-with-structs.html#cb438-15"></a>    head<span class="op">-&gt;</span>data <span class="op">=</span> <span class="dv">11</span><span class="op">;</span></span>
 <span id="cb438-16"><a href="structs-ii-more-fun-with-structs.html#cb438-16"></a>    head<span class="op">-&gt;</span>next <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> node<span class="op">));</span></span>
@@ -184,73 +184,73 @@
 <span id="cb438-19"><a href="structs-ii-more-fun-with-structs.html#cb438-19"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next<span class="op">-&gt;</span>data <span class="op">=</span> <span class="dv">33</span><span class="op">;</span></span>
 <span id="cb438-20"><a href="structs-ii-more-fun-with-structs.html#cb438-20"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next <span class="op">=</span> NULL<span class="op">;</span></span>
 <span id="cb438-21"><a href="structs-ii-more-fun-with-structs.html#cb438-21"></a></span>
-<span id="cb438-22"><a href="structs-ii-more-fun-with-structs.html#cb438-22"></a>    <span class="co">// Traverse it</span></span>
+<span id="cb438-22"><a href="structs-ii-more-fun-with-structs.html#cb438-22"></a>    <span class="co">// Liste üzerinde gezin (traverse)</span></span>
 <span id="cb438-23"><a href="structs-ii-more-fun-with-structs.html#cb438-23"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">struct</span> node <span class="op">*</span>cur <span class="op">=</span> head<span class="op">;</span> cur <span class="op">!=</span> NULL<span class="op">;</span> cur <span class="op">=</span> cur<span class="op">-&gt;</span>next<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb438-24"><a href="structs-ii-more-fun-with-structs.html#cb438-24"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> cur<span class="op">-&gt;</span>data<span class="op">);</span></span>
 <span id="cb438-25"><a href="structs-ii-more-fun-with-structs.html#cb438-25"></a>    <span class="op">}</span></span>
 <span id="cb438-26"><a href="structs-ii-more-fun-with-structs.html#cb438-26"></a><span class="op">}</span></span></code></pre></div>
-<p>Running that prints:</p>
+<p>Bunu çalıştırmak şunu yazdırır:</p>
 <div class="sourceCode" id="cb439"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb439-1"><a href="structs-ii-more-fun-with-structs.html#cb439-1" aria-hidden="true" tabindex="-1"></a>11</span>
 <span id="cb439-2"><a href="structs-ii-more-fun-with-structs.html#cb439-2" aria-hidden="true" tabindex="-1"></a>22</span>
 <span id="cb439-3"><a href="structs-ii-more-fun-with-structs.html#cb439-3" aria-hidden="true" tabindex="-1"></a>33</span></code></pre></div>
 <p></p>
-<h2 data-number="20.4" id="flexible-array-members"><span class="header-section-number">20.4</span> Flexible Array Members</h2>
+<h2 data-number="20.4" id="flexible-array-members"><span class="header-section-number">20.4</span> Esnek Dizi Üyeleri (Flexible Array Members)</h2>
 <p></p>
-<p>Back in the good old days, when people carved C code out of wood, some folks thought would be neat if they could allocate <code>struct</code>s that had variable length arrays at the end of them.</p>
-<p>I want to be clear that the first part of the section is the old way of doing things, and we’re going to do things the new way after that.</p>
-<p>For example, maybe you could define a <code>struct</code> for holding strings and the length of that string. It would have a length and an array to hold the data. Maybe something like this:</p>
+<p>Eski güzel günlerde, insanlar C kodunu ahşaptan yontarken, bazıları sonlarında değişken uzunluklu diziler <em>(variable length arrays)</em> bulunan <code>struct</code> yapıları tahsis edebilseler harika olacağını düşündü.</p>
+<p>Şunu açıkça belirteyim ki, bu bölümün ilk kısmı işlerin eski yapılma şeklidir; bundan sonra işleri yeni yöntemle yapacağız.</p>
+<p>Örneğin, metin dizilerini <em>(strings)</em> ve o metnin uzunluğunu tutmak için bir <code>struct</code> tanımlayabilirsiniz. Verileri tutmak için bir uzunluk alanına ve bir diziye sahip olurdu. Belki şöyle bir şey:</p>
 <div class="sourceCode" id="cb440"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb440-1"><a href="structs-ii-more-fun-with-structs.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
 <span id="cb440-2"><a href="structs-ii-more-fun-with-structs.html#cb440-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
 <span id="cb440-3"><a href="structs-ii-more-fun-with-structs.html#cb440-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[</span><span class="dv">8</span><span class="op">];</span></span>
 <span id="cb440-4"><a href="structs-ii-more-fun-with-structs.html#cb440-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>But that has <code>8</code> hardcoded as the maximum length of a string, and that’s not much. What if we did something <em>clever</em> and just <code>malloc()</code>d some extra space at the end after the struct, and then let the data overflow into that space?</p>
-<p>Let’s do that, and then allocate another 40 bytes on top of it:</p>
+<p>Ancak bu yapı bir metin dizisinin maksimum uzunluğu olarak sabit kodlanmış <code>8</code> değerine sahiptir ve bu pek fazla değildir. Ya <em>akıllıca</em> bir şey yapıp yapının hemen arkasından <code>malloc()</code> ile biraz ekstra alan tahsis etseydik ve ardından verilerin o alana taşmasına <em>(overflow)</em> izin verseydik?</p>
+<p>Gelin bunu yapalım ve üzerine 40 bayt daha tahsis edelim:</p>
 <div class="sourceCode" id="cb441"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb441-1"><a href="structs-ii-more-fun-with-structs.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">*</span>s <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>s <span class="op">+</span> <span class="dv">40</span><span class="op">);</span></span></code></pre></div>
-<p>Because <code>data</code> is the last field of the <code>struct</code>, if we overflow that field, it runs out into space that we already allocated! For this reason, this trick only works if the short array is the <em>last</em> field in the <code>struct</code>.</p>
-<div class="sourceCode" id="cb442"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb442-1"><a href="structs-ii-more-fun-with-structs.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Copy more than 8 bytes!</span></span>
+<p><code>data</code> yapının son alanı olduğu için, o alanı taşırdığımızda zaten tahsis etmiş olduğumuz alana doğru taşar! Bu nedenle, bu hile yalnızca kısa dizi <code>struct</code> yapısındaki <em>son</em> alan olduğunda çalışır.</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb442-1"><a href="structs-ii-more-fun-with-structs.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 8 bayttan fazlasını kopyala!</span></span>
 <span id="cb442-2"><a href="structs-ii-more-fun-with-structs.html#cb442-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb442-3"><a href="structs-ii-more-fun-with-structs.html#cb442-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Won&#39;t crash. Probably.</span></span></code></pre></div>
+<span id="cb442-3"><a href="structs-ii-more-fun-with-structs.html#cb442-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Çökmez. Muhtemelen.</span></span></code></pre></div>
 <p></p>
-<p>In fact, there was a common compiler workaround for doing this, where you’d allocate a zero length array at the end:</p>
+<p>Hatta bunu yapmak için sonuna sıfır uzunluklu bir dizi tahsis ettiğiniz yaygın bir derleyici geçici çözümü <em>(workaround)</em> vardı:</p>
 <div class="sourceCode" id="cb443"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb443-1"><a href="structs-ii-more-fun-with-structs.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
 <span id="cb443-2"><a href="structs-ii-more-fun-with-structs.html#cb443-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
 <span id="cb443-3"><a href="structs-ii-more-fun-with-structs.html#cb443-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
 <span id="cb443-4"><a href="structs-ii-more-fun-with-structs.html#cb443-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>And then every extra byte you allocated was ready for use in that string.</p>
-<p>Because <code>data</code> is the last field of the <code>struct</code>, if we overflow that field, it runs out into space that we already allocated!</p>
-<div class="sourceCode" id="cb444"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb444-1"><a href="structs-ii-more-fun-with-structs.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Copy more than 8 bytes!</span></span>
+<p>Ve böylece tahsis ettiğiniz her ekstra bayt o metin dizisinde kullanılmaya hazır hale gelirdi.</p>
+<p><code>data</code> yapının son alanı olduğu için, o alanı taşırdığımızda zaten tahsis etmiş olduğumuz alana doğru taşar!</p>
+<div class="sourceCode" id="cb444"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb444-1"><a href="structs-ii-more-fun-with-structs.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 8 bayttan fazlasını kopyala!</span></span>
 <span id="cb444-2"><a href="structs-ii-more-fun-with-structs.html#cb444-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb444-3"><a href="structs-ii-more-fun-with-structs.html#cb444-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Won&#39;t crash. Probably.</span></span></code></pre></div>
-<p>But, of course, actually accessing the data beyond the end of that array is undefined behavior! In these modern times, we no longer deign to resort to such savagery.</p>
+<span id="cb444-3"><a href="structs-ii-more-fun-with-structs.html#cb444-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Çökmez. Muhtemelen.</span></span></code></pre></div>
+<p>Ancak elbette, o dizinin sonunun ötesindeki veriye erişmek tanımsız davranıştır <em>(undefined behavior)</em>! Bu modern zamanlarda artık böyle barbarca yöntemlere tenezzül etmiyoruz.</p>
 <p></p>
-<p>Luckily for us, we can still get the same effect with C99 and later, but now it’s legal.</p>
-<p>Let’s just change our above definition to have no size for the array<a href="function-specifiers-alignment-specifiersoperators.html#fn135" class="footnote-ref" id="fnref135" role="doc-noteref"><sup>135</sup></a>:</p>
+<p>Şansımıza, C99 ve sonrasında aynı etkiyi elde edebiliyoruz, üstelik artık tamamen yasal.</p>
+<p>Yukarıdaki tanımımızı dizi boyutu olmayacak şekilde değiştirelim<a href="function-specifiers-alignment-specifiersoperators.html#fn135" class="footnote-ref" id="fnref135" role="doc-noteref"><sup>135</sup></a>:</p>
 <div class="sourceCode" id="cb445"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb445-1"><a href="structs-ii-more-fun-with-structs.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
 <span id="cb445-2"><a href="structs-ii-more-fun-with-structs.html#cb445-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
 <span id="cb445-3"><a href="structs-ii-more-fun-with-structs.html#cb445-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[];</span></span>
 <span id="cb445-4"><a href="structs-ii-more-fun-with-structs.html#cb445-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>Again, this only works if the flexible array member is the <em>last</em> field in the <code>struct</code>.</p>
-<p>And then we can allocate all the space we want for those strings by <code>malloc()</code>ing larger than the <code>struct len_string</code>, as we do in this example that makes a new <code>struct len_string</code> from a C string:</p>
+<p>Yine belirtelim, bu yalnızca esnek dizi üyesi <em>(flexible array member)</em> <code>struct</code> içindeki <em>son</em> alan olduğunda çalışır.</p>
+<p>Ve sonra, bir C metin dizisinden <em>(string)</em> yeni bir <code>struct len_string</code> oluşturan bu örnekte yaptığımız gibi, <code>struct len_string</code> yapısından daha büyük bir alanı <code>malloc()</code> ile tahsis ederek bu metin dizileri için istediğimiz tüm alanı ayırabiliriz:</p>
 <div class="sourceCode" id="cb446"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb446-1"><a href="structs-ii-more-fun-with-structs.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">*</span>len_string_from_c_string<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
 <span id="cb446-2"><a href="structs-ii-more-fun-with-structs.html#cb446-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb446-3"><a href="structs-ii-more-fun-with-structs.html#cb446-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> len <span class="op">=</span> strlen<span class="op">(</span>s<span class="op">);</span></span>
 <span id="cb446-4"><a href="structs-ii-more-fun-with-structs.html#cb446-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb446-5"><a href="structs-ii-more-fun-with-structs.html#cb446-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Allocate &quot;len&quot; more bytes than we&#39;d normally need</span></span>
+<span id="cb446-5"><a href="structs-ii-more-fun-with-structs.html#cb446-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Normalde ihtiyacımız olandan &quot;len&quot; bayt daha fazla tahsis et</span></span>
 <span id="cb446-6"><a href="structs-ii-more-fun-with-structs.html#cb446-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> len_string <span class="op">*</span>ls <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>ls <span class="op">+</span> len<span class="op">);</span></span>
 <span id="cb446-7"><a href="structs-ii-more-fun-with-structs.html#cb446-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb446-8"><a href="structs-ii-more-fun-with-structs.html#cb446-8" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">-&gt;</span>length <span class="op">=</span> len<span class="op">;</span></span>
 <span id="cb446-9"><a href="structs-ii-more-fun-with-structs.html#cb446-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb446-10"><a href="structs-ii-more-fun-with-structs.html#cb446-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Copy the string into those extra bytes</span></span>
+<span id="cb446-10"><a href="structs-ii-more-fun-with-structs.html#cb446-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Metni bu ekstra baytlara kopyala</span></span>
 <span id="cb446-11"><a href="structs-ii-more-fun-with-structs.html#cb446-11" aria-hidden="true" tabindex="-1"></a>    memcpy<span class="op">(</span>ls<span class="op">-&gt;</span>data<span class="op">,</span> s<span class="op">,</span> len<span class="op">);</span></span>
 <span id="cb446-12"><a href="structs-ii-more-fun-with-structs.html#cb446-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb446-13"><a href="structs-ii-more-fun-with-structs.html#cb446-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ls<span class="op">;</span></span>
 <span id="cb446-14"><a href="structs-ii-more-fun-with-structs.html#cb446-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<h2 data-number="20.5" id="struct-padding-bytes"><span class="header-section-number">20.5</span> Padding Bytes</h2>
+<h2 data-number="20.5" id="struct-padding-bytes"><span class="header-section-number">20.5</span> <code>struct</code> Doldurma Baytları (Padding Bytes)</h2>
 <p></p>
-<p>Beware that C is allowed to add padding bytes within or after a <code>struct</code> as it sees fit. You can’t trust that they will be directly adjacent in memory<a href="function-specifiers-alignment-specifiersoperators.html#fn136" class="footnote-ref" id="fnref136" role="doc-noteref"><sup>136</sup></a>.</p>
-<p>Let’s take a look at this program. We output two numbers. One is the sum of the <code>sizeof</code>s the individual field types. The other is the <code>sizeof</code> the entire <code>struct</code>.</p>
-<p>One would expect them to be the same. The size of the total is the size of the sum of its parts, right?</p>
+<p>C dilinin uygun gördüğü şekilde bir <code>struct</code> içinde veya sonrasında doldurma baytları <em>(padding bytes)</em> eklesine izin verildiğini unutmayın. Bellekte doğrudan yan yana olacaklarına güvenemezsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn136" class="footnote-ref" id="fnref136" role="doc-noteref"><sup>136</sup></a>.</p>
+<p>Bu programa bir göz atalım. İki sayı yazdırıyoruz. Biri ayrı ayrı alan türlerinin <code>sizeof</code> toplamıdır. Diğeri ise tüm <code>struct</code> yapısının <code>sizeof</code> değeridir.</p>
+<p>İnsan bunların aynı olmasını bekler. Toplamın boyutu, parçalarının boyutunun toplamıdır, değil mi?</p>
 <div class="sourceCode" id="cb447"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb447-1"><a href="structs-ii-more-fun-with-structs.html#cb447-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb447-2"><a href="structs-ii-more-fun-with-structs.html#cb447-2"></a></span>
 <span id="cb447-3"><a href="structs-ii-more-fun-with-structs.html#cb447-3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
@@ -265,16 +265,16 @@
 <span id="cb447-12"><a href="structs-ii-more-fun-with-structs.html#cb447-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">));</span></span>
 <span id="cb447-13"><a href="structs-ii-more-fun-with-structs.html#cb447-13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> foo<span class="op">));</span></span>
 <span id="cb447-14"><a href="structs-ii-more-fun-with-structs.html#cb447-14"></a><span class="op">}</span></span></code></pre></div>
-<p>But on my system, this outputs:</p>
+<p>Ancak benim sistemimde bu şunu yazdırır:</p>
 <div class="sourceCode" id="cb448"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb448-1"><a href="structs-ii-more-fun-with-structs.html#cb448-1" aria-hidden="true" tabindex="-1"></a>10</span>
 <span id="cb448-2"><a href="structs-ii-more-fun-with-structs.html#cb448-2" aria-hidden="true" tabindex="-1"></a>16</span></code></pre></div>
-<p>They’re not the same! The compiler has added 6 bytes of padding to help it be more performant. Maybe you got different output with your compiler, but unless you’re forcing it, you can’t be sure there’s no padding.</p>
+<p>Aynı değiller! Derleyici, daha performanslı olmasına yardımcı olmak için 6 baytlık doldurma <em>(padding)</em> eklemiştir. Belki derleyicinizle farklı bir çıktı aldınız, ancak bunu zorlamadığınız sürece doldurma baytı olmadığından emin olamazsınız.</p>
 <p></p>
 <h2 data-number="20.6" id="offsetof"><span class="header-section-number">20.6</span> <code>offsetof</code></h2>
 <p></p>
-<p>In the previous section, we saw that the compiler could inject padding bytes at will inside a structure.</p>
-<p>What if we needed to know where those were? We can measure it with <code>offsetof</code>, defined in <code>&lt;stddef.h&gt;</code>.</p>
-<p>Let’s modify the code from above to print the offsets of the individual fields in the <code>struct</code>:</p>
+<p>Önceki bölümde derleyicinin bir yapı içine istediği gibi doldurma baytları enjekte edebildiğini gördük.</p>
+<p>Ya bunların nerede olduğunu bilmemiz gerekirse? Bunu <code>&lt;stddef.h&gt;</code> içinde tanımlanan <code>offsetof</code> ile ölçebiliriz.</p>
+<p>Yukarıdaki kodu, <code>struct</code> içindeki bireysel alanların ofsetlerini <em>(offsets)</em> yazdıracak şekilde değiştirelim:</p>
 <div class="sourceCode" id="cb449"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb449-1"><a href="structs-ii-more-fun-with-structs.html#cb449-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb449-2"><a href="structs-ii-more-fun-with-structs.html#cb449-2"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
 <span id="cb449-3"><a href="structs-ii-more-fun-with-structs.html#cb449-3"></a></span>
@@ -292,12 +292,12 @@
 <span id="cb449-15"><a href="structs-ii-more-fun-with-structs.html#cb449-15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> c<span class="op">));</span></span>
 <span id="cb449-16"><a href="structs-ii-more-fun-with-structs.html#cb449-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> d<span class="op">));</span></span>
 <span id="cb449-17"><a href="structs-ii-more-fun-with-structs.html#cb449-17"></a><span class="op">}</span></span></code></pre></div>
-<p>For me, this outputs:</p>
+<p>Benim için bu şunu yazdırır:</p>
 <div class="sourceCode" id="cb450"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb450-1"><a href="structs-ii-more-fun-with-structs.html#cb450-1" aria-hidden="true" tabindex="-1"></a>0</span>
 <span id="cb450-2"><a href="structs-ii-more-fun-with-structs.html#cb450-2" aria-hidden="true" tabindex="-1"></a>4</span>
 <span id="cb450-3"><a href="structs-ii-more-fun-with-structs.html#cb450-3" aria-hidden="true" tabindex="-1"></a>8</span>
 <span id="cb450-4"><a href="structs-ii-more-fun-with-structs.html#cb450-4" aria-hidden="true" tabindex="-1"></a>12</span></code></pre></div>
-<p>indicating that we’re using 4 bytes for each of the fields. It’s a little weird, because <code>char</code> is only 1 byte, right? The compiler is putting 3 padding bytes after each <code>char</code> so that all the fields are 4 bytes long. Presumably this will run faster on my CPU.</p>
+<p>bu da alanların her biri için 4 bayt kullandığımızı gösterir. Biraz garip, çünkü <code>char</code> sadece 1 bayttır, değil mi? Derleyici, tüm alanların 4 bayt uzunluğunda olması için her <code>char</code> değerinden sonra 3 doldurma baytı koyuyor. Muhtemelen bu işlemci üzerinde daha hızlı çalışacaktır.</p>
 <p></p>
 <!--
 
@@ -316,21 +316,21 @@
 - a type compatible with the effective type of the object
 
 -->
-<h2 data-number="20.7" id="fake-oop"><span class="header-section-number">20.7</span> Fake OOP</h2>
-<p>There’s a slightly abusive thing that’s sort of OOP-like that you can do with <code>struct</code>s.</p>
-<p>Since the pointer to the <code>struct</code> is the same as a pointer to the first element of the <code>struct</code>, you can freely cast a pointer to the <code>struct</code> to a pointer to the first element.</p>
-<p>What this means is that we can set up a situation like this:</p>
+<h2 data-number="20.7" id="fake-oop"><span class="header-section-number">20.7</span> Sahte OOP (Nesne Yönelimli Programlama)</h2>
+<p><code>struct</code> yapılarıyla yapabileceğiniz, bir nevi Nesne Yönelimli Programlama (OOP) benzeri hafif suistimal edici bir şey var.</p>
+<p><code>struct</code> yapısına olan gösterici <em>(pointer)</em>, <code>struct</code> yapısının ilk elemanına olan gösterici ile aynı olduğu için, <code>struct</code> göstericisini ilk elemanın göstericisine serbestçe dönüştürebilirsiniz <em>(cast)</em>.</p>
+<p>Bu, şöyle bir durum kurabileceğimiz anlamına gelir:</p>
 <div class="sourceCode" id="cb451"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb451-1"><a href="structs-ii-more-fun-with-structs.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> parent <span class="op">{</span></span>
 <span id="cb451-2"><a href="structs-ii-more-fun-with-structs.html#cb451-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">;</span></span>
 <span id="cb451-3"><a href="structs-ii-more-fun-with-structs.html#cb451-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
 <span id="cb451-4"><a href="structs-ii-more-fun-with-structs.html#cb451-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb451-5"><a href="structs-ii-more-fun-with-structs.html#cb451-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> child <span class="op">{</span></span>
-<span id="cb451-6"><a href="structs-ii-more-fun-with-structs.html#cb451-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// MUST be first</span></span>
+<span id="cb451-6"><a href="structs-ii-more-fun-with-structs.html#cb451-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// İLK sırada OLMALIDIR</span></span>
 <span id="cb451-7"><a href="structs-ii-more-fun-with-structs.html#cb451-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> c<span class="op">,</span> d<span class="op">;</span></span>
 <span id="cb451-8"><a href="structs-ii-more-fun-with-structs.html#cb451-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>Then we are able to pass a pointer to a <code>struct child</code> to a function that expects either that <em>or</em> a pointer to a <code>struct parent</code>!</p>
-<p>Because <code>struct parent super</code> is the first item in the <code>struct child</code>, a pointer to any <code>struct child</code> is the same as a pointer to that <code>super</code> field<a href="function-specifiers-alignment-specifiersoperators.html#fn137" class="footnote-ref" id="fnref137" role="doc-noteref"><sup>137</sup></a>.</p>
-<p>Let’s set up an example here. We’ll make <code>struct</code>s as above, but then we’ll pass a pointer to a <code>struct child</code> to a function that needs a pointer to a <code>struct parent</code>… and it’ll still work.</p>
+<p>Böylece <code>struct child</code> göstericisini, ya bunu <em>ya da</em> bir <code>struct parent</code> göstericisini bekleyen bir fonksiyona geçirebiliriz!</p>
+<p>Çünkü <code>struct parent super</code>, <code>struct child</code> yapısındaki ilk ögedir; herhangi bir <code>struct child</code> göstericisi o <code>super</code> alanına olan gösterici ile aynıdır<a href="function-specifiers-alignment-specifiersoperators.html#fn137" class="footnote-ref" id="fnref137" role="doc-noteref"><sup>137</sup></a>.</p>
+<p>Gelin burada bir örnek oluşturalım. Yukarıdaki gibi <code>struct</code> yapıları yapacağız, ancak sonra bir <code>struct parent</code> göstericisine ihtiyaç duyan bir fonksiyona <code>struct child</code> göstericisi geçireceğiz... ve bu yine de çalışacak.</p>
 <div class="sourceCode" id="cb452"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb452-1"><a href="structs-ii-more-fun-with-structs.html#cb452-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb452-2"><a href="structs-ii-more-fun-with-structs.html#cb452-2"></a></span>
 <span id="cb452-3"><a href="structs-ii-more-fun-with-structs.html#cb452-3"></a><span class="kw">struct</span> parent <span class="op">{</span></span>
@@ -338,53 +338,52 @@
 <span id="cb452-5"><a href="structs-ii-more-fun-with-structs.html#cb452-5"></a><span class="op">};</span></span>
 <span id="cb452-6"><a href="structs-ii-more-fun-with-structs.html#cb452-6"></a></span>
 <span id="cb452-7"><a href="structs-ii-more-fun-with-structs.html#cb452-7"></a><span class="kw">struct</span> child <span class="op">{</span></span>
-<span id="cb452-8"><a href="structs-ii-more-fun-with-structs.html#cb452-8"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// MUST be first</span></span>
+<span id="cb452-8"><a href="structs-ii-more-fun-with-structs.html#cb452-8"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// İLK sırada OLMALIDIR</span></span>
 <span id="cb452-9"><a href="structs-ii-more-fun-with-structs.html#cb452-9"></a>    <span class="dt">int</span> c<span class="op">,</span> d<span class="op">;</span></span>
 <span id="cb452-10"><a href="structs-ii-more-fun-with-structs.html#cb452-10"></a><span class="op">};</span></span>
 <span id="cb452-11"><a href="structs-ii-more-fun-with-structs.html#cb452-11"></a></span>
-<span id="cb452-12"><a href="structs-ii-more-fun-with-structs.html#cb452-12"></a><span class="co">// Making the argument `void*` so we can pass any type into it</span></span>
-<span id="cb452-13"><a href="structs-ii-more-fun-with-structs.html#cb452-13"></a><span class="co">// (namely a struct parent or struct child)</span></span>
+<span id="cb452-12"><a href="structs-ii-more-fun-with-structs.html#cb452-12"></a><span class="co">// İçine herhangi bir tür geçirebilmemiz için argümanı void* yapıyoruz</span></span>
+<span id="cb452-13"><a href="structs-ii-more-fun-with-structs.html#cb452-13"></a><span class="co">// (yani bir struct parent veya struct child)</span></span>
 <span id="cb452-14"><a href="structs-ii-more-fun-with-structs.html#cb452-14"></a><span class="dt">void</span> print_parent<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>p<span class="op">)</span></span>
 <span id="cb452-15"><a href="structs-ii-more-fun-with-structs.html#cb452-15"></a><span class="op">{</span></span>
-<span id="cb452-16"><a href="structs-ii-more-fun-with-structs.html#cb452-16"></a>    <span class="co">// Expects a struct parent--but a struct child will also work</span></span>
-<span id="cb452-17"><a href="structs-ii-more-fun-with-structs.html#cb452-17"></a>    <span class="co">// because the pointer points to the struct parent in the first</span></span>
-<span id="cb452-18"><a href="structs-ii-more-fun-with-structs.html#cb452-18"></a>    <span class="co">// field:</span></span>
-<span id="cb452-19"><a href="structs-ii-more-fun-with-structs.html#cb452-19"></a>    <span class="kw">struct</span> parent <span class="op">*</span>self <span class="op">=</span> p<span class="op">;</span></span>
-<span id="cb452-20"><a href="structs-ii-more-fun-with-structs.html#cb452-20"></a></span>
-<span id="cb452-21"><a href="structs-ii-more-fun-with-structs.html#cb452-21"></a>    printf<span class="op">(</span><span class="st">&quot;Parent: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>a<span class="op">,</span> self<span class="op">-&gt;</span>b<span class="op">);</span></span>
-<span id="cb452-22"><a href="structs-ii-more-fun-with-structs.html#cb452-22"></a><span class="op">}</span></span>
-<span id="cb452-23"><a href="structs-ii-more-fun-with-structs.html#cb452-23"></a></span>
-<span id="cb452-24"><a href="structs-ii-more-fun-with-structs.html#cb452-24"></a><span class="dt">void</span> print_child<span class="op">(</span><span class="kw">struct</span> child <span class="op">*</span>self<span class="op">)</span></span>
-<span id="cb452-25"><a href="structs-ii-more-fun-with-structs.html#cb452-25"></a><span class="op">{</span></span>
-<span id="cb452-26"><a href="structs-ii-more-fun-with-structs.html#cb452-26"></a>    printf<span class="op">(</span><span class="st">&quot;Child: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>c<span class="op">,</span> self<span class="op">-&gt;</span>d<span class="op">);</span></span>
-<span id="cb452-27"><a href="structs-ii-more-fun-with-structs.html#cb452-27"></a><span class="op">}</span></span>
-<span id="cb452-28"><a href="structs-ii-more-fun-with-structs.html#cb452-28"></a></span>
-<span id="cb452-29"><a href="structs-ii-more-fun-with-structs.html#cb452-29"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb452-30"><a href="structs-ii-more-fun-with-structs.html#cb452-30"></a><span class="op">{</span></span>
-<span id="cb452-31"><a href="structs-ii-more-fun-with-structs.html#cb452-31"></a>    <span class="kw">struct</span> child c <span class="op">=</span> <span class="op">{.</span>super<span class="op">.</span>a<span class="op">=</span><span class="dv">1</span><span class="op">,</span> <span class="op">.</span>super<span class="op">.</span>b<span class="op">=</span><span class="dv">2</span><span class="op">,</span> <span class="op">.</span>c<span class="op">=</span><span class="dv">3</span><span class="op">,</span> <span class="op">.</span>d<span class="op">=</span><span class="dv">4</span><span class="op">};</span></span>
-<span id="cb452-32"><a href="structs-ii-more-fun-with-structs.html#cb452-32"></a></span>
-<span id="cb452-33"><a href="structs-ii-more-fun-with-structs.html#cb452-33"></a>    print_child<span class="op">(&amp;</span>c<span class="op">);</span></span>
-<span id="cb452-34"><a href="structs-ii-more-fun-with-structs.html#cb452-34"></a>    print_parent<span class="op">(&amp;</span>c<span class="op">);</span>  <span class="co">// Also works even though it&#39;s a struct child!</span></span>
-<span id="cb452-35"><a href="structs-ii-more-fun-with-structs.html#cb452-35"></a><span class="op">}</span></span></code></pre></div>
-<p>See what we did on the last line of <code>main()</code>? We called <code>print_parent()</code> but passed a <code>struct child*</code> as the argument! Even though <code>print_parent()</code> needs the argument to point to a <code>struct parent</code>, we’re <em>getting away with it</em> because the first field in the <code>struct child</code> is a <code>struct parent</code>.</p>
-<p>Again, this works because a pointer to a <code>struct</code> has the same value as a pointer to the first field in that <code>struct</code>.</p>
-<p>This all hinges on this part of the spec:</p>
+<span id="cb452-16"><a href="structs-ii-more-fun-with-structs.html#cb452-16"></a>    <span class="co">// Bir struct parent bekler--ancak bir struct child da çalışır</span></span>
+<span id="cb452-17"><a href="structs-ii-more-fun-with-structs.html#cb452-17"></a>    <span class="co">// çünkü gösterici ilk alandaki struct parent'ı gösterir:</span></span>
+<span id="cb452-18"><a href="structs-ii-more-fun-with-structs.html#cb452-18"></a>    <span class="kw">struct</span> parent <span class="op">*</span>self <span class="op">=</span> p<span class="op">;</span></span>
+<span id="cb452-19"><a href="structs-ii-more-fun-with-structs.html#cb452-19"></a></span>
+<span id="cb452-20"><a href="structs-ii-more-fun-with-structs.html#cb452-20"></a>    printf<span class="op">(</span><span class="st">&quot;Parent: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>a<span class="op">,</span> self<span class="op">-&gt;</span>b<span class="op">);</span></span>
+<span id="cb452-21"><a href="structs-ii-more-fun-with-structs.html#cb452-21"></a><span class="op">}</span></span>
+<span id="cb452-22"><a href="structs-ii-more-fun-with-structs.html#cb452-22"></a></span>
+<span id="cb452-23"><a href="structs-ii-more-fun-with-structs.html#cb452-23"></a><span class="dt">void</span> print_child<span class="op">(</span><span class="kw">struct</span> child <span class="op">*</span>self<span class="op">)</span></span>
+<span id="cb452-24"><a href="structs-ii-more-fun-with-structs.html#cb452-24"></a><span class="op">{</span></span>
+<span id="cb452-25"><a href="structs-ii-more-fun-with-structs.html#cb452-25"></a>    printf<span class="op">(</span><span class="st">&quot;Child: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>c<span class="op">,</span> self<span class="op">-&gt;</span>d<span class="op">);</span></span>
+<span id="cb452-26"><a href="structs-ii-more-fun-with-structs.html#cb452-26"></a><span class="op">}</span></span>
+<span id="cb452-27"><a href="structs-ii-more-fun-with-structs.html#cb452-27"></a></span>
+<span id="cb452-28"><a href="structs-ii-more-fun-with-structs.html#cb452-28"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb452-29"><a href="structs-ii-more-fun-with-structs.html#cb452-29"></a><span class="op">{</span></span>
+<span id="cb452-30"><a href="structs-ii-more-fun-with-structs.html#cb452-30"></a>    <span class="kw">struct</span> child c <span class="op">=</span> <span class="op">{.</span>super<span class="op">.</span>a<span class="op">=</span><span class="dv">1</span><span class="op">,</span> <span class="op">.</span>super<span class="op">.</span>b<span class="op">=</span><span class="dv">2</span><span class="op">,</span> <span class="op">.</span>c<span class="op">=</span><span class="dv">3</span><span class="op">,</span> <span class="op">.</span>d<span class="op">=</span><span class="dv">4</span><span class="op">};</span></span>
+<span id="cb452-31"><a href="structs-ii-more-fun-with-structs.html#cb452-31"></a></span>
+<span id="cb452-32"><a href="structs-ii-more-fun-with-structs.html#cb452-32"></a>    print_child<span class="op">(&amp;</span>c<span class="op">);</span></span>
+<span id="cb452-33"><a href="structs-ii-more-fun-with-structs.html#cb452-33"></a>    print_parent<span class="op">(&amp;</span>c<span class="op">);</span>  <span class="co">// Bir struct child olmasına rağmen bu da çalışır!</span></span>
+<span id="cb452-34"><a href="structs-ii-more-fun-with-structs.html#cb452-34"></a><span class="op">}</span></span></code></pre></div>
+<p><code>main()</code> fonksiyonunun son satırında ne yaptığımızı gördünüz mü? <code>print_parent()</code> fonksiyonunu çağırdık ama argüman olarak bir <code>struct child*</code> geçirdik! <code>print_parent()</code> fonksiyonunun bir <code>struct parent</code>'ı gösteren argümana ihtiyacı olmasına rağmen, <code>struct child</code> içindeki ilk alan bir <code>struct parent</code> olduğu için bunu <em>yanımıza kâr kalacak şekilde başardık</em>.</p>
+<p>Yineleyelim, bu çalışır çünkü bir <code>struct</code> göstericisi, o <code>struct</code> yapısının ilk alanının göstericisiyle aynı değere sahiptir.</p>
+<p>Tüm bunlar standart spesifikasyonunun şu bölümüne dayanır:</p>
 <blockquote>
-<p><strong>§6.7.2.1¶15</strong> […] A pointer to a structure object, suitably converted, points to its initial member […], and vice versa.</p>
+<p><strong>§6.7.2.1¶15</strong> […] Uygun şekilde dönüştürülmüş bir yapı nesnesi göstericisi, onun ilk üyesini gösterir […], ve tersi de geçerlidir.</p>
 </blockquote>
-<p>and</p>
+<p>ve</p>
 <blockquote>
-<p><strong>§6.5¶7</strong> An object shall have its stored value accessed only by an lvalue expression that has one of the following types:</p>
+<p><strong>§6.5¶7</strong> Bir nesnenin saklanan değerine yalnızca aşağıdaki türlerden birine sahip bir sol-taraf ifadesi <em>(lvalue expression)</em> ile erişilebilir:</p>
 <ul>
-<li>a type compatible with the effective type of the object</li>
+<li>nesnenin etkin türü ile uyumlu bir tür</li>
 <li>[…]</li>
 </ul>
 </blockquote>
-<p>and my assumption that “suitably converted” means “cast to the effective type of the initial member”.</p>
-<h2 data-number="20.8" id="bit-fields"><span class="header-section-number">20.8</span> Bit-Fields</h2>
+<p>ve benim "uygun şekilde dönüştürülmüş" ifadesinin "ilk üyenin etkin türüne dönüştürülmüş <em>(cast)</em>" anlamına geldiği yönündeki varsayımım.</p>
+<h2 data-number="20.8" id="bit-fields"><span class="header-section-number">20.8</span> Bit Alanları (Bit-Fields)</h2>
 <p></p>
-<p>In my experience, these are rarely used, but you might see them out there from time to time, especially in lower-level applications that pack bits together into larger spaces.</p>
-<p>Let’s take a look at some code to demonstrate a use case:</p>
+<p>Deneyimlerime göre bunlar nadiren kullanılır, ancak zaman zaman özellikle bitleri daha büyük alanlarda paketleyen alt seviye uygulamalarda görebilirsiniz.</p>
+<p>Bir kullanım durumunu göstermek için bazı kodlara göz atalım:</p>
 <div class="sourceCode" id="cb453"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb453-1"><a href="structs-ii-more-fun-with-structs.html#cb453-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb453-2"><a href="structs-ii-more-fun-with-structs.html#cb453-2"></a></span>
 <span id="cb453-3"><a href="structs-ii-more-fun-with-structs.html#cb453-3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
@@ -398,96 +397,96 @@
 <span id="cb453-11"><a href="structs-ii-more-fun-with-structs.html#cb453-11"></a><span class="op">{</span></span>
 <span id="cb453-12"><a href="structs-ii-more-fun-with-structs.html#cb453-12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> foo<span class="op">));</span></span>
 <span id="cb453-13"><a href="structs-ii-more-fun-with-structs.html#cb453-13"></a><span class="op">}</span></span></code></pre></div>
-<p>For me, this prints <code>16</code>. Which makes sense, since <code>unsigned</code>s are 4 bytes on my system.</p>
-<p>But what if we knew that all the values that were going to be stored in <code>a</code> and <code>b</code> could be stored in 5 bits, and the values in <code>c</code>, and <code>d</code> could be stored in 3 bits? That’s only a total 16 bits. Why have 128 bits reserved for them if we’re only going to use 16?</p>
-<p>Well, we can tell C to pretty-please try to pack these values in. We can specify the maximum number of bits that values can take (from 1 up the size of the containing type).</p>
-<p>We do this by putting a colon after the field name, followed by the field width in bits.</p>
+<p>Benim için bu <code>16</code> yazdırır. Bu da mantıklıdır, çünkü benim sistemimde <code>unsigned</code> türleri 4 bayttır.</p>
+<p>Peki ya <code>a</code> ve <code>b</code> içinde saklanacak tüm değerlerin 5 bitte, <code>c</code> ve <code>d</code> içindeki değerlerin ise 3 bitte saklanabileceğini bilseydik? Bu toplamda sadece 16 bittir. Sadece 16 bit kullanacaksak neden onlar için 128 bit ayrılsın ki?</p>
+<p>C'ye bu değerleri paketlemeye çalışmasını tatlılıkla söyleyebiliriz. Değerlerin alabileceği maksimum bit sayısını belirtebiliriz (1'den kapsayan türün boyutuna kadar).</p>
+<p>Bunu alan adından sonra bir iki nokta üst üste ve ardından bit cinsinden alan genişliğini koyarak yaparız.</p>
 <div class="sourceCode" id="cb454" data-startfrom="3"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 2;"><span id="cb454-3"><a href="structs-ii-more-fun-with-structs.html#cb454-3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
 <span id="cb454-4"><a href="structs-ii-more-fun-with-structs.html#cb454-4"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
 <span id="cb454-5"><a href="structs-ii-more-fun-with-structs.html#cb454-5"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
 <span id="cb454-6"><a href="structs-ii-more-fun-with-structs.html#cb454-6"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
 <span id="cb454-7"><a href="structs-ii-more-fun-with-structs.html#cb454-7"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
 <span id="cb454-8"><a href="structs-ii-more-fun-with-structs.html#cb454-8"></a><span class="op">};</span></span></code></pre></div>
-<p>Now when I ask C how big my <code>struct foo</code> is, it tells me 4! It was 16 bytes, but now it’s only 4. It has “packed” those 4 values down into 4 bytes, which is a four-fold memory savings.</p>
-<p>The tradeoff is, of course, that the 5-bit fields can only hold values from 0-31 and the 3-bit fields can only hold values from 0-7. But life’s all about compromise, after all.</p>
-<h3 data-number="20.8.1" id="non-adjacent-bit-fields"><span class="header-section-number">20.8.1</span> Non-Adjacent Bit-Fields</h3>
-<p>A gotcha: C will only combine <strong>adjacent</strong> bit-fields. If they’re interrupted by non-bit-fields, you get no savings:</p>
-<div class="sourceCode" id="cb455"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb455-1"><a href="structs-ii-more-fun-with-structs.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 16 (for me)</span></span>
-<span id="cb455-2"><a href="structs-ii-more-fun-with-structs.html#cb455-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span>   <span class="co">// since a is not adjacent to c.</span></span>
+<p>Şimdi C'ye <code>struct foo</code> yapımın ne kadar büyük olduğunu sorduğumda bana 4 diyor! 16 bayttı ama şimdi sadece 4. Bu 4 değeri 4 bayta "paketledi", bu da bellek açısından dört kat tasarruf anlamına gelir.</p>
+<p>Dezavantajı elbette 5 bitlik alanların yalnızca 0-31 arasındaki değerleri ve 3 bitlik alanların yalnızca 0-7 arasındaki değerleri tutabilmesidir. Ama ne de olsa hayat uzlaşılarla doludur.</p>
+<h3 data-number="20.8.1" id="non-adjacent-bit-fields"><span class="header-section-number">20.8.1</span> Bitişik Olmayan Bit Alanları</h3>
+<p>Bir püf noktası: C yalnızca <strong>bitişik</strong> bit alanlarını birleştirecektir. Aralarına bit alanı olmayan ögeler girerse hiçbir tasarruf elde edemezsiniz:</p>
+<div class="sourceCode" id="cb455"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb455-1"><a href="structs-ii-more-fun-with-structs.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 16 (benim için)</span></span>
+<span id="cb455-2"><a href="structs-ii-more-fun-with-structs.html#cb455-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span>   <span class="co">// a, c ile bitişik olmadığı için.</span></span>
 <span id="cb455-3"><a href="structs-ii-more-fun-with-structs.html#cb455-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span></span>
 <span id="cb455-4"><a href="structs-ii-more-fun-with-structs.html#cb455-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb455-5"><a href="structs-ii-more-fun-with-structs.html#cb455-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">;</span></span>
 <span id="cb455-6"><a href="structs-ii-more-fun-with-structs.html#cb455-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>In that example, since <code>a</code> is not adjacent to <code>c</code>, they are both “packed” in their own <code>int</code>s.</p>
-<p>So we have one <code>int</code> each for <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code>. Since my <code>int</code>s are 4 bytes, that’s a grand total of 16 bytes.</p>
-<p>A quick rearrangement yields some space savings from 16 bytes down to 12 bytes (on my system):</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb456-1"><a href="structs-ii-more-fun-with-structs.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 12 (for me)</span></span>
+<p>Bu örnekte <code>a</code>, <code>c</code> ile bitişik olmadığı için her ikisi de kendi <code>int</code> türleri içinde "paketlenir".</p>
+<p>Yani <code>a</code>, <code>b</code>, <code>c</code> ve <code>d</code> için birer <code>int</code> yapımız var. Benim <code>int</code> türlerim 4 bayt olduğundan, bu toplamda 16 bayt eder.</p>
+<p>Hızlı bir yeniden düzenleme 16 bayttan 12 bayta (benim sistemimde) bir alan tasarrufu sağlar:</p>
+<div class="sourceCode" id="cb456"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb456-1"><a href="structs-ii-more-fun-with-structs.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 12 (benim için)</span></span>
 <span id="cb456-2"><a href="structs-ii-more-fun-with-structs.html#cb456-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb456-3"><a href="structs-ii-more-fun-with-structs.html#cb456-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb456-4"><a href="structs-ii-more-fun-with-structs.html#cb456-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span></span>
 <span id="cb456-5"><a href="structs-ii-more-fun-with-structs.html#cb456-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">;</span></span>
 <span id="cb456-6"><a href="structs-ii-more-fun-with-structs.html#cb456-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>And now, since <code>a</code> is next to <code>c</code>, the compiler puts them together into a single <code>int</code>.</p>
-<p>So we have one <code>int</code> for a combined <code>a</code> and <code>c</code>, and one <code>int</code> each for <code>b</code> and <code>d</code>. For a grand total of 3 <code>int</code>s, or 12 bytes.</p>
-<p>Put all your bitfields together to get the compiler to combine them.</p>
-<h3 data-number="20.8.2" id="signed-or-unsigned-ints"><span class="header-section-number">20.8.2</span> Signed or Unsigned <code>int</code>s</h3>
-<p>If you just declare a bit-field to be <code>int</code>, the different compilers will treat it as <code>signed</code> or <code>unsigned</code>. Just like the situation with <code>char</code>.</p>
-<p>Be specific about the signedness when using bit-fields.</p>
-<h3 data-number="20.8.3" id="unnamed-bit-fields"><span class="header-section-number">20.8.3</span> Unnamed Bit-Fields</h3>
-<p>In some specific circumstances, you might need to reserve some bits for hardware reasons, but not need to use them in code.</p>
-<p>For example, let’s say you have a byte where the top 2 bits have a meaning, the bottom 1 bit has a meaning, but the middle 5 bits do not get used by you<a href="function-specifiers-alignment-specifiersoperators.html#fn138" class="footnote-ref" id="fnref138" role="doc-noteref"><sup>138</sup></a>.</p>
-<p>We <em>could</em> do something like this:</p>
+<p>Ve şimdi <code>a</code>, <code>c</code>'nin yanında olduğu için derleyici bunları tek bir <code>int</code> içinde birleştirir.</p>
+<p>Böylece birleştirilmiş <code>a</code> ve <code>c</code> için bir <code>int</code>, <code>b</code> ve <code>d</code> için birer <code>int</code> elde ederiz. Genel toplamda 3 <code>int</code> yani 12 bayt.</p>
+<p>Derleyicinin bunları birleştirmesini sağlamak için tüm bit alanlarınızı bir araya toplayın.</p>
+<h3 data-number="20.8.2" id="signed-or-unsigned-ints"><span class="header-section-number">20.8.2</span> İşaretli veya İşaretsiz <code>int</code> Türleri</h3>
+<p>Bir bit alanını yalnızca <code>int</code> olarak bildirirseniz, farklı derleyiciler bunu <code>signed</code> veya <code>unsigned</code> olarak ele alacaktır. Tıpkı <code>char</code> durumunda olduğu gibi.</p>
+<p>Bit alanlarını kullanırken işaretli/işaretsiz <em>(signedness)</em> durumunu açıkça belirtin.</p>
+<h3 data-number="20.8.3" id="unnamed-bit-fields"><span class="header-section-number">20.8.3</span> İsimsiz Bit Alanları</h3>
+<p>Bazı özel durumlarda donanımsal nedenlerle bazı bitleri ayırmanız gerekebilir, ancak bunları kodda kullanmanız gerekmeyebilir.</p>
+<p>Örneğin, üst 2 bitin bir anlamı olduğu, en alttaki 1 bitin bir anlamı olduğu, ancak ortadaki 5 bitin sizin tarafınızdan kullanılmadığı bir baytınız olduğunu varsayalım<a href="function-specifiers-alignment-specifiersoperators.html#fn138" class="footnote-ref" id="fnref138" role="doc-noteref"><sup>138</sup></a>.</p>
+<p>Şöyle bir şey yapabilirdik:</p>
 <div class="sourceCode" id="cb457"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb457-1"><a href="structs-ii-more-fun-with-structs.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
 <span id="cb457-2"><a href="structs-ii-more-fun-with-structs.html#cb457-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> a<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
 <span id="cb457-3"><a href="structs-ii-more-fun-with-structs.html#cb457-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> dummy<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
 <span id="cb457-4"><a href="structs-ii-more-fun-with-structs.html#cb457-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> b<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb457-5"><a href="structs-ii-more-fun-with-structs.html#cb457-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>And that works—in our code we use <code>a</code> and <code>b</code>, but never <code>dummy</code>. It’s just there to eat up 5 bits to make sure <code>a</code> and <code>b</code> are in the “required” (by this contrived example) positions within the byte.</p>
-<p>C allows us a way to clean this up: <em>unnamed bit-fields</em>. You can just leave the name (<code>dummy</code>) out in this case, and C is perfectly happy for the same effect:</p>
+<p>Ve bu çalışır—kodumuzda <code>a</code> ve <code>b</code> kullanırız ama asla <code>dummy</code> kullanmayız. Sadece <code>a</code> ve <code>b</code>'nin bayt içinde "gerekli" (bu kurgusal örnekte belirtilen) konumlarda olduğundan emin olmak amacıyla 5 bit harcamak için oradadır.</p>
+<p>C bize bunu temizlemenin bir yolunu sunar: <em>isimsiz bit alanları (unnamed bit-fields)</em>. Bu durumda adı (<code>dummy</code>) tamamen bırakabilirsiniz ve C aynı etki için bunu memnuniyetle karşılar:</p>
 <div class="sourceCode" id="cb458"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb458-1"><a href="structs-ii-more-fun-with-structs.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
 <span id="cb458-2"><a href="structs-ii-more-fun-with-structs.html#cb458-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> a<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
-<span id="cb458-3"><a href="structs-ii-more-fun-with-structs.html#cb458-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">:</span><span class="dv">5</span><span class="op">;</span>   <span class="co">// &lt;-- unnamed bit-field!</span></span>
+<span id="cb458-3"><a href="structs-ii-more-fun-with-structs.html#cb458-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">:</span><span class="dv">5</span><span class="op">;</span>   <span class="co">// &lt;-- isimsiz bit alanı!</span></span>
 <span id="cb458-4"><a href="structs-ii-more-fun-with-structs.html#cb458-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> b<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb458-5"><a href="structs-ii-more-fun-with-structs.html#cb458-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<h3 data-number="20.8.4" id="zero-width-unnamed-bit-fields"><span class="header-section-number">20.8.4</span> Zero-Width Unnamed Bit-Fields</h3>
-<p>Some more esoterica out here… Let’s say you were packing bits into an <code>unsigned int</code>, and you needed some adjacent bit-fields to pack into the <em>next</em> <code>unsigned int</code>.</p>
-<p>That is, if you do this:</p>
+<h3 data-number="20.8.4" id="zero-width-unnamed-bit-fields"><span class="header-section-number">20.8.4</span> Sıfır Genişlikli İsimsiz Bit Alanları</h3>
+<p>Burada biraz daha derin detaylar var... Diyelim ki bitleri bir <code>unsigned int</code> içine paketliyordunuz ve bazı bitişik bit alanlarının bir <em>sonraki</em> <code>unsigned int</code> içine paketlenmesine ihtiyaç duydunuz.</p>
+<p>Yani bunu yaparsanız:</p>
 <div class="sourceCode" id="cb459"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb459-1"><a href="structs-ii-more-fun-with-structs.html#cb459-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
 <span id="cb459-2"><a href="structs-ii-more-fun-with-structs.html#cb459-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb459-3"><a href="structs-ii-more-fun-with-structs.html#cb459-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
 <span id="cb459-4"><a href="structs-ii-more-fun-with-structs.html#cb459-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
 <span id="cb459-5"><a href="structs-ii-more-fun-with-structs.html#cb459-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">4</span><span class="op">;</span></span>
 <span id="cb459-6"><a href="structs-ii-more-fun-with-structs.html#cb459-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>the compiler packs all those into a single <code>unsigned int</code>. But what if you needed <code>a</code> and <code>b</code> in one <code>int</code>, and <code>c</code> and <code>d</code> in a different one?</p>
-<p>There’s a solution for that: put an unnamed bit-field of width <code>0</code> where you want the compiler to start anew with packing bits in a different <code>int</code>:</p>
+<p>derleyici tüm bunları tek bir <code>unsigned int</code> içinde paketler. Peki ya bir <code>int</code> içinde <code>a</code> ve <code>b</code>'ye, farklı bir <code>int</code> içinde ise <code>c</code> ve <code>d</code>'ye ihtiyacınız varsa?</p>
+<p>Bunun bir çözümü var: derleyicinin farklı bir <code>int</code> içinde bitleri paketlemeye yeniden başlamasını istediğiniz yere <code>0</code> genişliğinde isimsiz bir bit alanı koyun:</p>
 <div class="sourceCode" id="cb460"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb460-1"><a href="structs-ii-more-fun-with-structs.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
 <span id="cb460-2"><a href="structs-ii-more-fun-with-structs.html#cb460-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb460-3"><a href="structs-ii-more-fun-with-structs.html#cb460-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
-<span id="cb460-4"><a href="structs-ii-more-fun-with-structs.html#cb460-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> <span class="op">:</span><span class="dv">0</span><span class="op">;</span>   <span class="co">// &lt;--Zero-width unnamed bit-field</span></span>
+<span id="cb460-4"><a href="structs-ii-more-fun-with-structs.html#cb460-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> <span class="op">:</span><span class="dv">0</span><span class="op">;</span>   <span class="co">// &lt;-- Sıfır genişlikli isimsiz bit alanı</span></span>
 <span id="cb460-5"><a href="structs-ii-more-fun-with-structs.html#cb460-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
 <span id="cb460-6"><a href="structs-ii-more-fun-with-structs.html#cb460-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">4</span><span class="op">;</span></span>
 <span id="cb460-7"><a href="structs-ii-more-fun-with-structs.html#cb460-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>It’s analogous to an explicit page break in a word processor. You’re telling the compiler, “Stop packing bits in this <code>unsigned</code>, and start packing them in the next one.”</p>
-<p>By adding the zero-width unnamed bit field in that spot, the compiler puts <code>a</code> and <code>b</code> in one <code>unsigned int</code>, and <code>c</code> and <code>d</code> in another <code>unsigned int</code>. Two total, for a size of 8 bytes on my system (<code>unsigned int</code>s are 4 bytes each).</p>
+<p>Bu, bir kelime işlemcideki açık sayfa sonuna <em>(page break)</em> benzer. Derleyiciye "Bu <code>unsigned</code> içinde bit paketlemeyi durdur ve bir sonrakinde paketlemeye başla" diyorsunuz.</p>
+<p>O noktaya sıfır genişlikli isimsiz bit alanını ekleyerek derleyici <code>a</code> ve <code>b</code>'yi bir <code>unsigned int</code> içine, <code>c</code> ve <code>d</code>'yi ise başka bir <code>unsigned int</code> içine koyar. Benim sistemimde toplam iki tane, yani 8 baytlık bir boyut (<code>unsigned int</code> türlerinin her biri 4 bayttır).</p>
 <p></p>
-<h2 data-number="20.9" id="unions"><span class="header-section-number">20.9</span> Unions</h2>
+<h2 data-number="20.9" id="unions"><span class="header-section-number">20.9</span> Birlikler: <code>union</code></h2>
 <p></p>
-<p>These are basically just like <code>struct</code>s, except the fields overlap in memory. The <code>union</code> will be only large enough for the largest field, and you can only use one field at a time.</p>
-<p>It’s a way to reuse the same memory space for different types of data.</p>
-<p>You declare them just like <code>struct</code>s, except it’s <code>union</code>. Take a look at this:</p>
+<p>Bunlar temel olarak <code>struct</code> yapılarına benzer, ancak alanlar bellekte üst üste biner. <code>union</code> yalnızca en büyük alan için yeterli boyutta olacaktır ve aynı anda yalnızca bir alan kullanabilirsiniz.</p>
+<p>Farklı veri türleri için aynı bellek alanını yeniden kullanmanın bir yoludur.</p>
+<p><code>union</code> olması dışında tıpkı <code>struct</code> yapıları gibi bildirirsiniz. Şuna bir bakın:</p>
 <div class="sourceCode" id="cb461"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb461-1"><a href="structs-ii-more-fun-with-structs.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
 <span id="cb461-2"><a href="structs-ii-more-fun-with-structs.html#cb461-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">,</span> d<span class="op">,</span> e<span class="op">,</span> f<span class="op">;</span></span>
 <span id="cb461-3"><a href="structs-ii-more-fun-with-structs.html#cb461-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> g<span class="op">,</span> h<span class="op">;</span></span>
 <span id="cb461-4"><a href="structs-ii-more-fun-with-structs.html#cb461-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> i<span class="op">,</span> j<span class="op">,</span> k<span class="op">,</span> l<span class="op">;</span></span>
 <span id="cb461-5"><a href="structs-ii-more-fun-with-structs.html#cb461-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>Now, that’s a lot of fields. If this were a <code>struct</code>, my system would tell me it took 36 bytes to hold it all.</p>
-<p>But it’s a <code>union</code>, so all those fields overlap in the same stretch of memory. The biggest one is <code>int</code> (or <code>float</code>), taking up 4 bytes on my system. And, indeed, if I ask for the <code>sizeof</code> the <code>union foo</code>, it tells me 4!</p>
-<p>The tradeoff is that you can only portably use one of those fields at a time. However…</p>
-<h3 data-number="20.9.1" id="union-type-punning"><span class="header-section-number">20.9.1</span> Unions and Type Punning</h3>
+<p>İşte bu çok fazla alan demek. Bu bir <code>struct</code> olsaydı, sistemim hepsini tutmak için 36 bayt gerektiğini söylerdi.</p>
+<p>Fakat bu bir <code>union</code> yapısıdır, bu nedenle tüm o alanlar aynı bellek uzamında üst üste biner. En büyüğü benim sistemimde 4 bayt yer kaplayan <code>int</code> (veya <code>float</code>) türüdür. Ve gerçekten de <code>union foo</code> için <code>sizeof</code> sorduğumda bana 4 yanıtını verir!</p>
+<p>Dezavantajı, taşınabilir bir şekilde aynı anda yalnızca bu alanlardan birini kullanabilmenizdir. Ancak…</p>
+<h3 data-number="20.9.1" id="union-type-punning"><span class="header-section-number">20.9.1</span> Birlikler ve Tür Kelime Oyunu (Type Punning)</h3>
 <p></p>
-<p>You can non-portably write to one <code>union</code> field and read from another!</p>
-<p>Doing so is called <a href="https://en.wikipedia.org/wiki/Type_punning" target="_blank" rel="noopener noreferrer">type punning</a><a href="function-specifiers-alignment-specifiersoperators.html#fn139" class="footnote-ref" id="fnref139" role="doc-noteref"><sup>139</sup></a>, and you’d use it if you really knew what you were doing, typically with some kind of low-level programming.</p>
-<p>Since the members of a union share the same memory, writing to one member necessarily affects the others. And if you read from one what was written to another, you get some weird effects.</p>
+<p>Taşınabilir olmayan bir şekilde bir <code>union</code> alanına yazıp başka bir alandan okuyabilirsiniz!</p>
+<p>Bunu yapmaya <a href="https://en.wikipedia.org/wiki/Type_punning" target="_blank" rel="noopener noreferrer">tür kelime oyunu <em>(type punning)</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn139" class="footnote-ref" id="fnref139" role="doc-noteref"><sup>139</sup></a> denir ve bunu genellikle bir tür alt seviye programlamada, gerçekten ne yaptığınızı biliyorsanız kullanırsınız.</p>
+<p>Bir birliğin <em>(union)</em> üyeleri aynı belleği paylaştığından, bir üyeye yazmak zorunlu olarak diğerlerini etkiler. Ve birine yazılanı diğerinden okursanız garip etkiler elde edersiniz.</p>
 <div class="sourceCode" id="cb462"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb462-1"><a href="structs-ii-more-fun-with-structs.html#cb462-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb462-2"><a href="structs-ii-more-fun-with-structs.html#cb462-2"></a></span>
 <span id="cb462-3"><a href="structs-ii-more-fun-with-structs.html#cb462-3"></a><span class="kw">union</span> foo <span class="op">{</span></span>
@@ -501,19 +500,19 @@
 <span id="cb462-11"><a href="structs-ii-more-fun-with-structs.html#cb462-11"></a></span>
 <span id="cb462-12"><a href="structs-ii-more-fun-with-structs.html#cb462-12"></a>    x<span class="op">.</span>b <span class="op">=</span> <span class="fl">3.14159</span><span class="op">;</span></span>
 <span id="cb462-13"><a href="structs-ii-more-fun-with-structs.html#cb462-13"></a></span>
-<span id="cb462-14"><a href="structs-ii-more-fun-with-structs.html#cb462-14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>b<span class="op">);</span>  <span class="co">// 3.14159, fair enough</span></span>
+<span id="cb462-14"><a href="structs-ii-more-fun-with-structs.html#cb462-14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>b<span class="op">);</span>  <span class="co">// 3.14159, oldukça makul</span></span>
 <span id="cb462-15"><a href="structs-ii-more-fun-with-structs.html#cb462-15"></a></span>
-<span id="cb462-16"><a href="structs-ii-more-fun-with-structs.html#cb462-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>a<span class="op">);</span>  <span class="co">// But what about this?</span></span>
+<span id="cb462-16"><a href="structs-ii-more-fun-with-structs.html#cb462-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>a<span class="op">);</span>  <span class="co">// Peki ya bu?</span></span>
 <span id="cb462-17"><a href="structs-ii-more-fun-with-structs.html#cb462-17"></a><span class="op">}</span></span></code></pre></div>
-<p>On my system, this prints out:</p>
+<p>Benim sistemimde bu şunu yazdırır:</p>
 <pre><code>3.141590
 4048</code></pre>
-<p>because under the hood, the object representation for the float <code>3.14159</code> was the same as the object representation for the short <code>4048</code>. On my system. Your results may vary.</p>
+<p>çünkü kaputun altında <code>3.14159</code> float değerinin nesne gösterimi <em>(object representation)</em>, <code>4048</code> short değerinin nesne gösterimi ile aynıydı. Benim sistemimde. Sizin sonuçlarınız farklılık gösterebilir.</p>
 <p></p>
-<h3 data-number="20.9.2" id="pointers-to-unions"><span class="header-section-number">20.9.2</span> Pointers to <code>union</code>s</h3>
+<h3 data-number="20.9.2" id="pointers-to-unions"><span class="header-section-number">20.9.2</span> <code>union</code> Göstericileri (Pointers)</h3>
 <p></p>
-<p>If you have a pointer to a <code>union</code>, you can cast that pointer to any of the types of the fields in that <code>union</code> and get the values out that way.</p>
-<p>In this example, we see that the <code>union</code> has <code>int</code>s and <code>float</code>s in it. And we get pointers to the <code>union</code>, but we cast them to <code>int*</code> and <code>float*</code> types (the cast silences compiler warnings). And then if we dereference those, we see that they have the values we stored directly in the <code>union</code>.</p>
+<p>Bir <code>union</code> göstericisine <em>(pointer)</em> sahipseniz, o göstericiyi o <code>union</code> içindeki alanların türlerinden herhangi birine dönüştürebilir <em>(cast)</em> ve değerleri bu şekilde alabilirsiniz.</p>
+<p>Bu örnekte <code>union</code> içinde <code>int</code> ve <code>float</code> türlerinin olduğunu görüyoruz. Ve <code>union</code> göstericileri elde ediyoruz ama bunları <code>int*</code> ve <code>float*</code> türlerine dönüştürüyoruz (bu tür dönüşümü derleyici uyarılarını susturur). Ve daha sonra bu göstericileri başvuru dışı bıraktığımızda <em>(dereference)</em>, doğrudan <code>union</code> içinde sakladığımız değerlere sahip olduklarını görürüz.</p>
 <div class="sourceCode" id="cb464"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb464-1"><a href="structs-ii-more-fun-with-structs.html#cb464-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb464-2"><a href="structs-ii-more-fun-with-structs.html#cb464-2"></a></span>
 <span id="cb464-3"><a href="structs-ii-more-fun-with-structs.html#cb464-3"></a><span class="kw">union</span> foo <span class="op">{</span></span>
@@ -531,95 +530,95 @@
 <span id="cb464-15"><a href="structs-ii-more-fun-with-structs.html#cb464-15"></a></span>
 <span id="cb464-16"><a href="structs-ii-more-fun-with-structs.html#cb464-16"></a>    x<span class="op">.</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
 <span id="cb464-17"><a href="structs-ii-more-fun-with-structs.html#cb464-17"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>a<span class="op">);</span>           <span class="co">// 12</span></span>
-<span id="cb464-18"><a href="structs-ii-more-fun-with-structs.html#cb464-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_int_p<span class="op">);</span>    <span class="co">// 12, again</span></span>
+<span id="cb464-18"><a href="structs-ii-more-fun-with-structs.html#cb464-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_int_p<span class="op">);</span>    <span class="co">// 12, yine</span></span>
 <span id="cb464-19"><a href="structs-ii-more-fun-with-structs.html#cb464-19"></a></span>
 <span id="cb464-20"><a href="structs-ii-more-fun-with-structs.html#cb464-20"></a>    x<span class="op">.</span>g <span class="op">=</span> <span class="fl">3.141592</span><span class="op">;</span></span>
 <span id="cb464-21"><a href="structs-ii-more-fun-with-structs.html#cb464-21"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>g<span class="op">);</span>           <span class="co">// 3.141592</span></span>
-<span id="cb464-22"><a href="structs-ii-more-fun-with-structs.html#cb464-22"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_float_p<span class="op">);</span>  <span class="co">// 3.141592, again</span></span>
+<span id="cb464-22"><a href="structs-ii-more-fun-with-structs.html#cb464-22"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_float_p<span class="op">);</span>  <span class="co">// 3.141592, yine</span></span>
 <span id="cb464-23"><a href="structs-ii-more-fun-with-structs.html#cb464-23"></a><span class="op">}</span></span></code></pre></div>
-<p>The reverse is also true. If we have a pointer to a type inside the <code>union</code>, we can cast that to a pointer to the <code>union</code> and access its members.</p>
+<p>Tersi de geçerlidir. <code>union</code> içindeki bir türün göstericisine sahipsek, bunu <code>union</code> göstericisine dönüştürebilir ve üyelerine erişebiliriz.</p>
 <div class="sourceCode" id="cb465"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb465-1"><a href="structs-ii-more-fun-with-structs.html#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo x<span class="op">;</span></span>
-<span id="cb465-2"><a href="structs-ii-more-fun-with-structs.html#cb465-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>foo_int_p <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)&amp;</span>x<span class="op">;</span>             <span class="co">// Pointer to int field</span></span>
-<span id="cb465-3"><a href="structs-ii-more-fun-with-structs.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="kw">union</span> foo <span class="op">*)</span>foo_int_p<span class="op">;</span>  <span class="co">// Back to pointer to union</span></span>
+<span id="cb465-2"><a href="structs-ii-more-fun-with-structs.html#cb465-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>foo_int_p <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)&amp;</span>x<span class="op">;</span>             <span class="co">// int alanına gösterici</span></span>
+<span id="cb465-3"><a href="structs-ii-more-fun-with-structs.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="kw">union</span> foo <span class="op">*)</span>foo_int_p<span class="op">;</span>  <span class="co">// Tekrar union göstericisine</span></span>
 <span id="cb465-4"><a href="structs-ii-more-fun-with-structs.html#cb465-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb465-5"><a href="structs-ii-more-fun-with-structs.html#cb465-5" aria-hidden="true" tabindex="-1"></a>p<span class="op">-&gt;</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// This line the same as...</span></span>
-<span id="cb465-6"><a href="structs-ii-more-fun-with-structs.html#cb465-6" aria-hidden="true" tabindex="-1"></a>x<span class="op">.</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>   <span class="co">// this one.</span></span></code></pre></div>
-<p>All this just lets you know that, under the hood, all these values in a <code>union</code> start at the same place in memory, and that’s the same as where the entire <code>union</code> is.</p>
+<span id="cb465-5"><a href="structs-ii-more-fun-with-structs.html#cb465-5" aria-hidden="true" tabindex="-1"></a>p<span class="op">-&gt;</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// Bu satır şununla aynıdır...</span></span>
+<span id="cb465-6"><a href="structs-ii-more-fun-with-structs.html#cb465-6" aria-hidden="true" tabindex="-1"></a>x<span class="op">.</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>   <span class="co">// bu satır.</span></span></code></pre></div>
+<p>Tüm bunlar size kaputun altında <code>union</code> içindeki tüm bu değerlerin bellekte aynı yerden başladığını ve bunun tüm <code>union</code> yapısının bulunduğu yerle aynı olduğunu bildirir.</p>
 <p></p>
-<h3 data-number="20.9.3" id="common-initial-sequences-in-unions"><span class="header-section-number">20.9.3</span> Common Initial Sequences in Unions</h3>
+<h3 data-number="20.9.3" id="common-initial-sequences-in-unions"><span class="header-section-number">20.9.3</span> Birliklerde Ortak Başlangıç Dizilimleri (Common Initial Sequences)</h3>
 <p></p>
-<p>If you have a <code>union</code> of <code>struct</code>s, and all those <code>struct</code>s begin with a <em>common initial sequence</em>, it’s valid to access members of that sequence from any of the <code>union</code> members.</p>
-<p>What?</p>
-<p>Here are two <code>struct</code>s with a common initial sequence:</p>
+<p><code>struct</code> yapılarından oluşan bir <code>union</code> yapınız varsa ve tüm o <code>struct</code> yapıları bir <em>ortak başlangıç dizilimi (common initial sequence)</em> ile başlıyorsa, <code>union</code> üyelerinin herhangi birinden o dizilimin üyelerine erişmek geçerlidir.</p>
+<p>Ne?</p>
+<p>İşte ortak başlangıç dizilimine sahip iki <code>struct</code>:</p>
 <div class="sourceCode" id="cb466"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb466-1"><a href="structs-ii-more-fun-with-structs.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> a <span class="op">{</span></span>
 <span id="cb466-2"><a href="structs-ii-more-fun-with-structs.html#cb466-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">;</span>     <span class="co">//</span></span>
-<span id="cb466-3"><a href="structs-ii-more-fun-with-structs.html#cb466-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Common initial sequence</span></span>
+<span id="cb466-3"><a href="structs-ii-more-fun-with-structs.html#cb466-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Ortak başlangıç dizilimi</span></span>
 <span id="cb466-4"><a href="structs-ii-more-fun-with-structs.html#cb466-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb466-5"><a href="structs-ii-more-fun-with-structs.html#cb466-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb466-6"><a href="structs-ii-more-fun-with-structs.html#cb466-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
 <span id="cb466-7"><a href="structs-ii-more-fun-with-structs.html#cb466-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb466-8"><a href="structs-ii-more-fun-with-structs.html#cb466-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> b <span class="op">{</span></span>
 <span id="cb466-9"><a href="structs-ii-more-fun-with-structs.html#cb466-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">;</span>     <span class="co">//</span></span>
-<span id="cb466-10"><a href="structs-ii-more-fun-with-structs.html#cb466-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Common initial sequence</span></span>
+<span id="cb466-10"><a href="structs-ii-more-fun-with-structs.html#cb466-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Ortak başlangıç dizilimi</span></span>
 <span id="cb466-11"><a href="structs-ii-more-fun-with-structs.html#cb466-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb466-12"><a href="structs-ii-more-fun-with-structs.html#cb466-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb466-13"><a href="structs-ii-more-fun-with-structs.html#cb466-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">short</span> z<span class="op">;</span></span>
 <span id="cb466-14"><a href="structs-ii-more-fun-with-structs.html#cb466-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>Do you see it? It’s that they start with <code>int</code> followed by <code>float</code>—that’s the common initial sequence. The members in the sequence of the <code>struct</code>s have to be compatible types. And we see that with <code>x</code> and <code>y</code>, which are <code>int</code> and <code>float</code> respectively.</p>
-<p>Now let’s build a union of these:</p>
+<p>Görüyor musunuz? <code>int</code> ile başlayıp ardından <code>float</code> ile devam ediyorlar—ortak başlangıç dizilimi işte budur. <code>struct</code> dizilimindeki üyelerin uyumlu türlerde olması gerekir. Bunu sırasıyla <code>int</code> ve <code>float</code> olan <code>x</code> ve <code>y</code> ile görüyoruz.</p>
+<p>Şimdi bunlardan bir birlik <em>(union)</em> oluşturalım:</p>
 <div class="sourceCode" id="cb467"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb467-1"><a href="structs-ii-more-fun-with-structs.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
 <span id="cb467-2"><a href="structs-ii-more-fun-with-structs.html#cb467-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> a sa<span class="op">;</span></span>
 <span id="cb467-3"><a href="structs-ii-more-fun-with-structs.html#cb467-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> b sb<span class="op">;</span></span>
 <span id="cb467-4"><a href="structs-ii-more-fun-with-structs.html#cb467-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>What this rule tells us is that we’re guaranteed that the members of the common initial sequences are interchangeable in code. That is:</p>
+<p>Bu kuralın bize söylediği şey, ortak başlangıç dizilimlerinin üyelerinin kod içinde birbirinin yerine geçebilir olduğunun garanti edilmesidir. Yani:</p>
 <ul>
-<li><code>f.sa.x</code> is the same as <code>f.sb.x</code>.</li>
+<li><code>f.sa.x</code> ifadesi <code>f.sb.x</code> ile aynıdır.</li>
 </ul>
-<p>and</p>
+<p>ve</p>
 <ul>
-<li><code>f.sa.y</code> is the same as <code>f.sb.y</code>.</li>
+<li><code>f.sa.y</code> ifadesi <code>f.sb.y</code> ile aynıdır.</li>
 </ul>
-<p>Because fields <code>x</code> and <code>y</code> are both in the common initial sequence.</p>
-<p>Also, the names of the members in the common initial sequence don’t matter—all that matters is that the types are the same.</p>
-<p>All together, this allows us a way to safely add some shared information between <code>struct</code>s in the <code>union</code>. The best example of this is probably using a field to determine the type of <code>struct</code> out of all the <code>struct</code>s in the <code>union</code> that is currently “in use”.</p>
-<p>That is, if we weren’t allowed this and we passed the <code>union</code> to some function, how would that function know which member of the <code>union</code> was the one it should look at?</p>
-<p>Take a look at these <code>struct</code>s. Note the common initial sequence:</p>
+<p>Çünkü hem <code>x</code> hem de <code>y</code> alanları ortak başlangıç dizilimindedir.</p>
+<p>Ayrıca, ortak başlangıç dizilimindeki üyelerin isimleri önemli değildir—önemli olan tek şey türlerin aynı olmasıdır.</p>
+<p>Hepsi bir arada değerlendirildiğinde bu, <code>union</code> içindeki <code>struct</code> yapıları arasında güvenli bir şekilde ortak bilgiler eklememize olanak tanır. Bunun en iyi örneği, muhtemelen <code>union</code> içindeki tüm <code>struct</code> yapılarından hangisinin o anda "kullanımda" olduğunu belirlemek için bir alan kullanmaktır.</p>
+<p>Yani buna izin verilmeseydi ve <code>union</code> yapısını bir fonksiyona geçirseydik, o fonksiyon <code>union</code> yapısının bakması gereken üyesinin hangisi olduğunu nasıl bilebilirdi?</p>
+<p>Bu <code>struct</code> yapılarına bir göz atın. Ortak başlangıç dizilimine dikkat edin:</p>
 <div class="sourceCode" id="cb468"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb468-1"><a href="structs-ii-more-fun-with-structs.html#cb468-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb468-2"><a href="structs-ii-more-fun-with-structs.html#cb468-2"></a></span>
 <span id="cb468-3"><a href="structs-ii-more-fun-with-structs.html#cb468-3"></a><span class="kw">struct</span> common <span class="op">{</span></span>
-<span id="cb468-4"><a href="structs-ii-more-fun-with-structs.html#cb468-4"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-4"><a href="structs-ii-more-fun-with-structs.html#cb468-4"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// ortak başlangıç dizilimi</span></span>
 <span id="cb468-5"><a href="structs-ii-more-fun-with-structs.html#cb468-5"></a><span class="op">};</span></span>
 <span id="cb468-6"><a href="structs-ii-more-fun-with-structs.html#cb468-6"></a></span>
 <span id="cb468-7"><a href="structs-ii-more-fun-with-structs.html#cb468-7"></a><span class="kw">struct</span> antelope <span class="op">{</span></span>
-<span id="cb468-8"><a href="structs-ii-more-fun-with-structs.html#cb468-8"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-8"><a href="structs-ii-more-fun-with-structs.html#cb468-8"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// ortak başlangıç dizilimi</span></span>
 <span id="cb468-9"><a href="structs-ii-more-fun-with-structs.html#cb468-9"></a></span>
 <span id="cb468-10"><a href="structs-ii-more-fun-with-structs.html#cb468-10"></a>    <span class="dt">int</span> loudness<span class="op">;</span></span>
 <span id="cb468-11"><a href="structs-ii-more-fun-with-structs.html#cb468-11"></a><span class="op">};</span></span>
 <span id="cb468-12"><a href="structs-ii-more-fun-with-structs.html#cb468-12"></a></span>
 <span id="cb468-13"><a href="structs-ii-more-fun-with-structs.html#cb468-13"></a><span class="kw">struct</span> octopus <span class="op">{</span></span>
-<span id="cb468-14"><a href="structs-ii-more-fun-with-structs.html#cb468-14"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-14"><a href="structs-ii-more-fun-with-structs.html#cb468-14"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// ortak başlangıç dizilimi</span></span>
 <span id="cb468-15"><a href="structs-ii-more-fun-with-structs.html#cb468-15"></a></span>
 <span id="cb468-16"><a href="structs-ii-more-fun-with-structs.html#cb468-16"></a>    <span class="dt">int</span> sea_creature<span class="op">;</span></span>
 <span id="cb468-17"><a href="structs-ii-more-fun-with-structs.html#cb468-17"></a>    <span class="dt">float</span> intelligence<span class="op">;</span></span>
 <span id="cb468-18"><a href="structs-ii-more-fun-with-structs.html#cb468-18"></a><span class="op">};</span></span></code></pre></div>
-<p>Now let’s throw them into a <code>union</code>:</p>
+<p>Şimdi bunları bir <code>union</code> içine koyalım:</p>
 <div class="sourceCode" id="cb469" data-startfrom="20"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 19;"><span id="cb469-20"><a href="structs-ii-more-fun-with-structs.html#cb469-20"></a><span class="kw">union</span> animal <span class="op">{</span></span>
 <span id="cb469-21"><a href="structs-ii-more-fun-with-structs.html#cb469-21"></a>    <span class="kw">struct</span> common common<span class="op">;</span></span>
 <span id="cb469-22"><a href="structs-ii-more-fun-with-structs.html#cb469-22"></a>    <span class="kw">struct</span> antelope antelope<span class="op">;</span></span>
 <span id="cb469-23"><a href="structs-ii-more-fun-with-structs.html#cb469-23"></a>    <span class="kw">struct</span> octopus octopus<span class="op">;</span></span>
 <span id="cb469-24"><a href="structs-ii-more-fun-with-structs.html#cb469-24"></a><span class="op">};</span></span></code></pre></div>
-<p>Also, please indulge me these two <code>#define</code>s for the demo:</p>
+<p>Ayrıca gösterim için bu iki <code>#define</code> tanımını hoş görün:</p>
 <div class="sourceCode" id="cb470" data-startfrom="26"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 25;"><span id="cb470-26"><a href="structs-ii-more-fun-with-structs.html#cb470-26"></a><span class="pp">#define ANTELOPE </span><span class="dv">1</span></span>
 <span id="cb470-27"><a href="structs-ii-more-fun-with-structs.html#cb470-27"></a><span class="pp">#define OCTOPUS  </span><span class="dv">2</span></span></code></pre></div>
-<p>So far, nothing special has happened here. It seems like the <code>type</code> field is completely useless.</p>
-<p>But now let’s make a generic function that prints a <code>union animal</code>. It has to somehow be able to tell if it’s looking at a <code>struct antelope</code> or a <code>struct octopus</code>.</p>
-<p>Because of the magic of common initial sequences, it can look up the animal type in any of these places for a particular <code>union animal x</code>:</p>
-<div class="sourceCode" id="cb471"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb471-1"><a href="structs-ii-more-fun-with-structs.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>common<span class="op">.</span>type<span class="op">;</span>    <span class="co">// or...</span></span>
-<span id="cb471-2"><a href="structs-ii-more-fun-with-structs.html#cb471-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>antelope<span class="op">.</span>type<span class="op">;</span>  <span class="co">// or...</span></span>
+<p>Şu ana kadar özel bir şey olmadı. <code>type</code> alanı tamamen yararsız görünüyor.</p>
+<p>Ancak şimdi bir <code>union animal</code> yazdıran genel <em>(generic)</em> bir fonksiyon yapalım. Bir <code>struct antelope</code> yapısına mı yoksa bir <code>struct octopus</code> yapısına mı baktığını bir şekilde anlayabilmesi gerekir.</p>
+<p>Ortak başlangıç dizilimlerinin sihri sayesinde, belirli bir <code>union animal x</code> için hayvan türüne bu yerlerin herhangi birinden bakabilir:</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb471-1"><a href="structs-ii-more-fun-with-structs.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>common<span class="op">.</span>type<span class="op">;</span>    <span class="co">// veya...</span></span>
+<span id="cb471-2"><a href="structs-ii-more-fun-with-structs.html#cb471-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>antelope<span class="op">.</span>type<span class="op">;</span>  <span class="co">// veya...</span></span>
 <span id="cb471-3"><a href="structs-ii-more-fun-with-structs.html#cb471-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>octopus<span class="op">.</span>type<span class="op">;</span></span></code></pre></div>
-<p>All those refer to the same value in memory.</p>
-<p>And, as you might have guessed, the <code>struct common</code> is there so code can agnostically look at the type without mentioning a particular animal.</p>
-<p>Let’s look at the code to print a <code>union animal</code>:</p>
+<p>Tüm bunlar bellekteki aynı değere işaret eder.</p>
+<p>Ve tahmin edebileceğiniz gibi, <code>struct common</code> yapısı, kodun belirli bir hayvandan bahsetmeden türü bağımsız olarak inceleyebilmesi için oradadır.</p>
+<p>Bir <code>union animal</code> yapısını yazdıran koda bakalım:</p>
 <div class="sourceCode" id="cb472" data-startfrom="29"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 28;"><span id="cb472-29"><a href="structs-ii-more-fun-with-structs.html#cb472-29"></a><span class="dt">void</span> print_animal<span class="op">(</span><span class="kw">union</span> animal <span class="op">*</span>x<span class="op">)</span></span>
 <span id="cb472-30"><a href="structs-ii-more-fun-with-structs.html#cb472-30"></a><span class="op">{</span></span>
 <span id="cb472-31"><a href="structs-ii-more-fun-with-structs.html#cb472-31"></a>    <span class="cf">switch</span> <span class="op">(</span>x<span class="op">-&gt;</span>common<span class="op">.</span>type<span class="op">)</span> <span class="op">{</span></span>
@@ -647,45 +646,45 @@
 <span id="cb472-53"><a href="structs-ii-more-fun-with-structs.html#cb472-53"></a>    print_animal<span class="op">(&amp;</span>a<span class="op">);</span></span>
 <span id="cb472-54"><a href="structs-ii-more-fun-with-structs.html#cb472-54"></a>    print_animal<span class="op">(&amp;</span>b<span class="op">);</span></span>
 <span id="cb472-55"><a href="structs-ii-more-fun-with-structs.html#cb472-55"></a><span class="op">}</span></span></code></pre></div>
-<p>See how on line 29 we’re just passing in the <code>union</code>—we have no idea what type of animal <code>struct</code> is in use within it.</p>
-<p>But that’s OK! Because on line 31 we check the type to see if it’s an antelope or an octopus. And then we can look at the proper <code>struct</code> to get the members.</p>
-<p>It’s definitely possible to get this same effect using just <code>struct</code>s, but you can do it this way if you want the memory-saving effects of a <code>union</code>.</p>
+<p>29. satırda doğrudan <code>union</code> yapısını nasıl geçirdiğimizi gördünüz mü—içinde ne tür bir hayvan <code>struct</code> yapısının kullanımda olduğu hakkında hiçbir fikrimiz yok.</p>
+<p>Ama sorun değil! Çünkü 31. satırda bunun bir antilop mu yoksa bir ahtapot mu olduğunu görmek için türe bakıyoruz. Ve ardından üyeleri almak için uygun <code>struct</code> yapısına bakabiliyoruz.</p>
+<p>Yalnızca <code>struct</code> yapılarını kullanarak aynı etkiyi elde etmek kesinlikle mümkündür, ancak bir <code>union</code> yapısının bellek tasarrufu sağlayan etkilerini istiyorsanız bu şekilde yapabilirsiniz.</p>
 <p></p>
-<h2 data-number="20.10" id="unions-and-unnamed-structs"><span class="header-section-number">20.10</span> Unions and Unnamed Structs</h2>
+<h2 data-number="20.10" id="unions-and-unnamed-structs"><span class="header-section-number">20.10</span> Birlikler ve İsimsiz Struct Yapıları</h2>
 <p></p>
-<p>You know how you can have an unnamed <code>struct</code>, like this:</p>
+<p>Şu şekilde isimsiz bir <code>struct</code> yapısına sahip olabileceğinizi biliyorsunuz:</p>
 <div class="sourceCode" id="cb473"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb473-1"><a href="structs-ii-more-fun-with-structs.html#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span></span>
 <span id="cb473-2"><a href="structs-ii-more-fun-with-structs.html#cb473-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
 <span id="cb473-3"><a href="structs-ii-more-fun-with-structs.html#cb473-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> s<span class="op">;</span></span></code></pre></div>
-<p>That defines a variable <code>s</code> that is of anonymous <code>struct</code> type (because the <code>struct</code> has no name tag), with members <code>x</code> and <code>y</code>.</p>
-<p>So things like this are valid:</p>
+<p>Bu, <code>x</code> ve <code>y</code> üyelerine sahip anonim bir <code>struct</code> türünde (çünkü <code>struct</code>'ın isim etiketi yok) <code>s</code> değişkenini tanımlar.</p>
+<p>Böylece bunun gibi şeyler geçerlidir:</p>
 <div class="sourceCode" id="cb474"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb474-1"><a href="structs-ii-more-fun-with-structs.html#cb474-1" aria-hidden="true" tabindex="-1"></a>s<span class="op">.</span>x <span class="op">=</span> <span class="dv">34</span><span class="op">;</span></span>
 <span id="cb474-2"><a href="structs-ii-more-fun-with-structs.html#cb474-2" aria-hidden="true" tabindex="-1"></a>s<span class="op">.</span>y <span class="op">=</span> <span class="dv">90</span><span class="op">;</span></span>
 <span id="cb474-3"><a href="structs-ii-more-fun-with-structs.html#cb474-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb474-4"><a href="structs-ii-more-fun-with-structs.html#cb474-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">.</span>x<span class="op">,</span> s<span class="op">.</span>y<span class="op">);</span></span></code></pre></div>
-<p>Turns out you can drop those unnamed <code>struct</code>s in <code>union</code>s just like you might expect:</p>
+<p>Görünüşe göre bu isimsiz <code>struct</code> yapılarını tıpkı bekleyeceğiniz gibi <code>union</code> yapıları içine de koyabilirsiniz:</p>
 <div class="sourceCode" id="cb475"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb475-1"><a href="structs-ii-more-fun-with-structs.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
-<span id="cb475-2"><a href="structs-ii-more-fun-with-structs.html#cb475-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// unnamed!</span></span>
+<span id="cb475-2"><a href="structs-ii-more-fun-with-structs.html#cb475-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// isimsiz!</span></span>
 <span id="cb475-3"><a href="structs-ii-more-fun-with-structs.html#cb475-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
 <span id="cb475-4"><a href="structs-ii-more-fun-with-structs.html#cb475-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> a<span class="op">;</span></span>
 <span id="cb475-5"><a href="structs-ii-more-fun-with-structs.html#cb475-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb475-6"><a href="structs-ii-more-fun-with-structs.html#cb475-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// unnamed!</span></span>
+<span id="cb475-6"><a href="structs-ii-more-fun-with-structs.html#cb475-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// isimsiz!</span></span>
 <span id="cb475-7"><a href="structs-ii-more-fun-with-structs.html#cb475-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> z<span class="op">,</span> w<span class="op">;</span></span>
 <span id="cb475-8"><a href="structs-ii-more-fun-with-structs.html#cb475-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> b<span class="op">;</span></span>
 <span id="cb475-9"><a href="structs-ii-more-fun-with-structs.html#cb475-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p>And then access them as per normal:</p>
+<p>Ve sonra bunlara normal şekilde erişebilirsiniz:</p>
 <div class="sourceCode" id="cb476"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb476-1"><a href="structs-ii-more-fun-with-structs.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo f<span class="op">;</span></span>
 <span id="cb476-2"><a href="structs-ii-more-fun-with-structs.html#cb476-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb476-3"><a href="structs-ii-more-fun-with-structs.html#cb476-3" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>a<span class="op">.</span>x <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb476-4"><a href="structs-ii-more-fun-with-structs.html#cb476-4" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>a<span class="op">.</span>y <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb476-5"><a href="structs-ii-more-fun-with-structs.html#cb476-5" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>b<span class="op">.</span>z <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
 <span id="cb476-6"><a href="structs-ii-more-fun-with-structs.html#cb476-6" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>b<span class="op">.</span>w <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code></pre></div>
-<p>No problem!</p>
+<p>Hiç sorun yok!</p>
 <p></p>
-<h2 data-number="20.11" id="passing-and-returning-structs-and-unions"><span class="header-section-number">20.11</span> Passing and Returning <code>struct</code>s and <code>union</code>s</h2>
+<h2 data-number="20.11" id="passing-and-returning-structs-and-unions"><span class="header-section-number">20.11</span> <code>struct</code> ve <code>union</code> Yapılarını Fonksiyonlara Geçirme ve Döndürme</h2>
 <p> </p>
-<p>You can pass a <code>struct</code> or <code>union</code> to a function by value (as opposed to a pointer to it)—a copy of that object to the parameter will be made as if by assignment as per usual.</p>
-<p>You can also return a <code>struct</code> or <code>union</code> from a function and it is also passed by value back.</p>
+<p>Bir <code>struct</code> veya <code>union</code> yapısını fonksiyona değer ile geçebilirsiniz <em>(pass by value)</em> (ona bir gösterici geçmenin aksine)—her zamanki gibi atama yoluyla o nesnenin bir kopyası parametreye aktarılacaktır.</p>
+<p>Bir fonksiyondan bir <code>struct</code> veya <code>union</code> da döndürebilirsiniz ve bu da geriye değer ile geçirilir <em>(pass by value)</em>.</p>
 <div class="sourceCode" id="cb477"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb477-1"><a href="structs-ii-more-fun-with-structs.html#cb477-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb477-2"><a href="structs-ii-more-fun-with-structs.html#cb477-2"></a></span>
 <span id="cb477-3"><a href="structs-ii-more-fun-with-structs.html#cb477-3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
@@ -699,14 +698,14 @@
 <span id="cb477-11"><a href="structs-ii-more-fun-with-structs.html#cb477-11"></a></span>
 <span id="cb477-12"><a href="structs-ii-more-fun-with-structs.html#cb477-12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb477-13"><a href="structs-ii-more-fun-with-structs.html#cb477-13"></a><span class="op">{</span></span>
-<span id="cb477-14"><a href="structs-ii-more-fun-with-structs.html#cb477-14"></a>    <span class="kw">struct</span> foo a <span class="op">=</span> f<span class="op">();</span>  <span class="co">// Copy is made</span></span>
+<span id="cb477-14"><a href="structs-ii-more-fun-with-structs.html#cb477-14"></a>    <span class="kw">struct</span> foo a <span class="op">=</span> f<span class="op">();</span>  <span class="co">// Kopya oluşturulur</span></span>
 <span id="cb477-15"><a href="structs-ii-more-fun-with-structs.html#cb477-15"></a></span>
 <span id="cb477-16"><a href="structs-ii-more-fun-with-structs.html#cb477-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">.</span>x<span class="op">,</span> a<span class="op">.</span>y<span class="op">);</span></span>
 <span id="cb477-17"><a href="structs-ii-more-fun-with-structs.html#cb477-17"></a><span class="op">}</span></span></code></pre></div>
-<p>Fun fact: if you do this, you can use the <code>.</code> operator right off the function call:</p>
+<p>Eğlenceli bir bilgi: Eğer bunu yaparsanız, nokta <code>.</code> işlecini doğrudan fonksiyon çağrısı üzerinden kullanabilirsiniz:</p>
 <div class="sourceCode" id="cb478" data-startfrom="16"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 15;"><span id="cb478-16"><a href="structs-ii-more-fun-with-structs.html#cb478-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">().</span>x<span class="op">,</span> f<span class="op">().</span>y<span class="op">);</span></span></code></pre></div>
-<p>(Of course that example calls the function twice, inefficiently.)</p>
-<p>And the same holds true for returning pointers to <code>struct</code>s and <code>union</code>s—just be sure to use the <code>-&gt;</code> arrow operator in that case.</p>
+<p>(Elbette bu örnek fonksiyonu iki kez çağırır, verimsiz bir şekilde.)</p>
+<p>Aynı şey <code>struct</code> ve <code>union</code> göstericileri döndürmek için de geçerlidir—sadece bu durumda <code>-&gt;</code> ok işlecini kullandığınızdan emin olun.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

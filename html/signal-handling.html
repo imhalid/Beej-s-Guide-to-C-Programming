@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,14 +32,14 @@
 </head>
 <body>
 <div class="nav-header"><a href="exiting-a-program.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="variable-length-arrays-vlas.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="29" id="signal-handling"><span class="header-section-number">29</span> Signal Handling</h1>
+<h1 data-number="29" id="signal-handling"><span class="header-section-number">29</span> Sinyal İşleme</h1>
 <p></p>
-<p>Before we start, I’m just going to advise you to generally ignore this entire chapter and use your OS’s (very likely) superior signal handling functions. Unix-likes have the <code>sigaction()</code> family of functions, and Windows has… whatever it does<a href="function-specifiers-alignment-specifiersoperators.html#fn172" class="footnote-ref" id="fnref172" role="doc-noteref"><sup>172</sup></a>.</p>
-<p>With that out of the way, what are signals?</p>
-<h2 data-number="29.1" id="what-are-signals"><span class="header-section-number">29.1</span> What Are Signals?</h2>
-<p>A <em>signal</em> is <em>raised</em> on a variety of external events. Your program can be configured to be interrupted to <em>handle</em> the signal, and, optionally, continue where it left off once the signal has been handled.</p>
-<p>Think of it like a function that’s automatically called when one of these external events occurs.</p>
-<p>What are these events? On your system, there are probably a lot of them, but in the C spec there are just a few:</p>
+<p>Başlamadan önce, genel olarak bu bölümün tamamını görmezden gelmenizi ve işletim sisteminizin (büyük olasılıkla) üstün sinyal işleme fonksiyonlarını kullanmanızı tavsiye edeceğim. Unix benzeri sistemlerde <code>sigaction()</code> fonksiyon ailesi vardır ve Windows'ta ise… her ne yapıyorsa o vardır<a href="function-specifiers-alignment-specifiersoperators.html#fn172" class="footnote-ref" id="fnref172" role="doc-noteref"><sup>172</sup></a>.</p>
+<p>Bunu aradan çıkardıktan sonra, sinyal nedir?</p>
+<h2 data-number="29.1" id="what-are-signals"><span class="header-section-number">29.1</span> Sinyal Nedir?</h2>
+<p>Çeşitli harici olaylarda bir <em>sinyal</em> <em>yükseltilir (raised)</em>. Programınız sinyali <em>işlemek (handle)</em> için kesintiye uğrayacak şekilde yapılandırılabilir ve isteğe bağlı olarak, sinyal işlendikten sonra kaldığı yerden devam edebilir.</p>
+<p>Bunu, bu harici olaylardan biri meydana geldiğinde otomatik olarak çağrılan bir fonksiyon gibi düşünün.</p>
+<p>Bu olaylar nelerdir? Sisteminizde muhtemelen bunlardan çok sayıda vardır, ancak C spesifikasyonunda yalnızca birkaçı bulunur:</p>
 <p> </p>
 <table>
 <colgroup>
@@ -48,48 +48,48 @@
 </colgroup>
 <thead>
 <tr>
-<th>Signal</th>
-<th>Description</th>
+<th>Sinyal</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>SIGABRT</code></td>
-<td>Abnormal termination—what happens when <code>abort()</code> is called.</td>
+<td>Anormal sonlanma—<code>abort()</code> çağrıldığında olan şey.</td>
 </tr>
 <tr>
 <td><code>SIGFPE</code></td>
-<td>Floating point exception.</td>
+<td>Kayan nokta istisnası (Floating point exception).</td>
 </tr>
 <tr>
 <td><code>SIGILL</code></td>
-<td>Illegal instruction.</td>
+<td>Geçersiz talimat (Illegal instruction).</td>
 </tr>
 <tr>
 <td><code>SIGINT</code></td>
-<td>Interrupt—usually the result of <code>CTRL-C</code> being hit.</td>
+<td>Kesme (Interrupt)—genellikle <code>CTRL-C</code> tuşuna basılmasının sonucu.</td>
 </tr>
 <tr>
 <td><code>SIGSEGV</code></td>
-<td>“Segmentation Violation”: invalid memory access.</td>
+<td>“Bölütleme İhlali (Segmentation Violation)”: geçersiz bellek erişimi.</td>
 </tr>
 <tr>
 <td><code>SIGTERM</code></td>
-<td>Termination requested.</td>
+<td>Sonlandırma istendi.</td>
 </tr>
 </tbody>
 </table>
-<p>You can set up your program to ignore, handle, or allow the default action for each of these by using the <code>signal()</code> function.</p>
-<h2 data-number="29.2" id="handling-signals-with-signal"><span class="header-section-number">29.2</span> Handling Signals with <code>signal()</code></h2>
+<p><code>signal()</code> fonksiyonunu kullanarak programınızı bunların her birini yok sayacak, işleyecek veya varsayılan eyleme izin verecek şekilde ayarlayabilirsiniz.</p>
+<h2 data-number="29.2" id="handling-signals-with-signal"><span class="header-section-number">29.2</span> <code>signal()</code> ile Sinyalleri İşleme</h2>
 <p></p>
-<p>The <code>signal()</code> call takes two parameters: the signal in question, and an action to take when that signal is raised.</p>
-<p>The action can be one of three things:</p>
+<p><code>signal()</code> çağrısı iki parametre alır: söz konusu sinyal ve o sinyal yükseltildiğinde alınacak bir eylem.</p>
+<p>Eylem üç şeyden biri olabilir:</p>
 <ul>
-<li>A pointer to a handler function.</li>
-<li><code>SIG_IGN</code> to ignore the signal.</li>
-<li><code>SIG_DFL</code> to restore the default handler for the signal.</li>
+<li>Bir işleyici (handler) fonksiyona gösterici.</li>
+<li>Sinyali yok saymak için <code>SIG_IGN</code>.</li>
+<li>Sinyal için varsayılan işleyiciyi geri yüklemek için <code>SIG_DFL</code>.</li>
 </ul>
-<p>Let’s write a program that you can’t <code>CTRL-C</code> out of. (Don’t fret—in the following program, you can also hit <code>RETURN</code> and it’ll exit.)</p>
+<p><code>CTRL-C</code> ile çıkamayacağınız bir program yazalım. (Üzülmeyin—aşağıdaki programda <code>RETURN</code> tuşuna da basabilirsiniz ve çıkacaktır.)</p>
 <p></p>
 <div class="sourceCode" id="cb584"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb584-1"><a href="signal-handling.html#cb584-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb584-2"><a href="signal-handling.html#cb584-2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
@@ -98,42 +98,42 @@
 <span id="cb584-5"><a href="signal-handling.html#cb584-5"></a><span class="op">{</span></span>
 <span id="cb584-6"><a href="signal-handling.html#cb584-6"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">1024</span><span class="op">];</span></span>
 <span id="cb584-7"><a href="signal-handling.html#cb584-7"></a></span>
-<span id="cb584-8"><a href="signal-handling.html#cb584-8"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_IGN<span class="op">);</span>    <span class="co">// Ignore SIGINT, caused by ^C</span></span>
+<span id="cb584-8"><a href="signal-handling.html#cb584-8"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_IGN<span class="op">);</span>    <span class="co">// ^C ile tetiklenen SIGINT sinyalini yok say</span></span>
 <span id="cb584-9"><a href="signal-handling.html#cb584-9"></a></span>
 <span id="cb584-10"><a href="signal-handling.html#cb584-10"></a>    printf<span class="op">(</span><span class="st">&quot;Try hitting ^C... (hit RETURN to exit)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb584-11"><a href="signal-handling.html#cb584-11"></a></span>
-<span id="cb584-12"><a href="signal-handling.html#cb584-12"></a>    <span class="co">// Wait for a line of input so the program doesn&#39;t just exit</span></span>
+<span id="cb584-12"><a href="signal-handling.html#cb584-12"></a>    <span class="co">// Programın hemen çıkmaması için bir satırlık girdi bekle</span></span>
 <span id="cb584-13"><a href="signal-handling.html#cb584-13"></a>    fgets<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> stdin<span class="op">);</span></span>
 <span id="cb584-14"><a href="signal-handling.html#cb584-14"></a><span class="op">}</span></span></code></pre></div>
-<p>Check out line 8—we tell the program to ignore <code>SIGINT</code>, the interrupt signal that’s raised when <code>CTRL-C</code> is hit. No matter how much you hit it, the signal remains ignored. If you comment out line 8, you’ll see you can <code>CTRL-C</code> with impunity and quit the program on the spot.</p>
+<p>8. satıra göz atın—programa <code>CTRL-C</code> tuşuna basıldığında yükseltilen kesme sinyali olan <code>SIGINT</code> sinyalini yok saymasını söylüyoruz. Ne kadar basarsanız basın, sinyal yok sayılmaya devam eder. 8. satırı yorum satırına alırsanız, cezasız bir şekilde <code>CTRL-C</code> yapabileceğinizi ve programdan anında çıkabileceğinizi görürsünüz.</p>
 <p> </p>
-<h2 data-number="29.3" id="writing-signal-handlers"><span class="header-section-number">29.3</span> Writing Signal Handlers</h2>
-<p>I mentioned you could also write a handler function that gets called when the signal is raised.</p>
-<p>These are pretty straightforward, are also very capability-limited when it comes to the spec.</p>
+<h2 data-number="29.3" id="writing-signal-handlers"><span class="header-section-number">29.3</span> Sinyal İşleyicileri Yazma</h2>
+<p>Sinyal yükseltildiğinde çağrılan bir işleyici fonksiyon da yazabileceğinizden bahsetmiştim.</p>
+<p>Bunlar oldukça basittir, ancak spesifikasyon söz konusu olduğunda yetenekleri çok sınırlıdır.</p>
 <p></p>
-<p>Before we start, let’s look at the function prototype for the <code>signal()</code> call:</p>
+<p>Başlamadan önce <code>signal()</code> çağrısının fonksiyon prototipine bakalım:</p>
 <div class="sourceCode" id="cb585"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb585-1"><a href="signal-handling.html#cb585-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
-<p>Pretty easy to read, right?</p>
-<p><em>WRONG!</em> <code>:)</code></p>
-<p>Let’s take a moment to take it apart for practice.</p>
-<p><code>signal()</code> takes two arguments: an integer <code>sig</code> representing the signal, and a pointer <code>func</code> to the handler (the handler returns <code>void</code> and takes an <code>int</code> as an argument), highlighted below:</p>
+<p>Okuması oldukça kolay, değil mi?</p>
+<p><em>YANLIŞ!</em> <code>:)</code></p>
+<p>Pratik yapmak için bunu parçalarına ayırmaya bir anımızı ayıralım.</p>
+<p><code>signal()</code> iki argüman alır: sinyali temsil eden bir tamsayı <code>sig</code> ve işleyiciye bir gösterici olan <code>func</code> (işleyici <code>void</code> döndürür ve argüman olarak bir <code>int</code> alır), aşağıda vurgulanmıştır:</p>
 <div class="sourceCode" id="cb586"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb586-1"><a href="signal-handling.html#cb586-1" aria-hidden="true" tabindex="-1"></a>                sig          func</span>
 <span id="cb586-2"><a href="signal-handling.html#cb586-2" aria-hidden="true" tabindex="-1"></a>              <span class="op">|-----|</span>  <span class="op">|---------------|</span></span>
 <span id="cb586-3"><a href="signal-handling.html#cb586-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
 <p></p>
-<p>Basically, we’re going to pass in the signal number we’re interested in catching, and we’re going to pass a pointer to a function of the form:</p>
+<p>Temel olarak, yakalamak istediğimiz sinyal numarasını geçireceğiz ve şu biçimdeki bir fonksiyona gösterici geçireceğiz:</p>
 <div class="sourceCode" id="cb587"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb587-1"><a href="signal-handling.html#cb587-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> f<span class="op">(</span><span class="dt">int</span> x<span class="op">);</span></span></code></pre></div>
-<p>that will do the actual catching.</p>
-<p>Now—what about the rest of that prototype? It’s basically all the return type. See, <code>signal()</code> will return whatever you passed as <code>func</code> on success… so that means it’s returning a pointer to a function that returns <code>void</code> and takes an <code>int</code> as an argument.</p>
-<div class="sourceCode" id="cb588"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb588-1"><a href="signal-handling.html#cb588-1" aria-hidden="true" tabindex="-1"></a>returned</span>
-<span id="cb588-2"><a href="signal-handling.html#cb588-2" aria-hidden="true" tabindex="-1"></a>function    indicates we<span class="ch">&#39;r</span><span class="er">e              and</span></span>
-<span id="cb588-3"><a href="signal-handling.html#cb588-3" aria-hidden="true" tabindex="-1"></a>returns     returning a                  that function</span>
-<span id="cb588-4"><a href="signal-handling.html#cb588-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span>        pointer to function          takes an <span class="dt">int</span></span>
+<p>gerçek yakalama işlemini bu fonksiyon yapacaktır.</p>
+<p>Şimdi—bu prototipin geri kalanı ne olacak? Bu aslında tamamen dönüş türüdür. Bakın, <code>signal()</code> başarılı olduğunda <code>func</code> olarak ne ilettiyseniz onu döndürür… yani bu, <code>void</code> döndüren ve argüman olarak bir <code>int</code> alan bir fonksiyona gösterici döndürdüğü anlamına gelir.</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb588-1"><a href="signal-handling.html#cb588-1" aria-hidden="true" tabindex="-1"></a>döndürülen</span>
+<span id="cb588-2"><a href="signal-handling.html#cb588-2" aria-hidden="true" tabindex="-1"></a>fonksiyon    bir fonksiyona              ve</span>
+<span id="cb588-3"><a href="signal-handling.html#cb588-3" aria-hidden="true" tabindex="-1"></a>void         gösterici                   o fonksiyon</span>
+<span id="cb588-4"><a href="signal-handling.html#cb588-4" aria-hidden="true" tabindex="-1"></a>döndürür     döndürdüğümüzü gösterir     bir int alır</span>
 <span id="cb588-5"><a href="signal-handling.html#cb588-5" aria-hidden="true" tabindex="-1"></a><span class="op">|--|</span>        <span class="op">|</span>                                   <span class="op">|---|</span></span>
 <span id="cb588-6"><a href="signal-handling.html#cb588-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span>       <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
-<p>Also, it can return <code>SIG_ERR</code> in case of an error.</p>
-<p>Let’s do an example where we make it so you have to hit <code>CTRL-C</code> twice to exit.</p>
-<p>I want to be clear that this program engages in undefined behavior in a couple ways. But it’ll probably work for you, and it’s hard to come up with portable non-trivial demos.</p>
+<p>Ayrıca bir hata durumunda <code>SIG_ERR</code> döndürebilir.</p>
+<p>Çıkmak için <code>CTRL-C</code> tuşuna iki kez basmanız gereken bir örnek yapalım.</p>
+<p>Bu programın birkaç şekilde tanımsız davranış sergilediğini açıkça belirtmek isterim. Ancak muhtemelen sizin için çalışacaktır ve önemsiz olmayan taşınabilir demolar sunmak zordur.</p>
 <p> </p>
 <div class="sourceCode" id="cb589"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb589-1"><a href="signal-handling.html#cb589-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb589-2"><a href="signal-handling.html#cb589-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
@@ -143,20 +143,20 @@
 <span id="cb589-6"><a href="signal-handling.html#cb589-6"></a></span>
 <span id="cb589-7"><a href="signal-handling.html#cb589-7"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
 <span id="cb589-8"><a href="signal-handling.html#cb589-8"></a><span class="op">{</span></span>
-<span id="cb589-9"><a href="signal-handling.html#cb589-9"></a>    <span class="co">// The compiler is allowed to run:</span></span>
+<span id="cb589-9"><a href="signal-handling.html#cb589-9"></a>    <span class="co">// Derleyicinin şunları çalıştırmasına izin verilir:</span></span>
 <span id="cb589-10"><a href="signal-handling.html#cb589-10"></a>    <span class="co">//</span></span>
 <span id="cb589-11"><a href="signal-handling.html#cb589-11"></a>    <span class="co">//   signal(signum, SIG_DFL)</span></span>
 <span id="cb589-12"><a href="signal-handling.html#cb589-12"></a>    <span class="co">//</span></span>
-<span id="cb589-13"><a href="signal-handling.html#cb589-13"></a>    <span class="co">// when the handler is called. So we reset the handler here:</span></span>
+<span id="cb589-13"><a href="signal-handling.html#cb589-13"></a>    <span class="co">// işleyici çağrıldığında. Bu yüzden işleyiciyi burada sıfırlıyoruz:</span></span>
 <span id="cb589-14"><a href="signal-handling.html#cb589-14"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span>
 <span id="cb589-15"><a href="signal-handling.html#cb589-15"></a></span>
-<span id="cb589-16"><a href="signal-handling.html#cb589-16"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>   <span class="co">// Get rid of unused variable warning</span></span>
+<span id="cb589-16"><a href="signal-handling.html#cb589-16"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>   <span class="co">// Kullanılmayan değişken uyarısından kurtulun</span></span>
 <span id="cb589-17"><a href="signal-handling.html#cb589-17"></a></span>
-<span id="cb589-18"><a href="signal-handling.html#cb589-18"></a>    count<span class="op">++;</span>                       <span class="co">// Undefined behavior</span></span>
-<span id="cb589-19"><a href="signal-handling.html#cb589-19"></a>    printf<span class="op">(</span><span class="st">&quot;Count: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">);</span>  <span class="co">// Undefined behavior</span></span>
+<span id="cb589-18"><a href="signal-handling.html#cb589-18"></a>    count<span class="op">++;</span>                       <span class="co">// Tanımsız davranış</span></span>
+<span id="cb589-19"><a href="signal-handling.html#cb589-19"></a>    printf<span class="op">(</span><span class="st">&quot;Count: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">);</span>  <span class="co">// Tanımsız davranış</span></span>
 <span id="cb589-20"><a href="signal-handling.html#cb589-20"></a></span>
 <span id="cb589-21"><a href="signal-handling.html#cb589-21"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb589-22"><a href="signal-handling.html#cb589-22"></a>        printf<span class="op">(</span><span class="st">&quot;Exiting!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      <span class="co">// Undefined behavior</span></span>
+<span id="cb589-22"><a href="signal-handling.html#cb589-22"></a>        printf<span class="op">(</span><span class="st">&quot;Exiting!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      <span class="co">// Tanımsız davranış</span></span>
 <span id="cb589-23"><a href="signal-handling.html#cb589-23"></a>        exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
 <span id="cb589-24"><a href="signal-handling.html#cb589-24"></a>    <span class="op">}</span></span>
 <span id="cb589-25"><a href="signal-handling.html#cb589-25"></a><span class="op">}</span></span>
@@ -167,48 +167,48 @@
 <span id="cb589-30"><a href="signal-handling.html#cb589-30"></a></span>
 <span id="cb589-31"><a href="signal-handling.html#cb589-31"></a>    printf<span class="op">(</span><span class="st">&quot;Try hitting ^C...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb589-32"><a href="signal-handling.html#cb589-32"></a></span>
-<span id="cb589-33"><a href="signal-handling.html#cb589-33"></a>    <span class="cf">for</span><span class="op">(;;);</span>  <span class="co">// Wait here forever</span></span>
+<span id="cb589-33"><a href="signal-handling.html#cb589-33"></a>    <span class="cf">for</span><span class="op">(;;);</span>  <span class="co">// Burada sonsuza kadar bekle</span></span>
 <span id="cb589-34"><a href="signal-handling.html#cb589-34"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>One of the things you’ll notice is that on line 14 we reset the signal handler. This is because C has the option of resetting the signal handler to its <code>SIG_DFL</code> behavior before running your custom handler. In other words, it could be a one-off. So we reset it first thing so that we handle it again for the next one.</p>
-<p>We’re ignoring the return value from <code>signal()</code> in this case. If we’d set it to a different handler earlier, it would return a pointer to that handler, which we could get like this:</p>
-<div class="sourceCode" id="cb590"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb590-1"><a href="signal-handling.html#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="co">// old_handler is type &quot;pointer to function that takes a single</span></span>
-<span id="cb590-2"><a href="signal-handling.html#cb590-2" aria-hidden="true" tabindex="-1"></a><span class="co">// int parameter and returns void&quot;:</span></span>
+<p>Fark edeceğiniz şeylerden biri, 14. satırda sinyal işleyicisini sıfırlamamızdır. Bunun nedeni, C'nin özel işleyicinizi çalıştırmadan önce sinyal işleyicisini <code>SIG_DFL</code> davranışına sıfırlama seçeneğine sahip olmasıdır. Başka bir deyişle, tek seferlik bir şey olabilir. Bu yüzden bir sonrakini tekrar işlemek için ilk iş olarak onu sıfırlıyoruz.</p>
+<p>Bu durumda <code>signal()</code> fonksiyonunun dönüş değerini yok sayıyoruz. Daha önce farklı bir işleyiciye ayarlamış olsaydık, o işleyiciye bir gösterici döndürürdü, bunu şu şekilde elde edebilirdik:</p>
+<div class="sourceCode" id="cb590"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb590-1"><a href="signal-handling.html#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="co">// old_handler, &quot;tek bir int parametresi alan ve void</span></span>
+<span id="cb590-2"><a href="signal-handling.html#cb590-2" aria-hidden="true" tabindex="-1"></a><span class="co">// döndüren fonksiyona gösterici&quot; türündedir:</span></span>
 <span id="cb590-3"><a href="signal-handling.html#cb590-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb590-4"><a href="signal-handling.html#cb590-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>old_handler<span class="op">)(</span><span class="dt">int</span><span class="op">);</span></span>
 <span id="cb590-5"><a href="signal-handling.html#cb590-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb590-6"><a href="signal-handling.html#cb590-6" aria-hidden="true" tabindex="-1"></a>old_handler <span class="op">=</span> signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span></code></pre></div>
 <p></p>
-<p>That said, I’m not sure of a common use case for this. But if you need the old handler for some reason, you can get it that way.</p>
-<p>Quick note on line 16—that’s just to tell the compiler to not warn that we’re not using this variable. It’s like saying, “I know I’m not using it; you don’t have to warn me.”</p>
-<p>And lastly you’ll see that I’ve marked undefined behavior in a couple places. More on that in the next section.</p>
-<h2 data-number="29.4" id="what-can-we-actually-do"><span class="header-section-number">29.4</span> What Can We Actually Do?</h2>
-<p>Turns out we’re pretty limited in what we can and can’t do in our signal handlers. This is one of the reasons why I say you shouldn’t even bother with this and instead use your OS’s signal handling instead (e.g. <code>sigaction()</code> for Unix-like systems).</p>
-<p>Wikipedia goes so far as to say the only really portable thing you can do is call <code>signal()</code> with <code>SIG_IGN</code> or <code>SIG_DFL</code> and that’s it.</p>
-<p>Here’s what we <strong>can’t</strong> portably do:</p>
+<p>Bununla birlikte, bunun yaygın bir kullanım durumundan emin değilim. Ancak herhangi bir nedenle eski işleyiciye ihtiyacınız varsa, bunu bu şekilde alabilirsiniz.</p>
+<p>16. satır hakkında küçük bir not—bu sadece derleyiciye bu değişkeni kullanmadığımız konusunda uyarı vermemesini söylemek içindir. "Kullanmadığımı biliyorum; beni uyarmana gerek yok" demek gibidir.</p>
+<p>Ve son olarak birkaç yerde tanımsız davranışı işaretlediğimi göreceksiniz. Bununla ilgili daha fazlası bir sonraki bölümde.</p>
+<h2 data-number="29.4" id="what-can-we-actually-do"><span class="header-section-number">29.4</span> Gerçekte Ne Yapabiliriz?</h2>
+<p>Sinyal işleyicilerimizde ne yapabileceğimiz ve ne yapamayacağımız konusunda oldukça sınırlı olduğumuz ortaya çıkıyor. Bu işlerle hiç uğraşmamanızı ve bunun yerine işletim sisteminizin sinyal işlemesini kullanmanızı (örneğin Unix benzeri sistemler için <code>sigaction()</code>) söylememin nedenlerinden biri de budur.</p>
+<p>Wikipedia, gerçekten taşınabilir şekilde yapabileceğiniz tek şeyin <code>SIG_IGN</code> veya <code>SIG_DFL</code> ile <code>signal()</code> çağırmak olduğunu söyleyecek kadar ileri gider, hepsi bu.</p>
+<p>İşte taşınabilir olarak <strong>yapamayacaklarımız</strong>:</p>
 <p></p>
 <ul>
-<li>Call any standard library function.
+<li>Herhangi bir standart kütüphane fonksiyonunu çağırmak.
 <ul>
-<li>Like <code>printf()</code>, for example.</li>
-<li>I think it’s probably safe to call restartable/reentrant functions, but the spec doesn’t allow that liberty.</li>
+<li>Örneğin <code>printf()</code> gibi.</li>
+<li>Yeniden girilebilir (restartable/reentrant) fonksiyonları çağırmanın muhtemelen güvenli olduğunu düşünüyorum, ancak spesifikasyon bu özgürlüğe izin vermiyor.</li>
 </ul></li>
-<li>Get or set values from a local <code>static</code>, file scope, or thread-local variable.
+<li>Yerel bir <code>static</code>, dosya kapsamı (file scope) veya izleğe özel (thread-local) değişkenden değer almak veya ayarlamak.
 <ul>
-<li>Unless it’s a lock-free atomic object or…</li>
-<li>You’re assigning into a variable of type <code>volatile sig_atomic_t</code>.</li>
+<li>Kilitsiz atomik bir nesne (lock-free atomic object) olmadığı sürece veya…</li>
+<li><code>volatile sig_atomic_t</code> türündeki bir değişkene atama yapmadığınız sürece.</li>
 </ul></li>
 </ul>
 <p></p>
-<p>That last bit–<code>sig_atomic_t</code>–is your ticket to getting data out of a signal handler. (Unless you want to use lock-free atomic objects, which is outside the scope of this section<a href="function-specifiers-alignment-specifiersoperators.html#fn173" class="footnote-ref" id="fnref173" role="doc-noteref"><sup>173</sup></a>.) It’s an integer type that might or might not be signed. And it’s bounded by what you can put in there.</p>
-<p>You can look at the minimum and maximum allowable values in the macros <code>SIG_ATOMIC_MIN</code> and <code>SIG_ATOMIC_MAX</code><a href="function-specifiers-alignment-specifiersoperators.html#fn174" class="footnote-ref" id="fnref174" role="doc-noteref"><sup>174</sup></a>.</p>
-<p>Confusingly, the spec also says you can’t refer “to any object with static or thread storage duration that is not a lock-free atomic object other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code> […]”</p>
-<p>My read on this is that you can’t read or write anything that’s not a lock-free atomic object. Also you can assign to an object that’s <code>volatile sig_atomic_t</code>.</p>
-<p>But can you read from it? I honestly don’t see why not, except that the spec is very pointed about mentioning assigning into. But if you have to read it and make any kind of decision based on it, you might be opening up room for some kind of race conditions.</p>
+<p>Bu son kısım–<code>sig_atomic_t</code>–bir sinyal işleyicisinden veri çıkarmanın biletidir. (Bu bölümün kapsamı dışında kalan kilitsiz atomik nesneleri kullanmak istemiyorsanız<a href="function-specifiers-alignment-specifiersoperators.html#fn173" class="footnote-ref" id="fnref173" role="doc-noteref"><sup>173</sup></a>.) İşaretli veya işaretsiz olabilen bir tamsayı türüdür. Ve oraya koyabileceğiniz şeylerle sınırlıdır.</p>
+<p>İzin verilen minimum ve maksimum değerlere <code>SIG_ATOMIC_MIN</code> ve <code>SIG_ATOMIC_MAX</code> makrolarından bakabilirsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn174" class="footnote-ref" id="fnref174" role="doc-noteref"><sup>174</sup></a>.</p>
+<p>Kafa karıştırıcı bir şekilde spesifikasyon ayrıca "<code>volatile sig_atomic_t</code> olarak bildirilmiş bir nesneye değer atamak dışında kilitsiz atomik bir nesne olmayan statik veya izlek depolama süresine sahip herhangi bir nesneye" başvuramayacağınızı söyler […]</p>
+<p>Bu konudaki okumam, kilitsiz atomik bir nesne olmayan hiçbir şeyi okuyamayacağınız veya yazamayacağınız yönündedir. Ayrıca <code>volatile sig_atomic_t</code> olan bir nesneye atama yapabilirsiniz.</p>
+<p>Peki ondan okuyabilir misiniz? Dürüst olmak gerekirse neden olmasın göremiyorum, ancak spesifikasyon atama yapmaktan bahsetme konusunda çok nettir. Ancak onu okumak ve buna göre herhangi bir karar vermek zorundaysanız, bazı yarış durumlarına (race conditions) yer açıyor olabilirsiniz.</p>
 <p></p>
-<p>With that in mind, we can rewrite our “hit <code>CTRL-C</code> twice to exit” code to be a little more portable, albeit less verbose on the output.</p>
-<p>Let’s change our <code>SIGINT</code> handler to do nothing except increment a value that’s of type <code>volatile sig_atomic_t</code>. So it’ll count the number of <code>CTRL-C</code>s that have been hit.</p>
-<p>Then in our main loop, we’ll check to see if that counter is over <code>2</code>, then bail out if it is.</p>
+<p>Bunu aklımızda tutarak, çıktı açısından daha az ayrıntılı olsa da biraz daha taşınabilir olması için "çıkmak için <code>CTRL-C</code> tuşuna iki kez bas" kodumuzu yeniden yazabiliriz.</p>
+<p><code>SIGINT</code> işleyicimizi <code>volatile sig_atomic_t</code> türündeki bir değeri artırmaktan başka bir şey yapmayacak şekilde değiştirelim. Böylece basılan <code>CTRL-C</code> sayısını sayacaktır.</p>
+<p>Ardından ana döngümüzde bu sayacın <code>2</code>'den büyük olup olmadığını kontrol edeceğiz ve öyleyse çıkacağız.</p>
 <div class="sourceCode" id="cb591"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb591-1"><a href="signal-handling.html#cb591-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb591-2"><a href="signal-handling.html#cb591-2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
 <span id="cb591-3"><a href="signal-handling.html#cb591-3"></a></span>
@@ -216,11 +216,11 @@
 <span id="cb591-5"><a href="signal-handling.html#cb591-5"></a></span>
 <span id="cb591-6"><a href="signal-handling.html#cb591-6"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
 <span id="cb591-7"><a href="signal-handling.html#cb591-7"></a><span class="op">{</span></span>
-<span id="cb591-8"><a href="signal-handling.html#cb591-8"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                    <span class="co">// Unused variable warning</span></span>
+<span id="cb591-8"><a href="signal-handling.html#cb591-8"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                    <span class="co">// Kullanılmayan değişken uyarısı</span></span>
 <span id="cb591-9"><a href="signal-handling.html#cb591-9"></a></span>
-<span id="cb591-10"><a href="signal-handling.html#cb591-10"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span>  <span class="co">// Reset signal handler</span></span>
+<span id="cb591-10"><a href="signal-handling.html#cb591-10"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span>  <span class="co">// Sinyal işleyicisini sıfırla</span></span>
 <span id="cb591-11"><a href="signal-handling.html#cb591-11"></a></span>
-<span id="cb591-12"><a href="signal-handling.html#cb591-12"></a>    count<span class="op">++;</span>                         <span class="co">// Undefined behavior</span></span>
+<span id="cb591-12"><a href="signal-handling.html#cb591-12"></a>    count<span class="op">++;</span>                         <span class="co">// Tanımsız davranış</span></span>
 <span id="cb591-13"><a href="signal-handling.html#cb591-13"></a><span class="op">}</span></span>
 <span id="cb591-14"><a href="signal-handling.html#cb591-14"></a></span>
 <span id="cb591-15"><a href="signal-handling.html#cb591-15"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -232,17 +232,17 @@
 <span id="cb591-21"><a href="signal-handling.html#cb591-21"></a>    <span class="cf">while</span><span class="op">(</span>count <span class="op">&lt;</span> <span class="dv">2</span><span class="op">);</span></span>
 <span id="cb591-22"><a href="signal-handling.html#cb591-22"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>Undefined behavior again? It’s my read that this is, because we have to read the value in order to increment and store it. Another thread might mess with <code>count</code> and make us mad. But in this simple case, there is no other thread doing that, so we can excuse the transgression and happily enjoy the demo.</p>
-<p>If we only want to postpone the exit by one hitting of <code>CTRL-C</code>, we can do that without too much trouble. But any more postponement would require some ridiculous function chaining.</p>
-<p>What we’ll do is handle it once, and the handler will reset the signal to its default behavior (that is, to exit):</p>
+<p>Yine mi tanımsız davranış? Benim okumama göre bu öyle, çünkü değeri artırmak ve saklamak için okumamız gerekiyor. Başka bir izlek <code>count</code> ile oynayabilir ve canımızı sıkabilir. Ancak bu basit durumda bunu yapan başka bir izlek yoktur, bu nedenle ihlali mazur görebilir ve demonun tadını çıkarabiliriz.</p>
+<p>Çıkışı yalnızca bir kez <code>CTRL-C</code> tuşuna basarak ertelemek istiyorsak, bunu çok fazla sorun yaşamadan yapabiliriz. Ancak daha fazla erteleme, bazı saçma fonksiyon zincirlemelerini gerektirecektir.</p>
+<p>Yapacağımız şey onu bir kez işlemek olacak ve işleyici sinyali varsayılan davranışına (yani çıkışa) sıfırlayacaktır:</p>
 <p></p>
 <div class="sourceCode" id="cb592"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb592-1"><a href="signal-handling.html#cb592-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb592-2"><a href="signal-handling.html#cb592-2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
 <span id="cb592-3"><a href="signal-handling.html#cb592-3"></a></span>
 <span id="cb592-4"><a href="signal-handling.html#cb592-4"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
 <span id="cb592-5"><a href="signal-handling.html#cb592-5"></a><span class="op">{</span></span>
-<span id="cb592-6"><a href="signal-handling.html#cb592-6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                      <span class="co">// Unused variable warning</span></span>
-<span id="cb592-7"><a href="signal-handling.html#cb592-7"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_DFL<span class="op">);</span>           <span class="co">// Reset signal handler</span></span>
+<span id="cb592-6"><a href="signal-handling.html#cb592-6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                      <span class="co">// Kullanılmayan değişken uyarısı</span></span>
+<span id="cb592-7"><a href="signal-handling.html#cb592-7"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_DFL<span class="op">);</span>           <span class="co">// Sinyal işleyicisini sıfırla</span></span>
 <span id="cb592-8"><a href="signal-handling.html#cb592-8"></a><span class="op">}</span></span>
 <span id="cb592-9"><a href="signal-handling.html#cb592-9"></a></span>
 <span id="cb592-10"><a href="signal-handling.html#cb592-10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -254,10 +254,10 @@
 <span id="cb592-16"><a href="signal-handling.html#cb592-16"></a>    <span class="cf">while</span><span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
 <span id="cb592-17"><a href="signal-handling.html#cb592-17"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>Later when we look at lock-free atomic variables, we’ll see a way to fix the <code>count</code> version (assuming lock-free atomic variables are available on your particular system).</p>
-<p>This is why at the beginning, I was suggesting checking out your OS’s built-in signal system as a probably-superior alternative.</p>
-<h2 data-number="29.5" id="friends-dont-let-friends-signal"><span class="header-section-number">29.5</span> Friends Don’t Let Friends <code>signal()</code></h2>
-<p>Again, use your OS’s built-in signal handling or the equivalent. It’s not in the spec, not as portable, but probably is far more capable. Plus your OS probably has a number of signals defined that aren’t in the C spec. And it’s difficult to write portable code using <code>signal()</code> anyway.</p>
+<p>Daha sonra kilitsiz atomik değişkenlere baktığımızda, <code>count</code> sürümünü düzeltmenin bir yolunu göreceğiz (özel sisteminizde kilitsiz atomik değişkenlerin mevcut olduğunu varsayarak).</p>
+<p>Bu yüzden başlangıçta muhtemelen daha üstün bir alternatif olarak işletim sisteminizin yerleşik sinyal sistemine göz atmanızı öneriyordum.</p>
+<h2 data-number="29.5" id="friends-dont-let-friends-signal"><span class="header-section-number">29.5</span> Dostlar Dostlarının <code>signal()</code> Kullanmasına İzin Vermez</h2>
+<p>Yine, işletim sisteminizin yerleşik sinyal işlemesini veya eşdeğerini kullanın. Spesifikasyonda yok, o kadar taşınabilir değil ama muhtemelen çok daha yetenekli. Ayrıca işletim sisteminizde C spesifikasyonunda olmayan tanımlanmış bir dizi sinyal muhtemelen mevcuttur. Ve zaten <code>signal()</code> kullanarak taşınabilir kod yazmak zordur.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

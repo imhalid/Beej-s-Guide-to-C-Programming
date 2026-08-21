@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -25,7 +25,7 @@
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beej's Guide to C Programming</title>
+  <title>Beej's C Programlama Rehberi</title>
   <base target="content-frame" />
   <link rel="stylesheet" href="../style.css" />
   <script>
@@ -40,244 +40,244 @@
 
   <!-- Mobile Top Header Bar -->
   <div class="mobile-topbar">
-    <button id="sidebar-toggle" class="mobile-toggle-btn" aria-label="Toggle Navigation">☰ Menu</button>
-    <span class="mobile-title">Beej's Guide to C Programming</span>
+    <button id="sidebar-toggle" class="mobile-toggle-btn" aria-label="Gezinmeyi Aç/Kapat">☰ Menü</button>
+    <span class="mobile-title">Beej's C Programlama Rehberi</span>
   </div>
 
   <!-- Left Sidebar (TOC) -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h1>Beej's Guide to C</h1>
+      <h1>Beej's C Rehberi</h1>
       <p class="subtitle">v0.10.5 — Brian “Beej Jorgensen” Hall</p>
       <div class="search-box">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input type="text" id="toc-search" placeholder="Filter TOC..." aria-label="Search Table of Contents" />
-        <button id="cmd-palette-trigger" class="cmd-trigger-btn" title="AI Semantic Search (Cmd/Ctrl + Shift + F)"><kbd>⌘⇧F</kbd></button>
+        <input type="text" id="toc-search" placeholder="İçindekiler tablosunda filtrele..." aria-label="İçindekiler Tablosunda Ara" />
+        <button id="cmd-palette-trigger" class="cmd-trigger-btn" title="Yapay Zeka Anlamsal Arama (Cmd/Ctrl + Shift + F)"><kbd>⌘⇧F</kbd></button>
       </div>
     </div>
     
     <div class="sidebar-nav">
       <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="foreword.html#foreword" id="toc-foreword"><span class="toc-section-number">1</span> Foreword</a>
+<li><a href="foreword.html#foreword" id="toc-foreword"><span class="toc-section-number">1</span> Önsöz</a>
 <ul>
-<li><a href="foreword.html#audience" id="toc-audience"><span class="toc-section-number">1.1</span> Audience</a></li>
-<li><a href="foreword.html#how-to-read-this-book" id="toc-how-to-read-this-book"><span class="toc-section-number">1.2</span> How to Read This Book</a></li>
-<li><a href="foreword.html#platform-and-compiler" id="toc-platform-and-compiler"><span class="toc-section-number">1.3</span> Platform and Compiler</a></li>
-<li><a href="foreword.html#official-homepage" id="toc-official-homepage"><span class="toc-section-number">1.4</span> Official Homepage</a></li>
-<li><a href="foreword.html#email-policy" id="toc-email-policy"><span class="toc-section-number">1.5</span> Email Policy</a></li>
-<li><a href="foreword.html#mirroring" id="toc-mirroring"><span class="toc-section-number">1.6</span> Mirroring</a></li>
-<li><a href="foreword.html#note-for-translators" id="toc-note-for-translators"><span class="toc-section-number">1.7</span> Note for Translators</a></li>
-<li><a href="foreword.html#copyright-and-distribution" id="toc-copyright-and-distribution"><span class="toc-section-number">1.8</span> Copyright and Distribution</a></li>
-<li><a href="foreword.html#dedication" id="toc-dedication"><span class="toc-section-number">1.9</span> Dedication</a></li>
+<li><a href="foreword.html#audience" id="toc-audience"><span class="toc-section-number">1.1</span> Hedef Kitle</a></li>
+<li><a href="foreword.html#how-to-read-this-book" id="toc-how-to-read-this-book"><span class="toc-section-number">1.2</span> Bu Kitap Nasıl Okunmalı</a></li>
+<li><a href="foreword.html#platform-and-compiler" id="toc-platform-and-compiler"><span class="toc-section-number">1.3</span> Platform ve Derleyici</a></li>
+<li><a href="foreword.html#official-homepage" id="toc-official-homepage"><span class="toc-section-number">1.4</span> Resmi Ana Sayfa</a></li>
+<li><a href="foreword.html#email-policy" id="toc-email-policy"><span class="toc-section-number">1.5</span> E-posta Politikası</a></li>
+<li><a href="foreword.html#mirroring" id="toc-mirroring"><span class="toc-section-number">1.6</span> Yansıtma (Mirroring)</a></li>
+<li><a href="foreword.html#note-for-translators" id="toc-note-for-translators"><span class="toc-section-number">1.7</span> Çevirmenler İçin Not</a></li>
+<li><a href="foreword.html#copyright-and-distribution" id="toc-copyright-and-distribution"><span class="toc-section-number">1.8</span> Telif Hakkı ve Dağıtım</a></li>
+<li><a href="foreword.html#dedication" id="toc-dedication"><span class="toc-section-number">1.9</span> İthaf</a></li>
 </ul></li>
 <li><a href="hello-world.html#hello-world" id="toc-hello-world"><span class="toc-section-number">2</span> Hello, World!</a>
 <ul>
-<li><a href="hello-world.html#what-to-expect-from-c" id="toc-what-to-expect-from-c"><span class="toc-section-number">2.1</span> What to Expect from C</a></li>
+<li><a href="hello-world.html#what-to-expect-from-c" id="toc-what-to-expect-from-c"><span class="toc-section-number">2.1</span> C'den Ne Beklemeli?</a></li>
 <li><a href="hello-world.html#hello-world-1" id="toc-hello-world-1"><span class="toc-section-number">2.2</span> Hello, World!</a></li>
-<li><a href="hello-world.html#compilation-details" id="toc-compilation-details"><span class="toc-section-number">2.3</span> Compilation Details</a></li>
-<li><a href="hello-world.html#building-with-gcc" id="toc-building-with-gcc"><span class="toc-section-number">2.4</span> Building with <code>gcc</code></a></li>
-<li><a href="hello-world.html#building-with-clang" id="toc-building-with-clang"><span class="toc-section-number">2.5</span> Building with <code>clang</code></a></li>
-<li><a href="hello-world.html#building-from-ides" id="toc-building-from-ides"><span class="toc-section-number">2.6</span> Building from IDEs</a></li>
-<li><a href="hello-world.html#c-versions" id="toc-c-versions"><span class="toc-section-number">2.7</span> C Versions</a></li>
+<li><a href="hello-world.html#compilation-details" id="toc-compilation-details"><span class="toc-section-number">2.3</span> Derleme Detayları</a></li>
+<li><a href="hello-world.html#building-with-gcc" id="toc-building-with-gcc"><span class="toc-section-number">2.4</span> <code>gcc</code> ile Derleme</a></li>
+<li><a href="hello-world.html#building-with-clang" id="toc-building-with-clang"><span class="toc-section-number">2.5</span> <code>clang</code> ile Derleme</a></li>
+<li><a href="hello-world.html#building-from-ides" id="toc-building-from-ides"><span class="toc-section-number">2.6</span> IDE'lerden Derleme</a></li>
+<li><a href="hello-world.html#c-versions" id="toc-c-versions"><span class="toc-section-number">2.7</span> C Sürümleri</a></li>
 </ul></li>
-<li><a href="variables-and-statements.html#variables-and-statements" id="toc-variables-and-statements"><span class="toc-section-number">3</span> Variables and Statements</a>
+<li><a href="variables-and-statements.html#variables-and-statements" id="toc-variables-and-statements"><span class="toc-section-number">3</span> Değişkenler ve İfadeler</a>
 <ul>
-<li><a href="variables-and-statements.html#variables" id="toc-variables"><span class="toc-section-number">3.1</span> Variables</a>
+<li><a href="variables-and-statements.html#variables" id="toc-variables"><span class="toc-section-number">3.1</span> Değişkenler</a>
 <ul>
-<li><a href="variables-and-statements.html#variable-names" id="toc-variable-names"><span class="toc-section-number">3.1.1</span> Variable Names</a></li>
-<li><a href="variables-and-statements.html#variable-types" id="toc-variable-types"><span class="toc-section-number">3.1.2</span> Variable Types</a></li>
-<li><a href="variables-and-statements.html#boolean-types" id="toc-boolean-types"><span class="toc-section-number">3.1.3</span> Boolean Types</a></li>
+<li><a href="variables-and-statements.html#variable-names" id="toc-variable-names"><span class="toc-section-number">3.1.1</span> Değişken İsimleri</a></li>
+<li><a href="variables-and-statements.html#variable-types" id="toc-variable-types"><span class="toc-section-number">3.1.2</span> Değişken Türleri</a></li>
+<li><a href="variables-and-statements.html#boolean-types" id="toc-boolean-types"><span class="toc-section-number">3.1.3</span> Boolean Türleri</a></li>
 </ul></li>
-<li><a href="variables-and-statements.html#operators" id="toc-operators"><span class="toc-section-number">3.2</span> Operators and Expressions</a>
+<li><a href="variables-and-statements.html#operators" id="toc-operators"><span class="toc-section-number">3.2</span> Operatörler ve İfadeler</a>
 <ul>
-<li><a href="variables-and-statements.html#arithmetic" id="toc-arithmetic"><span class="toc-section-number">3.2.1</span> Arithmetic</a></li>
-<li><a href="variables-and-statements.html#ternary-operator" id="toc-ternary-operator"><span class="toc-section-number">3.2.2</span> Ternary Operator</a></li>
-<li><a href="variables-and-statements.html#pre-and-post-increment-and-decrement" id="toc-pre-and-post-increment-and-decrement"><span class="toc-section-number">3.2.3</span> Pre-and-Post Increment-and-Decrement</a></li>
-<li><a href="variables-and-statements.html#the-comma-operator" id="toc-the-comma-operator"><span class="toc-section-number">3.2.4</span> The Comma Operator</a></li>
-<li><a href="variables-and-statements.html#conditional-operators" id="toc-conditional-operators"><span class="toc-section-number">3.2.5</span> Conditional Operators</a></li>
-<li><a href="variables-and-statements.html#boolean-operators" id="toc-boolean-operators"><span class="toc-section-number">3.2.6</span> Boolean Operators</a></li>
-<li><a href="variables-and-statements.html#sizeof-operator" id="toc-sizeof-operator"><span class="toc-section-number">3.2.7</span> The <code>sizeof</code> Operator</a></li>
+<li><a href="variables-and-statements.html#arithmetic" id="toc-arithmetic"><span class="toc-section-number">3.2.1</span> Aritmetik</a></li>
+<li><a href="variables-and-statements.html#ternary-operator" id="toc-ternary-operator"><span class="toc-section-number">3.2.2</span> Üçlü (Ternary) Operatör</a></li>
+<li><a href="variables-and-statements.html#pre-and-post-increment-and-decrement" id="toc-pre-and-post-increment-and-decrement"><span class="toc-section-number">3.2.3</span> Ön ve Son Artırma ve Azaltma</a></li>
+<li><a href="variables-and-statements.html#the-comma-operator" id="toc-the-comma-operator"><span class="toc-section-number">3.2.4</span> Virgül Operatörü</a></li>
+<li><a href="variables-and-statements.html#conditional-operators" id="toc-conditional-operators"><span class="toc-section-number">3.2.5</span> Koşullu Operatörler</a></li>
+<li><a href="variables-and-statements.html#boolean-operators" id="toc-boolean-operators"><span class="toc-section-number">3.2.6</span> Boolean Operatörler</a></li>
+<li><a href="variables-and-statements.html#sizeof-operator" id="toc-sizeof-operator"><span class="toc-section-number">3.2.7</span> <code>sizeof</code> Operatörü</a></li>
 </ul></li>
-<li><a href="variables-and-statements.html#flow-control" id="toc-flow-control"><span class="toc-section-number">3.3</span> Flow Control</a>
+<li><a href="variables-and-statements.html#flow-control" id="toc-flow-control"><span class="toc-section-number">3.3</span> Akış Kontrolü</a>
 <ul>
-<li><a href="variables-and-statements.html#ifstat" id="toc-ifstat"><span class="toc-section-number">3.3.1</span> The <code>if</code>-<code>else</code> statement</a></li>
-<li><a href="variables-and-statements.html#whilestat" id="toc-whilestat"><span class="toc-section-number">3.3.2</span> The <code>while</code> statement</a></li>
-<li><a href="variables-and-statements.html#dowhilestat" id="toc-dowhilestat"><span class="toc-section-number">3.3.3</span> The <code>do-while</code> statement</a></li>
-<li><a href="variables-and-statements.html#forstat" id="toc-forstat"><span class="toc-section-number">3.3.4</span> The <code>for</code> statement</a></li>
-<li><a href="variables-and-statements.html#switch-statement" id="toc-switch-statement"><span class="toc-section-number">3.3.5</span> The <code>switch</code> Statement</a></li>
-</ul></li>
-</ul></li>
-<li><a href="functions.html#functions" id="toc-functions"><span class="toc-section-number">4</span> Functions</a>
-<ul>
-<li><a href="functions.html#passvalue" id="toc-passvalue"><span class="toc-section-number">4.1</span> Passing by Value</a></li>
-<li><a href="functions.html#prototypes" id="toc-prototypes"><span class="toc-section-number">4.2</span> Function Prototypes</a></li>
-<li><a href="functions.html#empty-parameter-lists" id="toc-empty-parameter-lists"><span class="toc-section-number">4.3</span> Empty Parameter Lists</a></li>
-</ul></li>
-<li><a href="pointers.html#pointers" id="toc-pointers"><span class="toc-section-number">5</span> Pointers—Cower In Fear!</a>
-<ul>
-<li><a href="pointers.html#ptmem" id="toc-ptmem"><span class="toc-section-number">5.1</span> Memory and Variables</a></li>
-<li><a href="pointers.html#pttypes" id="toc-pttypes"><span class="toc-section-number">5.2</span> Pointer Types</a></li>
-<li><a href="pointers.html#deref" id="toc-deref"><span class="toc-section-number">5.3</span> Dereferencing</a></li>
-<li><a href="pointers.html#ptpass" id="toc-ptpass"><span class="toc-section-number">5.4</span> Passing Pointers as Arguments</a></li>
-<li><a href="pointers.html#the-null-pointer" id="toc-the-null-pointer"><span class="toc-section-number">5.5</span> The <code>NULL</code> Pointer</a></li>
-<li><a href="pointers.html#a-note-on-declaring-pointers" id="toc-a-note-on-declaring-pointers"><span class="toc-section-number">5.6</span> A Note on Declaring Pointers</a></li>
-<li><a href="pointers.html#sizeof-and-pointers" id="toc-sizeof-and-pointers"><span class="toc-section-number">5.7</span> <code>sizeof</code> and Pointers</a></li>
-</ul></li>
-<li><a href="arrays.html#arrays" id="toc-arrays"><span class="toc-section-number">6</span> Arrays</a>
-<ul>
-<li><a href="arrays.html#easy-example" id="toc-easy-example"><span class="toc-section-number">6.1</span> Easy Example</a></li>
-<li><a href="arrays.html#getting-the-length-of-an-array" id="toc-getting-the-length-of-an-array"><span class="toc-section-number">6.2</span> Getting the Length of an Array</a></li>
-<li><a href="arrays.html#array-initializers" id="toc-array-initializers"><span class="toc-section-number">6.3</span> Array Initializers</a></li>
-<li><a href="arrays.html#out-of-bounds" id="toc-out-of-bounds"><span class="toc-section-number">6.4</span> Out of Bounds!</a></li>
-<li><a href="arrays.html#multidimensional-arrays" id="toc-multidimensional-arrays"><span class="toc-section-number">6.5</span> Multidimensional Arrays</a></li>
-<li><a href="arrays.html#arrays-and-pointers" id="toc-arrays-and-pointers"><span class="toc-section-number">6.6</span> Arrays and Pointers</a>
-<ul>
-<li><a href="arrays.html#getting-a-pointer-to-an-array" id="toc-getting-a-pointer-to-an-array"><span class="toc-section-number">6.6.1</span> Getting a Pointer to an Array</a></li>
-<li><a href="arrays.html#passing1darrays" id="toc-passing1darrays"><span class="toc-section-number">6.6.2</span> Passing Single Dimensional Arrays to Functions</a></li>
-<li><a href="arrays.html#changing-arrays-in-functions" id="toc-changing-arrays-in-functions"><span class="toc-section-number">6.6.3</span> Changing Arrays in Functions</a></li>
-<li><a href="arrays.html#passing-multidimensional-arrays-to-functions" id="toc-passing-multidimensional-arrays-to-functions"><span class="toc-section-number">6.6.4</span> Passing Multidimensional Arrays to Functions</a></li>
+<li><a href="variables-and-statements.html#ifstat" id="toc-ifstat"><span class="toc-section-number">3.3.1</span> <code>if</code>-<code>else</code> İfadesi</a></li>
+<li><a href="variables-and-statements.html#whilestat" id="toc-whilestat"><span class="toc-section-number">3.3.2</span> <code>while</code> İfadesi</a></li>
+<li><a href="variables-and-statements.html#dowhilestat" id="toc-dowhilestat"><span class="toc-section-number">3.3.3</span> <code>do-while</code> İfadesi</a></li>
+<li><a href="variables-and-statements.html#forstat" id="toc-forstat"><span class="toc-section-number">3.3.4</span> <code>for</code> İfadesi</a></li>
+<li><a href="variables-and-statements.html#switch-statement" id="toc-switch-statement"><span class="toc-section-number">3.3.5</span> <code>switch</code> İfadesi</a></li>
 </ul></li>
 </ul></li>
-<li><a href="strings.html#strings" id="toc-strings"><span class="toc-section-number">7</span> Strings</a>
+<li><a href="functions.html#functions" id="toc-functions"><span class="toc-section-number">4</span> Fonksiyonlar</a>
 <ul>
-<li><a href="strings.html#string-literals" id="toc-string-literals"><span class="toc-section-number">7.1</span> String Literals</a></li>
-<li><a href="strings.html#string-variables" id="toc-string-variables"><span class="toc-section-number">7.2</span> String Variables</a></li>
-<li><a href="strings.html#string-variables-as-arrays" id="toc-string-variables-as-arrays"><span class="toc-section-number">7.3</span> String Variables as Arrays</a></li>
-<li><a href="strings.html#string-initializers" id="toc-string-initializers"><span class="toc-section-number">7.4</span> String Initializers</a></li>
-<li><a href="strings.html#getting-string-length" id="toc-getting-string-length"><span class="toc-section-number">7.5</span> Getting String Length</a></li>
-<li><a href="strings.html#string-termination" id="toc-string-termination"><span class="toc-section-number">7.6</span> String Termination</a></li>
-<li><a href="strings.html#copying-a-string" id="toc-copying-a-string"><span class="toc-section-number">7.7</span> Copying a String</a></li>
+<li><a href="functions.html#passvalue" id="toc-passvalue"><span class="toc-section-number">4.1</span> Değer ile Geçme (Pass by Value)</a></li>
+<li><a href="functions.html#prototypes" id="toc-prototypes"><span class="toc-section-number">4.2</span> Fonksiyon Bildirimleri (Prototypes)</a></li>
+<li><a href="functions.html#empty-parameter-lists" id="toc-empty-parameter-lists"><span class="toc-section-number">4.3</span> Boş Parametre Listeleri</a></li>
 </ul></li>
-<li><a href="structs.html#structs" id="toc-structs"><span class="toc-section-number">8</span> Structs</a>
+<li><a href="pointers.html#pointers" id="toc-pointers"><span class="toc-section-number">5</span> Göstericiler (Pointers)—Korkudan Titreyin!</a>
 <ul>
-<li><a href="structs.html#declaring-a-struct" id="toc-declaring-a-struct"><span class="toc-section-number">8.1</span> Declaring a Struct</a></li>
-<li><a href="structs.html#struct-initializers" id="toc-struct-initializers"><span class="toc-section-number">8.2</span> Struct Initializers</a></li>
-<li><a href="structs.html#passing-structs-to-functions" id="toc-passing-structs-to-functions"><span class="toc-section-number">8.3</span> Passing Structs to Functions</a></li>
-<li><a href="structs.html#the-arrow-operator" id="toc-the-arrow-operator"><span class="toc-section-number">8.4</span> The Arrow Operator</a></li>
-<li><a href="structs.html#copying-and-returning-structs" id="toc-copying-and-returning-structs"><span class="toc-section-number">8.5</span> Copying and Returning <code>struct</code>s</a></li>
-<li><a href="structs.html#comparing-structs" id="toc-comparing-structs"><span class="toc-section-number">8.6</span> Comparing <code>struct</code>s</a></li>
+<li><a href="pointers.html#ptmem" id="toc-ptmem"><span class="toc-section-number">5.1</span> Bellek ve Değişkenler</a></li>
+<li><a href="pointers.html#pttypes" id="toc-pttypes"><span class="toc-section-number">5.2</span> Gösterici Türleri</a></li>
+<li><a href="pointers.html#deref" id="toc-deref"><span class="toc-section-number">5.3</span> Değere Ulaşma (Dereferencing)</a></li>
+<li><a href="pointers.html#ptpass" id="toc-ptpass"><span class="toc-section-number">5.4</span> Göstericileri Argüman Olarak Geçme</a></li>
+<li><a href="pointers.html#the-null-pointer" id="toc-the-null-pointer"><span class="toc-section-number">5.5</span> <code>NULL</code> Göstericisi (Null Pointer)</a></li>
+<li><a href="pointers.html#a-note-on-declaring-pointers" id="toc-a-note-on-declaring-pointers"><span class="toc-section-number">5.6</span> Gösterici Bildirimi Üzerine Bir Not</a></li>
+<li><a href="pointers.html#sizeof-and-pointers" id="toc-sizeof-and-pointers"><span class="toc-section-number">5.7</span> <code>sizeof</code> ve Göstericiler</a></li>
 </ul></li>
-<li><a href="file-inputoutput.html#file-inputoutput" id="toc-file-inputoutput"><span class="toc-section-number">9</span> File Input/Output</a>
+<li><a href="arrays.html#arrays" id="toc-arrays"><span class="toc-section-number">6</span> Diziler</a>
 <ul>
-<li><a href="file-inputoutput.html#the-file-data-type" id="toc-the-file-data-type"><span class="toc-section-number">9.1</span> The <code>FILE*</code> Data Type</a></li>
-<li><a href="file-inputoutput.html#reading-text-files" id="toc-reading-text-files"><span class="toc-section-number">9.2</span> Reading Text Files</a></li>
-<li><a href="file-inputoutput.html#end-of-file-eof" id="toc-end-of-file-eof"><span class="toc-section-number">9.3</span> End of File: <code>EOF</code></a>
+<li><a href="arrays.html#easy-example" id="toc-easy-example"><span class="toc-section-number">6.1</span> Kolay Örnek</a></li>
+<li><a href="arrays.html#getting-the-length-of-an-array" id="toc-getting-the-length-of-an-array"><span class="toc-section-number">6.2</span> Bir Dizinin Uzunluğunu Alma</a></li>
+<li><a href="arrays.html#array-initializers" id="toc-array-initializers"><span class="toc-section-number">6.3</span> Dizi İlklendiricileri</a></li>
+<li><a href="arrays.html#out-of-bounds" id="toc-out-of-bounds"><span class="toc-section-number">6.4</span> Sınırların Dışında!</a></li>
+<li><a href="arrays.html#multidimensional-arrays" id="toc-multidimensional-arrays"><span class="toc-section-number">6.5</span> Çok Boyutlu Diziler</a></li>
+<li><a href="arrays.html#arrays-and-pointers" id="toc-arrays-and-pointers"><span class="toc-section-number">6.6</span> Diziler ve Göstericiler</a>
 <ul>
-<li><a href="file-inputoutput.html#reading-a-line-at-a-time" id="toc-reading-a-line-at-a-time"><span class="toc-section-number">9.3.1</span> Reading a Line at a Time</a></li>
-</ul></li>
-<li><a href="file-inputoutput.html#formatted-input" id="toc-formatted-input"><span class="toc-section-number">9.4</span> Formatted Input</a></li>
-<li><a href="file-inputoutput.html#writing-text-files" id="toc-writing-text-files"><span class="toc-section-number">9.5</span> Writing Text Files</a></li>
-<li><a href="file-inputoutput.html#binary-file-io" id="toc-binary-file-io"><span class="toc-section-number">9.6</span> Binary File I/O</a>
-<ul>
-<li><a href="file-inputoutput.html#struct-and-number-caveats" id="toc-struct-and-number-caveats"><span class="toc-section-number">9.6.1</span> <code>struct</code> and Number Caveats</a></li>
+<li><a href="arrays.html#getting-a-pointer-to-an-array" id="toc-getting-a-pointer-to-an-array"><span class="toc-section-number">6.6.1</span> Bir Diziye Gösterici Alma</a></li>
+<li><a href="arrays.html#passing1darrays" id="toc-passing1darrays"><span class="toc-section-number">6.6.2</span> Tek Boyutlu Dizileri Fonksiyonlara Geçme</a></li>
+<li><a href="arrays.html#changing-arrays-in-functions" id="toc-changing-arrays-in-functions"><span class="toc-section-number">6.6.3</span> Fonksiyonlarda Dizileri Değiştirme</a></li>
+<li><a href="arrays.html#passing-multidimensional-arrays-to-functions" id="toc-passing-multidimensional-arrays-to-functions"><span class="toc-section-number">6.6.4</span> Çok Boyutlu Dizileri Fonksiyonlara Geçme</a></li>
 </ul></li>
 </ul></li>
-<li><a href="typedef-making-new-types.html#typedef-making-new-types" id="toc-typedef-making-new-types"><span class="toc-section-number">10</span> <code>typedef</code>: Making New Types</a>
+<li><a href="strings.html#strings" id="toc-strings"><span class="toc-section-number">7</span> Metin Dizileri (Strings)</a>
 <ul>
-<li><a href="typedef-making-new-types.html#typedef-in-theory" id="toc-typedef-in-theory"><span class="toc-section-number">10.1</span> <code>typedef</code> in Theory</a>
-<ul>
-<li><a href="typedef-making-new-types.html#scoping" id="toc-scoping"><span class="toc-section-number">10.1.1</span> Scoping</a></li>
+<li><a href="strings.html#string-literals" id="toc-string-literals"><span class="toc-section-number">7.1</span> String Sabitleri (Literals)</a></li>
+<li><a href="strings.html#string-variables" id="toc-string-variables"><span class="toc-section-number">7.2</span> String Değişkenleri</a></li>
+<li><a href="strings.html#string-variables-as-arrays" id="toc-string-variables-as-arrays"><span class="toc-section-number">7.3</span> Dizi Olarak String Değişkenleri</a></li>
+<li><a href="strings.html#string-initializers" id="toc-string-initializers"><span class="toc-section-number">7.4</span> String İlklendiricileri</a></li>
+<li><a href="strings.html#getting-string-length" id="toc-getting-string-length"><span class="toc-section-number">7.5</span> String Uzunluğunu Alma</a></li>
+<li><a href="strings.html#string-termination" id="toc-string-termination"><span class="toc-section-number">7.6</span> String Sonlandırma</a></li>
+<li><a href="strings.html#copying-a-string" id="toc-copying-a-string"><span class="toc-section-number">7.7</span> Bir Stringi Kopyalama</a></li>
 </ul></li>
-<li><a href="typedef-making-new-types.html#typedef-in-practice" id="toc-typedef-in-practice"><span class="toc-section-number">10.2</span> <code>typedef</code> in Practice</a>
+<li><a href="structs.html#structs" id="toc-structs"><span class="toc-section-number">8</span> Yapılar (Structs)</a>
 <ul>
-<li><a href="typedef-making-new-types.html#typedef-struct" id="toc-typedef-struct"><span class="toc-section-number">10.2.1</span> <code>typedef</code> and <code>struct</code>s</a></li>
-<li><a href="typedef-making-new-types.html#typedef-and-other-types" id="toc-typedef-and-other-types"><span class="toc-section-number">10.2.2</span> <code>typedef</code> and Other Types</a></li>
-<li><a href="typedef-making-new-types.html#typedef-and-pointers" id="toc-typedef-and-pointers"><span class="toc-section-number">10.2.3</span> <code>typedef</code> and Pointers</a></li>
-<li><a href="typedef-making-new-types.html#typedef-and-capitalization" id="toc-typedef-and-capitalization"><span class="toc-section-number">10.2.4</span> <code>typedef</code> and Capitalization</a></li>
+<li><a href="structs.html#declaring-a-struct" id="toc-declaring-a-struct"><span class="toc-section-number">8.1</span> Bir Yapı (Struct) Bildirimi</a></li>
+<li><a href="structs.html#struct-initializers" id="toc-struct-initializers"><span class="toc-section-number">8.2</span> Yapı (Struct) İlklendiricileri</a></li>
+<li><a href="structs.html#passing-structs-to-functions" id="toc-passing-structs-to-functions"><span class="toc-section-number">8.3</span> Yapıları Fonksiyonlara Geçme</a></li>
+<li><a href="structs.html#the-arrow-operator" id="toc-the-arrow-operator"><span class="toc-section-number">8.4</span> Ok (Arrow) Operatörü</a></li>
+<li><a href="structs.html#copying-and-returning-structs" id="toc-copying-and-returning-structs"><span class="toc-section-number">8.5</span> <code>struct</code> Yapılarını Kopyalama ve Döndürme</a></li>
+<li><a href="structs.html#comparing-structs" id="toc-comparing-structs"><span class="toc-section-number">8.6</span> <code>struct</code> Yapılarını Karşılaştırma</a></li>
 </ul></li>
-<li><a href="typedef-making-new-types.html#arrays-and-typedef" id="toc-arrays-and-typedef"><span class="toc-section-number">10.3</span> Arrays and <code>typedef</code></a></li>
+<li><a href="file-inputoutput.html#file-inputoutput" id="toc-file-inputoutput"><span class="toc-section-number">9</span> Dosya Girdi/Çıktısı (I/O)</a>
+<ul>
+<li><a href="file-inputoutput.html#the-file-data-type" id="toc-the-file-data-type"><span class="toc-section-number">9.1</span> <code>FILE*</code> Veri Türü</a></li>
+<li><a href="file-inputoutput.html#reading-text-files" id="toc-reading-text-files"><span class="toc-section-number">9.2</span> Metin Dosyalarını Okuma</a></li>
+<li><a href="file-inputoutput.html#end-of-file-eof" id="toc-end-of-file-eof"><span class="toc-section-number">9.3</span> Dosya Sonu: <code>EOF</code></a>
+<ul>
+<li><a href="file-inputoutput.html#reading-a-line-at-a-time" id="toc-reading-a-line-at-a-time"><span class="toc-section-number">9.3.1</span> Her Seferinde Bir Satır Okuma</a></li>
 </ul></li>
-<li><a href="pointers2.html#pointers2" id="toc-pointers2"><span class="toc-section-number">11</span> Pointers II: Arithmetic</a>
+<li><a href="file-inputoutput.html#formatted-input" id="toc-formatted-input"><span class="toc-section-number">9.4</span> Biçimlendirilmiş Girdi</a></li>
+<li><a href="file-inputoutput.html#writing-text-files" id="toc-writing-text-files"><span class="toc-section-number">9.5</span> Metin Dosyaları Yazma</a></li>
+<li><a href="file-inputoutput.html#binary-file-io" id="toc-binary-file-io"><span class="toc-section-number">9.6</span> İkili (Binary) Dosya G/Ç</a>
 <ul>
-<li><a href="pointers2.html#pointer-arithmetic" id="toc-pointer-arithmetic"><span class="toc-section-number">11.1</span> Pointer Arithmetic</a>
-<ul>
-<li><a href="pointers2.html#adding-to-pointers" id="toc-adding-to-pointers"><span class="toc-section-number">11.1.1</span> Adding to Pointers</a></li>
-<li><a href="pointers2.html#changing-pointers" id="toc-changing-pointers"><span class="toc-section-number">11.1.2</span> Changing Pointers</a></li>
-<li><a href="pointers2.html#subtracting-pointers" id="toc-subtracting-pointers"><span class="toc-section-number">11.1.3</span> Subtracting Pointers</a></li>
-</ul></li>
-<li><a href="pointers2.html#arraypointerequiv" id="toc-arraypointerequiv"><span class="toc-section-number">11.2</span> Array/Pointer Equivalence</a>
-<ul>
-<li><a href="pointers2.html#arraypointer-equivalence-in-function-calls" id="toc-arraypointer-equivalence-in-function-calls"><span class="toc-section-number">11.2.1</span> Array/Pointer Equivalence in Function Calls</a></li>
-</ul></li>
-<li><a href="pointers2.html#void-pointers" id="toc-void-pointers"><span class="toc-section-number">11.3</span> <code>void</code> Pointers</a></li>
-</ul></li>
-<li><a href="manual-memory-allocation.html#manual-memory-allocation" id="toc-manual-memory-allocation"><span class="toc-section-number">12</span> Manual Memory Allocation</a>
-<ul>
-<li><a href="manual-memory-allocation.html#allocating-and-deallocating-malloc-and-free" id="toc-allocating-and-deallocating-malloc-and-free"><span class="toc-section-number">12.1</span> Allocating and Deallocating, <code>malloc()</code> and <code>free()</code></a></li>
-<li><a href="manual-memory-allocation.html#error-checking" id="toc-error-checking"><span class="toc-section-number">12.2</span> Error Checking</a></li>
-<li><a href="manual-memory-allocation.html#allocating-space-for-an-array" id="toc-allocating-space-for-an-array"><span class="toc-section-number">12.3</span> Allocating Space for an Array</a></li>
-<li><a href="manual-memory-allocation.html#an-alternative-calloc" id="toc-an-alternative-calloc"><span class="toc-section-number">12.4</span> An Alternative: <code>calloc()</code></a></li>
-<li><a href="manual-memory-allocation.html#changing-allocated-size-with-realloc" id="toc-changing-allocated-size-with-realloc"><span class="toc-section-number">12.5</span> Changing Allocated Size with <code>realloc()</code></a>
-<ul>
-<li><a href="manual-memory-allocation.html#reading-in-lines-of-arbitrary-length" id="toc-reading-in-lines-of-arbitrary-length"><span class="toc-section-number">12.5.1</span> Reading in Lines of Arbitrary Length</a></li>
-<li><a href="manual-memory-allocation.html#realloc-with-null" id="toc-realloc-with-null"><span class="toc-section-number">12.5.2</span> <code>realloc()</code> with <code>NULL</code></a></li>
-</ul></li>
-<li><a href="manual-memory-allocation.html#aligned-allocations" id="toc-aligned-allocations"><span class="toc-section-number">12.6</span> Aligned Allocations</a></li>
-</ul></li>
-<li><a href="scope.html#scope" id="toc-scope"><span class="toc-section-number">13</span> Scope</a>
-<ul>
-<li><a href="scope.html#block-scope" id="toc-block-scope"><span class="toc-section-number">13.1</span> Block Scope</a>
-<ul>
-<li><a href="scope.html#where-to-define-variables" id="toc-where-to-define-variables"><span class="toc-section-number">13.1.1</span> Where To Define Variables</a></li>
-<li><a href="scope.html#variable-hiding" id="toc-variable-hiding"><span class="toc-section-number">13.1.2</span> Variable Hiding</a></li>
-</ul></li>
-<li><a href="scope.html#file-scope" id="toc-file-scope"><span class="toc-section-number">13.2</span> File Scope</a></li>
-<li><a href="scope.html#for-loop-scope" id="toc-for-loop-scope"><span class="toc-section-number">13.3</span> <code>for</code>-loop Scope</a></li>
-<li><a href="scope.html#a-note-on-function-scope" id="toc-a-note-on-function-scope"><span class="toc-section-number">13.4</span> A Note on Function Scope</a></li>
-</ul></li>
-<li><a href="types-ii-way-more-types.html#types-ii-way-more-types" id="toc-types-ii-way-more-types"><span class="toc-section-number">14</span> Types II: Way More Types!</a>
-<ul>
-<li><a href="types-ii-way-more-types.html#signed-and-unsigned-integers" id="toc-signed-and-unsigned-integers"><span class="toc-section-number">14.1</span> Signed and Unsigned Integers</a></li>
-<li><a href="types-ii-way-more-types.html#character-types" id="toc-character-types"><span class="toc-section-number">14.2</span> Character Types</a></li>
-<li><a href="types-ii-way-more-types.html#more-integer-types-short-long-long-long" id="toc-more-integer-types-short-long-long-long"><span class="toc-section-number">14.3</span> More Integer Types: <code>short</code>, <code>long</code>, <code>long long</code></a></li>
-<li><a href="types-ii-way-more-types.html#more-float-double-and-long-double" id="toc-more-float-double-and-long-double"><span class="toc-section-number">14.4</span> More Float: <code>double</code> and <code>long double</code></a>
-<ul>
-<li><a href="types-ii-way-more-types.html#how-many-decimal-digits" id="toc-how-many-decimal-digits"><span class="toc-section-number">14.4.1</span> How Many Decimal Digits?</a></li>
-<li><a href="types-ii-way-more-types.html#converting-to-decimal-and-back" id="toc-converting-to-decimal-and-back"><span class="toc-section-number">14.4.2</span> Converting to Decimal and Back</a></li>
-</ul></li>
-<li><a href="types-ii-way-more-types.html#constant-numeric-types" id="toc-constant-numeric-types"><span class="toc-section-number">14.5</span> Constant Numeric Types</a>
-<ul>
-<li><a href="types-ii-way-more-types.html#hexadecimal-and-octal" id="toc-hexadecimal-and-octal"><span class="toc-section-number">14.5.1</span> Hexadecimal and Octal</a></li>
-<li><a href="types-ii-way-more-types.html#integer-constants" id="toc-integer-constants"><span class="toc-section-number">14.5.2</span> Integer Constants</a></li>
-<li><a href="types-ii-way-more-types.html#floating-point-constants" id="toc-floating-point-constants"><span class="toc-section-number">14.5.3</span> Floating Point Constants</a></li>
+<li><a href="file-inputoutput.html#struct-and-number-caveats" id="toc-struct-and-number-caveats"><span class="toc-section-number">9.6.1</span> <code>struct</code> ve Sayı Uyarıları</a></li>
 </ul></li>
 </ul></li>
-<li><a href="types-iii-conversions.html#types-iii-conversions" id="toc-types-iii-conversions"><span class="toc-section-number">15</span> Types III: Conversions</a>
+<li><a href="typedef-making-new-types.html#typedef-making-new-types" id="toc-typedef-making-new-types"><span class="toc-section-number">10</span> <code>typedef</code>: Yeni Türler Oluşturma</a>
 <ul>
-<li><a href="types-iii-conversions.html#string-conversions" id="toc-string-conversions"><span class="toc-section-number">15.1</span> String Conversions</a>
+<li><a href="typedef-making-new-types.html#typedef-in-theory" id="toc-typedef-in-theory"><span class="toc-section-number">10.1</span> Teoride <code>typedef</code></a>
 <ul>
-<li><a href="types-iii-conversions.html#numeric-value-to-string" id="toc-numeric-value-to-string"><span class="toc-section-number">15.1.1</span> Numeric Value to String</a></li>
-<li><a href="types-iii-conversions.html#string-to-numeric-value" id="toc-string-to-numeric-value"><span class="toc-section-number">15.1.2</span> String to Numeric Value</a></li>
+<li><a href="typedef-making-new-types.html#scoping" id="toc-scoping"><span class="toc-section-number">10.1.1</span> Kapsam (Scoping)</a></li>
 </ul></li>
-<li><a href="types-iii-conversions.html#char-conversions" id="toc-char-conversions"><span class="toc-section-number">15.2</span> <code>char</code> Conversions</a></li>
-<li><a href="types-iii-conversions.html#numeric-conversions" id="toc-numeric-conversions"><span class="toc-section-number">15.3</span> Numeric Conversions</a>
+<li><a href="typedef-making-new-types.html#typedef-in-practice" id="toc-typedef-in-practice"><span class="toc-section-number">10.2</span> Uygulamada <code>typedef</code></a>
+<ul>
+<li><a href="typedef-making-new-types.html#typedef-struct" id="toc-typedef-struct"><span class="toc-section-number">10.2.1</span> <code>typedef</code> ve <code>struct</code> Yapıları</a></li>
+<li><a href="typedef-making-new-types.html#typedef-and-other-types" id="toc-typedef-and-other-types"><span class="toc-section-number">10.2.2</span> <code>typedef</code> ve Diğer Türler</a></li>
+<li><a href="typedef-making-new-types.html#typedef-and-pointers" id="toc-typedef-and-pointers"><span class="toc-section-number">10.2.3</span> <code>typedef</code> ve Göstericiler</a></li>
+<li><a href="typedef-making-new-types.html#typedef-and-capitalization" id="toc-typedef-and-capitalization"><span class="toc-section-number">10.2.4</span> <code>typedef</code> ve Büyük/Küçük Harf Kullanımı</a></li>
+</ul></li>
+<li><a href="typedef-making-new-types.html#arrays-and-typedef" id="toc-arrays-and-typedef"><span class="toc-section-number">10.3</span> Diziler ve <code>typedef</code></a></li>
+</ul></li>
+<li><a href="pointers2.html#pointers2" id="toc-pointers2"><span class="toc-section-number">11</span> Göstericiler II: Aritmetik</a>
+<ul>
+<li><a href="pointers2.html#pointer-arithmetic" id="toc-pointer-arithmetic"><span class="toc-section-number">11.1</span> Gösterici Aritmetiği</a>
+<ul>
+<li><a href="pointers2.html#adding-to-pointers" id="toc-adding-to-pointers"><span class="toc-section-number">11.1.1</span> Göstericilere Ekleme Yapma</a></li>
+<li><a href="pointers2.html#changing-pointers" id="toc-changing-pointers"><span class="toc-section-number">11.1.2</span> Göstericileri Değiştirme</a></li>
+<li><a href="pointers2.html#subtracting-pointers" id="toc-subtracting-pointers"><span class="toc-section-number">11.1.3</span> Göstericileri Çıkarma</a></li>
+</ul></li>
+<li><a href="pointers2.html#arraypointerequiv" id="toc-arraypointerequiv"><span class="toc-section-number">11.2</span> Dizi/Gösterici Eşdeğerliği</a>
+<ul>
+<li><a href="pointers2.html#arraypointer-equivalence-in-function-calls" id="toc-arraypointer-equivalence-in-function-calls"><span class="toc-section-number">11.2.1</span> Fonksiyon Çağrılarında Dizi/Gösterici Eşdeğerliği</a></li>
+</ul></li>
+<li><a href="pointers2.html#void-pointers" id="toc-void-pointers"><span class="toc-section-number">11.3</span> <code>void</code> Göstericileri</a></li>
+</ul></li>
+<li><a href="manual-memory-allocation.html#manual-memory-allocation" id="toc-manual-memory-allocation"><span class="toc-section-number">12</span> Elle Bellek Ayırma</a>
+<ul>
+<li><a href="manual-memory-allocation.html#allocating-and-deallocating-malloc-and-free" id="toc-allocating-and-deallocating-malloc-and-free"><span class="toc-section-number">12.1</span> Bellek Ayırma ve Serbest Bırakma, <code>malloc()</code> ve <code>free()</code></a></li>
+<li><a href="manual-memory-allocation.html#error-checking" id="toc-error-checking"><span class="toc-section-number">12.2</span> Hata Kontrolü</a></li>
+<li><a href="manual-memory-allocation.html#allocating-space-for-an-array" id="toc-allocating-space-for-an-array"><span class="toc-section-number">12.3</span> Bir Dizi İçin Yer Ayırma</a></li>
+<li><a href="manual-memory-allocation.html#an-alternative-calloc" id="toc-an-alternative-calloc"><span class="toc-section-number">12.4</span> Bir Alternatif: <code>calloc()</code></a></li>
+<li><a href="manual-memory-allocation.html#changing-allocated-size-with-realloc" id="toc-changing-allocated-size-with-realloc"><span class="toc-section-number">12.5</span> Ayrılan Boyutu <code>realloc()</code> ile Değiştirme</a>
+<ul>
+<li><a href="manual-memory-allocation.html#reading-in-lines-of-arbitrary-length" id="toc-reading-in-lines-of-arbitrary-length"><span class="toc-section-number">12.5.1</span> Keyfi Uzunluktaki Satırları Okuma</a></li>
+<li><a href="manual-memory-allocation.html#realloc-with-null" id="toc-realloc-with-null"><span class="toc-section-number">12.5.2</span> <code>NULL</code> ile <code>realloc()</code></a></li>
+</ul></li>
+<li><a href="manual-memory-allocation.html#aligned-allocations" id="toc-aligned-allocations"><span class="toc-section-number">12.6</span> Hizalanmış (Aligned) Bellek Tahsisleri</a></li>
+</ul></li>
+<li><a href="scope.html#scope" id="toc-scope"><span class="toc-section-number">13</span> Kapsam (Scope)</a>
+<ul>
+<li><a href="scope.html#block-scope" id="toc-block-scope"><span class="toc-section-number">13.1</span> Blok Kapsamı</a>
+<ul>
+<li><a href="scope.html#where-to-define-variables" id="toc-where-to-define-variables"><span class="toc-section-number">13.1.1</span> Değişkenlerin Nerede Tanımlanacağı</a></li>
+<li><a href="scope.html#variable-hiding" id="toc-variable-hiding"><span class="toc-section-number">13.1.2</span> Değişken Gizleme</a></li>
+</ul></li>
+<li><a href="scope.html#file-scope" id="toc-file-scope"><span class="toc-section-number">13.2</span> Dosya Kapsamı</a></li>
+<li><a href="scope.html#for-loop-scope" id="toc-for-loop-scope"><span class="toc-section-number">13.3</span> <code>for</code> Döngüsü Kapsamı</a></li>
+<li><a href="scope.html#a-note-on-function-scope" id="toc-a-note-on-function-scope"><span class="toc-section-number">13.4</span> Fonksiyon Kapsamı Üzerine Bir Not</a></li>
+</ul></li>
+<li><a href="types-ii-way-more-types.html#types-ii-way-more-types" id="toc-types-ii-way-more-types"><span class="toc-section-number">14</span> Türler II: Çok Daha Fazla Tür!</a>
+<ul>
+<li><a href="types-ii-way-more-types.html#signed-and-unsigned-integers" id="toc-signed-and-unsigned-integers"><span class="toc-section-number">14.1</span> İşaretli ve İşaretsiz Tamsayılar</a></li>
+<li><a href="types-ii-way-more-types.html#character-types" id="toc-character-types"><span class="toc-section-number">14.2</span> Karakter Türleri</a></li>
+<li><a href="types-ii-way-more-types.html#more-integer-types-short-long-long-long" id="toc-more-integer-types-short-long-long-long"><span class="toc-section-number">14.3</span> Daha Fazla Tamsayı Türü: <code>short</code>, <code>long</code>, <code>long long</code></a></li>
+<li><a href="types-ii-way-more-types.html#more-float-double-and-long-double" id="toc-more-float-double-and-long-double"><span class="toc-section-number">14.4</span> Daha Fazla Kayan Nokta: <code>double</code> ve <code>long double</code></a>
+<ul>
+<li><a href="types-ii-way-more-types.html#how-many-decimal-digits" id="toc-how-many-decimal-digits"><span class="toc-section-number">14.4.1</span> Kaç Ondalık Basamak?</a></li>
+<li><a href="types-ii-way-more-types.html#converting-to-decimal-and-back" id="toc-converting-to-decimal-and-back"><span class="toc-section-number">14.4.2</span> Ondalığa Dönüştürme ve Geri Çevirme</a></li>
+</ul></li>
+<li><a href="types-ii-way-more-types.html#constant-numeric-types" id="toc-constant-numeric-types"><span class="toc-section-number">14.5</span> Sabit Sayısal Türler</a>
+<ul>
+<li><a href="types-ii-way-more-types.html#hexadecimal-and-octal" id="toc-hexadecimal-and-octal"><span class="toc-section-number">14.5.1</span> Onaltılık (Hexadecimal) ve Sekizlik (Octal)</a></li>
+<li><a href="types-ii-way-more-types.html#integer-constants" id="toc-integer-constants"><span class="toc-section-number">14.5.2</span> Tamsayı Sabitleri</a></li>
+<li><a href="types-ii-way-more-types.html#floating-point-constants" id="toc-floating-point-constants"><span class="toc-section-number">14.5.3</span> Kayan Noktalı Sayı Sabitleri</a></li>
+</ul></li>
+</ul></li>
+<li><a href="types-iii-conversions.html#types-iii-conversions" id="toc-types-iii-conversions"><span class="toc-section-number">15</span> Türler III: Dönüşümler</a>
+<ul>
+<li><a href="types-iii-conversions.html#string-conversions" id="toc-string-conversions"><span class="toc-section-number">15.1</span> String Dönüşümleri</a>
+<ul>
+<li><a href="types-iii-conversions.html#numeric-value-to-string" id="toc-numeric-value-to-string"><span class="toc-section-number">15.1.1</span> Sayısal Değerden Stringe</a></li>
+<li><a href="types-iii-conversions.html#string-to-numeric-value" id="toc-string-to-numeric-value"><span class="toc-section-number">15.1.2</span> Stringden Sayısal Değere</a></li>
+</ul></li>
+<li><a href="types-iii-conversions.html#char-conversions" id="toc-char-conversions"><span class="toc-section-number">15.2</span> <code>char</code> Dönüşümleri</a></li>
+<li><a href="types-iii-conversions.html#numeric-conversions" id="toc-numeric-conversions"><span class="toc-section-number">15.3</span> Sayısal Dönüşümler</a>
 <ul>
 <li><a href="types-iii-conversions.html#boolean" id="toc-boolean"><span class="toc-section-number">15.3.1</span> Boolean</a></li>
-<li><a href="types-iii-conversions.html#integer-to-integer-conversions" id="toc-integer-to-integer-conversions"><span class="toc-section-number">15.3.2</span> Integer to Integer Conversions</a></li>
-<li><a href="types-iii-conversions.html#integer-and-floating-point-conversions" id="toc-integer-and-floating-point-conversions"><span class="toc-section-number">15.3.3</span> Integer and Floating Point Conversions</a></li>
+<li><a href="types-iii-conversions.html#integer-to-integer-conversions" id="toc-integer-to-integer-conversions"><span class="toc-section-number">15.3.2</span> Tamsayıdan Tamsayıya Dönüşümler</a></li>
+<li><a href="types-iii-conversions.html#integer-and-floating-point-conversions" id="toc-integer-and-floating-point-conversions"><span class="toc-section-number">15.3.3</span> Tamsayı ve Kayan Nokta Dönüşümleri</a></li>
 </ul></li>
-<li><a href="types-iii-conversions.html#implicit-conversions" id="toc-implicit-conversions"><span class="toc-section-number">15.4</span> Implicit Conversions</a>
+<li><a href="types-iii-conversions.html#implicit-conversions" id="toc-implicit-conversions"><span class="toc-section-number">15.4</span> Örtük (Implicit) Dönüşümler</a>
 <ul>
-<li><a href="types-iii-conversions.html#integer-promotions" id="toc-integer-promotions"><span class="toc-section-number">15.4.1</span> The Integer Promotions</a></li>
-<li><a href="types-iii-conversions.html#usual-arithmetic-conversions" id="toc-usual-arithmetic-conversions"><span class="toc-section-number">15.4.2</span> The Usual Arithmetic Conversions</a></li>
+<li><a href="types-iii-conversions.html#integer-promotions" id="toc-integer-promotions"><span class="toc-section-number">15.4.1</span> Tamsayı Yükseltmeleri</a></li>
+<li><a href="types-iii-conversions.html#usual-arithmetic-conversions" id="toc-usual-arithmetic-conversions"><span class="toc-section-number">15.4.2</span> Yaygın Aritmetik Dönüşümler</a></li>
 <li><a href="types-iii-conversions.html#void" id="toc-void"><span class="toc-section-number">15.4.3</span> <code>void*</code></a></li>
 </ul></li>
-<li><a href="types-iii-conversions.html#explicit-conversions" id="toc-explicit-conversions"><span class="toc-section-number">15.5</span> Explicit Conversions</a>
+<li><a href="types-iii-conversions.html#explicit-conversions" id="toc-explicit-conversions"><span class="toc-section-number">15.5</span> Açık (Explicit) Dönüşümler</a>
 <ul>
-<li><a href="types-iii-conversions.html#casting" id="toc-casting"><span class="toc-section-number">15.5.1</span> Casting</a></li>
+<li><a href="types-iii-conversions.html#casting" id="toc-casting"><span class="toc-section-number">15.5.1</span> Tür Dönüşümü (Casting)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="types-iv-qualifiers-and-specifiers.html#types-iv-qualifiers-and-specifiers" id="toc-types-iv-qualifiers-and-specifiers"><span class="toc-section-number">16</span> Types IV: Qualifiers and Specifiers</a>
+<li><a href="types-iv-qualifiers-and-specifiers.html#types-iv-qualifiers-and-specifiers" id="toc-types-iv-qualifiers-and-specifiers"><span class="toc-section-number">16</span> Türler IV: Niteleyiciler ve Belirteçler</a>
 <ul>
-<li><a href="types-iv-qualifiers-and-specifiers.html#type-qualifiers" id="toc-type-qualifiers"><span class="toc-section-number">16.1</span> Type Qualifiers</a>
+<li><a href="types-iv-qualifiers-and-specifiers.html#type-qualifiers" id="toc-type-qualifiers"><span class="toc-section-number">16.1</span> Tür Niteleyicileri</a>
 <ul>
 <li><a href="types-iv-qualifiers-and-specifiers.html#const" id="toc-const"><span class="toc-section-number">16.1.1</span> <code>const</code></a></li>
 <li><a href="types-iv-qualifiers-and-specifiers.html#restrict" id="toc-restrict"><span class="toc-section-number">16.1.2</span> <code>restrict</code></a></li>
 <li><a href="types-iv-qualifiers-and-specifiers.html#volatile" id="toc-volatile"><span class="toc-section-number">16.1.3</span> <code>volatile</code></a></li>
 <li><a href="types-iv-qualifiers-and-specifiers.html#atomic" id="toc-atomic"><span class="toc-section-number">16.1.4</span> <code>_Atomic</code></a></li>
 </ul></li>
-<li><a href="types-iv-qualifiers-and-specifiers.html#storage-class-specifiers" id="toc-storage-class-specifiers"><span class="toc-section-number">16.2</span> Storage-Class Specifiers</a>
+<li><a href="types-iv-qualifiers-and-specifiers.html#storage-class-specifiers" id="toc-storage-class-specifiers"><span class="toc-section-number">16.2</span> Depolama Sınıfı Belirteçleri</a>
 <ul>
 <li><a href="types-iv-qualifiers-and-specifiers.html#auto" id="toc-auto"><span class="toc-section-number">16.2.1</span> <code>auto</code></a></li>
 <li><a href="types-iv-qualifiers-and-specifiers.html#static" id="toc-static"><span class="toc-section-number">16.2.2</span> <code>static</code></a></li>
@@ -286,388 +286,388 @@
 <li><a href="types-iv-qualifiers-and-specifiers.html#thread_local" id="toc-thread_local"><span class="toc-section-number">16.2.5</span> <code>_Thread_local</code></a></li>
 </ul></li>
 </ul></li>
-<li><a href="multifile-projects.html#multifile-projects" id="toc-multifile-projects"><span class="toc-section-number">17</span> Multifile Projects</a>
+<li><a href="multifile-projects.html#multifile-projects" id="toc-multifile-projects"><span class="toc-section-number">17</span> Çok Dosyalı Projeler</a>
 <ul>
-<li><a href="multifile-projects.html#includes-func-protos" id="toc-includes-func-protos"><span class="toc-section-number">17.1</span> Includes and Function Prototypes</a></li>
-<li><a href="multifile-projects.html#dealing-with-repeated-includes" id="toc-dealing-with-repeated-includes"><span class="toc-section-number">17.2</span> Dealing with Repeated Includes</a></li>
-<li><a href="multifile-projects.html#static-and-extern" id="toc-static-and-extern"><span class="toc-section-number">17.3</span> <code>static</code> and <code>extern</code></a></li>
-<li><a href="multifile-projects.html#compiling-with-object-files" id="toc-compiling-with-object-files"><span class="toc-section-number">17.4</span> Compiling with Object Files</a></li>
+<li><a href="multifile-projects.html#includes-func-protos" id="toc-includes-func-protos"><span class="toc-section-number">17.1</span> Include'lar ve Fonksiyon Protokolleri</a></li>
+<li><a href="multifile-projects.html#dealing-with-repeated-includes" id="toc-dealing-with-repeated-includes"><span class="toc-section-number">17.2</span> Tekrarlanan Include'larla Başa Çıkma</a></li>
+<li><a href="multifile-projects.html#static-and-extern" id="toc-static-and-extern"><span class="toc-section-number">17.3</span> <code>static</code> ve <code>extern</code></a></li>
+<li><a href="multifile-projects.html#compiling-with-object-files" id="toc-compiling-with-object-files"><span class="toc-section-number">17.4</span> Nesne Dosyaları ile Derleme</a></li>
 </ul></li>
-<li><a href="the-outside-environment.html#the-outside-environment" id="toc-the-outside-environment"><span class="toc-section-number">18</span> The Outside Environment</a>
+<li><a href="the-outside-environment.html#the-outside-environment" id="toc-the-outside-environment"><span class="toc-section-number">18</span> Dış Ortam</a>
 <ul>
-<li><a href="the-outside-environment.html#command-line-arguments" id="toc-command-line-arguments"><span class="toc-section-number">18.1</span> Command Line Arguments</a>
+<li><a href="the-outside-environment.html#command-line-arguments" id="toc-command-line-arguments"><span class="toc-section-number">18.1</span> Komut Satırı Argümanları</a>
 <ul>
-<li><a href="the-outside-environment.html#the-last-argv-is-null" id="toc-the-last-argv-is-null"><span class="toc-section-number">18.1.1</span> The Last <code>argv</code> is <code>NULL</code></a></li>
-<li><a href="the-outside-environment.html#the-alternate-char-argv" id="toc-the-alternate-char-argv"><span class="toc-section-number">18.1.2</span> The Alternate: <code>char **argv</code></a></li>
-<li><a href="the-outside-environment.html#fun-facts" id="toc-fun-facts"><span class="toc-section-number">18.1.3</span> Fun Facts</a></li>
+<li><a href="the-outside-environment.html#the-last-argv-is-null" id="toc-the-last-argv-is-null"><span class="toc-section-number">18.1.1</span> Son <code>argv</code> Elemanı <code>NULL</code>'dır</a></li>
+<li><a href="the-outside-environment.html#the-alternate-char-argv" id="toc-the-alternate-char-argv"><span class="toc-section-number">18.1.2</span> Alternatif: <code>char **argv</code></a></li>
+<li><a href="the-outside-environment.html#fun-facts" id="toc-fun-facts"><span class="toc-section-number">18.1.3</span> Eğlenceli Bilgiler</a></li>
 </ul></li>
-<li><a href="the-outside-environment.html#exit-status" id="toc-exit-status"><span class="toc-section-number">18.2</span> Exit Status</a>
+<li><a href="the-outside-environment.html#exit-status" id="toc-exit-status"><span class="toc-section-number">18.2</span> Çıkış Durumu</a>
 <ul>
-<li><a href="the-outside-environment.html#other-exit-status-values" id="toc-other-exit-status-values"><span class="toc-section-number">18.2.1</span> Other Exit Status Values</a></li>
+<li><a href="the-outside-environment.html#other-exit-status-values" id="toc-other-exit-status-values"><span class="toc-section-number">18.2.1</span> Diğer Çıkış Durum Değerleri</a></li>
 </ul></li>
-<li><a href="the-outside-environment.html#env-var" id="toc-env-var"><span class="toc-section-number">18.3</span> Environment Variables</a>
+<li><a href="the-outside-environment.html#env-var" id="toc-env-var"><span class="toc-section-number">18.3</span> Çevre Değişkenleri</a>
 <ul>
-<li><a href="the-outside-environment.html#setting-environment-variables" id="toc-setting-environment-variables"><span class="toc-section-number">18.3.1</span> Setting Environment Variables</a></li>
-<li><a href="the-outside-environment.html#unix-like-alternative-environment-variables" id="toc-unix-like-alternative-environment-variables"><span class="toc-section-number">18.3.2</span> Unix-like Alternative Environment Variables</a></li>
+<li><a href="the-outside-environment.html#setting-environment-variables" id="toc-setting-environment-variables"><span class="toc-section-number">18.3.1</span> Çevre Değişkenlerini Ayarlama</a></li>
+<li><a href="the-outside-environment.html#unix-like-alternative-environment-variables" id="toc-unix-like-alternative-environment-variables"><span class="toc-section-number">18.3.2</span> Unix Benzeri Alternatif Çevre Değişkenleri</a></li>
 </ul></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#the-c-preprocessor" id="toc-the-c-preprocessor"><span class="toc-section-number">19</span> The C Preprocessor</a>
+<li><a href="the-c-preprocessor.html#the-c-preprocessor" id="toc-the-c-preprocessor"><span class="toc-section-number">19</span> C Ön İşlemcisi</a>
 <ul>
 <li><a href="the-c-preprocessor.html#include" id="toc-include"><span class="toc-section-number">19.1</span> <code>#include</code></a></li>
-<li><a href="the-c-preprocessor.html#simple-macros" id="toc-simple-macros"><span class="toc-section-number">19.2</span> Simple Macros</a></li>
-<li><a href="the-c-preprocessor.html#conditional-compilation" id="toc-conditional-compilation"><span class="toc-section-number">19.3</span> Conditional Compilation</a>
+<li><a href="the-c-preprocessor.html#simple-macros" id="toc-simple-macros"><span class="toc-section-number">19.2</span> Basit Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#conditional-compilation" id="toc-conditional-compilation"><span class="toc-section-number">19.3</span> Koşullu Derleme</a>
 <ul>
-<li><a href="the-c-preprocessor.html#if-defined-ifdef-and-endif" id="toc-if-defined-ifdef-and-endif"><span class="toc-section-number">19.3.1</span> If Defined, <code>#ifdef</code> and <code>#endif</code></a></li>
-<li><a href="the-c-preprocessor.html#if-not-defined-ifndef" id="toc-if-not-defined-ifndef"><span class="toc-section-number">19.3.2</span> If Not Defined, <code>#ifndef</code></a></li>
+<li><a href="the-c-preprocessor.html#if-defined-ifdef-and-endif" id="toc-if-defined-ifdef-and-endif"><span class="toc-section-number">19.3.1</span> Tanımlanmışsa, <code>#ifdef</code> ve <code>#endif</code></a></li>
+<li><a href="the-c-preprocessor.html#if-not-defined-ifndef" id="toc-if-not-defined-ifndef"><span class="toc-section-number">19.3.2</span> Tanımlanmamışsa, <code>#ifndef</code></a></li>
 <li><a href="the-c-preprocessor.html#else" id="toc-else"><span class="toc-section-number">19.3.3</span> <code>#else</code></a></li>
-<li><a href="the-c-preprocessor.html#else-if-elifdef-elifndef" id="toc-else-if-elifdef-elifndef"><span class="toc-section-number">19.3.4</span> Else-If: <code>#elifdef</code>, <code>#elifndef</code></a></li>
-<li><a href="the-c-preprocessor.html#general-conditional-if-elif" id="toc-general-conditional-if-elif"><span class="toc-section-number">19.3.5</span> General Conditional: <code>#if</code>, <code>#elif</code></a></li>
-<li><a href="the-c-preprocessor.html#losing-a-macro-undef" id="toc-losing-a-macro-undef"><span class="toc-section-number">19.3.6</span> Losing a Macro: <code>#undef</code></a></li>
+<li><a href="the-c-preprocessor.html#else-if-elifdef-elifndef" id="toc-else-if-elifdef-elifndef"><span class="toc-section-number">19.3.4</span> Değilse-Eğer: <code>#elifdef</code>, <code>#elifndef</code></a></li>
+<li><a href="the-c-preprocessor.html#general-conditional-if-elif" id="toc-general-conditional-if-elif"><span class="toc-section-number">19.3.5</span> Genel Koşul: <code>#if</code>, <code>#elif</code></a></li>
+<li><a href="the-c-preprocessor.html#losing-a-macro-undef" id="toc-losing-a-macro-undef"><span class="toc-section-number">19.3.6</span> Makro Tanımını Kaldırma: <code>#undef</code></a></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#built-in-macros" id="toc-built-in-macros"><span class="toc-section-number">19.4</span> Built-in Macros</a>
+<li><a href="the-c-preprocessor.html#built-in-macros" id="toc-built-in-macros"><span class="toc-section-number">19.4</span> Yerleşik Makrolar</a>
 <ul>
-<li><a href="the-c-preprocessor.html#mandatory-macros" id="toc-mandatory-macros"><span class="toc-section-number">19.4.1</span> Mandatory Macros</a></li>
-<li><a href="the-c-preprocessor.html#optional-macros" id="toc-optional-macros"><span class="toc-section-number">19.4.2</span> Optional Macros</a></li>
+<li><a href="the-c-preprocessor.html#mandatory-macros" id="toc-mandatory-macros"><span class="toc-section-number">19.4.1</span> Zorunlu Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#optional-macros" id="toc-optional-macros"><span class="toc-section-number">19.4.2</span> İsteğe Bağlı Makrolar</a></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#macros-with-arguments" id="toc-macros-with-arguments"><span class="toc-section-number">19.5</span> Macros with Arguments</a>
+<li><a href="the-c-preprocessor.html#macros-with-arguments" id="toc-macros-with-arguments"><span class="toc-section-number">19.5</span> Argümanlı Makrolar</a>
 <ul>
-<li><a href="the-c-preprocessor.html#macros-with-one-argument" id="toc-macros-with-one-argument"><span class="toc-section-number">19.5.1</span> Macros with One Argument</a></li>
-<li><a href="the-c-preprocessor.html#macros-with-more-than-one-argument" id="toc-macros-with-more-than-one-argument"><span class="toc-section-number">19.5.2</span> Macros with More than One Argument</a></li>
-<li><a href="the-c-preprocessor.html#macros-with-variable-arguments" id="toc-macros-with-variable-arguments"><span class="toc-section-number">19.5.3</span> Macros with Variable Arguments</a></li>
-<li><a href="the-c-preprocessor.html#stringification" id="toc-stringification"><span class="toc-section-number">19.5.4</span> Stringification</a></li>
-<li><a href="the-c-preprocessor.html#concatenation" id="toc-concatenation"><span class="toc-section-number">19.5.5</span> Concatenation</a></li>
+<li><a href="the-c-preprocessor.html#macros-with-one-argument" id="toc-macros-with-one-argument"><span class="toc-section-number">19.5.1</span> Tek Argümanlı Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#macros-with-more-than-one-argument" id="toc-macros-with-more-than-one-argument"><span class="toc-section-number">19.5.2</span> Birden Fazla Argümanlı Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#macros-with-variable-arguments" id="toc-macros-with-variable-arguments"><span class="toc-section-number">19.5.3</span> Değişken Sayıda Argümanlı Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#stringification" id="toc-stringification"><span class="toc-section-number">19.5.4</span> Metinleştirme (Stringification)</a></li>
+<li><a href="the-c-preprocessor.html#concatenation" id="toc-concatenation"><span class="toc-section-number">19.5.5</span> Birleştirme (Concatenation)</a></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#multiline-macros" id="toc-multiline-macros"><span class="toc-section-number">19.6</span> Multiline Macros</a></li>
-<li><a href="the-c-preprocessor.html#my-assert" id="toc-my-assert"><span class="toc-section-number">19.7</span> Example: An Assert Macro</a></li>
-<li><a href="the-c-preprocessor.html#the-error-directive" id="toc-the-error-directive"><span class="toc-section-number">19.8</span> The <code>#error</code> Directive</a></li>
-<li><a href="the-c-preprocessor.html#the-embed-directive" id="toc-the-embed-directive"><span class="toc-section-number">19.9</span> The <code>#embed</code> Directive</a>
+<li><a href="the-c-preprocessor.html#multiline-macros" id="toc-multiline-macros"><span class="toc-section-number">19.6</span> Çok Satırlı Makrolar</a></li>
+<li><a href="the-c-preprocessor.html#my-assert" id="toc-my-assert"><span class="toc-section-number">19.7</span> Örnek: Bir Assert Makrosu</a></li>
+<li><a href="the-c-preprocessor.html#the-error-directive" id="toc-the-error-directive"><span class="toc-section-number">19.8</span> <code>#error</code> Yönergesi</a></li>
+<li><a href="the-c-preprocessor.html#the-embed-directive" id="toc-the-embed-directive"><span class="toc-section-number">19.9</span> <code>#embed</code> Yönergesi</a>
 <ul>
-<li><a href="the-c-preprocessor.html#embed-parameters" id="toc-embed-parameters"><span class="toc-section-number">19.9.1</span> <code>#embed</code> Parameters</a></li>
-<li><a href="the-c-preprocessor.html#the-limit-parameter" id="toc-the-limit-parameter"><span class="toc-section-number">19.9.2</span> The <code>limit()</code> Parameter</a></li>
-<li><a href="the-c-preprocessor.html#the-if_empty-parameter" id="toc-the-if_empty-parameter"><span class="toc-section-number">19.9.3</span> The <code>if_empty</code> Parameter</a></li>
-<li><a href="the-c-preprocessor.html#the-prefix-and-suffix-parameters" id="toc-the-prefix-and-suffix-parameters"><span class="toc-section-number">19.9.4</span> The <code>prefix()</code> and <code>suffix()</code> Parameters</a></li>
-<li><a href="the-c-preprocessor.html#the-__has_embed-identifier" id="toc-the-__has_embed-identifier"><span class="toc-section-number">19.9.5</span> The <code>__has_embed()</code> Identifier</a></li>
-<li><a href="the-c-preprocessor.html#other-parameters" id="toc-other-parameters"><span class="toc-section-number">19.9.6</span> Other Parameters</a></li>
-<li><a href="the-c-preprocessor.html#embedding-multi-byte-values" id="toc-embedding-multi-byte-values"><span class="toc-section-number">19.9.7</span> Embedding Multi-Byte Values</a></li>
+<li><a href="the-c-preprocessor.html#embed-parameters" id="toc-embed-parameters"><span class="toc-section-number">19.9.1</span> <code>#embed</code> Parametreleri</a></li>
+<li><a href="the-c-preprocessor.html#the-limit-parameter" id="toc-the-limit-parameter"><span class="toc-section-number">19.9.2</span> <code>limit()</code> Parametresi</a></li>
+<li><a href="the-c-preprocessor.html#the-if_empty-parameter" id="toc-the-if_empty-parameter"><span class="toc-section-number">19.9.3</span> <code>if_empty</code> Parametresi</a></li>
+<li><a href="the-c-preprocessor.html#the-prefix-and-suffix-parameters" id="toc-the-prefix-and-suffix-parameters"><span class="toc-section-number">19.9.4</span> <code>prefix()</code> ve <code>suffix()</code> Parametreleri</a></li>
+<li><a href="the-c-preprocessor.html#the-__has_embed-identifier" id="toc-the-__has_embed-identifier"><span class="toc-section-number">19.9.5</span> <code>__has_embed()</code> Tanımlayıcısı</a></li>
+<li><a href="the-c-preprocessor.html#other-parameters" id="toc-other-parameters"><span class="toc-section-number">19.9.6</span> Diğer Parametreler</a></li>
+<li><a href="the-c-preprocessor.html#embedding-multi-byte-values" id="toc-embedding-multi-byte-values"><span class="toc-section-number">19.9.7</span> Çok Baytlı Değerleri Gömme</a></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#pragma" id="toc-pragma"><span class="toc-section-number">19.10</span> The <code>#pragma</code> Directive</a>
+<li><a href="the-c-preprocessor.html#pragma" id="toc-pragma"><span class="toc-section-number">19.10</span> <code>#pragma</code> Yönergesi</a>
 <ul>
-<li><a href="the-c-preprocessor.html#non-standard-pragmas" id="toc-non-standard-pragmas"><span class="toc-section-number">19.10.1</span> Non-Standard Pragmas</a></li>
-<li><a href="the-c-preprocessor.html#standard-pragmas" id="toc-standard-pragmas"><span class="toc-section-number">19.10.2</span> Standard Pragmas</a></li>
-<li><a href="the-c-preprocessor.html#pragma-operator" id="toc-pragma-operator"><span class="toc-section-number">19.10.3</span> <code>_Pragma</code> Operator</a></li>
+<li><a href="the-c-preprocessor.html#non-standard-pragmas" id="toc-non-standard-pragmas"><span class="toc-section-number">19.10.1</span> Standart Olmayan Pragma'lar</a></li>
+<li><a href="the-c-preprocessor.html#standard-pragmas" id="toc-standard-pragmas"><span class="toc-section-number">19.10.2</span> Standart Pragma'lar</a></li>
+<li><a href="the-c-preprocessor.html#pragma-operator" id="toc-pragma-operator"><span class="toc-section-number">19.10.3</span> <code>_Pragma</code> Operatörü</a></li>
 </ul></li>
-<li><a href="the-c-preprocessor.html#the-line-directive" id="toc-the-line-directive"><span class="toc-section-number">19.11</span> The <code>#line</code> Directive</a></li>
-<li><a href="the-c-preprocessor.html#the-null-directive" id="toc-the-null-directive"><span class="toc-section-number">19.12</span> The Null Directive</a></li>
+<li><a href="the-c-preprocessor.html#the-line-directive" id="toc-the-line-directive"><span class="toc-section-number">19.11</span> <code>#line</code> Yönergesi</a></li>
+<li><a href="the-c-preprocessor.html#the-null-directive" id="toc-the-null-directive"><span class="toc-section-number">19.12</span> Boş Yönerge</a></li>
 </ul></li>
-<li><a href="structs-ii-more-fun-with-structs.html#structs-ii-more-fun-with-structs" id="toc-structs-ii-more-fun-with-structs"><span class="toc-section-number">20</span> <code>struct</code>s II: More Fun with <code>struct</code>s</a>
+<li><a href="structs-ii-more-fun-with-structs.html#structs-ii-more-fun-with-structs" id="toc-structs-ii-more-fun-with-structs"><span class="toc-section-number">20</span> <code>struct</code> Yapıları II: <code>struct</code>'lar ile Daha Fazla Eğlence</a>
 <ul>
-<li><a href="structs-ii-more-fun-with-structs.html#initializers-of-nested-structs-and-arrays" id="toc-initializers-of-nested-structs-and-arrays"><span class="toc-section-number">20.1</span> Initializers of Nested <code>struct</code>s and Arrays</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#anonymous-structs" id="toc-anonymous-structs"><span class="toc-section-number">20.2</span> Anonymous <code>struct</code>s</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#self-referential-structs" id="toc-self-referential-structs"><span class="toc-section-number">20.3</span> Self-Referential <code>struct</code>s</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#flexible-array-members" id="toc-flexible-array-members"><span class="toc-section-number">20.4</span> Flexible Array Members</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#struct-padding-bytes" id="toc-struct-padding-bytes"><span class="toc-section-number">20.5</span> Padding Bytes</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#initializers-of-nested-structs-and-arrays" id="toc-initializers-of-nested-structs-and-arrays"><span class="toc-section-number">20.1</span> İç İçe Yapıların ve Dizilerin İlklendiricileri</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#anonymous-structs" id="toc-anonymous-structs"><span class="toc-section-number">20.2</span> Anonim <code>struct</code> Yapıları</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#self-referential-structs" id="toc-self-referential-structs"><span class="toc-section-number">20.3</span> Öz-Referanslı <code>struct</code> Yapıları</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#flexible-array-members" id="toc-flexible-array-members"><span class="toc-section-number">20.4</span> Esnek Dizi Üyeleri</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#struct-padding-bytes" id="toc-struct-padding-bytes"><span class="toc-section-number">20.5</span> Dolgu Baytları</a></li>
 <li><a href="structs-ii-more-fun-with-structs.html#offsetof" id="toc-offsetof"><span class="toc-section-number">20.6</span> <code>offsetof</code></a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#fake-oop" id="toc-fake-oop"><span class="toc-section-number">20.7</span> Fake OOP</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#bit-fields" id="toc-bit-fields"><span class="toc-section-number">20.8</span> Bit-Fields</a>
+<li><a href="structs-ii-more-fun-with-structs.html#fake-oop" id="toc-fake-oop"><span class="toc-section-number">20.7</span> Sahte OOP</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#bit-fields" id="toc-bit-fields"><span class="toc-section-number">20.8</span> Bit Alanları</a>
 <ul>
-<li><a href="structs-ii-more-fun-with-structs.html#non-adjacent-bit-fields" id="toc-non-adjacent-bit-fields"><span class="toc-section-number">20.8.1</span> Non-Adjacent Bit-Fields</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#signed-or-unsigned-ints" id="toc-signed-or-unsigned-ints"><span class="toc-section-number">20.8.2</span> Signed or Unsigned <code>int</code>s</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#unnamed-bit-fields" id="toc-unnamed-bit-fields"><span class="toc-section-number">20.8.3</span> Unnamed Bit-Fields</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#zero-width-unnamed-bit-fields" id="toc-zero-width-unnamed-bit-fields"><span class="toc-section-number">20.8.4</span> Zero-Width Unnamed Bit-Fields</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#non-adjacent-bit-fields" id="toc-non-adjacent-bit-fields"><span class="toc-section-number">20.8.1</span> Bitişik Olmayan Bit Alanları</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#signed-or-unsigned-ints" id="toc-signed-or-unsigned-ints"><span class="toc-section-number">20.8.2</span> İşaretli veya İşaretsiz <code>int</code>'ler</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#unnamed-bit-fields" id="toc-unnamed-bit-fields"><span class="toc-section-number">20.8.3</span> İsimsiz Bit Alanları</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#zero-width-unnamed-bit-fields" id="toc-zero-width-unnamed-bit-fields"><span class="toc-section-number">20.8.4</span> Sıfır Genişlikli İsimsiz Bit Alanları</a></li>
 </ul></li>
-<li><a href="structs-ii-more-fun-with-structs.html#unions" id="toc-unions"><span class="toc-section-number">20.9</span> Unions</a>
+<li><a href="structs-ii-more-fun-with-structs.html#unions" id="toc-unions"><span class="toc-section-number">20.9</span> Birlikler (Unions)</a>
 <ul>
-<li><a href="structs-ii-more-fun-with-structs.html#union-type-punning" id="toc-union-type-punning"><span class="toc-section-number">20.9.1</span> Unions and Type Punning</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#pointers-to-unions" id="toc-pointers-to-unions"><span class="toc-section-number">20.9.2</span> Pointers to <code>union</code>s</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#common-initial-sequences-in-unions" id="toc-common-initial-sequences-in-unions"><span class="toc-section-number">20.9.3</span> Common Initial Sequences in Unions</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#union-type-punning" id="toc-union-type-punning"><span class="toc-section-number">20.9.1</span> Birlikler ve Tür Söz Oyunu</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#pointers-to-unions" id="toc-pointers-to-unions"><span class="toc-section-number">20.9.2</span> <code>union</code> Göstericileri</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#common-initial-sequences-in-unions" id="toc-common-initial-sequences-in-unions"><span class="toc-section-number">20.9.3</span> Birliklerde Ortak Başlangıç Dizilimleri</a></li>
 </ul></li>
-<li><a href="structs-ii-more-fun-with-structs.html#unions-and-unnamed-structs" id="toc-unions-and-unnamed-structs"><span class="toc-section-number">20.10</span> Unions and Unnamed Structs</a></li>
-<li><a href="structs-ii-more-fun-with-structs.html#passing-and-returning-structs-and-unions" id="toc-passing-and-returning-structs-and-unions"><span class="toc-section-number">20.11</span> Passing and Returning <code>struct</code>s and <code>union</code>s</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#unions-and-unnamed-structs" id="toc-unions-and-unnamed-structs"><span class="toc-section-number">20.10</span> Birlikler ve İsimsiz Struct Yapıları</a></li>
+<li><a href="structs-ii-more-fun-with-structs.html#passing-and-returning-structs-and-unions" id="toc-passing-and-returning-structs-and-unions"><span class="toc-section-number">20.11</span> <code>struct</code> ve <code>union</code> Yapılarını Geçme ve Döndürme</a></li>
 </ul></li>
-<li><a href="characters-and-strings-ii.html#characters-and-strings-ii" id="toc-characters-and-strings-ii"><span class="toc-section-number">21</span> Characters and Strings II</a>
+<li><a href="characters-and-strings-ii.html#characters-and-strings-ii" id="toc-characters-and-strings-ii"><span class="toc-section-number">21</span> Karakterler ve Metin Dizileri II</a>
 <ul>
-<li><a href="characters-and-strings-ii.html#escape-sequences" id="toc-escape-sequences"><span class="toc-section-number">21.1</span> Escape Sequences</a>
+<li><a href="characters-and-strings-ii.html#escape-sequences" id="toc-escape-sequences"><span class="toc-section-number">21.1</span> Kaçış Dizileri</a>
 <ul>
-<li><a href="characters-and-strings-ii.html#frequently-used-escapes" id="toc-frequently-used-escapes"><span class="toc-section-number">21.1.1</span> Frequently-used Escapes</a></li>
-<li><a href="characters-and-strings-ii.html#rarely-used-escapes" id="toc-rarely-used-escapes"><span class="toc-section-number">21.1.2</span> Rarely-used Escapes</a></li>
-<li><a href="characters-and-strings-ii.html#numeric-escapes" id="toc-numeric-escapes"><span class="toc-section-number">21.1.3</span> Numeric Escapes</a></li>
+<li><a href="characters-and-strings-ii.html#frequently-used-escapes" id="toc-frequently-used-escapes"><span class="toc-section-number">21.1.1</span> Sık Kullanılan Kaçış Karakterleri</a></li>
+<li><a href="characters-and-strings-ii.html#rarely-used-escapes" id="toc-rarely-used-escapes"><span class="toc-section-number">21.1.2</span> Nadir Kullanılan Kaçış Karakterleri</a></li>
+<li><a href="characters-and-strings-ii.html#numeric-escapes" id="toc-numeric-escapes"><span class="toc-section-number">21.1.3</span> Sayısal Kaçış Karakterleri</a></li>
 </ul></li>
 </ul></li>
-<li><a href="enumerated-types-enum.html#enumerated-types-enum" id="toc-enumerated-types-enum"><span class="toc-section-number">22</span> Enumerated Types: <code>enum</code></a>
+<li><a href="enumerated-types-enum.html#enumerated-types-enum" id="toc-enumerated-types-enum"><span class="toc-section-number">22</span> Numaralandırma Türleri: <code>enum</code></a>
 <ul>
-<li><a href="enumerated-types-enum.html#behavior-of-enum" id="toc-behavior-of-enum"><span class="toc-section-number">22.1</span> Behavior of <code>enum</code></a>
+<li><a href="enumerated-types-enum.html#behavior-of-enum" id="toc-behavior-of-enum"><span class="toc-section-number">22.1</span> <code>enum</code> Davranışı</a>
 <ul>
-<li><a href="enumerated-types-enum.html#numbering" id="toc-numbering"><span class="toc-section-number">22.1.1</span> Numbering</a></li>
-<li><a href="enumerated-types-enum.html#trailing-commas" id="toc-trailing-commas"><span class="toc-section-number">22.1.2</span> Trailing Commas</a></li>
-<li><a href="enumerated-types-enum.html#scope-1" id="toc-scope-1"><span class="toc-section-number">22.1.3</span> Scope</a></li>
-<li><a href="enumerated-types-enum.html#style" id="toc-style"><span class="toc-section-number">22.1.4</span> Style</a></li>
+<li><a href="enumerated-types-enum.html#numbering" id="toc-numbering"><span class="toc-section-number">22.1.1</span> Numaralandırma</a></li>
+<li><a href="enumerated-types-enum.html#trailing-commas" id="toc-trailing-commas"><span class="toc-section-number">22.1.2</span> Sondaki Virgüller</a></li>
+<li><a href="enumerated-types-enum.html#scope-1" id="toc-scope-1"><span class="toc-section-number">22.1.3</span> Kapsam</a></li>
+<li><a href="enumerated-types-enum.html#style" id="toc-style"><span class="toc-section-number">22.1.4</span> Stil</a></li>
 </ul></li>
-<li><a href="enumerated-types-enum.html#your-enum-is-a-type" id="toc-your-enum-is-a-type"><span class="toc-section-number">22.2</span> Your <code>enum</code> is a Type</a></li>
+<li><a href="enumerated-types-enum.html#your-enum-is-a-type" id="toc-your-enum-is-a-type"><span class="toc-section-number">22.2</span> <code>enum</code>'ınız Bir Türdür</a></li>
 </ul></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-iii-pointers-to-pointers-and-more" id="toc-pointers-iii-pointers-to-pointers-and-more"><span class="toc-section-number">23</span> Pointers III: Pointers to Pointers and More</a>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-iii-pointers-to-pointers-and-more" id="toc-pointers-iii-pointers-to-pointers-and-more"><span class="toc-section-number">23</span> Göstericiler III: Gösterici Göstericileri ve Daha Fazlası</a>
 <ul>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-to-pointers" id="toc-pointers-to-pointers"><span class="toc-section-number">23.1</span> Pointers to Pointers</a>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-to-pointers" id="toc-pointers-to-pointers"><span class="toc-section-number">23.1</span> Gösterici Göstericileri</a>
 <ul>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointer-pointers-and-const" id="toc-pointer-pointers-and-const"><span class="toc-section-number">23.1.1</span> Pointer Pointers and <code>const</code></a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointer-pointers-and-const" id="toc-pointer-pointers-and-const"><span class="toc-section-number">23.1.1</span> Gösterici Göstericileri ve <code>const</code></a></li>
 </ul></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#multibyte-values" id="toc-multibyte-values"><span class="toc-section-number">23.2</span> Multibyte Values</a></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#the-null-pointer-and-zero" id="toc-the-null-pointer-and-zero"><span class="toc-section-number">23.3</span> The <code>NULL</code> Pointer and Zero</a></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-as-integers" id="toc-pointers-as-integers"><span class="toc-section-number">23.4</span> Pointers as Integers</a></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#casting-pointers-to-other-pointers" id="toc-casting-pointers-to-other-pointers"><span class="toc-section-number">23.5</span> Casting Pointers to other Pointers</a></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#ptr_differences" id="toc-ptr_differences"><span class="toc-section-number">23.6</span> Pointer Differences</a></li>
-<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-to-functions" id="toc-pointers-to-functions"><span class="toc-section-number">23.7</span> Pointers to Functions</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#multibyte-values" id="toc-multibyte-values"><span class="toc-section-number">23.2</span> Çok Baytlı Değerler</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#the-null-pointer-and-zero" id="toc-the-null-pointer-and-zero"><span class="toc-section-number">23.3</span> <code>NULL</code> Göstericisi ve Sıfır</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-as-integers" id="toc-pointers-as-integers"><span class="toc-section-number">23.4</span> Tamsayı Olarak Göstericiler</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#casting-pointers-to-other-pointers" id="toc-casting-pointers-to-other-pointers"><span class="toc-section-number">23.5</span> Göstericileri Diğer Göstericilere Dönüştürme</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#ptr_differences" id="toc-ptr_differences"><span class="toc-section-number">23.6</span> Gösterici Farkları</a></li>
+<li><a href="pointers-iii-pointers-to-pointers-and-more.html#pointers-to-functions" id="toc-pointers-to-functions"><span class="toc-section-number">23.7</span> Fonksiyon Göstericileri</a></li>
 </ul></li>
-<li><a href="bitwise-operations.html#bitwise-operations" id="toc-bitwise-operations"><span class="toc-section-number">24</span> Bitwise Operations</a>
+<li><a href="bitwise-operations.html#bitwise-operations" id="toc-bitwise-operations"><span class="toc-section-number">24</span> Bit Düzeyinde İşlemler</a>
 <ul>
-<li><a href="bitwise-operations.html#bitwise-and-or-xor-and-not" id="toc-bitwise-and-or-xor-and-not"><span class="toc-section-number">24.1</span> Bitwise AND, OR, XOR, and NOT</a></li>
-<li><a href="bitwise-operations.html#bitwise-shift" id="toc-bitwise-shift"><span class="toc-section-number">24.2</span> Bitwise Shift</a></li>
+<li><a href="bitwise-operations.html#bitwise-and-or-xor-and-not" id="toc-bitwise-and-or-xor-and-not"><span class="toc-section-number">24.1</span> Bit Düzeyinde VE, VEYA, ÖZEL VEYA (XOR) ve DEĞİL</a></li>
+<li><a href="bitwise-operations.html#bitwise-shift" id="toc-bitwise-shift"><span class="toc-section-number">24.2</span> Bit Kaydırma</a></li>
 </ul></li>
-<li><a href="variadic-functions.html#variadic-functions" id="toc-variadic-functions"><span class="toc-section-number">25</span> Variadic Functions</a>
+<li><a href="variadic-functions.html#variadic-functions" id="toc-variadic-functions"><span class="toc-section-number">25</span> Değişken Argümanlı Fonksiyonlar (Variadic)</a>
 <ul>
-<li><a href="variadic-functions.html#ellipses-in-function-signatures" id="toc-ellipses-in-function-signatures"><span class="toc-section-number">25.1</span> Ellipses in Function Signatures</a></li>
-<li><a href="variadic-functions.html#getting-the-extra-arguments" id="toc-getting-the-extra-arguments"><span class="toc-section-number">25.2</span> Getting the Extra Arguments</a></li>
-<li><a href="variadic-functions.html#va_list-functionality" id="toc-va_list-functionality"><span class="toc-section-number">25.3</span> <code>va_list</code> Functionality</a></li>
-<li><a href="variadic-functions.html#library-functions-that-use-va_lists" id="toc-library-functions-that-use-va_lists"><span class="toc-section-number">25.4</span> Library Functions That Use <code>va_list</code>s</a></li>
-<li><a href="variadic-functions.html#variadic-macro-gotchas" id="toc-variadic-macro-gotchas"><span class="toc-section-number">25.5</span> Variadic Macro Gotchas</a></li>
+<li><a href="variadic-functions.html#ellipses-in-function-signatures" id="toc-ellipses-in-function-signatures"><span class="toc-section-number">25.1</span> Fonksiyon İmzalarında Üç Nokta</a></li>
+<li><a href="variadic-functions.html#getting-the-extra-arguments" id="toc-getting-the-extra-arguments"><span class="toc-section-number">25.2</span> Ek Argümanları Alma</a></li>
+<li><a href="variadic-functions.html#va_list-functionality" id="toc-va_list-functionality"><span class="toc-section-number">25.3</span> <code>va_list</code> İşlevselliği</a></li>
+<li><a href="variadic-functions.html#library-functions-that-use-va_lists" id="toc-library-functions-that-use-va_lists"><span class="toc-section-number">25.4</span> <code>va_list</code> Kullanan Kütüphane Fonksiyonları</a></li>
+<li><a href="variadic-functions.html#variadic-macro-gotchas" id="toc-variadic-macro-gotchas"><span class="toc-section-number">25.5</span> Değişken Argümanlı Makro Tuzakları</a></li>
 </ul></li>
-<li><a href="locale-and-internationalization.html#locale-and-internationalization" id="toc-locale-and-internationalization"><span class="toc-section-number">26</span> Locale and Internationalization</a>
+<li><a href="locale-and-internationalization.html#locale-and-internationalization" id="toc-locale-and-internationalization"><span class="toc-section-number">26</span> Yerelleştirme ve Uluslararasılaştırma</a>
 <ul>
-<li><a href="locale-and-internationalization.html#setting-the-localization-quick-and-dirty" id="toc-setting-the-localization-quick-and-dirty"><span class="toc-section-number">26.1</span> Setting the Localization, Quick and Dirty</a></li>
-<li><a href="locale-and-internationalization.html#getting-the-monetary-locale-settings" id="toc-getting-the-monetary-locale-settings"><span class="toc-section-number">26.2</span> Getting the Monetary Locale Settings</a>
+<li><a href="locale-and-internationalization.html#setting-the-localization-quick-and-dirty" id="toc-setting-the-localization-quick-and-dirty"><span class="toc-section-number">26.1</span> Yerelleştirmeyi Hızlıca Ayarlama</a></li>
+<li><a href="locale-and-internationalization.html#getting-the-monetary-locale-settings" id="toc-getting-the-monetary-locale-settings"><span class="toc-section-number">26.2</span> Para Birimi Yerel Ayarlarını Alma</a>
 <ul>
-<li><a href="locale-and-internationalization.html#monetary-digit-grouping" id="toc-monetary-digit-grouping"><span class="toc-section-number">26.2.1</span> Monetary Digit Grouping</a></li>
-<li><a href="locale-and-internationalization.html#separators-and-sign-position" id="toc-separators-and-sign-position"><span class="toc-section-number">26.2.2</span> Separators and Sign Position</a></li>
-<li><a href="locale-and-internationalization.html#example-values" id="toc-example-values"><span class="toc-section-number">26.2.3</span> Example Values</a></li>
+<li><a href="locale-and-internationalization.html#monetary-digit-grouping" id="toc-monetary-digit-grouping"><span class="toc-section-number">26.2.1</span> Parasal Basamak Gruplama</a></li>
+<li><a href="locale-and-internationalization.html#separators-and-sign-position" id="toc-separators-and-sign-position"><span class="toc-section-number">26.2.2</span> Ayıraçlar ve İşaret Konumu</a></li>
+<li><a href="locale-and-internationalization.html#example-values" id="toc-example-values"><span class="toc-section-number">26.2.3</span> Örnek Değerler</a></li>
 </ul></li>
-<li><a href="locale-and-internationalization.html#localization-specifics" id="toc-localization-specifics"><span class="toc-section-number">26.3</span> Localization Specifics</a></li>
+<li><a href="locale-and-internationalization.html#localization-specifics" id="toc-localization-specifics"><span class="toc-section-number">26.3</span> Yerelleştirme Detayları</a></li>
 </ul></li>
-<li><a href="unicode-wide-characters-and-all-that.html#unicode-wide-characters-and-all-that" id="toc-unicode-wide-characters-and-all-that"><span class="toc-section-number">27</span> Unicode, Wide Characters, and All That</a>
+<li><a href="unicode-wide-characters-and-all-that.html#unicode-wide-characters-and-all-that" id="toc-unicode-wide-characters-and-all-that"><span class="toc-section-number">27</span> Unicode, Geniş Karakterler ve Tüm Bunlar</a>
 <ul>
-<li><a href="unicode-wide-characters-and-all-that.html#what-is-unicode" id="toc-what-is-unicode"><span class="toc-section-number">27.1</span> What is Unicode?</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#code-points" id="toc-code-points"><span class="toc-section-number">27.2</span> Code Points</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#encoding" id="toc-encoding"><span class="toc-section-number">27.3</span> Encoding</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#src-exec-charset" id="toc-src-exec-charset"><span class="toc-section-number">27.4</span> Source and Execution Character Sets</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#unicode-in-c" id="toc-unicode-in-c"><span class="toc-section-number">27.5</span> Unicode in C</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#utf8-quick" id="toc-utf8-quick"><span class="toc-section-number">27.6</span> A Quick Note on UTF-8 Before We Swerve into the Weeds</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#different-character-types" id="toc-different-character-types"><span class="toc-section-number">27.7</span> Different Character Types</a>
+<li><a href="unicode-wide-characters-and-all-that.html#what-is-unicode" id="toc-what-is-unicode"><span class="toc-section-number">27.1</span> Unicode Nedir?</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#code-points" id="toc-code-points"><span class="toc-section-number">27.2</span> Kod Noktaları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#encoding" id="toc-encoding"><span class="toc-section-number">27.3</span> Kodlama (Encoding)</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#src-exec-charset" id="toc-src-exec-charset"><span class="toc-section-number">27.4</span> Kaynak ve Yürütme Karakter Kümeleri</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#unicode-in-c" id="toc-unicode-in-c"><span class="toc-section-number">27.5</span> C'de Unicode</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#utf8-quick" id="toc-utf8-quick"><span class="toc-section-number">27.6</span> Ayrıntılara Dalan Önce UTF-8 Üzerine Hızlı Bir Not</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#different-character-types" id="toc-different-character-types"><span class="toc-section-number">27.7</span> Farklı Karakter Türleri</a>
 <ul>
-<li><a href="unicode-wide-characters-and-all-that.html#multibyte-characters" id="toc-multibyte-characters"><span class="toc-section-number">27.7.1</span> Multibyte Characters</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#wide-characters" id="toc-wide-characters"><span class="toc-section-number">27.7.2</span> Wide Characters</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#multibyte-characters" id="toc-multibyte-characters"><span class="toc-section-number">27.7.1</span> Çok Baytlı Karakterler</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#wide-characters" id="toc-wide-characters"><span class="toc-section-number">27.7.2</span> Geniş Karakterler</a></li>
 </ul></li>
-<li><a href="unicode-wide-characters-and-all-that.html#using-wide-characters-and-wchar_t" id="toc-using-wide-characters-and-wchar_t"><span class="toc-section-number">27.8</span> Using Wide Characters and <code>wchar_t</code></a>
+<li><a href="unicode-wide-characters-and-all-that.html#using-wide-characters-and-wchar_t" id="toc-using-wide-characters-and-wchar_t"><span class="toc-section-number">27.8</span> Geniş Karakterler ve <code>wchar_t</code> Kullanımı</a>
 <ul>
-<li><a href="unicode-wide-characters-and-all-that.html#multibyte-to-wchar_t-conversions" id="toc-multibyte-to-wchar_t-conversions"><span class="toc-section-number">27.8.1</span> Multibyte to <code>wchar_t</code> Conversions</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#multibyte-to-wchar_t-conversions" id="toc-multibyte-to-wchar_t-conversions"><span class="toc-section-number">27.8.1</span> Çok Baytlıdan <code>wchar_t</code>'ye Dönüşümler</a></li>
 </ul></li>
-<li><a href="unicode-wide-characters-and-all-that.html#wide-character-functionality" id="toc-wide-character-functionality"><span class="toc-section-number">27.9</span> Wide Character Functionality</a>
+<li><a href="unicode-wide-characters-and-all-that.html#wide-character-functionality" id="toc-wide-character-functionality"><span class="toc-section-number">27.9</span> Geniş Karakter İşlevselliği</a>
 <ul>
 <li><a href="unicode-wide-characters-and-all-that.html#wint_t" id="toc-wint_t"><span class="toc-section-number">27.9.1</span> <code>wint_t</code></a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#io-stream-orientation" id="toc-io-stream-orientation"><span class="toc-section-number">27.9.2</span> I/O Stream Orientation</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#io-functions" id="toc-io-functions"><span class="toc-section-number">27.9.3</span> I/O Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#type-conversion-functions" id="toc-type-conversion-functions"><span class="toc-section-number">27.9.4</span> Type Conversion Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#string-and-memory-copying-functions" id="toc-string-and-memory-copying-functions"><span class="toc-section-number">27.9.5</span> String and Memory Copying Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#string-and-memory-comparing-functions" id="toc-string-and-memory-comparing-functions"><span class="toc-section-number">27.9.6</span> String and Memory Comparing Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#string-searching-functions" id="toc-string-searching-functions"><span class="toc-section-number">27.9.7</span> String Searching Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#lengthmiscellaneous-functions" id="toc-lengthmiscellaneous-functions"><span class="toc-section-number">27.9.8</span> Length/Miscellaneous Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#character-classification-functions" id="toc-character-classification-functions"><span class="toc-section-number">27.9.9</span> Character Classification Functions</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#io-stream-orientation" id="toc-io-stream-orientation"><span class="toc-section-number">27.9.2</span> G/Ç Akış Yönelimi</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#io-functions" id="toc-io-functions"><span class="toc-section-number">27.9.3</span> G/Ç Fonksiyonları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#type-conversion-functions" id="toc-type-conversion-functions"><span class="toc-section-number">27.9.4</span> Tür Dönüştürme Fonksiyonları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#string-and-memory-copying-functions" id="toc-string-and-memory-copying-functions"><span class="toc-section-number">27.9.5</span> String ve Bellek Kopyalama Fonksiyonları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#string-and-memory-comparing-functions" id="toc-string-and-memory-comparing-functions"><span class="toc-section-number">27.9.6</span> String ve Bellek Karşılaştırma Fonksiyonları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#string-searching-functions" id="toc-string-searching-functions"><span class="toc-section-number">27.9.7</span> String Arama Fonksiyonları</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#lengthmiscellaneous-functions" id="toc-lengthmiscellaneous-functions"><span class="toc-section-number">27.9.8</span> Uzunluk / Çeşitli Fonksiyonlar</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#character-classification-functions" id="toc-character-classification-functions"><span class="toc-section-number">27.9.9</span> Karakter Sınıflandırma Fonksiyonları</a></li>
 </ul></li>
-<li><a href="unicode-wide-characters-and-all-that.html#parse-state-restartable-functions" id="toc-parse-state-restartable-functions"><span class="toc-section-number">27.10</span> Parse State, Restartable Functions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#unicode-encodings-and-c" id="toc-unicode-encodings-and-c"><span class="toc-section-number">27.11</span> Unicode Encodings and C</a>
+<li><a href="unicode-wide-characters-and-all-that.html#parse-state-restartable-functions" id="toc-parse-state-restartable-functions"><span class="toc-section-number">27.10</span> Çözümleme Durumu, Yeniden Başlatılabilir Fonksiyonlar</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#unicode-encodings-and-c" id="toc-unicode-encodings-and-c"><span class="toc-section-number">27.11</span> Unicode Kodlamaları ve C</a>
 <ul>
 <li><a href="unicode-wide-characters-and-all-that.html#utf-8" id="toc-utf-8"><span class="toc-section-number">27.11.1</span> UTF-8</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#utf-16-utf-32-char16_t-and-char32_t" id="toc-utf-16-utf-32-char16_t-and-char32_t"><span class="toc-section-number">27.11.2</span> UTF-16, UTF-32, <code>char16_t</code>, and <code>char32_t</code></a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#multibyte-conversions" id="toc-multibyte-conversions"><span class="toc-section-number">27.11.3</span> Multibyte Conversions</a></li>
-<li><a href="unicode-wide-characters-and-all-that.html#utf-3rd-party" id="toc-utf-3rd-party"><span class="toc-section-number">27.11.4</span> Third-Party Libraries</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#utf-16-utf-32-char16_t-and-char32_t" id="toc-utf-16-utf-32-char16_t-and-char32_t"><span class="toc-section-number">27.11.2</span> UTF-16, UTF-32, <code>char16_t</code> ve <code>char32_t</code></a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#multibyte-conversions" id="toc-multibyte-conversions"><span class="toc-section-number">27.11.3</span> Çok Baytlı Dönüşümler</a></li>
+<li><a href="unicode-wide-characters-and-all-that.html#utf-3rd-party" id="toc-utf-3rd-party"><span class="toc-section-number">27.11.4</span> Üçüncü Taraf Kütüphaneler</a></li>
 </ul></li>
 </ul></li>
-<li><a href="exiting-a-program.html#exiting-a-program" id="toc-exiting-a-program"><span class="toc-section-number">28</span> Exiting a Program</a>
+<li><a href="exiting-a-program.html#exiting-a-program" id="toc-exiting-a-program"><span class="toc-section-number">28</span> Bir Programdan Çıkış Yapmak</a>
 <ul>
-<li><a href="exiting-a-program.html#normal-exits" id="toc-normal-exits"><span class="toc-section-number">28.1</span> Normal Exits</a>
+<li><a href="exiting-a-program.html#normal-exits" id="toc-normal-exits"><span class="toc-section-number">28.1</span> Normal Çıkışlar</a>
 <ul>
-<li><a href="exiting-a-program.html#returning-from-main" id="toc-returning-from-main"><span class="toc-section-number">28.1.1</span> Returning From <code>main()</code></a></li>
+<li><a href="exiting-a-program.html#returning-from-main" id="toc-returning-from-main"><span class="toc-section-number">28.1.1</span> <code>main()</code> Fonksiyonundan Dönmek</a></li>
 <li><a href="exiting-a-program.html#exit" id="toc-exit"><span class="toc-section-number">28.1.2</span> <code>exit()</code></a></li>
-<li><a href="exiting-a-program.html#setting-up-exit-handlers-with-atexit" id="toc-setting-up-exit-handlers-with-atexit"><span class="toc-section-number">28.1.3</span> Setting Up Exit Handlers with <code>atexit()</code></a></li>
+<li><a href="exiting-a-program.html#setting-up-exit-handlers-with-atexit" id="toc-setting-up-exit-handlers-with-atexit"><span class="toc-section-number">28.1.3</span> <code>atexit()</code> ile Çıkış İşleyicileri Kurmak</a></li>
 </ul></li>
-<li><a href="exiting-a-program.html#quicker-exits-with-quick_exit" id="toc-quicker-exits-with-quick_exit"><span class="toc-section-number">28.2</span> Quicker Exits with <code>quick_exit()</code></a></li>
-<li><a href="exiting-a-program.html#nuke-it-from-orbit-_exit" id="toc-nuke-it-from-orbit-_exit"><span class="toc-section-number">28.3</span> Nuke it from Orbit: <code>_Exit()</code></a></li>
-<li><a href="exiting-a-program.html#exiting-sometimes-assert" id="toc-exiting-sometimes-assert"><span class="toc-section-number">28.4</span> Exiting Sometimes: <code>assert()</code></a></li>
-<li><a href="exiting-a-program.html#abnormal-exit-abort" id="toc-abnormal-exit-abort"><span class="toc-section-number">28.5</span> Abnormal Exit: <code>abort()</code></a></li>
+<li><a href="exiting-a-program.html#quicker-exits-with-quick_exit" id="toc-quicker-exits-with-quick_exit"><span class="toc-section-number">28.2</span> <code>quick_exit()</code> ile Daha Hızlı Çıkışlar</a></li>
+<li><a href="exiting-a-program.html#nuke-it-from-orbit-_exit" id="toc-nuke-it-from-orbit-_exit"><span class="toc-section-number">28.3</span> Yörüngeden Yok Et: <code>_Exit()</code></a></li>
+<li><a href="exiting-a-program.html#exiting-sometimes-assert" id="toc-exiting-sometimes-assert"><span class="toc-section-number">28.4</span> Bazen Çıkış Yapmak: <code>assert()</code></a></li>
+<li><a href="exiting-a-program.html#abnormal-exit-abort" id="toc-abnormal-exit-abort"><span class="toc-section-number">28.5</span> Anormal Çıkış: <code>abort()</code></a></li>
 </ul></li>
-<li><a href="signal-handling.html#signal-handling" id="toc-signal-handling"><span class="toc-section-number">29</span> Signal Handling</a>
+<li><a href="signal-handling.html#signal-handling" id="toc-signal-handling"><span class="toc-section-number">29</span> Sinyal İşleme</a>
 <ul>
-<li><a href="signal-handling.html#what-are-signals" id="toc-what-are-signals"><span class="toc-section-number">29.1</span> What Are Signals?</a></li>
-<li><a href="signal-handling.html#handling-signals-with-signal" id="toc-handling-signals-with-signal"><span class="toc-section-number">29.2</span> Handling Signals with <code>signal()</code></a></li>
-<li><a href="signal-handling.html#writing-signal-handlers" id="toc-writing-signal-handlers"><span class="toc-section-number">29.3</span> Writing Signal Handlers</a></li>
-<li><a href="signal-handling.html#what-can-we-actually-do" id="toc-what-can-we-actually-do"><span class="toc-section-number">29.4</span> What Can We Actually Do?</a></li>
-<li><a href="signal-handling.html#friends-dont-let-friends-signal" id="toc-friends-dont-let-friends-signal"><span class="toc-section-number">29.5</span> Friends Don’t Let Friends <code>signal()</code></a></li>
+<li><a href="signal-handling.html#what-are-signals" id="toc-what-are-signals"><span class="toc-section-number">29.1</span> Sinyaller Nedir?</a></li>
+<li><a href="signal-handling.html#handling-signals-with-signal" id="toc-handling-signals-with-signal"><span class="toc-section-number">29.2</span> Sinyallerin <code>signal()</code> ile İşlenmesi</a></li>
+<li><a href="signal-handling.html#writing-signal-handlers" id="toc-writing-signal-handlers"><span class="toc-section-number">29.3</span> Sinyal İşleyicileri Yazma</a></li>
+<li><a href="signal-handling.html#what-can-we-actually-do" id="toc-what-can-we-actually-do"><span class="toc-section-number">29.4</span> Gerçekte Ne Yapabiliriz?</a></li>
+<li><a href="signal-handling.html#friends-dont-let-friends-signal" id="toc-friends-dont-let-friends-signal"><span class="toc-section-number">29.5</span> Dostlar Dostlarının <code>signal()</code> Kullanmasına İzin Vermez</a></li>
 </ul></li>
-<li><a href="variable-length-arrays-vlas.html#variable-length-arrays-vlas" id="toc-variable-length-arrays-vlas"><span class="toc-section-number">30</span> Variable-Length Arrays (VLAs)</a>
+<li><a href="variable-length-arrays-vlas.html#variable-length-arrays-vlas" id="toc-variable-length-arrays-vlas"><span class="toc-section-number">30</span> Değişken Uzunluklu Diziler (VLA)</a>
 <ul>
-<li><a href="variable-length-arrays-vlas.html#the-basics" id="toc-the-basics"><span class="toc-section-number">30.1</span> The Basics</a></li>
-<li><a href="variable-length-arrays-vlas.html#sizeof-and-vlas" id="toc-sizeof-and-vlas"><span class="toc-section-number">30.2</span> <code>sizeof</code> and VLAs</a></li>
-<li><a href="variable-length-arrays-vlas.html#multidimensional-vlas" id="toc-multidimensional-vlas"><span class="toc-section-number">30.3</span> Multidimensional VLAs</a></li>
-<li><a href="variable-length-arrays-vlas.html#passing-one-dimensional-vlas-to-functions" id="toc-passing-one-dimensional-vlas-to-functions"><span class="toc-section-number">30.4</span> Passing One-Dimensional VLAs to Functions</a></li>
-<li><a href="variable-length-arrays-vlas.html#passing-multi-dimensional-vlas-to-functions" id="toc-passing-multi-dimensional-vlas-to-functions"><span class="toc-section-number">30.5</span> Passing Multi-Dimensional VLAs to Functions</a>
+<li><a href="variable-length-arrays-vlas.html#the-basics" id="toc-the-basics"><span class="toc-section-number">30.1</span> Temeller</a></li>
+<li><a href="variable-length-arrays-vlas.html#sizeof-and-vlas" id="toc-sizeof-and-vlas"><span class="toc-section-number">30.2</span> <code>sizeof</code> ve VLA'lar</a></li>
+<li><a href="variable-length-arrays-vlas.html#multidimensional-vlas" id="toc-multidimensional-vlas"><span class="toc-section-number">30.3</span> Çok Boyutlu VLA'lar</a></li>
+<li><a href="variable-length-arrays-vlas.html#passing-one-dimensional-vlas-to-functions" id="toc-passing-one-dimensional-vlas-to-functions"><span class="toc-section-number">30.4</span> Tek Boyutlu VLA'ları Fonksiyonlara Geçme</a></li>
+<li><a href="variable-length-arrays-vlas.html#passing-multi-dimensional-vlas-to-functions" id="toc-passing-multi-dimensional-vlas-to-functions"><span class="toc-section-number">30.5</span> Çok Boyutlu VLA'ları Fonksiyonlara Geçme</a>
 <ul>
-<li><a href="variable-length-arrays-vlas.html#partial-multidimensional-vlas" id="toc-partial-multidimensional-vlas"><span class="toc-section-number">30.5.1</span> Partial Multidimensional VLAs</a></li>
+<li><a href="variable-length-arrays-vlas.html#partial-multidimensional-vlas" id="toc-partial-multidimensional-vlas"><span class="toc-section-number">30.5.1</span> Kısmi Çok Boyutlu VLA'lar</a></li>
 </ul></li>
-<li><a href="variable-length-arrays-vlas.html#compatibility-with-regular-arrays" id="toc-compatibility-with-regular-arrays"><span class="toc-section-number">30.6</span> Compatibility with Regular Arrays</a></li>
-<li><a href="variable-length-arrays-vlas.html#typedef-and-vlas" id="toc-typedef-and-vlas"><span class="toc-section-number">30.7</span> <code>typedef</code> and VLAs</a></li>
-<li><a href="variable-length-arrays-vlas.html#jumping-pitfalls" id="toc-jumping-pitfalls"><span class="toc-section-number">30.8</span> Jumping Pitfalls</a></li>
-<li><a href="variable-length-arrays-vlas.html#vla-general-issues" id="toc-vla-general-issues"><span class="toc-section-number">30.9</span> General Issues</a></li>
+<li><a href="variable-length-arrays-vlas.html#compatibility-with-regular-arrays" id="toc-compatibility-with-regular-arrays"><span class="toc-section-number">30.6</span> Normal Dizilerle Uyumluluk</a></li>
+<li><a href="variable-length-arrays-vlas.html#typedef-and-vlas" id="toc-typedef-and-vlas"><span class="toc-section-number">30.7</span> <code>typedef</code> ve VLA'lar</a></li>
+<li><a href="variable-length-arrays-vlas.html#jumping-pitfalls" id="toc-jumping-pitfalls"><span class="toc-section-number">30.8</span> Atlama Tuzakları</a></li>
+<li><a href="variable-length-arrays-vlas.html#vla-general-issues" id="toc-vla-general-issues"><span class="toc-section-number">30.9</span> Genel Sorunlar</a></li>
 </ul></li>
 <li><a href="goto.html#goto" id="toc-goto"><span class="toc-section-number">31</span> <code>goto</code></a>
 <ul>
-<li><a href="goto.html#a-simple-example" id="toc-a-simple-example"><span class="toc-section-number">31.1</span> A Simple Example</a></li>
-<li><a href="goto.html#labeled-continue" id="toc-labeled-continue"><span class="toc-section-number">31.2</span> Labeled <code>continue</code></a></li>
-<li><a href="goto.html#bailing-out" id="toc-bailing-out"><span class="toc-section-number">31.3</span> Bailing Out</a></li>
-<li><a href="goto.html#labeled-break" id="toc-labeled-break"><span class="toc-section-number">31.4</span> Labeled <code>break</code></a></li>
-<li><a href="goto.html#multi-level-cleanup" id="toc-multi-level-cleanup"><span class="toc-section-number">31.5</span> Multi-level Cleanup</a></li>
-<li><a href="goto.html#tail-call-optimization" id="toc-tail-call-optimization"><span class="toc-section-number">31.6</span> Tail Call Optimization</a></li>
-<li><a href="goto.html#restarting-interrupted-system-calls" id="toc-restarting-interrupted-system-calls"><span class="toc-section-number">31.7</span> Restarting Interrupted System Calls</a></li>
-<li><a href="goto.html#goto-and-thread-preemption" id="toc-goto-and-thread-preemption"><span class="toc-section-number">31.8</span> <code>goto</code> and Thread Preemption</a></li>
-<li><a href="goto.html#goto-and-variable-scope" id="toc-goto-and-variable-scope"><span class="toc-section-number">31.9</span> <code>goto</code> and Variable Scope</a></li>
-<li><a href="goto.html#goto-and-variable-length-arrays" id="toc-goto-and-variable-length-arrays"><span class="toc-section-number">31.10</span> <code>goto</code> and Variable-Length Arrays</a></li>
+<li><a href="goto.html#a-simple-example" id="toc-a-simple-example"><span class="toc-section-number">31.1</span> Basit Bir Örnek</a></li>
+<li><a href="goto.html#labeled-continue" id="toc-labeled-continue"><span class="toc-section-number">31.2</span> Etiketli <code>continue</code></a></li>
+<li><a href="goto.html#bailing-out" id="toc-bailing-out"><span class="toc-section-number">31.3</span> Erken Dönüş / Çıkış</a></li>
+<li><a href="goto.html#labeled-break" id="toc-labeled-break"><span class="toc-section-number">31.4</span> Etiketli <code>break</code></a></li>
+<li><a href="goto.html#multi-level-cleanup" id="toc-multi-level-cleanup"><span class="toc-section-number">31.5</span> Çok Seviyeli Temizlik</a></li>
+<li><a href="goto.html#tail-call-optimization" id="toc-tail-call-optimization"><span class="toc-section-number">31.6</span> Kuyruk Çağrısı Eniyilemesi</a></li>
+<li><a href="goto.html#restarting-interrupted-system-calls" id="toc-restarting-interrupted-system-calls"><span class="toc-section-number">31.7</span> Kesintiye Uğrayan Sistem Çağrılarını Yeniden Başlatma</a></li>
+<li><a href="goto.html#goto-and-thread-preemption" id="toc-goto-and-thread-preemption"><span class="toc-section-number">31.8</span> <code>goto</code> ve İzlek Kesintisi</a></li>
+<li><a href="goto.html#goto-and-variable-scope" id="toc-goto-and-variable-scope"><span class="toc-section-number">31.9</span> <code>goto</code> ve Değişken Kapsamı</a></li>
+<li><a href="goto.html#goto-and-variable-length-arrays" id="toc-goto-and-variable-length-arrays"><span class="toc-section-number">31.10</span> <code>goto</code> ve Değişken Uzunluklu Diziler</a></li>
 </ul></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#types-part-v-compound-literals-and-generic-selections" id="toc-types-part-v-compound-literals-and-generic-selections"><span class="toc-section-number">32</span> Types Part V: Compound Literals and Generic Selections</a>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#types-part-v-compound-literals-and-generic-selections" id="toc-types-part-v-compound-literals-and-generic-selections"><span class="toc-section-number">32</span> Türler Bölüm V: Bileşik Sabitler ve Genel Seçimler</a>
 <ul>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#compound-literals" id="toc-compound-literals"><span class="toc-section-number">32.1</span> Compound Literals</a>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#compound-literals" id="toc-compound-literals"><span class="toc-section-number">32.1</span> Bileşik Sabitler (Compound Literals)</a>
 <ul>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#passing-unnamed-objects-to-functions" id="toc-passing-unnamed-objects-to-functions"><span class="toc-section-number">32.1.1</span> Passing Unnamed Objects to Functions</a></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#unnamed-structs" id="toc-unnamed-structs"><span class="toc-section-number">32.1.2</span> Unnamed <code>struct</code>s</a></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#pointers-to-unnamed-objects" id="toc-pointers-to-unnamed-objects"><span class="toc-section-number">32.1.3</span> Pointers to Unnamed Objects</a></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#unnamed-objects-and-scope" id="toc-unnamed-objects-and-scope"><span class="toc-section-number">32.1.4</span> Unnamed Objects and Scope</a></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#silly-unnamed-object-example" id="toc-silly-unnamed-object-example"><span class="toc-section-number">32.1.5</span> Silly Unnamed Object Example</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#passing-unnamed-objects-to-functions" id="toc-passing-unnamed-objects-to-functions"><span class="toc-section-number">32.1.1</span> İsimsiz Nesneleri Fonksiyonlara Geçme</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#unnamed-structs" id="toc-unnamed-structs"><span class="toc-section-number">32.1.2</span> İsimsiz <code>struct</code> Yapıları</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#pointers-to-unnamed-objects" id="toc-pointers-to-unnamed-objects"><span class="toc-section-number">32.1.3</span> İsimsiz Nesnelere Göstericiler</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#unnamed-objects-and-scope" id="toc-unnamed-objects-and-scope"><span class="toc-section-number">32.1.4</span> İsimsiz Nesneler ve Kapsam</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#silly-unnamed-object-example" id="toc-silly-unnamed-object-example"><span class="toc-section-number">32.1.5</span> Komik İsimsiz Nesne Örneği</a></li>
 </ul></li>
-<li><a href="types-part-v-compound-literals-and-generic-selections.html#type-generics" id="toc-type-generics"><span class="toc-section-number">32.2</span> Generic Selections</a></li>
+<li><a href="types-part-v-compound-literals-and-generic-selections.html#type-generics" id="toc-type-generics"><span class="toc-section-number">32.2</span> Genel Seçimler (Generic Selections)</a></li>
 </ul></li>
-<li><a href="arrays-part-ii.html#arrays-part-ii" id="toc-arrays-part-ii"><span class="toc-section-number">33</span> Arrays Part II</a>
+<li><a href="arrays-part-ii.html#arrays-part-ii" id="toc-arrays-part-ii"><span class="toc-section-number">33</span> Diziler Bölüm II</a>
 <ul>
-<li><a href="arrays-part-ii.html#type-qualifiers-for-arrays-in-parameter-lists" id="toc-type-qualifiers-for-arrays-in-parameter-lists"><span class="toc-section-number">33.1</span> Type Qualifiers for Arrays in Parameter Lists</a></li>
-<li><a href="arrays-part-ii.html#static-for-arrays-in-parameter-lists" id="toc-static-for-arrays-in-parameter-lists"><span class="toc-section-number">33.2</span> <code>static</code> for Arrays in Parameter Lists</a></li>
-<li><a href="arrays-part-ii.html#equivalent-initializers" id="toc-equivalent-initializers"><span class="toc-section-number">33.3</span> Equivalent Initializers</a></li>
+<li><a href="arrays-part-ii.html#type-qualifiers-for-arrays-in-parameter-lists" id="toc-type-qualifiers-for-arrays-in-parameter-lists"><span class="toc-section-number">33.1</span> Parametre Listelerindeki Diziler İçin Tür Niteleyicileri</a></li>
+<li><a href="arrays-part-ii.html#static-for-arrays-in-parameter-lists" id="toc-static-for-arrays-in-parameter-lists"><span class="toc-section-number">33.2</span> Parametre Listelerindeki Diziler İçin <code>static</code></a></li>
+<li><a href="arrays-part-ii.html#equivalent-initializers" id="toc-equivalent-initializers"><span class="toc-section-number">33.3</span> Eşdeğer İlklendiriciler</a></li>
 </ul></li>
-<li><a href="setjmp-longjmp.html#setjmp-longjmp" id="toc-setjmp-longjmp"><span class="toc-section-number">34</span> Long Jumps with <code>setjmp</code>, <code>longjmp</code></a>
+<li><a href="setjmp-longjmp.html#setjmp-longjmp" id="toc-setjmp-longjmp"><span class="toc-section-number">34</span> <code>setjmp</code>, <code>longjmp</code> ile Uzak Atlamalar</a>
 <ul>
-<li><a href="setjmp-longjmp.html#using-setjmp-and-longjmp" id="toc-using-setjmp-and-longjmp"><span class="toc-section-number">34.1</span> Using <code>setjmp</code> and <code>longjmp</code></a></li>
-<li><a href="setjmp-longjmp.html#pitfalls" id="toc-pitfalls"><span class="toc-section-number">34.2</span> Pitfalls</a>
+<li><a href="setjmp-longjmp.html#using-setjmp-and-longjmp" id="toc-using-setjmp-and-longjmp"><span class="toc-section-number">34.1</span> <code>setjmp</code> ve <code>longjmp</code> Kullanımı</a></li>
+<li><a href="setjmp-longjmp.html#pitfalls" id="toc-pitfalls"><span class="toc-section-number">34.2</span> Tuzaklar ve Dikkat Edilmesi Gerekenler</a>
 <ul>
-<li><a href="setjmp-longjmp.html#the-values-of-local-variables" id="toc-the-values-of-local-variables"><span class="toc-section-number">34.2.1</span> The Values of Local Variables</a></li>
-<li><a href="setjmp-longjmp.html#how-much-state-is-saved" id="toc-how-much-state-is-saved"><span class="toc-section-number">34.2.2</span> How Much State is Saved?</a></li>
-<li><a href="setjmp-longjmp.html#you-cant-name-anything-setjmp" id="toc-you-cant-name-anything-setjmp"><span class="toc-section-number">34.2.3</span> You Can’t Name Anything <code>setjmp</code></a></li>
-<li><a href="setjmp-longjmp.html#you-cant-setjmp-in-a-larger-expression" id="toc-you-cant-setjmp-in-a-larger-expression"><span class="toc-section-number">34.2.4</span> You Can’t <code>setjmp()</code> in a Larger Expression</a></li>
-<li><a href="setjmp-longjmp.html#when-cant-you-longjmp" id="toc-when-cant-you-longjmp"><span class="toc-section-number">34.2.5</span> When Can’t You <code>longjmp()</code>?</a></li>
-<li><a href="setjmp-longjmp.html#you-cant-pass-0-to-longjmp" id="toc-you-cant-pass-0-to-longjmp"><span class="toc-section-number">34.2.6</span> You Can’t Pass <code>0</code> to <code>longjmp()</code></a></li>
-<li><a href="setjmp-longjmp.html#longjmp-and-variable-length-arrays" id="toc-longjmp-and-variable-length-arrays"><span class="toc-section-number">34.2.7</span> <code>longjmp()</code> and Variable Length Arrays</a></li>
-</ul></li>
-</ul></li>
-<li><a href="incomplete-types.html#incomplete-types" id="toc-incomplete-types"><span class="toc-section-number">35</span> Incomplete Types</a>
-<ul>
-<li><a href="incomplete-types.html#use-case-self-referential-structures" id="toc-use-case-self-referential-structures"><span class="toc-section-number">35.1</span> Use Case: Self-Referential Structures</a></li>
-<li><a href="incomplete-types.html#incomplete-type-error-messages" id="toc-incomplete-type-error-messages"><span class="toc-section-number">35.2</span> Incomplete Type Error Messages</a></li>
-<li><a href="incomplete-types.html#other-incomplete-types" id="toc-other-incomplete-types"><span class="toc-section-number">35.3</span> Other Incomplete Types</a></li>
-<li><a href="incomplete-types.html#use-case-arrays-in-header-files" id="toc-use-case-arrays-in-header-files"><span class="toc-section-number">35.4</span> Use Case: Arrays in Header Files</a></li>
-<li><a href="incomplete-types.html#completing-incomplete-types" id="toc-completing-incomplete-types"><span class="toc-section-number">35.5</span> Completing Incomplete Types</a></li>
-</ul></li>
-<li><a href="complex-numbers.html#complex-numbers" id="toc-complex-numbers"><span class="toc-section-number">36</span> Complex Numbers</a>
-<ul>
-<li><a href="complex-numbers.html#complex-types" id="toc-complex-types"><span class="toc-section-number">36.1</span> Complex Types</a></li>
-<li><a href="complex-numbers.html#assigning-complex-numbers" id="toc-assigning-complex-numbers"><span class="toc-section-number">36.2</span> Assigning Complex Numbers</a></li>
-<li><a href="complex-numbers.html#constructing-deconstructing-and-printing" id="toc-constructing-deconstructing-and-printing"><span class="toc-section-number">36.3</span> Constructing, Deconstructing, and Printing</a></li>
-<li><a href="complex-numbers.html#complex-arithmetic-and-comparisons" id="toc-complex-arithmetic-and-comparisons"><span class="toc-section-number">36.4</span> Complex Arithmetic and Comparisons</a></li>
-<li><a href="complex-numbers.html#complex-math" id="toc-complex-math"><span class="toc-section-number">36.5</span> Complex Math</a>
-<ul>
-<li><a href="complex-numbers.html#trigonometry-functions" id="toc-trigonometry-functions"><span class="toc-section-number">36.5.1</span> Trigonometry Functions</a></li>
-<li><a href="complex-numbers.html#exponential-and-logarithmic-functions" id="toc-exponential-and-logarithmic-functions"><span class="toc-section-number">36.5.2</span> Exponential and Logarithmic Functions</a></li>
-<li><a href="complex-numbers.html#power-and-absolute-value-functions" id="toc-power-and-absolute-value-functions"><span class="toc-section-number">36.5.3</span> Power and Absolute Value Functions</a></li>
-<li><a href="complex-numbers.html#manipulation-functions" id="toc-manipulation-functions"><span class="toc-section-number">36.5.4</span> Manipulation Functions</a></li>
+<li><a href="setjmp-longjmp.html#the-values-of-local-variables" id="toc-the-values-of-local-variables"><span class="toc-section-number">34.2.1</span> Yerel Değişkenlerin Değerleri</a></li>
+<li><a href="setjmp-longjmp.html#how-much-state-is-saved" id="toc-how-much-state-is-saved"><span class="toc-section-number">34.2.2</span> Ne Kadar Durum Saklanır?</a></li>
+<li><a href="setjmp-longjmp.html#you-cant-name-anything-setjmp" id="toc-you-cant-name-anything-setjmp"><span class="toc-section-number">34.2.3</span> Hiçbir Şeyi <code>setjmp</code> Olarak Adlandıramazsınız</a></li>
+<li><a href="setjmp-longjmp.html#you-cant-setjmp-in-a-larger-expression" id="toc-you-cant-setjmp-in-a-larger-expression"><span class="toc-section-number">34.2.4</span> Daha Büyük Bir İfade İçinde <code>setjmp()</code> Kullanamazsınız</a></li>
+<li><a href="setjmp-longjmp.html#when-cant-you-longjmp" id="toc-when-cant-you-longjmp"><span class="toc-section-number">34.2.5</span> Ne Zaman <code>longjmp()</code> Yapamazsınız?</a></li>
+<li><a href="setjmp-longjmp.html#you-cant-pass-0-to-longjmp" id="toc-you-cant-pass-0-to-longjmp"><span class="toc-section-number">34.2.6</span> <code>longjmp()</code> Fonksiyonuna <code>0</code> Geçiremezsiniz</a></li>
+<li><a href="setjmp-longjmp.html#longjmp-and-variable-length-arrays" id="toc-longjmp-and-variable-length-arrays"><span class="toc-section-number">34.2.7</span> <code>longjmp()</code> ve Değişken Uzunluklu Diziler</a></li>
 </ul></li>
 </ul></li>
-<li><a href="fixed-width-integer-types.html#fixed-width-integer-types" id="toc-fixed-width-integer-types"><span class="toc-section-number">37</span> Fixed Width Integer Types</a>
+<li><a href="incomplete-types.html#incomplete-types" id="toc-incomplete-types"><span class="toc-section-number">35</span> Tamamlanmamış Türler</a>
 <ul>
-<li><a href="fixed-width-integer-types.html#the-bit-sized-types" id="toc-the-bit-sized-types"><span class="toc-section-number">37.1</span> The Bit-Sized Types</a></li>
-<li><a href="fixed-width-integer-types.html#maximum-integer-size-type" id="toc-maximum-integer-size-type"><span class="toc-section-number">37.2</span> Maximum Integer Size Type</a></li>
-<li><a href="fixed-width-integer-types.html#using-fixed-size-constants" id="toc-using-fixed-size-constants"><span class="toc-section-number">37.3</span> Using Fixed Size Constants</a></li>
-<li><a href="fixed-width-integer-types.html#limits-of-fixed-size-integers" id="toc-limits-of-fixed-size-integers"><span class="toc-section-number">37.4</span> Limits of Fixed Size Integers</a></li>
-<li><a href="fixed-width-integer-types.html#format-specifiers" id="toc-format-specifiers"><span class="toc-section-number">37.5</span> Format Specifiers</a></li>
+<li><a href="incomplete-types.html#use-case-self-referential-structures" id="toc-use-case-self-referential-structures"><span class="toc-section-number">35.1</span> Kullanım Senaryosu: Öz-Referanslı Yapılar</a></li>
+<li><a href="incomplete-types.html#incomplete-type-error-messages" id="toc-incomplete-type-error-messages"><span class="toc-section-number">35.2</span> Tamamlanmamış Tür Hata Mesajları</a></li>
+<li><a href="incomplete-types.html#other-incomplete-types" id="toc-other-incomplete-types"><span class="toc-section-number">35.3</span> Diğer Tamamlanmamış Türler</a></li>
+<li><a href="incomplete-types.html#use-case-arrays-in-header-files" id="toc-use-case-arrays-in-header-files"><span class="toc-section-number">35.4</span> Kullanım Senaryosu: Başlık Dosyalarındaki Diziler</a></li>
+<li><a href="incomplete-types.html#completing-incomplete-types" id="toc-completing-incomplete-types"><span class="toc-section-number">35.5</span> Tamamlanmamış Türleri Tamamlama</a></li>
 </ul></li>
-<li><a href="date-and-time-functionality.html#date-and-time-functionality" id="toc-date-and-time-functionality"><span class="toc-section-number">38</span> Date and Time Functionality</a>
+<li><a href="complex-numbers.html#complex-numbers" id="toc-complex-numbers"><span class="toc-section-number">36</span> Karmaşık Sayılar</a>
 <ul>
-<li><a href="date-and-time-functionality.html#quick-terminology-and-information" id="toc-quick-terminology-and-information"><span class="toc-section-number">38.1</span> Quick Terminology and Information</a></li>
-<li><a href="date-and-time-functionality.html#date-types" id="toc-date-types"><span class="toc-section-number">38.2</span> Date Types</a></li>
-<li><a href="date-and-time-functionality.html#initialization-and-conversion-between-types" id="toc-initialization-and-conversion-between-types"><span class="toc-section-number">38.3</span> Initialization and Conversion Between Types</a>
+<li><a href="complex-numbers.html#complex-types" id="toc-complex-types"><span class="toc-section-number">36.1</span> Karmaşık Türler</a></li>
+<li><a href="complex-numbers.html#assigning-complex-numbers" id="toc-assigning-complex-numbers"><span class="toc-section-number">36.2</span> Karmaşık Sayılara Değer Atama</a></li>
+<li><a href="complex-numbers.html#constructing-deconstructing-and-printing" id="toc-constructing-deconstructing-and-printing"><span class="toc-section-number">36.3</span> Oluşturma, Bileşenlerine Ayırma ve Yazdırma</a></li>
+<li><a href="complex-numbers.html#complex-arithmetic-and-comparisons" id="toc-complex-arithmetic-and-comparisons"><span class="toc-section-number">36.4</span> Karmaşık Aritmetik ve Karşılaştırmalar</a></li>
+<li><a href="complex-numbers.html#complex-math" id="toc-complex-math"><span class="toc-section-number">36.5</span> Karmaşık Matematik</a>
 <ul>
-<li><a href="date-and-time-functionality.html#converting-time_t-to-struct-tm" id="toc-converting-time_t-to-struct-tm"><span class="toc-section-number">38.3.1</span> Converting <code>time_t</code> to <code>struct tm</code></a></li>
-<li><a href="date-and-time-functionality.html#converting-struct-tm-to-time_t" id="toc-converting-struct-tm-to-time_t"><span class="toc-section-number">38.3.2</span> Converting <code>struct tm</code> to <code>time_t</code></a></li>
+<li><a href="complex-numbers.html#trigonometry-functions" id="toc-trigonometry-functions"><span class="toc-section-number">36.5.1</span> Trigonometri Fonksiyonları</a></li>
+<li><a href="complex-numbers.html#exponential-and-logarithmic-functions" id="toc-exponential-and-logarithmic-functions"><span class="toc-section-number">36.5.2</span> Üstel ve Logaritmik Fonksiyonlar</a></li>
+<li><a href="complex-numbers.html#power-and-absolute-value-functions" id="toc-power-and-absolute-value-functions"><span class="toc-section-number">36.5.3</span> Üs ve Mutlak Değer Fonksiyonları</a></li>
+<li><a href="complex-numbers.html#manipulation-functions" id="toc-manipulation-functions"><span class="toc-section-number">36.5.4</span> Dönüştürme/İşleme Fonksiyonları</a></li>
 </ul></li>
-<li><a href="date-and-time-functionality.html#formatted-date-output" id="toc-formatted-date-output"><span class="toc-section-number">38.4</span> Formatted Date Output</a></li>
-<li><a href="date-and-time-functionality.html#more-resolution-with-timespec_get" id="toc-more-resolution-with-timespec_get"><span class="toc-section-number">38.5</span> More Resolution with <code>timespec_get()</code></a></li>
-<li><a href="date-and-time-functionality.html#differences-between-times" id="toc-differences-between-times"><span class="toc-section-number">38.6</span> Differences Between Times</a></li>
 </ul></li>
-<li><a href="multithreading.html#multithreading" id="toc-multithreading"><span class="toc-section-number">39</span> Multithreading</a>
+<li><a href="fixed-width-integer-types.html#fixed-width-integer-types" id="toc-fixed-width-integer-types"><span class="toc-section-number">37</span> Sabit Genişlikli Tamsayı Türleri</a>
 <ul>
-<li><a href="multithreading.html#background" id="toc-background"><span class="toc-section-number">39.1</span> Background</a></li>
-<li><a href="multithreading.html#things-you-can-do" id="toc-things-you-can-do"><span class="toc-section-number">39.2</span> Things You Can Do</a></li>
-<li><a href="multithreading.html#data-races-and-the-standard-library" id="toc-data-races-and-the-standard-library"><span class="toc-section-number">39.3</span> Data Races and the Standard Library</a></li>
-<li><a href="multithreading.html#creating-and-waiting-for-threads" id="toc-creating-and-waiting-for-threads"><span class="toc-section-number">39.4</span> Creating and Waiting for Threads</a></li>
-<li><a href="multithreading.html#detaching-threads" id="toc-detaching-threads"><span class="toc-section-number">39.5</span> Detaching Threads</a></li>
-<li><a href="multithreading.html#thread-local-data" id="toc-thread-local-data"><span class="toc-section-number">39.6</span> Thread Local Data</a>
-<ul>
-<li><a href="multithreading.html#thread-local" id="toc-thread-local"><span class="toc-section-number">39.6.1</span> <code>_Thread_local</code> Storage-Class</a></li>
-<li><a href="multithreading.html#another-option-thread-specific-storage" id="toc-another-option-thread-specific-storage"><span class="toc-section-number">39.6.2</span> Another Option: Thread-Specific Storage</a></li>
+<li><a href="fixed-width-integer-types.html#the-bit-sized-types" id="toc-the-bit-sized-types"><span class="toc-section-number">37.1</span> Bit Boyutlu Türler</a></li>
+<li><a href="fixed-width-integer-types.html#maximum-integer-size-type" id="toc-maximum-integer-size-type"><span class="toc-section-number">37.2</span> Maksimum Tamsayı Boyutu Türü</a></li>
+<li><a href="fixed-width-integer-types.html#using-fixed-size-constants" id="toc-using-fixed-size-constants"><span class="toc-section-number">37.3</span> Sabit Boyutlu Sabitleri Kullanma</a></li>
+<li><a href="fixed-width-integer-types.html#limits-of-fixed-size-integers" id="toc-limits-of-fixed-size-integers"><span class="toc-section-number">37.4</span> Sabit Boyutlu Tamsayıların Sınırları</a></li>
+<li><a href="fixed-width-integer-types.html#format-specifiers" id="toc-format-specifiers"><span class="toc-section-number">37.5</span> Format Belirteçleri</a></li>
 </ul></li>
-<li><a href="multithreading.html#mutex" id="toc-mutex"><span class="toc-section-number">39.7</span> Mutexes</a>
+<li><a href="date-and-time-functionality.html#date-and-time-functionality" id="toc-date-and-time-functionality"><span class="toc-section-number">38</span> Tarih ve Zaman İşlevselliği</a>
 <ul>
-<li><a href="multithreading.html#different-mutex-types" id="toc-different-mutex-types"><span class="toc-section-number">39.7.1</span> Different Mutex Types</a></li>
-</ul></li>
-<li><a href="multithreading.html#condition-variables" id="toc-condition-variables"><span class="toc-section-number">39.8</span> Condition Variables</a>
+<li><a href="date-and-time-functionality.html#quick-terminology-and-information" id="toc-quick-terminology-and-information"><span class="toc-section-number">38.1</span> Hızlı Terminoloji ve Bilgiler</a></li>
+<li><a href="date-and-time-functionality.html#date-types" id="toc-date-types"><span class="toc-section-number">38.2</span> Tarih Türleri</a></li>
+<li><a href="date-and-time-functionality.html#initialization-and-conversion-between-types" id="toc-initialization-and-conversion-between-types"><span class="toc-section-number">38.3</span> İlklendirme ve Türler Arasında Dönüşüm</a>
 <ul>
-<li><a href="multithreading.html#timed-condition-wait" id="toc-timed-condition-wait"><span class="toc-section-number">39.8.1</span> Timed Condition Wait</a></li>
-<li><a href="multithreading.html#broadcast-wake-up-all-waiting-threads" id="toc-broadcast-wake-up-all-waiting-threads"><span class="toc-section-number">39.8.2</span> Broadcast: Wake Up All Waiting Threads</a></li>
+<li><a href="date-and-time-functionality.html#converting-time_t-to-struct-tm" id="toc-converting-time_t-to-struct-tm"><span class="toc-section-number">38.3.1</span> <code>time_t</code> Türünü <code>struct tm</code> Yapısına Dönüştürme</a></li>
+<li><a href="date-and-time-functionality.html#converting-struct-tm-to-time_t" id="toc-converting-struct-tm-to-time_t"><span class="toc-section-number">38.3.2</span> <code>struct tm</code> Yapısını <code>time_t</code> Türüne Dönüştürme</a></li>
 </ul></li>
-<li><a href="multithreading.html#running-a-function-one-time" id="toc-running-a-function-one-time"><span class="toc-section-number">39.9</span> Running a Function One Time</a></li>
+<li><a href="date-and-time-functionality.html#formatted-date-output" id="toc-formatted-date-output"><span class="toc-section-number">38.4</span> Biçimlendirilmiş Tarih Çıktısı</a></li>
+<li><a href="date-and-time-functionality.html#more-resolution-with-timespec_get" id="toc-more-resolution-with-timespec_get"><span class="toc-section-number">38.5</span> <code>timespec_get()</code> ile Daha Yüksek Çözünürlük</a></li>
+<li><a href="date-and-time-functionality.html#differences-between-times" id="toc-differences-between-times"><span class="toc-section-number">38.6</span> Zamanlar Arasındaki Farklar</a></li>
 </ul></li>
-<li><a href="chapter-atomics.html#chapter-atomics" id="toc-chapter-atomics"><span class="toc-section-number">40</span> Atomics</a>
+<li><a href="multithreading.html#multithreading" id="toc-multithreading"><span class="toc-section-number">39</span> Çoklu İzlek Kullanımı (Multithreading)</a>
 <ul>
-<li><a href="chapter-atomics.html#testing-for-atomic-support" id="toc-testing-for-atomic-support"><span class="toc-section-number">40.1</span> Testing for Atomic Support</a></li>
-<li><a href="chapter-atomics.html#atomic-variables" id="toc-atomic-variables"><span class="toc-section-number">40.2</span> Atomic Variables</a></li>
-<li><a href="chapter-atomics.html#synchronization" id="toc-synchronization"><span class="toc-section-number">40.3</span> Synchronization</a></li>
-<li><a href="chapter-atomics.html#acquire-and-release" id="toc-acquire-and-release"><span class="toc-section-number">40.4</span> Acquire and Release</a></li>
-<li><a href="chapter-atomics.html#sequential-consistency" id="toc-sequential-consistency"><span class="toc-section-number">40.5</span> Sequential Consistency</a></li>
-<li><a href="chapter-atomics.html#atomic-assignments-and-operators" id="toc-atomic-assignments-and-operators"><span class="toc-section-number">40.6</span> Atomic Assignments and Operators</a></li>
-<li><a href="chapter-atomics.html#library-functions-that-automatically-synchronize" id="toc-library-functions-that-automatically-synchronize"><span class="toc-section-number">40.7</span> Library Functions that Automatically Synchronize</a></li>
-<li><a href="chapter-atomics.html#atomic-type-specifier-qualifier" id="toc-atomic-type-specifier-qualifier"><span class="toc-section-number">40.8</span> Atomic Type Specifier, Qualifier</a></li>
-<li><a href="chapter-atomics.html#lock-free-atomic" id="toc-lock-free-atomic"><span class="toc-section-number">40.9</span> Lock-Free Atomic Variables</a>
+<li><a href="multithreading.html#background" id="toc-background"><span class="toc-section-number">39.1</span> Arka Plan</a></li>
+<li><a href="multithreading.html#things-you-can-do" id="toc-things-you-can-do"><span class="toc-section-number">39.2</span> Yapabileceğiniz Şeyler</a></li>
+<li><a href="multithreading.html#data-races-and-the-standard-library" id="toc-data-races-and-the-standard-library"><span class="toc-section-number">39.3</span> Veri Yarışları (Data Races) ve Standart Kütüphane</a></li>
+<li><a href="multithreading.html#creating-and-waiting-for-threads" id="toc-creating-and-waiting-for-threads"><span class="toc-section-number">39.4</span> İzlekler Oluşturma ve Bekleme</a></li>
+<li><a href="multithreading.html#detaching-threads" id="toc-detaching-threads"><span class="toc-section-number">39.5</span> İzlekleri Ayırma (Detaching Threads)</a></li>
+<li><a href="multithreading.html#thread-local-data" id="toc-thread-local-data"><span class="toc-section-number">39.6</span> İzleğe Özel Yerel Veri</a>
 <ul>
-<li><a href="chapter-atomics.html#signal-handlers-and-lock-free-atomics" id="toc-signal-handlers-and-lock-free-atomics"><span class="toc-section-number">40.9.1</span> Signal Handlers and Lock-Free Atomics</a></li>
+<li><a href="multithreading.html#thread-local" id="toc-thread-local"><span class="toc-section-number">39.6.1</span> <code>_Thread_local</code> Depolama Sınıfı</a></li>
+<li><a href="multithreading.html#another-option-thread-specific-storage" id="toc-another-option-thread-specific-storage"><span class="toc-section-number">39.6.2</span> Başka Bir Seçenek: İzleğe Özel Depolama</a></li>
 </ul></li>
-<li><a href="chapter-atomics.html#atomic-flags" id="toc-atomic-flags"><span class="toc-section-number">40.10</span> Atomic Flags</a></li>
-<li><a href="chapter-atomics.html#atomic-structs-and-unions" id="toc-atomic-structs-and-unions"><span class="toc-section-number">40.11</span> Atomic <code>struct</code>s and <code>union</code>s</a></li>
-<li><a href="chapter-atomics.html#atomic-pointers" id="toc-atomic-pointers"><span class="toc-section-number">40.12</span> Atomic Pointers</a></li>
-<li><a href="chapter-atomics.html#memory-order" id="toc-memory-order"><span class="toc-section-number">40.13</span> Memory Order</a>
+<li><a href="multithreading.html#mutex" id="toc-mutex"><span class="toc-section-number">39.7</span> Mutex'ler / Kilitler</a>
 <ul>
-<li><a href="chapter-atomics.html#sequential-consistency-1" id="toc-sequential-consistency-1"><span class="toc-section-number">40.13.1</span> Sequential Consistency</a></li>
-<li><a href="chapter-atomics.html#acquire" id="toc-acquire"><span class="toc-section-number">40.13.2</span> Acquire</a></li>
-<li><a href="chapter-atomics.html#release" id="toc-release"><span class="toc-section-number">40.13.3</span> Release</a></li>
-<li><a href="chapter-atomics.html#consume" id="toc-consume"><span class="toc-section-number">40.13.4</span> Consume</a></li>
-<li><a href="chapter-atomics.html#acquirerelease" id="toc-acquirerelease"><span class="toc-section-number">40.13.5</span> Acquire/Release</a></li>
-<li><a href="chapter-atomics.html#relaxed" id="toc-relaxed"><span class="toc-section-number">40.13.6</span> Relaxed</a></li>
+<li><a href="multithreading.html#different-mutex-types" id="toc-different-mutex-types"><span class="toc-section-number">39.7.1</span> Farklı Mutex Türleri</a></li>
 </ul></li>
-<li><a href="chapter-atomics.html#fences" id="toc-fences"><span class="toc-section-number">40.14</span> Fences</a></li>
-<li><a href="chapter-atomics.html#references" id="toc-references"><span class="toc-section-number">40.15</span> References</a></li>
-</ul></li>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#function-specifiers-alignment-specifiersoperators" id="toc-function-specifiers-alignment-specifiersoperators"><span class="toc-section-number">41</span> Function Specifiers, Alignment Specifiers/Operators</a>
+<li><a href="multithreading.html#condition-variables" id="toc-condition-variables"><span class="toc-section-number">39.8</span> Koşul Değişkenleri (Condition Variables)</a>
 <ul>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#function-specifiers" id="toc-function-specifiers"><span class="toc-section-number">41.1</span> Function Specifiers</a>
-<ul>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#inline-for-speedmaybe" id="toc-inline-for-speedmaybe"><span class="toc-section-number">41.1.1</span> <code>inline</code> for Speed—Maybe</a></li>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#noreturn" id="toc-noreturn"><span class="toc-section-number">41.1.2</span> <code>noreturn</code> and <code>_Noreturn</code></a></li>
+<li><a href="multithreading.html#timed-condition-wait" id="toc-timed-condition-wait"><span class="toc-section-number">39.8.1</span> Zaman Ayarlı Koşul Bekleme</a></li>
+<li><a href="multithreading.html#broadcast-wake-up-all-waiting-threads" id="toc-broadcast-wake-up-all-waiting-threads"><span class="toc-section-number">39.8.2</span> Yayın (Broadcast): Bekleyen Tüm İzlekleri Uyandır</a></li>
 </ul></li>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#alignment-specifiers-and-operators" id="toc-alignment-specifiers-and-operators"><span class="toc-section-number">41.2</span> Alignment Specifiers and Operators</a>
-<ul>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#alignas-and-_alignas" id="toc-alignas-and-_alignas"><span class="toc-section-number">41.2.1</span> <code>alignas</code> and <code>_Alignas</code></a></li>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#alignof-and-_alignof" id="toc-alignof-and-_alignof"><span class="toc-section-number">41.2.2</span> <code>alignof</code> and <code>_Alignof</code></a></li>
+<li><a href="multithreading.html#running-a-function-one-time" id="toc-running-a-function-one-time"><span class="toc-section-number">39.9</span> Bir Fonksiyonu Tek Bir Kez Çalıştırma</a></li>
 </ul></li>
-<li><a href="function-specifiers-alignment-specifiersoperators.html#memalignment-function" id="toc-memalignment-function"><span class="toc-section-number">41.3</span> <code>memalignment()</code> Function</a></li>
+<li><a href="chapter-atomics.html#chapter-atomics" id="toc-chapter-atomics"><span class="toc-section-number">40</span> Bölünemez İşlemler (Atomics)</a>
+<ul>
+<li><a href="chapter-atomics.html#testing-for-atomic-support" id="toc-testing-for-atomic-support"><span class="toc-section-number">40.1</span> Atomic Desteğini Test Etme</a></li>
+<li><a href="chapter-atomics.html#atomic-variables" id="toc-atomic-variables"><span class="toc-section-number">40.2</span> Atomic Değişkenler</a></li>
+<li><a href="chapter-atomics.html#synchronization" id="toc-synchronization"><span class="toc-section-number">40.3</span> Eşzamanlama (Synchronization)</a></li>
+<li><a href="chapter-atomics.html#acquire-and-release" id="toc-acquire-and-release"><span class="toc-section-number">40.4</span> Edinme ve Serbest Bırakma (Acquire and Release)</a></li>
+<li><a href="chapter-atomics.html#sequential-consistency" id="toc-sequential-consistency"><span class="toc-section-number">40.5</span> Sıralı Tutarlılık (Sequential Consistency)</a></li>
+<li><a href="chapter-atomics.html#atomic-assignments-and-operators" id="toc-atomic-assignments-and-operators"><span class="toc-section-number">40.6</span> Atomic Atamalar ve Operatörler</a></li>
+<li><a href="chapter-atomics.html#library-functions-that-automatically-synchronize" id="toc-library-functions-that-automatically-synchronize"><span class="toc-section-number">40.7</span> Otomatik Olarak Eşzamanlanan Kütüphane Fonksiyonları</a></li>
+<li><a href="chapter-atomics.html#atomic-type-specifier-qualifier" id="toc-atomic-type-specifier-qualifier"><span class="toc-section-number">40.8</span> Atomic Tür Belirteci, Niteleyicisi</a></li>
+<li><a href="chapter-atomics.html#lock-free-atomic" id="toc-lock-free-atomic"><span class="toc-section-number">40.9</span> Kilitsiz (Lock-Free) Atomic Değişkenler</a>
+<ul>
+<li><a href="chapter-atomics.html#signal-handlers-and-lock-free-atomics" id="toc-signal-handlers-and-lock-free-atomics"><span class="toc-section-number">40.9.1</span> Sinyal İşleyicileri ve Kilitsiz Atomic'ler</a></li>
+</ul></li>
+<li><a href="chapter-atomics.html#atomic-flags" id="toc-atomic-flags"><span class="toc-section-number">40.10</span> Atomic Bayraklar</a></li>
+<li><a href="chapter-atomics.html#atomic-structs-and-unions" id="toc-atomic-structs-and-unions"><span class="toc-section-number">40.11</span> Atomic <code>struct</code> ve <code>union</code> Yapıları</a></li>
+<li><a href="chapter-atomics.html#atomic-pointers" id="toc-atomic-pointers"><span class="toc-section-number">40.12</span> Atomic Göstericiler</a></li>
+<li><a href="chapter-atomics.html#memory-order" id="toc-memory-order"><span class="toc-section-number">40.13</span> Bellek Sıralaması (Memory Order)</a>
+<ul>
+<li><a href="chapter-atomics.html#sequential-consistency-1" id="toc-sequential-consistency-1"><span class="toc-section-number">40.13.1</span> Sıralı Tutarlılık</a></li>
+<li><a href="chapter-atomics.html#acquire" id="toc-acquire"><span class="toc-section-number">40.13.2</span> Edinme (Acquire)</a></li>
+<li><a href="chapter-atomics.html#release" id="toc-release"><span class="toc-section-number">40.13.3</span> Serbest Bırakma (Release)</a></li>
+<li><a href="chapter-atomics.html#consume" id="toc-consume"><span class="toc-section-number">40.13.4</span> Tüketme (Consume)</a></li>
+<li><a href="chapter-atomics.html#acquirerelease" id="toc-acquirerelease"><span class="toc-section-number">40.13.5</span> Edinme/Serbest Bırakma</a></li>
+<li><a href="chapter-atomics.html#relaxed" id="toc-relaxed"><span class="toc-section-number">40.13.6</span> Gevşek (Relaxed)</a></li>
+</ul></li>
+<li><a href="chapter-atomics.html#fences" id="toc-fences"><span class="toc-section-number">40.14</span> Çitler / Bariyerler (Fences)</a></li>
+<li><a href="chapter-atomics.html#references" id="toc-references"><span class="toc-section-number">40.15</span> Kaynaklar</a></li>
+</ul></li>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#function-specifiers-alignment-specifiersoperators" id="toc-function-specifiers-alignment-specifiersoperators"><span class="toc-section-number">41</span> Fonksiyon Belirteçleri, Hizalama Belirteçleri/Operatörleri</a>
+<ul>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#function-specifiers" id="toc-function-specifiers"><span class="toc-section-number">41.1</span> Fonksiyon Belirteçleri</a>
+<ul>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#inline-for-speedmaybe" id="toc-inline-for-speedmaybe"><span class="toc-section-number">41.1.1</span> Hız İçin <code>inline</code>—Belki</a></li>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#noreturn" id="toc-noreturn"><span class="toc-section-number">41.1.2</span> <code>noreturn</code> ve <code>_Noreturn</code></a></li>
+</ul></li>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#alignment-specifiers-and-operators" id="toc-alignment-specifiers-and-operators"><span class="toc-section-number">41.2</span> Hizalama Belirteçleri ve Operatörleri</a>
+<ul>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#alignas-and-_alignas" id="toc-alignas-and-_alignas"><span class="toc-section-number">41.2.1</span> <code>alignas</code> ve <code>_Alignas</code></a></li>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#alignof-and-_alignof" id="toc-alignof-and-_alignof"><span class="toc-section-number">41.2.2</span> <code>alignof</code> ve <code>_Alignof</code></a></li>
+</ul></li>
+<li><a href="function-specifiers-alignment-specifiersoperators.html#memalignment-function" id="toc-memalignment-function"><span class="toc-section-number">41.3</span> <code>memalignment()</code> Fonksiyonu</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -690,13 +690,13 @@
       </svg>
       <span class="theme-name-badge">Dark Obsidian</span>
     </button>
-    <iframe name="content-frame" id="content-frame" src="foreword.html" class="content-frame" title="Chapter Content"></iframe>
+    <iframe name="content-frame" id="content-frame" src="foreword.html" class="content-frame" title="Bölüm İçeriği"></iframe>
   </main>
 
   <!-- Command Palette Modal (Cmd/Ctrl + Shift + F) -->
   <div id="cmd-palette" class="cmd-palette-overlay" aria-hidden="true">
     <div class="cmd-palette-backdrop" id="cmd-palette-backdrop"></div>
-    <div class="cmd-palette-modal" role="dialog" aria-modal="true" aria-label="Semantic Command Search">
+    <div class="cmd-palette-modal" role="dialog" aria-modal="true" aria-label="Anlamsal Komut Araması">
       <div class="cmd-palette-header">
         <svg class="cmd-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text" id="cmd-palette-input" placeholder="Konu veya kavram ara... (Örn: pointers, threads, malloc, structs)" autocomplete="off" spellcheck="false" />
@@ -707,7 +707,7 @@
         <span><kbd>↑</kbd> <kbd>↓</kbd> Gezin</span>
         <span><kbd>↵</kbd> Seç</span>
         <span><kbd>ESC</kbd> Kapat</span>
-        <span class="cmd-badge-hint">Semantic Match %</span>
+        <span class="cmd-badge-hint">Anlamsal Eşleşme %</span>
       </div>
     </div>
   </div>

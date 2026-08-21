@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,27 +32,27 @@
 </head>
 <body>
 <div class="nav-header"><a href="signal-handling.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="goto.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="30" id="variable-length-arrays-vlas"><span class="header-section-number">30</span> Variable-Length Arrays (VLAs)</h1>
+<h1 data-number="30" id="variable-length-arrays-vlas"><span class="header-section-number">30</span> Değişken Uzunluklu Diziler (VLA'lar)</h1>
 <p></p>
-<p>C provides a way for you to declare an array whose size is determined at runtime. This gives you the benefits of dynamic runtime sizing like you get with <code>malloc()</code>, but without needing to worry about <code>free()</code>ing the memory after.</p>
-<p>Now, a lot of people don’t like VLAs. They’ve been banned from the Linux kernel, for example. We’ll dig into more of that rationale <a href="variable-length-arrays-vlas.html#vla-general-issues">later</a>.</p>
+<p>C, boyutu çalışma zamanında (runtime) belirlenen bir dizi tanımlamanıza imkan tanır. Bu, <code>malloc()</code> ile elde ettiğiniz dinamik çalışma zamanı boyutlandırmasının avantajlarını sunar, üstelik sonrasında belleği <code>free()</code> ile serbest bırakma derdi olmadan.</p>
+<p>Şimdi, pek çok kişi VLA'ları pek sevmez. Örneğin Linux çekirdeğinden yasaklandılar. Bunun gerekçelerine <a href="variable-length-arrays-vlas.html#vla-general-issues">daha sonra</a> daha ayrıntılı olarak değineceğiz.</p>
 <p></p>
-<p>This is an optional feature of the language. The macro <code>__STDC_NO_VLA__</code> is set to <code>1</code> if VLAs are <em>not</em> present. (They were mandatory in C99, and then became optional in C11.)</p>
+<p>Bu, dilin isteğe bağlı bir özelliğidir. VLA'lar <em>mevcut değilse</em> <code>__STDC_NO_VLA__</code> makrosu <code>1</code> olarak ayarlanır. (C99'da zorunluydular, ardından C11 ile isteğe bağlı hale geldiler.)</p>
 <div class="sourceCode" id="cb593"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb593-1"><a href="variable-length-arrays-vlas.html#cb593-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __STDC_NO_VLA__ == 1</span></span>
 <span id="cb593-2"><a href="variable-length-arrays-vlas.html#cb593-2" aria-hidden="true" tabindex="-1"></a>   <span class="pp">#error Sorry, need VLAs for this program!</span></span>
 <span id="cb593-3"><a href="variable-length-arrays-vlas.html#cb593-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
 <p></p>
-<p>But since neither GCC nor Clang bother to define this macro, you may get limited mileage from this.</p>
-<p>Let’s dive in first with an example, and then we’ll look for the devil in the details.</p>
-<h2 data-number="30.1" id="the-basics"><span class="header-section-number">30.1</span> The Basics</h2>
-<p>A normal array is declared with a constant size, like this:</p>
+<p>Ancak ne GCC ne de Clang bu makroyu tanımlama zahmetine girmediğinden, bundan pek fazla yararlanamayabilirsiniz.</p>
+<p>Gelin önce bir örnekle başlayalım, ardından detaylardaki şeytana bakarız.</p>
+<h2 data-number="30.1" id="the-basics"><span class="header-section-number">30.1</span> Temel Bilgiler</h2>
+<p>Normal bir dizi, sabit bir boyutla şu şekilde tanımlanır:</p>
 <div class="sourceCode" id="cb594"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb594-1"><a href="variable-length-arrays-vlas.html#cb594-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> v<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span></code></pre></div>
 <p></p>
-<p>But with VLAs, we can use a size determined at runtime to set the array, like this:</p>
+<p>Ancak VLA'lar ile, diziyi oluşturmak için çalışma zamanında belirlenen bir boyut kullanabiliriz, şöyle ki:</p>
 <div class="sourceCode" id="cb595"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb595-1"><a href="variable-length-arrays-vlas.html#cb595-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
 <span id="cb595-2"><a href="variable-length-arrays-vlas.html#cb595-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> v<span class="op">[</span>n<span class="op">];</span></span></code></pre></div>
-<p>Now, that looks like the same thing, and in many ways is, but this gives you the flexibility to compute the size you need, and then get an array of exactly that size.</p>
-<p>Let’s ask the user to input the size of the array, and then store the index-times-10 in each of those array elements:</p>
+<p>Şimdi, bu aynı şeymiş gibi görünüyor ve birçok açıdan öyle, ancak bu size ihtiyacınız olan boyutu hesaplama ve ardından tam da o boyutta bir dizi elde etme esnekliği sağlar.</p>
+<p>Kullanıcıdan dizinin boyutunu girmesini isteyelim ve ardından bu dizi elemanlarının her birinde indeks çarpı 10 değerini saklayalım:</p>
 <div class="sourceCode" id="cb596"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb596-1"><a href="variable-length-arrays-vlas.html#cb596-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb596-2"><a href="variable-length-arrays-vlas.html#cb596-2"></a></span>
 <span id="cb596-3"><a href="variable-length-arrays-vlas.html#cb596-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -72,25 +72,25 @@
 <span id="cb596-17"><a href="variable-length-arrays-vlas.html#cb596-17"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb596-18"><a href="variable-length-arrays-vlas.html#cb596-18"></a>        printf<span class="op">(</span><span class="st">&quot;v[</span><span class="sc">%d</span><span class="st">] = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> v<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb596-19"><a href="variable-length-arrays-vlas.html#cb596-19"></a><span class="op">}</span></span></code></pre></div>
-<p>(On line 7, I have an <code>fflush()</code> that should force the line to output even though I don’t have a newline at the end.)</p>
-<p>Line 12 is where we declare the VLA—once execution gets past that line, the size of the array is set to whatever <code>n</code> was at that moment. The array length can’t be changed later.</p>
-<p>You can put an expression in the brackets, as well:</p>
+<p>(7. satırda, sonunda bir yeni satır karakteri olmasa bile satırı çıktı vermeye zorlaması gereken bir <code>fflush()</code> var.)</p>
+<p>12. satır, VLA'yı tanımladığımız yerdir—çalışma o satırı geçtiğinde, dizinin boyutu o anda <code>n</code> neyse ona ayarlanır. Dizi uzunluğu daha sonra değiştirilemez.</p>
+<p>Köşeli parantezlerin içine bir ifade de koyabilirsiniz:</p>
 <div class="sourceCode" id="cb597"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb597-1"><a href="variable-length-arrays-vlas.html#cb597-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> v<span class="op">[</span>x <span class="op">*</span> <span class="dv">100</span><span class="op">];</span></span></code></pre></div>
-<p>Some restrictions:</p>
+<p>Bazı kısıtlamalar:</p>
 <ul>
-<li>You can’t declare a VLA at file scope, and you can’t make a <code>static</code> one in block scope<a href="function-specifiers-alignment-specifiersoperators.html#fn175" class="footnote-ref" id="fnref175" role="doc-noteref"><sup>175</sup></a>.</li>
-<li>You can’t use an initializer list to initialize the array.</li>
+<li>Dosya kapsamında (file scope) bir VLA tanımlayamazsınız ve blok kapsamında <code>static</code> bir VLA yapamazsınız<a href="function-specifiers-alignment-specifiersoperators.html#fn175" class="footnote-ref" id="fnref175" role="doc-noteref"><sup>175</sup></a>.</li>
+<li>Diziyi ilklendirmek için bir ilklendirme listesi (initializer list) kullanamazsınız.</li>
 </ul>
-<p>Also, entering a negative value for the size of the array invokes undefined behavior—in this universe, anyway.</p>
+<p>Ayrıca, dizi boyutu için negatif bir değer girmek tanımsız davranışa <em>(undefined behavior)</em> yol açar—en azından bu evrende.</p>
 <p></p>
-<h2 data-number="30.2" id="sizeof-and-vlas"><span class="header-section-number">30.2</span> <code>sizeof</code> and VLAs</h2>
+<h2 data-number="30.2" id="sizeof-and-vlas"><span class="header-section-number">30.2</span> <code>sizeof</code> ve VLA'lar</h2>
 <p></p>
-<p>We’re used to <code>sizeof</code> giving us the size in bytes of any particular object, including arrays. And VLAs are no exception.</p>
-<p>The main difference is that <code>sizeof</code> on a VLA is executed at <em>runtime</em>, whereas on a non-variably-sized variable it is computed at <em>compile time</em>.</p>
-<p>But the usage is the same.</p>
-<p>You can even compute the number of elements in a VLA with the usual array trick:</p>
+<p><code>sizeof</code> operatörünün diziler de dahil olmak üzere belirli herhangi bir nesnenin bayt cinsinden boyutunu vermesine alışkınız. VLA'lar da bir istisna değildir.</p>
+<p>Temel fark, bir VLA üzerinde <code>sizeof</code> işleminin <em>çalışma zamanında</em> (runtime) yürütülmesidir; oysa değişken boyutlu olmayan bir değişkende <em>derleme zamanında</em> (compile time) hesaplanır.</p>
+<p>Ancak kullanımı aynıdır.</p>
+<p>Hatta alışılagelmiş dizi hilesiyle bir VLA'daki eleman sayısını bile hesaplayabilirsiniz:</p>
 <div class="sourceCode" id="cb598"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb598-1"><a href="variable-length-arrays-vlas.html#cb598-1" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> num_elems <span class="op">=</span> <span class="kw">sizeof</span> v <span class="op">/</span> <span class="kw">sizeof</span> v<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span></code></pre></div>
-<p>There’s a subtle and correct implication from the above line: pointer arithmetic works just like you’d expect for a regular array. So go ahead and use it to your heart’s content:</p>
+<p>Yukarıdaki satırdan çıkarılacak ince ve doğru bir anlam var: pointer aritmetiği tıpkı normal bir diziden bekleyeceğiniz gibi çalışır. O halde gönlünüzce kullanmaya devam edin:</p>
 <div class="sourceCode" id="cb599"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb599-1"><a href="variable-length-arrays-vlas.html#cb599-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb599-2"><a href="variable-length-arrays-vlas.html#cb599-2"></a></span>
 <span id="cb599-3"><a href="variable-length-arrays-vlas.html#cb599-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -106,25 +106,25 @@
 <span id="cb599-13"><a href="variable-length-arrays-vlas.html#cb599-13"></a>    p<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="dv">34</span><span class="op">;</span></span>
 <span id="cb599-14"><a href="variable-length-arrays-vlas.html#cb599-14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> v<span class="op">[</span><span class="dv">3</span><span class="op">]);</span>  <span class="co">// 34</span></span>
 <span id="cb599-15"><a href="variable-length-arrays-vlas.html#cb599-15"></a><span class="op">}</span></span></code></pre></div>
-<p>Like with regular arrays, you can use parentheses with <code>sizeof()</code> to get the size of a would-be VLA without actually declaring one:</p>
+<p>Normal dizilerde olduğu gibi, gerçekte bir VLA tanımlamadan olası bir VLA'nın boyutunu almak için <code>sizeof()</code> ile parantez kullanabilirsiniz:</p>
 <div class="sourceCode" id="cb600"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb600-1"><a href="variable-length-arrays-vlas.html#cb600-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
 <span id="cb600-2"><a href="variable-length-arrays-vlas.html#cb600-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb600-3"><a href="variable-length-arrays-vlas.html#cb600-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span> <span class="op">[</span>x<span class="op">]));</span>  <span class="co">// Prints 48 on my system</span></span></code></pre></div>
+<span id="cb600-3"><a href="variable-length-arrays-vlas.html#cb600-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span> <span class="op">[</span>x<span class="op">]));</span>  <span class="co">// Benim sistemimde 48 yazdırır</span></span></code></pre></div>
 <p></p>
-<h2 data-number="30.3" id="multidimensional-vlas"><span class="header-section-number">30.3</span> Multidimensional VLAs</h2>
+<h2 data-number="30.3" id="multidimensional-vlas"><span class="header-section-number">30.3</span> Çok Boyutlu VLA'lar</h2>
 <p></p>
-<p>You can go ahead and make all kinds of VLAs with one or more dimensions set to a variable</p>
+<p>Bir veya daha fazla boyutu bir değişkene ayarlanmış her türlü VLA'yı yapmaya devam edebilirsiniz</p>
 <div class="sourceCode" id="cb601"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb601-1"><a href="variable-length-arrays-vlas.html#cb601-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> w <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
 <span id="cb601-2"><a href="variable-length-arrays-vlas.html#cb601-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> h <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb601-3"><a href="variable-length-arrays-vlas.html#cb601-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb601-4"><a href="variable-length-arrays-vlas.html#cb601-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[</span>h<span class="op">][</span>w<span class="op">];</span></span>
 <span id="cb601-5"><a href="variable-length-arrays-vlas.html#cb601-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y<span class="op">[</span><span class="dv">5</span><span class="op">][</span>w<span class="op">];</span></span>
 <span id="cb601-6"><a href="variable-length-arrays-vlas.html#cb601-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> z<span class="op">[</span><span class="dv">10</span><span class="op">][</span>w<span class="op">][</span><span class="dv">20</span><span class="op">];</span></span></code></pre></div>
-<p>Again, you can navigate these just like you would a regular array.</p>
+<p>Yine, bunlarda tıpkı normal bir dizide gezinir gibi gezinebilirsiniz.</p>
 <p></p>
-<h2 data-number="30.4" id="passing-one-dimensional-vlas-to-functions"><span class="header-section-number">30.4</span> Passing One-Dimensional VLAs to Functions</h2>
+<h2 data-number="30.4" id="passing-one-dimensional-vlas-to-functions"><span class="header-section-number">30.4</span> Tek Boyutlu VLA'ları Fonksiyonlara Geçirmek</h2>
 <p></p>
-<p>Passing single-dimensional VLAs into a function can be no different than passing a regular array in. You just go for it.</p>
+<p>Tek boyutlu VLA'ları bir fonksiyona aktarmak, normal bir diziyi aktarmaktan farklı olmayabilir. Doğrudan yapabilirsiniz.</p>
 <div class="sourceCode" id="cb602"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb602-1"><a href="variable-length-arrays-vlas.html#cb602-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb602-2"><a href="variable-length-arrays-vlas.html#cb602-2"></a></span>
 <span id="cb602-3"><a href="variable-length-arrays-vlas.html#cb602-3"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="dt">int</span> <span class="op">*</span>v<span class="op">)</span></span>
@@ -139,7 +139,7 @@
 <span id="cb602-12"><a href="variable-length-arrays-vlas.html#cb602-12"></a></span>
 <span id="cb602-13"><a href="variable-length-arrays-vlas.html#cb602-13"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb602-14"><a href="variable-length-arrays-vlas.html#cb602-14"></a><span class="op">{</span></span>
-<span id="cb602-15"><a href="variable-length-arrays-vlas.html#cb602-15"></a>    <span class="dt">int</span> x<span class="op">[</span><span class="dv">5</span><span class="op">];</span>   <span class="co">// Standard array</span></span>
+<span id="cb602-15"><a href="variable-length-arrays-vlas.html#cb602-15"></a>    <span class="dt">int</span> x<span class="op">[</span><span class="dv">5</span><span class="op">];</span>   <span class="co">// Standart dizi</span></span>
 <span id="cb602-16"><a href="variable-length-arrays-vlas.html#cb602-16"></a></span>
 <span id="cb602-17"><a href="variable-length-arrays-vlas.html#cb602-17"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
 <span id="cb602-18"><a href="variable-length-arrays-vlas.html#cb602-18"></a>    <span class="dt">int</span> y<span class="op">[</span>a<span class="op">];</span>   <span class="co">// VLA</span></span>
@@ -150,22 +150,22 @@
 <span id="cb602-23"><a href="variable-length-arrays-vlas.html#cb602-23"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> sum<span class="op">(</span><span class="dv">5</span><span class="op">,</span> x<span class="op">));</span></span>
 <span id="cb602-24"><a href="variable-length-arrays-vlas.html#cb602-24"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> sum<span class="op">(</span>a<span class="op">,</span> y<span class="op">));</span></span>
 <span id="cb602-25"><a href="variable-length-arrays-vlas.html#cb602-25"></a><span class="op">}</span></span></code></pre></div>
-<p>But there’s a bit more to it than that. You can also let C know that the array is a specific VLA size by passing that in first and then giving that dimension in the parameter list:</p>
+<p>Ancak işin içinde bundan biraz daha fazlası var. Ayrıca, önce boyutu geçirip ardından parametre listesinde o boyutu vererek C'ye dizinin belirli bir VLA boyutunda olduğunu bildirebilirsiniz:</p>
 <div class="sourceCode" id="cb603"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb603-1"><a href="variable-length-arrays-vlas.html#cb603-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="dt">int</span> v<span class="op">[</span>count<span class="op">])</span></span>
 <span id="cb603-2"><a href="variable-length-arrays-vlas.html#cb603-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb603-3"><a href="variable-length-arrays-vlas.html#cb603-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
 <span id="cb603-4"><a href="variable-length-arrays-vlas.html#cb603-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>Incidentally, there are a couple ways of listing a prototype for the above function; one of them involves an <code>*</code> if you don’t want to specifically name the value in the VLA. It just indicates that the type is a VLA as opposed to a regular pointer.</p>
-<p>VLA prototypes:</p>
-<div class="sourceCode" id="cb604"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb604-1"><a href="variable-length-arrays-vlas.html#cb604-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> do_something<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="dt">int</span> v<span class="op">[</span>count<span class="op">]);</span>  <span class="co">// With names</span></span>
-<span id="cb604-2"><a href="variable-length-arrays-vlas.html#cb604-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> do_something<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span> v<span class="op">[*]);</span>            <span class="co">// Without names</span></span></code></pre></div>
-<p>Again, that <code>*</code> thing only works with the prototype—in the function itself, you’ll have to put the explicit size.</p>
+<p>Bu arada, yukarıdaki fonksiyon için bir prototip listelemenin birkaç yolu vardır; bunlardan biri, VLA'daki değeri özel olarak adlandırmak istemiyorsanız bir <code>*</code> içerir. Bu sadece türün normal bir pointer aksine bir VLA olduğunu gösterir.</p>
+<p>VLA prototipleri:</p>
+<div class="sourceCode" id="cb604"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb604-1"><a href="variable-length-arrays-vlas.html#cb604-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> do_something<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="dt">int</span> v<span class="op">[</span>count<span class="op">]);</span>  <span class="co">// İsimlerle</span></span>
+<span id="cb604-2"><a href="variable-length-arrays-vlas.html#cb604-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> do_something<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span> v<span class="op">[*]);</span>            <span class="co">// İsimsiz</span></span></code></pre></div>
+<p>Yine, o <code>*</code> olayı yalnızca prototiple çalışır—fonksiyonun kendisinde açık boyutu koymanız gerekir.</p>
 <p> </p>
-<p>Now—<em>let’s get multidimensional</em>! This is where the fun begins.</p>
-<h2 data-number="30.5" id="passing-multi-dimensional-vlas-to-functions"><span class="header-section-number">30.5</span> Passing Multi-Dimensional VLAs to Functions</h2>
-<p>Same thing as we did with the second form of one-dimensional VLAs, above, but this time we’re passing in two dimensions and using those.</p>
-<p>In the following example, we build a multiplication table matrix of a variable width and height, and then pass it to a function to print it out.</p>
+<p>Şimdi—<em>çok boyutlu hale gelelim</em>! Eğlence burada başlıyor.</p>
+<h2 data-number="30.5" id="passing-multi-dimensional-vlas-to-functions"><span class="header-section-number">30.5</span> Çok Boyutlu VLA'ları Fonksiyonlara Geçirmek</h2>
+<p>Yukarıdaki tek boyutlu VLA'ların ikinci biçimiyle yaptığımız şeyin aynısı, ancak bu sefer iki boyut geçiriyoruz ve bunları kullanıyoruz.</p>
+<p>Aşağıdaki örnekte, değişken genişlik ve yükseklikte bir çarpım tablosu matrisi oluşturup ardından bunu yazdırması için bir fonksiyona geçiriyoruz.</p>
 <div class="sourceCode" id="cb605"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb605-1"><a href="variable-length-arrays-vlas.html#cb605-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb605-2"><a href="variable-length-arrays-vlas.html#cb605-2"></a></span>
 <span id="cb605-3"><a href="variable-length-arrays-vlas.html#cb605-3"></a><span class="dt">void</span> print_matrix<span class="op">(</span><span class="dt">int</span> h<span class="op">,</span> <span class="dt">int</span> w<span class="op">,</span> <span class="dt">int</span> m<span class="op">[</span>h<span class="op">][</span>w<span class="op">])</span></span>
@@ -188,10 +188,10 @@
 <span id="cb605-20"><a href="variable-length-arrays-vlas.html#cb605-20"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> col <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> col <span class="op">&lt;</span> cols<span class="op">;</span> col<span class="op">++)</span></span>
 <span id="cb605-21"><a href="variable-length-arrays-vlas.html#cb605-21"></a>            matrix<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> row <span class="op">*</span> col<span class="op">;</span></span>
 <span id="cb605-22"><a href="variable-length-arrays-vlas.html#cb605-22"></a></span>
-<span id="cb605-23"><a href="variable-length-arrays-vlas.html#cb605-23"></a>    print_matrix<span class="op">(</span>rows<span class="op">,</span> cols<span class="op">,</span> matrix<span class="op">);</span></span>
+<span id="cb605-23"><a href="variable-length-arrays-vlas.html#cb605-23"></a>    print_matrix<span class="op">(</span>rows<span, cols<span, matrix<span class="op">);</span></span>
 <span id="cb605-24"><a href="variable-length-arrays-vlas.html#cb605-24"></a><span class="op">}</span></span></code></pre></div>
-<h3 data-number="30.5.1" id="partial-multidimensional-vlas"><span class="header-section-number">30.5.1</span> Partial Multidimensional VLAs</h3>
-<p>You can have some of the dimensions fixed and some variable. Let’s say we have a record length fixed at 5 elements, but we don’t know how many records there are.</p>
+<h3 data-number="30.5.1" id="partial-multidimensional-vlas"><span class="header-section-number">30.5.1</span> Kısmi Çok Boyutlu VLA'lar</h3>
+<p>Boyutlardan bazılarının sabit, bazılarının ise değişken olmasını sağlayabilirsiniz. Diyelim ki 5 eleman olarak sabitlenmiş bir kayıt uzunluğumuz var, ancak kaç kayıt olduğunu bilmiyoruz.</p>
 <div class="sourceCode" id="cb606"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb606-1"><a href="variable-length-arrays-vlas.html#cb606-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb606-2"><a href="variable-length-arrays-vlas.html#cb606-2"></a></span>
 <span id="cb606-3"><a href="variable-length-arrays-vlas.html#cb606-3"></a><span class="dt">void</span> print_records<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="dt">int</span> record<span class="op">[</span>count<span class="op">][</span><span class="dv">5</span><span class="op">])</span></span>
@@ -208,7 +208,7 @@
 <span id="cb606-14"><a href="variable-length-arrays-vlas.html#cb606-14"></a>    <span class="dt">int</span> rec_count <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
 <span id="cb606-15"><a href="variable-length-arrays-vlas.html#cb606-15"></a>    <span class="dt">int</span> records<span class="op">[</span>rec_count<span class="op">][</span><span class="dv">5</span><span class="op">];</span></span>
 <span id="cb606-16"><a href="variable-length-arrays-vlas.html#cb606-16"></a></span>
-<span id="cb606-17"><a href="variable-length-arrays-vlas.html#cb606-17"></a>    <span class="co">// Fill with some dummy data</span></span>
+<span id="cb606-17"><a href="variable-length-arrays-vlas.html#cb606-17"></a>    <span class="co">// Bazı sahte verilerle doldur</span></span>
 <span id="cb606-18"><a href="variable-length-arrays-vlas.html#cb606-18"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> rec_count<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb606-19"><a href="variable-length-arrays-vlas.html#cb606-19"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> j<span class="op">++)</span></span>
 <span id="cb606-20"><a href="variable-length-arrays-vlas.html#cb606-20"></a>            records<span class="op">[</span>i<span class="op">][</span>j<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>i<span class="op">+</span><span class="dv">1</span><span class="op">)*(</span>j<span class="op">+</span><span class="dv">2</span><span class="op">);</span></span>
@@ -216,10 +216,10 @@
 <span id="cb606-22"><a href="variable-length-arrays-vlas.html#cb606-22"></a>    print_records<span class="op">(</span>rec_count<span class="op">,</span> records<span class="op">);</span></span>
 <span id="cb606-23"><a href="variable-length-arrays-vlas.html#cb606-23"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<h2 data-number="30.6" id="compatibility-with-regular-arrays"><span class="header-section-number">30.6</span> Compatibility with Regular Arrays</h2>
+<h2 data-number="30.6" id="compatibility-with-regular-arrays"><span class="header-section-number">30.6</span> Normal Dizilerle Uyumluluk</h2>
 <p></p>
-<p>Because VLAs are just like regular arrays in memory, it’s perfectly permissible to pass them interchangeably… as long as the dimensions match.</p>
-<p>For example, if we have a function that specifically wants a <span class="math inline">\(3\times5\)</span> array, we can still pass a VLA into it.</p>
+<p>VLA'lar bellekte tıpkı normal diziler gibi olduğundan, boyutlar eşleştiği sürece bunları birbirinin yerine geçirmek tamamen kabul edilebilirdir…</p>
+<p>Örneğin, özellikle bir <span class="math inline">\(3\times5\)</span> dizisi isteyen bir fonksiyonumuz varsa, içine yine de bir VLA geçirebiliriz.</p>
 <div class="sourceCode" id="cb607"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb607-1"><a href="variable-length-arrays-vlas.html#cb607-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> foo<span class="op">(</span><span class="dt">int</span> m<span class="op">[</span><span class="dv">5</span><span class="op">][</span><span class="dv">3</span><span class="op">])</span> <span class="op">{...}</span></span>
 <span id="cb607-2"><a href="variable-length-arrays-vlas.html#cb607-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb607-3"><a href="variable-length-arrays-vlas.html#cb607-3" aria-hidden="true" tabindex="-1"></a>\\ <span class="op">...</span></span>
@@ -227,22 +227,22 @@
 <span id="cb607-5"><a href="variable-length-arrays-vlas.html#cb607-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> w <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> h <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
 <span id="cb607-6"><a href="variable-length-arrays-vlas.html#cb607-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> matrix<span class="op">[</span>h<span class="op">][</span>w<span class="op">];</span></span>
 <span id="cb607-7"><a href="variable-length-arrays-vlas.html#cb607-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb607-8"><a href="variable-length-arrays-vlas.html#cb607-8" aria-hidden="true" tabindex="-1"></a>foo<span class="op">(</span>matrix<span class="op">);</span>   <span class="co">// OK!</span></span></code></pre></div>
-<p>Likewise, if you have a VLA function, you can pass a regular array into it:</p>
+<span id="cb607-8"><a href="variable-length-arrays-vlas.html#cb607-8" aria-hidden="true" tabindex="-1"></a>foo<span class="op">(</span>matrix<span class="op">);</span>   <span class="co">// Tamam!</span></span></code></pre></div>
+<p>Aynı şekilde, bir VLA fonksiyonunuz varsa, içine normal bir dizi geçirebilirsiniz:</p>
 <div class="sourceCode" id="cb608"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb608-1"><a href="variable-length-arrays-vlas.html#cb608-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> foo<span class="op">(</span><span class="dt">int</span> h<span class="op">,</span> <span class="dt">int</span> w<span class="op">,</span> <span class="dt">int</span> m<span class="op">[</span>h<span class="op">][</span>w<span class="op">])</span> <span class="op">{...}</span></span>
 <span id="cb608-2"><a href="variable-length-arrays-vlas.html#cb608-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb608-3"><a href="variable-length-arrays-vlas.html#cb608-3" aria-hidden="true" tabindex="-1"></a>\\ <span class="op">...</span></span>
 <span id="cb608-4"><a href="variable-length-arrays-vlas.html#cb608-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb608-5"><a href="variable-length-arrays-vlas.html#cb608-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> matrix<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">5</span><span class="op">];</span></span>
 <span id="cb608-6"><a href="variable-length-arrays-vlas.html#cb608-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb608-7"><a href="variable-length-arrays-vlas.html#cb608-7" aria-hidden="true" tabindex="-1"></a>foo<span class="op">(</span><span class="dv">3</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> matrix<span class="op">);</span>   <span class="co">// OK!</span></span></code></pre></div>
-<p>Beware, though: if your dimensions mismatch, you’re going to have some undefined behavior going on, likely.</p>
+<span id="cb608-7"><a href="variable-length-arrays-vlas.html#cb608-7" aria-hidden="true" tabindex="-1"></a>foo<span class="op">(</span><span class="dv">3</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> matrix<span class="op">);</span>   <span class="co">// Tamam!</span></span></code></pre></div>
+<p>Yine de dikkatli olun: boyutlarınız uyuşmuyorsa, muhtemelen bazı tanımsız davranışlarla <em>(undefined behavior)</em> karşılaşırsınız.</p>
 <p></p>
-<h2 data-number="30.7" id="typedef-and-vlas"><span class="header-section-number">30.7</span> <code>typedef</code> and VLAs</h2>
+<h2 data-number="30.7" id="typedef-and-vlas"><span class="header-section-number">30.7</span> <code>typedef</code> ve VLA'lar</h2>
 <p></p>
-<p>You can <code>typedef</code> a VLA, but the behavior might not be as you expect.</p>
-<p>Basically, <code>typedef</code> makes a new type with the values as they existed the moment the <code>typedef</code> was executed.</p>
-<p>So it’s not a <code>typedef</code> of a VLA so much as a new fixed size array type of the dimensions at the time.</p>
+<p>Bir VLA'yı <code>typedef</code> ile tanımlayabilirsiniz, ancak davranış beklediğiniz gibi olmayabilir.</p>
+<p>Temel olarak <code>typedef</code>, değerleri <code>typedef</code> çalıştırıldığı andaki halleriyle olan yeni bir tür oluşturur.</p>
+<p>Yani bu bir VLA'nın <code>typedef</code>'i olmaktan ziyade, o andaki boyutlara sahip yeni bir sabit boyutlu dizi türüdür.</p>
 <div class="sourceCode" id="cb609"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb609-1"><a href="variable-length-arrays-vlas.html#cb609-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb609-2"><a href="variable-length-arrays-vlas.html#cb609-2"></a></span>
 <span id="cb609-3"><a href="variable-length-arrays-vlas.html#cb609-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -251,44 +251,44 @@
 <span id="cb609-6"><a href="variable-length-arrays-vlas.html#cb609-6"></a></span>
 <span id="cb609-7"><a href="variable-length-arrays-vlas.html#cb609-7"></a>    <span class="kw">typedef</span> <span class="dt">int</span> goat<span class="op">[</span>w<span class="op">];</span></span>
 <span id="cb609-8"><a href="variable-length-arrays-vlas.html#cb609-8"></a></span>
-<span id="cb609-9"><a href="variable-length-arrays-vlas.html#cb609-9"></a>    <span class="co">// goat is an array of 10 ints</span></span>
+<span id="cb609-9"><a href="variable-length-arrays-vlas.html#cb609-9"></a>    <span class="co">// goat 10 int'lik bir dizidir</span></span>
 <span id="cb609-10"><a href="variable-length-arrays-vlas.html#cb609-10"></a>    goat x<span class="op">;</span></span>
 <span id="cb609-11"><a href="variable-length-arrays-vlas.html#cb609-11"></a></span>
-<span id="cb609-12"><a href="variable-length-arrays-vlas.html#cb609-12"></a>    <span class="co">// Init with squares of numbers</span></span>
+<span id="cb609-12"><a href="variable-length-arrays-vlas.html#cb609-12"></a>    <span class="co">// Sayıların kareleriyle ilklendir</span></span>
 <span id="cb609-13"><a href="variable-length-arrays-vlas.html#cb609-13"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> w<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb609-14"><a href="variable-length-arrays-vlas.html#cb609-14"></a>        x<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i<span class="op">*</span>i<span class="op">;</span></span>
 <span id="cb609-15"><a href="variable-length-arrays-vlas.html#cb609-15"></a></span>
-<span id="cb609-16"><a href="variable-length-arrays-vlas.html#cb609-16"></a>    <span class="co">// Print them</span></span>
+<span id="cb609-16"><a href="variable-length-arrays-vlas.html#cb609-16"></a>    <span class="co">// Bunları yazdır</span></span>
 <span id="cb609-17"><a href="variable-length-arrays-vlas.html#cb609-17"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> w<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb609-18"><a href="variable-length-arrays-vlas.html#cb609-18"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb609-19"><a href="variable-length-arrays-vlas.html#cb609-19"></a></span>
-<span id="cb609-20"><a href="variable-length-arrays-vlas.html#cb609-20"></a>    <span class="co">// Now let&#39;s change w...</span></span>
+<span id="cb609-20"><a href="variable-length-arrays-vlas.html#cb609-20"></a>    <span class="co">// Şimdi w'yi değiştirelim...</span></span>
 <span id="cb609-21"><a href="variable-length-arrays-vlas.html#cb609-21"></a></span>
 <span id="cb609-22"><a href="variable-length-arrays-vlas.html#cb609-22"></a>    w <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb609-23"><a href="variable-length-arrays-vlas.html#cb609-23"></a></span>
-<span id="cb609-24"><a href="variable-length-arrays-vlas.html#cb609-24"></a>    <span class="co">// But goat is STILL an array of 10 ints, because that was the</span></span>
-<span id="cb609-25"><a href="variable-length-arrays-vlas.html#cb609-25"></a>    <span class="co">// value of w when the typedef executed.</span></span>
+<span id="cb609-24"><a href="variable-length-arrays-vlas.html#cb609-24"></a>    <span class="co">// Ancak goat HALA 10 int'lik bir dizidir, çünkü typedef</span></span>
+<span id="cb609-25"><a href="variable-length-arrays-vlas.html#cb609-25"></a>    <span class="co">// çalıştığında w'nin değeri oydu.</span></span>
 <span id="cb609-26"><a href="variable-length-arrays-vlas.html#cb609-26"></a><span class="op">}</span></span></code></pre></div>
-<p>So it acts like an array of fixed size.</p>
-<p>But you still can’t use an initializer list on it.</p>
+<p>Yani sabit boyutlu bir dizi gibi davranır.</p>
+<p>Ancak yine de üzerinde bir ilklendirme listesi kullanamazsınız.</p>
 <p></p>
-<h2 data-number="30.8" id="jumping-pitfalls"><span class="header-section-number">30.8</span> Jumping Pitfalls</h2>
+<h2 data-number="30.8" id="jumping-pitfalls"><span class="header-section-number">30.8</span> Atlama Tuzakları</h2>
 <p></p>
-<p>You have to watch out when using <code>goto</code> near VLAs because a lot of things aren’t legal.</p>
+<p>VLA'ların yakınında <code>goto</code> kullanırken dikkatli olmalısınız çünkü pek çok şey yasal değildir.</p>
 <p> </p>
-<p>And when you’re using <code>longjmp()</code> there’s a case where you could leak memory with VLAs.</p>
+<p>Ve <code>longjmp()</code> kullanırken VLA'lar ile bellek sızıntısı yaşayabileceğiniz bir durum vardır.</p>
 <p></p>
-<p>But both of these things we’ll cover in their respective chapters.</p>
-<h2 data-number="30.9" id="vla-general-issues"><span class="header-section-number">30.9</span> General Issues</h2>
+<p>Ancak bu iki konuyu da ilgili bölümlerinde ele alacağız.</p>
+<h2 data-number="30.9" id="vla-general-issues"><span class="header-section-number">30.9</span> Genel Sorunlar</h2>
 <p></p>
-<p>VLAs have been banned from the Linux kernel for a few reasons:</p>
+<p>VLA'lar birkaç nedenden dolayı Linux çekirdeğinde yasaklanmıştır:</p>
 <ul>
-<li>Lots of places they were used should have just been fixed-size.</li>
-<li>The code behind VLAs is slower (to a degree that most people wouldn’t notice, but makes a difference in an operating system).</li>
-<li>VLAs are not supported to the same degree by all C compilers.</li>
-<li>Stack size is limited, and VLAs go on the stack. If some code accidentally (or maliciously) passes a large value into a kernel function that allocates a VLA, <em>Bad Things</em>™ could happen.</li>
+<li>Kullanıldıkları pek çok yer sadece sabit boyutlu olmalıydı.</li>
+<li>VLA'ların arkasındaki kod daha yavaştır (çoğu insanın fark etmeyeceği kadar, ancak bir işletim sisteminde fark yaratan derecede).</li>
+<li>VLA'lar tüm C derleyicileri tarafından aynı derecede desteklenmez.</li>
+<li>Yığın (stack) boyutu sınırlıdır ve VLA'lar yığına yerleşir. Bir kod yanlışlıkla (veya kötü niyetle) bir VLA tahsis eden bir çekirdek fonksiyonuna büyük bir değer geçirirse, <em>Kötü Şeyler</em>™ yaşanabilir.</li>
 </ul>
-<p>Other folks online point out that there’s no way to detect a VLA’s failure to allocate, and programs that suffered such problems would likely just crash. While fixed-size arrays also have the same issue, it’s far more likely that someone accidentally make a <em>VLA Of Unusual Size</em> than somehow accidentally declare a fixed-size, say, 30 megabyte array.</p>
+<p>İnternetteki diğer kişiler, bir VLA'nın tahsis edilememe durumunu tespit etmenin hiçbir yolu olmadığını ve bu tür sorunlardan muzdarip programların muhtemelen çökeceğini belirtiyor. Sabit boyutlu diziler de aynı soruna sahip olsa da, birinin yanlışlıkla, diyelim ki 30 megabaytlık sabit boyutlu bir dizi tanımlamasından ziyade, yanlışlıkla <em>Olağandışı Boyutta Bir VLA</em> oluşturması çok daha olasıdır.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

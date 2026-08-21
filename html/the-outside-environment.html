@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -26,37 +26,37 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Beej's Guide to C Programming</title>
+  <title>Beej's C Programlama Rehberi</title>
   <link rel="stylesheet" href="../style.css" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="nav-header"><a href="multifile-projects.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="the-c-preprocessor.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="18" id="the-outside-environment"><span class="header-section-number">18</span> The Outside Environment</h1>
-<p>When you run a program, it’s actually you talking to the shell, saying, “Hey, please run this thing.” And the shell says, “Sure,” and then tells the operating system, “Hey, could you please make a new process and run this thing?” And if all goes well, the OS complies and your program runs.</p>
-<p>But there’s a whole world outside your program in the shell that can be interacted with from within C. We’ll look at a few of those in this chapter.</p>
-<h2 data-number="18.1" id="command-line-arguments"><span class="header-section-number">18.1</span> Command Line Arguments</h2>
+<h1 data-number="18" id="the-outside-environment"><span class="header-section-number">18</span> Dış Çevre</h1>
+<p>Bir programı çalıştırdığınızda, aslında siz kabuğa (shell) "Hey, lütfen bunu çalıştır" dersiniz. Kabuk da "Tabii ki" der ve ardından işletim sistemine "Hey, lütfen yeni bir süreç (process) oluşturup bunu çalıştırır mısın?" der. Eğer her şey yolunda giderse, işletim sistemi bunu kabul eder ve programınız çalışır.</p>
+<p>Ancak programınızın dışında, kabuk içinde C kodunun içinden etkileşime girilebilecek koca bir dünya vardır. Bu bölümde bunlardan birkaçına göz atacağız.</p>
+<h2 data-number="18.1" id="command-line-arguments"><span class="header-section-number">18.1</span> Komut Satırı Argümanları</h2>
 <p></p>
-<p>Many command line utilities accept <em>command line arguments</em>. For example, if we want to see all files that end in <code>.txt</code>, we can type something like this on a Unix-like system:</p>
+<p>Birçok komut satırı aracı <em>komut satırı argümanları</em> kabul eder. Örneğin, Unix benzeri bir sistemde <code>.txt</code> ile biten tüm dosyaları görmek istersek şöyle bir şey yazabiliriz:</p>
 <div class="sourceCode" id="cb306"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb306-1"><a href="the-outside-environment.html#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.txt</span></code></pre></div>
-<p>(or <code>dir</code> instead of <code>ls</code> on a Windows system).</p>
-<p>In this case, the command is <code>ls</code>, but its arguments are all files that end with <code>.txt</code><a href="function-specifiers-alignment-specifiersoperators.html#fn120" class="footnote-ref" id="fnref120" role="doc-noteref"><sup>120</sup></a>.</p>
-<p>So how can we see what is passed into program from the command line?</p>
-<p>Say we have a program called <code>add</code> that adds all numbers passed on the command line and prints the result:</p>
+<p>(veya Windows sisteminde <code>ls</code> yerine <code>dir</code>).</p>
+<p>Bu durumda komut <code>ls</code>tir, ancak argümanları <code>.txt</code> ile biten tüm dosyalardır<a href="function-specifiers-alignment-specifiersoperators.html#fn120" class="footnote-ref" id="fnref120" role="doc-noteref"><sup>120</sup></a>.</p>
+<p>Peki komut satırından programa ne aktarıldığını nasıl görebiliriz?</p>
+<p>Diyelim ki komut satırında iletilen tüm sayıları toplayan ve sonucu yazdıran <code>add</code> adında bir programımız var:</p>
 <div class="sourceCode" id="cb307"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb307-1"><a href="the-outside-environment.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./add</span> 10 30 5</span>
 <span id="cb307-2"><a href="the-outside-environment.html#cb307-2" aria-hidden="true" tabindex="-1"></a><span class="ex">45</span></span></code></pre></div>
-<p>That’s gonna pay the bills for sure!</p>
-<p>But seriously, this is a great tool for seeing how to get those arguments from the command line and break them down.</p>
-<p>First, let’s see how to get them at all. For this, we’re going to need a new <code>main()</code>!</p>
-<p>Here’s a program that prints out all the command line arguments. For example, if we name the executable <code>foo</code>, we can run it like this:</p>
+<p>Faturaları ödeyeceği kesin!</p>
+<p>Ama ciddileşmek gerekirse, bu komut satırından o argümanları nasıl alacağımızı ve onları nasıl ayrıştıracağımızı görmek için harika bir araçtır.</p>
+<p>Öncelikle, onları nasıl elde edeceğimize bakalım. Bunun için yeni bir <code>main()</code> fonksiyonuna ihtiyacımız olacak!</p>
+<p>İşte tüm komut satırı argümanlarını yazdıran bir program. Örneğin, yürütülebilir dosyayı <code>foo</code> olarak adlandırırsak, onu şöyle çalıştırabiliriz:</p>
 <div class="sourceCode" id="cb308"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb308-1"><a href="the-outside-environment.html#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span> i like turtles</span></code></pre></div>
-<p>and we’ll see this output:</p>
+<p>ve şu çıktıyı görürüz:</p>
 <div class="sourceCode" id="cb309"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb309-1"><a href="the-outside-environment.html#cb309-1" aria-hidden="true" tabindex="-1"></a>arg 0: ./foo</span>
 <span id="cb309-2"><a href="the-outside-environment.html#cb309-2" aria-hidden="true" tabindex="-1"></a>arg 1: i</span>
 <span id="cb309-3"><a href="the-outside-environment.html#cb309-3" aria-hidden="true" tabindex="-1"></a>arg 2: like</span>
 <span id="cb309-4"><a href="the-outside-environment.html#cb309-4" aria-hidden="true" tabindex="-1"></a>arg 3: turtles</span></code></pre></div>
-<p>It’s a little weird, because the zeroth argument is the name of the executable, itself. But that’s just something to get used to. The arguments themselves follow directly.</p>
-<p>Source:</p>
+<p>Biraz garip görünebilir, çünkü sıfırıncı argüman yürütülebilir dosyanın kendisinin adıdır. Ama bu sadece alışılması gereken bir durumdur. Argümanların kendileri hemen ardından gelir.</p>
+<p>Kaynak kod:</p>
 <p> </p>
 <div class="sourceCode" id="cb310"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb310-1"><a href="the-outside-environment.html#cb310-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb310-2"><a href="the-outside-environment.html#cb310-2"></a></span>
@@ -66,24 +66,24 @@
 <span id="cb310-6"><a href="the-outside-environment.html#cb310-6"></a>        printf<span class="op">(</span><span class="st">&quot;arg </span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> argv<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb310-7"><a href="the-outside-environment.html#cb310-7"></a>    <span class="op">}</span></span>
 <span id="cb310-8"><a href="the-outside-environment.html#cb310-8"></a><span class="op">}</span></span></code></pre></div>
-<p>Whoa! What’s going on with the <code>main()</code> function signature? What’s <code>argc</code> and <code>argv</code><a href="function-specifiers-alignment-specifiersoperators.html#fn121" class="footnote-ref" id="fnref121" role="doc-noteref"><sup>121</sup></a> (pronounced <em>arg-cee</em> and <em>arg-vee</em>)?</p>
-<p>Let’s start with the easy one first: <code>argc</code>. This is the <em>argument count</em>, including the program name, itself. If you think of all the arguments as an array of strings, which is exactly what they are, then you can think of <code>argc</code> as the length of that array, which is exactly what it is.</p>
-<p>And so what we’re doing in that loop is going through all the <code>argv</code>s and printing them out one at a time, so for a given input:</p>
+<p>Vay canına! <code>main()</code> fonksiyon imzasında neler oluyor? <code>argc</code> ve <code>argv</code><a href="function-specifiers-alignment-specifiersoperators.html#fn121" class="footnote-ref" id="fnref121" role="doc-noteref"><sup>121</sup></a> (<em>arg-si</em> ve <em>arg-vi</em> olarak okunur) nedir?</p>
+<p>Kolay olanla başlayalım: <code>argc</code>. Bu, program adının kendisi de dahil olmak üzere <em>argüman sayısıdır</em> (argument count). Tüm argümanları bir metin dizisi (string) dizisi olarak düşünürseniz — ki tam olarak öyledirler —, <code>argc</code> değerini o dizinin uzunluğu olarak düşünebilirsiniz — ki tam olarak öyledir.</p>
+<p>Dolayısıyla bu döngüde yaptığımız şey, tüm <code>argv</code> ögelerini dolaşmak ve onları teker teker yazdırmaktır, böylece verilen bir girdi için:</p>
 <div class="sourceCode" id="cb311"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb311-1"><a href="the-outside-environment.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span> i like turtles</span></code></pre></div>
-<p>we get a corresponding output:</p>
+<p>karşılık gelen çıktıyı elde ederiz:</p>
 <div class="sourceCode" id="cb312"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb312-1"><a href="the-outside-environment.html#cb312-1" aria-hidden="true" tabindex="-1"></a>arg 0: ./foo</span>
 <span id="cb312-2"><a href="the-outside-environment.html#cb312-2" aria-hidden="true" tabindex="-1"></a>arg 1: i</span>
 <span id="cb312-3"><a href="the-outside-environment.html#cb312-3" aria-hidden="true" tabindex="-1"></a>arg 2: like</span>
 <span id="cb312-4"><a href="the-outside-environment.html#cb312-4" aria-hidden="true" tabindex="-1"></a>arg 3: turtles</span></code></pre></div>
-<p>With that in mind, we should be good to go with our adder program.</p>
-<p>Our plan:</p>
+<p>Bunu aklımızda tutarak, toplama programımızla devam etmeye hazırız.</p>
+<p>Planımız:</p>
 <ul>
-<li>Look at all the command line arguments (past <code>argv[0]</code>, the program name)</li>
-<li>Convert them to integers</li>
-<li>Add them to a running total</li>
-<li>Print the result</li>
+<li>Tüm komut satırı argümanlarına bakın (<code>argv[0]</code> yani program adından sonrakilere)</li>
+<li>Onları tamsayılara dönüştürün</li>
+<li>Onları yürütülen bir toplama ekleyin</li>
+<li>Sonucu yazdırın</li>
 </ul>
-<p>Let’s get to it!</p>
+<p>Hadi yapalım!</p>
 <div class="sourceCode" id="cb313"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb313-1"><a href="the-outside-environment.html#cb313-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb313-2"><a href="the-outside-environment.html#cb313-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb313-3"><a href="the-outside-environment.html#cb313-3"></a></span>
@@ -91,8 +91,8 @@
 <span id="cb313-5"><a href="the-outside-environment.html#cb313-5"></a><span class="op">{</span></span>
 <span id="cb313-6"><a href="the-outside-environment.html#cb313-6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb313-7"><a href="the-outside-environment.html#cb313-7"></a></span>
-<span id="cb313-8"><a href="the-outside-environment.html#cb313-8"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> argc<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span>  <span class="co">// Start at 1, the first argument</span></span>
-<span id="cb313-9"><a href="the-outside-environment.html#cb313-9"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// Use strtol() for better error handling</span></span>
+<span id="cb313-8"><a href="the-outside-environment.html#cb313-8"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> argc<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span>  <span class="co">// 1'den başla, ilk argüman</span></span>
+<span id="cb313-9"><a href="the-outside-environment.html#cb313-9"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// Daha iyi hata yönetimi için strtol() kullanın</span></span>
 <span id="cb313-10"><a href="the-outside-environment.html#cb313-10"></a></span>
 <span id="cb313-11"><a href="the-outside-environment.html#cb313-11"></a>        total <span class="op">+=</span> value<span class="op">;</span></span>
 <span id="cb313-12"><a href="the-outside-environment.html#cb313-12"></a>    <span class="op">}</span></span>
@@ -100,7 +100,7 @@
 <span id="cb313-14"><a href="the-outside-environment.html#cb313-14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> total<span class="op">);</span></span>
 <span id="cb313-15"><a href="the-outside-environment.html#cb313-15"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>Sample runs:</p>
+<p>Örnek çalıştırmalar:</p>
 <div class="sourceCode" id="cb314"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb314-1"><a href="the-outside-environment.html#cb314-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./add</span>
 <span id="cb314-2"><a href="the-outside-environment.html#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span></span>
 <span id="cb314-3"><a href="the-outside-environment.html#cb314-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./add 1</span>
@@ -111,29 +111,29 @@
 <span id="cb314-8"><a href="the-outside-environment.html#cb314-8" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span></span>
 <span id="cb314-9"><a href="the-outside-environment.html#cb314-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./add 1 2 3 4</span>
 <span id="cb314-10"><a href="the-outside-environment.html#cb314-10" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span></span></code></pre></div>
-<p>Of course, it might puke if you pass in a non-integer, but hardening against that is left as an exercise to the reader.</p>
-<h3 data-number="18.1.1" id="the-last-argv-is-null"><span class="header-section-number">18.1.1</span> The Last <code>argv</code> is <code>NULL</code></h3>
-<p>One bit of fun trivia about <code>argv</code> is that after the last string is a pointer to <code>NULL</code>.</p>
-<p>That is:</p>
+<p>Tabii ki, tamsayı olmayan bir değer girerseniz kusabilir, ancak buna karşı önlem almak okuyucuya bir alıştırma olarak bırakılmıştır.</p>
+<h3 data-number="18.1.1" id="the-last-argv-is-null"><span class="header-section-number">18.1.1</span> Son <code>argv</code> Değeri <code>NULL</code>'dır</h3>
+<p><code>argv</code> hakkında eğlenceli bir önbilgi, son metin dizisinden (string) sonra gelen elemanın <code>NULL</code> işaretçisi (pointer) olmasıdır.</p>
+<p>Yani:</p>
 <div class="sourceCode" id="cb315"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb315-1"><a href="the-outside-environment.html#cb315-1" aria-hidden="true" tabindex="-1"></a>argv<span class="op">[</span>argc<span class="op">]</span> <span class="op">==</span> NULL</span></code></pre></div>
-<p>is always true!</p>
-<p>This might seem pointless, but it turns out to be useful in a couple places; we’ll take a look at one of those right now.</p>
-<h3 data-number="18.1.2" id="the-alternate-char-argv"><span class="header-section-number">18.1.2</span> The Alternate: <code>char **argv</code></h3>
-<p>Remember that when you call a function, C doesn’t differentiate between array notation and pointer notation in the function signature.</p>
-<p>That is, these are the same:</p>
+<p>her zaman doğrudur!</p>
+<p>Bu anlamsız görünebilir, ancak birkaç yerde faydalı olduğu ortaya çıkar; şimdi bunlardan birine göz atacağız.</p>
+<h3 data-number="18.1.2" id="the-alternate-char-argv"><span class="header-section-number">18.1.2</span> Alternatif: <code>char **argv</code></h3>
+<p>Bir fonksiyon çağırdığınızda, C dilinin fonksiyon imzasında dizi notasyonu ile pointer notasyonu arasında bir fark gözetmediğini hatırlayın.</p>
+<p>Yani şunlar aynıdır:</p>
 <div class="sourceCode" id="cb316"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb316-1"><a href="the-outside-environment.html#cb316-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">char</span> a<span class="op">[])</span></span>
 <span id="cb316-2"><a href="the-outside-environment.html#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>a<span class="op">)</span></span></code></pre></div>
-<p>Now, it’s been convenient to think of <code>argv</code> as an array of strings, i.e. an array of <code>char*</code>s, so this made sense:</p>
+<p>Şimdi, <code>argv</code> ifadesini bir string dizisi, yani bir <code>char*</code> dizisi olarak düşünmek elverişliydi, bu yüzden şu mantıklı geliyordu:</p>
 <div class="sourceCode" id="cb317"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb317-1"><a href="the-outside-environment.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span></span></code></pre></div>
-<p>but because of the equivalence, you could also write:</p>
+<p>fakat bu denklik nedeniyle şöyle de yazabilirsiniz:</p>
 <div class="sourceCode" id="cb318"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb318-1"><a href="the-outside-environment.html#cb318-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span></code></pre></div>
-<p>Yeah, that’s a pointer to a pointer, all right! If it makes it easier, think of it as a pointer to a string. But really, it’s a pointer to a value that points to a <code>char</code>.</p>
-<p>Also recall that these are equivalent:</p>
+<p>Evet, bu tam anlamıyla bir pointer'a pointer'dır! Kolaylaştıracaksa, bunu bir string'e pointer olarak düşünün. Ama gerçekte, bir <code>char</code> gösteren bir değere pointer'dır.</p>
+<p>Ayrıca şunların da eşdeğer olduğunu hatırlayın:</p>
 <div class="sourceCode" id="cb319"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb319-1"><a href="the-outside-environment.html#cb319-1" aria-hidden="true" tabindex="-1"></a>argv<span class="op">[</span>i<span class="op">]</span></span>
 <span id="cb319-2"><a href="the-outside-environment.html#cb319-2" aria-hidden="true" tabindex="-1"></a><span class="op">*(</span>argv <span class="op">+</span> i<span class="op">)</span></span></code></pre></div>
-<p>which means you can do pointer arithmetic on <code>argv</code>.</p>
-<p>So an alternate way to consume the command line arguments might be to just walk along the <code>argv</code> array by bumping up a pointer until we hit that <code>NULL</code> at the end.</p>
-<p>Let’s modify our adder to do that:</p>
+<p>bu da <code>argv</code> üzerinde pointer aritmetiği yapabileceğiniz anlamına gelir.</p>
+<p>Dolayısıyla komut satırı argümanlarını tüketmenin alternatif bir yolu, sondaki <code>NULL</code> değerine ulaşana kadar bir pointer'ı artırarak <code>argv</code> dizisinde ilerlemektir.</p>
+<p>Toplama programımızı bunu yapacak şekilde değiştirelim:</p>
 <div class="sourceCode" id="cb320"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb320-1"><a href="the-outside-environment.html#cb320-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb320-2"><a href="the-outside-environment.html#cb320-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb320-3"><a href="the-outside-environment.html#cb320-3"></a></span>
@@ -141,78 +141,78 @@
 <span id="cb320-5"><a href="the-outside-environment.html#cb320-5"></a><span class="op">{</span></span>
 <span id="cb320-6"><a href="the-outside-environment.html#cb320-6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb320-7"><a href="the-outside-environment.html#cb320-7"></a>    </span>
-<span id="cb320-8"><a href="the-outside-environment.html#cb320-8"></a>    <span class="co">// Cute trick to get the compiler to stop warning about the</span></span>
-<span id="cb320-9"><a href="the-outside-environment.html#cb320-9"></a>    <span class="co">// unused variable argc:</span></span>
+<span id="cb320-8"><a href="the-outside-environment.html#cb320-8"></a>    <span class="co">// Derleyicinin kullanılmayan argc değişkeni hakkında</span></span>
+<span id="cb320-9"><a href="the-outside-environment.html#cb320-9"></a>    <span class="co">// uyarı vermesini engellemek için sevimli bir numara:</span></span>
 <span id="cb320-10"><a href="the-outside-environment.html#cb320-10"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argc<span class="op">;</span></span>
 <span id="cb320-11"><a href="the-outside-environment.html#cb320-11"></a></span>
 <span id="cb320-12"><a href="the-outside-environment.html#cb320-12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">char</span> <span class="op">**</span>p <span class="op">=</span> argv <span class="op">+</span> <span class="dv">1</span><span class="op">;</span> <span class="op">*</span>p <span class="op">!=</span> NULL<span class="op">;</span> p<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb320-13"><a href="the-outside-environment.html#cb320-13"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(*</span>p<span class="op">);</span>  <span class="co">// Use strtol() for better error handling</span></span>
+<span id="cb320-13"><a href="the-outside-environment.html#cb320-13"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(*</span>p<span class="op">);</span>  <span class="co">// Daha iyi hata yönetimi için strtol() kullanın</span></span>
 <span id="cb320-14"><a href="the-outside-environment.html#cb320-14"></a></span>
 <span id="cb320-15"><a href="the-outside-environment.html#cb320-15"></a>        total <span class="op">+=</span> value<span class="op">;</span></span>
 <span id="cb320-16"><a href="the-outside-environment.html#cb320-16"></a>    <span class="op">}</span></span>
 <span id="cb320-17"><a href="the-outside-environment.html#cb320-17"></a></span>
 <span id="cb320-18"><a href="the-outside-environment.html#cb320-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> total<span class="op">);</span></span>
 <span id="cb320-19"><a href="the-outside-environment.html#cb320-19"></a><span class="op">}</span></span></code></pre></div>
-<p>Personally, I use array notation to access <code>argv</code>, but have seen this style floating around, as well.</p>
-<h3 data-number="18.1.3" id="fun-facts"><span class="header-section-number">18.1.3</span> Fun Facts</h3>
+<p>Şahsen ben <code>argv</code> ögesine erişmek için dizi notasyonunu tercih ederim, ancak bu stilin de ortalıkta dolaştığını gördüm.</p>
+<h3 data-number="18.1.3" id="fun-facts"><span class="header-section-number">18.1.3</span> Eğlenceli Gerçekler</h3>
 <p></p>
-<p>Just a few more things about <code>argc</code> and <code>argv</code>.</p>
+<p><code>argc</code> ve <code>argv</code> hakkında birkaç küçük şey daha.</p>
 <ul>
-<li><p>Some environments might not set <code>argv[0]</code> to the program name. If it’s not available, <code>argv[0]</code> will be an empty string. I’ve never seen this happen.</p></li>
-<li><p>The spec is actually pretty liberal with what an implementation can do with <code>argv</code> and where those values come from. But every system I’ve been on works the same way, as we’ve discussed in this section.</p></li>
-<li><p>You can modify <code>argc</code>, <code>argv</code>, or any of the strings that <code>argv</code> points to. (Just don’t make those strings longer than they already are!)</p></li>
-<li><p>On some Unix-like systems, modifying the string <code>argv[0]</code> results in the output of <code>ps</code> changing<a href="function-specifiers-alignment-specifiersoperators.html#fn122" class="footnote-ref" id="fnref122" role="doc-noteref"><sup>122</sup></a>.</p>
-<p>Normally, if you have a program called <code>foo</code> that you’ve run with <code>./foo</code>, you might see this in the output of <code>ps</code>:</p>
+<li><p>Bazı ortamlar <code>argv[0]</code> değerini program adı olarak ayarlamayabilir. Mevcut değilse <code>argv[0]</code> boş bir string olacaktır. Bunun yaşandığını hiç görmedim.</p></li>
+<li><p>Spesifikasyon, bir uygulamanın <code>argv</code> ile ne yapabileceği ve bu değerlerin nereden geldiği konusunda oldukça esnektir. Ancak bulunduğum her sistem, bu bölümde tartıştığımız şekilde çalışıyor.</p></li>
+<li><p><code>argc</code>, <code>argv</code> veya <code>argv</code>'nin işaret ettiği string'lerden herhangi birini değiştirebilirsiniz. (Yalnızca o string'leri mevcut uzunluklarından daha uzun hale getirmeyin!)</p></li>
+<li><p>Bazı Unix benzeri sistemlerde, <code>argv[0]</code> string'ini değiştirmek <code>ps</code> komutunun çıktısının değişmesine neden olur<a href="function-specifiers-alignment-specifiersoperators.html#fn122" class="footnote-ref" id="fnref122" role="doc-noteref"><sup>122</sup></a>.</p>
+<p>Normalde <code>./foo</code> ile çalıştırdığınız <code>foo</code> adlı bir programınız varsa, <code>ps</code> çıktısında şunu görebilirsiniz:</p>
 <div class="sourceCode" id="cb321"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb321-1"><a href="the-outside-environment.html#cb321-1" aria-hidden="true" tabindex="-1"></a> 4078 tty1     S      0:00 ./foo</span></code></pre></div>
-<p>But if you modify <code>argv[0]</code> like so, being careful that the new string <code>"Hi!  "</code> is the same length as the old one <code>"./foo"</code>:</p>
+<p>Ancak <code>argv[0]</code> ögesini yeni <code>"Hi!  "</code> string'inin eski <code>"./foo"</code> ile aynı uzunlukta olmasına dikkat ederek şöyle değiştirirseniz:</p>
 <div class="sourceCode" id="cb322"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb322-1"><a href="the-outside-environment.html#cb322-1" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>argv<span class="op">[</span><span class="dv">0</span><span class="op">],</span> <span class="st">&quot;Hi!  &quot;</span><span class="op">);</span></span></code></pre></div>
-<p>and then run <code>ps</code> while the program <code>./foo</code> is still executing, we’ll see this instead:</p>
+<p>ve ardından <code>./foo</code> programı hâlâ çalışırken <code>ps</code> komutunu çalıştırırsanız, yerine şunu görürüz:</p>
 <div class="sourceCode" id="cb323"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb323-1"><a href="the-outside-environment.html#cb323-1" aria-hidden="true" tabindex="-1"></a> 4079 tty1     S      0:00 Hi!  </span></code></pre></div>
-<p>This behavior is not in the spec and is highly system-dependent.</p></li>
+<p>Bu davranış spesifikasyonda yer almaz ve büyük ölçüde sisteme bağlıdır.</p></li>
 </ul>
 <p> </p>
-<h2 data-number="18.2" id="exit-status"><span class="header-section-number">18.2</span> Exit Status</h2>
+<h2 data-number="18.2" id="exit-status"><span class="header-section-number">18.2</span> Çıkış Durumu</h2>
 <p></p>
-<p>Did you notice that the function signatures for <code>main()</code> have it returning type <code>int</code>? What’s that all about? It has to do with a thing called the <em>exit status</em>, which is an integer that can be returned to the program that launched yours to let it know how things went.</p>
-<p>Now, there are a number of ways a program can exit in C, including <code>return</code>ing from <code>main()</code>, or calling one of the <code>exit()</code> variants.</p>
-<p>All of these methods accept an <code>int</code> as an argument.</p>
-<p> Side note: did you see that in basically all my examples, even though <code>main()</code> is supposed to return an <code>int</code>, I don’t actually <code>return</code> anything? In any other function, this would be illegal, but there’s a special case in C: if execution reaches the end of <code>main()</code> without finding a <code>return</code>, it automatically does a <code>return 0</code>. </p>
-<p>But what does the <code>0</code> mean? What other numbers can we put there? And how are they used?</p>
-<p>The spec is both clear and vague on the matter, as is common. Clear because it spells out what you can do, but vague in that it doesn’t particularly limit it, either.</p>
-<p>Nothing for it but to <em>forge ahead</em> and figure it out!</p>
-<p>Let’s get <a href="https://en.wikipedia.org/wiki/Inception" target="_blank" rel="noopener noreferrer">Inception</a><a href="function-specifiers-alignment-specifiersoperators.html#fn123" class="footnote-ref" id="fnref123" role="doc-noteref"><sup>123</sup></a> for a second: turns out that when you run your program, <em>you’re running it from another program</em>.</p>
-<p>Usually this other program is some kind of <a href="https://en.wikipedia.org/wiki/Shell_(computing)" target="_blank" rel="noopener noreferrer">shell</a><a href="function-specifiers-alignment-specifiersoperators.html#fn124" class="footnote-ref" id="fnref124" role="doc-noteref"><sup>124</sup></a> that doesn’t do much on its own except launch other programs.</p>
-<p>But this is a multi-phase process, especially visible in command-line shells:</p>
+<p><code>main()</code> fonksiyon imzalarının dönüş türü olarak <code>int</code> kullandığını fark ettiniz mi? Bu neyle ilgilidir? Bu, programınızı başlatan programa işlerin nasıl gittiğini bildirmek için döndürülebilen bir tamsayı olan <em>çıkış durumu</em> (exit status) konusuyla ilgilidir.</p>
+<p>C dilinde bir programın çıkış yapmasının, <code>main()</code> fonksiyonundan <code>return</code> ile dönmek veya <code>exit()</code> varyantlarından birini çağırmak da dahil olmak üzere birden fazla yolu vardır.</p>
+<p>Bu yöntemlerin tümü argüman olarak bir <code>int</code> kabul eder.</p>
+<p>Yan not: Neredeyse tüm örneklerimde <code>main()</code> fonksiyonunun bir <code>int</code> döndürmesi gerekmesine rağmen aslında hiçbir şey <code>return</code> etmediğimi gördünüz mü? Başka herhangi bir fonksiyonda bu yasa dışı olurdu, ancak C dilinde özel bir durum vardır: Kodun yürütülmesi bir <code>return</code> ile karşılaşmadan <code>main()</code> sonuna ulaşırsa, otomatik olarak <code>return 0</code> yapar.</p>
+<p>Peki <code>0</code> ne anlama gelir? Orada başka hangi sayıları kullanabiliriz? Ve bunlar nasıl kullanılır?</p>
+<p>Spesifikasyon, yaygın olduğu üzere bu konuda hem net hem de muğlaktır. Net çünkü yapabileceklerinizi açıkça belirtir, ancak muğlak çünkü bunu özellikle sınırlandırmaz.</p>
+<p><em>İleri atılıp</em> bunu çözmekten başka çare yok!</p>
+<p>Bir anlığına <a href="https://en.wikipedia.org/wiki/Inception" target="_blank" rel="noopener noreferrer">Inception</a><a href="function-specifiers-alignment-specifiersoperators.html#fn123" class="footnote-ref" id="fnref123" role="doc-noteref"><sup>123</sup></a> moduna geçelim: Meğer programınızı çalıştırdığınızda, <em>onu başka bir programdan çalıştırıyormuşsunuz</em>.</p>
+<p>Genellikle bu diğer program, başka programları başlatmak dışında kendi başına pek bir şey yapmayan bir tür <a href="https://en.wikipedia.org/wiki/Shell_(computing)" target="_blank" rel="noopener noreferrer">kabuktur</a> (shell)<a href="function-specifiers-alignment-specifiersoperators.html#fn124" class="footnote-ref" id="fnref124" role="doc-noteref"><sup>124</sup></a>.</p>
+<p>Ancak bu, özellikle komut satırı kabuklarında belirgin olan çok aşamalı bir süreçtir:</p>
 <ol type="1">
-<li>The shell launches your program</li>
-<li>The shell typically goes to sleep (for command-line shells)</li>
-<li>Your program runs</li>
-<li>Your program terminates</li>
-<li>The shell wakes up and waits for another command</li>
+<li>Kabuk programınızı başlatır</li>
+<li>Kabuk genellikle uyku moduna geçer (komut satırı kabukları için)</li>
+<li>Programınız çalışır</li>
+<li>Programınız sonlanır</li>
+<li>Kabuk uyanır ve başka bir komut bekler</li>
 </ol>
-<p>Now, there’s a little piece of communication that takes place between steps 4 and 5: the program can return a <em>status value</em> that the shell can interrogate. Typically, this value is used to indicate the success or failure of your program, and, if a failure, what type of failure.</p>
-<p>This value is what we’ve been <code>return</code>ing from <code>main()</code>. That’s the status.</p>
-<p>Now, the C spec allows for two different status values, which have macro names defined in <code>&lt;stdlib.h&gt;</code>:</p>
+<p>Şimdi, 4. ve 5. adımlar arasında gerçekleşen küçük bir iletişim vardır: program kabuğun sorgulayabileceği bir <em>durum değeri</em> (status value) döndürebilir. Tipik olarak bu değer programınızın başarısını veya başarısızlığını ve eğer bir başarısızlık varsa ne tür bir başarısızlık olduğunu belirtmek için kullanılır.</p>
+<p>Bu değer, <code>main()</code> fonksiyonundan <code>return</code> ile döndürdüğümüz şeydir. Durum odur.</p>
+<p>C spesifikasyonu, <code>&lt;stdlib.h&gt;</code> içinde tanımlanmış makro adlarına sahip iki farklı durum değerine izin verir:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Status</th>
-<th>Description</th>
+<th>Durum</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>EXIT_SUCCESS</code> or <code>0</code></td>
-<td>Program terminated successfully.</td>
+<td><code>EXIT_SUCCESS</code> veya <code>0</code></td>
+<td>Program başarıyla sonlandı.</td>
 </tr>
 <tr>
 <td><code>EXIT_FAILURE</code></td>
-<td>Program terminated with an error.</td>
+<td>Program bir hatayla sonlandı.</td>
 </tr>
 </tbody>
 </table>
-<p>Let’s write a short program that multiplies two numbers from the command line. We’ll require that you specify exactly two values. If you don’t, we’ll print an error message, and exit with an error status.</p>
+<p>Komut satırından gelen iki sayıyı çarpan kısa bir program yazalım. Tam olarak iki değer belirtmenizi şart koşacağız. Belirtmezseniz bir hata mesajı yazdıracağız ve bir hata durumuyla çıkış yapacağız.</p>
 <div class="sourceCode" id="cb324"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb324-1"><a href="the-outside-environment.html#cb324-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb324-2"><a href="the-outside-environment.html#cb324-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb324-3"><a href="the-outside-environment.html#cb324-3"></a></span>
@@ -220,15 +220,15 @@
 <span id="cb324-5"><a href="the-outside-environment.html#cb324-5"></a><span class="op">{</span></span>
 <span id="cb324-6"><a href="the-outside-environment.html#cb324-6"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb324-7"><a href="the-outside-environment.html#cb324-7"></a>        printf<span class="op">(</span><span class="st">&quot;usage: mult x y</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb324-8"><a href="the-outside-environment.html#cb324-8"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span>   <span class="co">// Indicate to shell that it didn&#39;t work</span></span>
+<span id="cb324-8"><a href="the-outside-environment.html#cb324-8"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span>   <span class="co">// Kabuğa işin yolunda gitmediğini bildir</span></span>
 <span id="cb324-9"><a href="the-outside-environment.html#cb324-9"></a>    <span class="op">}</span></span>
 <span id="cb324-10"><a href="the-outside-environment.html#cb324-10"></a></span>
 <span id="cb324-11"><a href="the-outside-environment.html#cb324-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">1</span><span class="op">])</span> <span class="op">*</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">2</span><span class="op">]));</span></span>
 <span id="cb324-12"><a href="the-outside-environment.html#cb324-12"></a></span>
-<span id="cb324-13"><a href="the-outside-environment.html#cb324-13"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// same as EXIT_SUCCESS, everything was good.</span></span>
+<span id="cb324-13"><a href="the-outside-environment.html#cb324-13"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// EXIT_SUCCESS ile aynı, her şey yolunda.</span></span>
 <span id="cb324-14"><a href="the-outside-environment.html#cb324-14"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>Now if we try to run this, we get the expected effect until we specify exactly the right number of command-line arguments:</p>
+<p>Şimdi bunu çalıştırmayı denersek, komut satırı argümanlarının sayısını tam olarak doğru belirtine kadar beklenen etkiyi elde ederiz:</p>
 <div class="sourceCode" id="cb325"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb325-1"><a href="the-outside-environment.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./mult</span>
 <span id="cb325-2"><a href="the-outside-environment.html#cb325-2" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
 <span id="cb325-3"><a href="the-outside-environment.html#cb325-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -238,8 +238,8 @@
 <span id="cb325-7"><a href="the-outside-environment.html#cb325-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./mult 3 4</span>
 <span id="cb325-8"><a href="the-outside-environment.html#cb325-8" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span></code></pre></div>
 <p></p>
-<p>But that doesn’t really show the exit status that we returned, does it? We can get the shell to print it out, though. Assuming you’re running Bash or another POSIX shell, you can use <code>echo $?</code> to see it<a href="function-specifiers-alignment-specifiersoperators.html#fn125" class="footnote-ref" id="fnref125" role="doc-noteref"><sup>125</sup></a>.</p>
-<p>Let’s try:</p>
+<p>Ancak bu durum, döndürdüğümüz çıkış durumunu tam olarak göstermez, değil mi? Yine de kabuğun bunu yazdırmasını sağlayabiliriz. Bash veya başka bir POSIX kabuğu çalıştırdığınızı varsayarsak, bunu görmek için <code>echo $?</code> kullanabilirsiniz<a href="function-specifiers-alignment-specifiersoperators.html#fn125" class="footnote-ref" id="fnref125" role="doc-noteref"><sup>125</sup></a>.</p>
+<p>Deneyelim:</p>
 <div class="sourceCode" id="cb326"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb326-1"><a href="the-outside-environment.html#cb326-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./mult</span>
 <span id="cb326-2"><a href="the-outside-environment.html#cb326-2" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
 <span id="cb326-3"><a href="the-outside-environment.html#cb326-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="va">$?</span></span>
@@ -255,19 +255,19 @@
 <span id="cb326-13"><a href="the-outside-environment.html#cb326-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="va">$?</span></span>
 <span id="cb326-14"><a href="the-outside-environment.html#cb326-14" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span></span></code></pre></div>
 <p></p>
-<p>Interesting! We see that on my system, <code>EXIT_FAILURE</code> is <code>1</code>. The spec doesn’t spell this out, so it could be any number. But try it; it’s probably <code>1</code> on your system, too.</p>
-<h3 data-number="18.2.1" id="other-exit-status-values"><span class="header-section-number">18.2.1</span> Other Exit Status Values</h3>
-<p>The status <code>0</code> most definitely means success, but what about all the other integers, even negative ones?</p>
-<p>Here we’re going off the C spec and into Unix land. In general, while <code>0</code> means success, a positive non-zero number means failure. So you can only have one type of success, and multiple types of failure. Bash says the exit code should be between 0 and 255, though a number of codes are reserved.</p>
-<p>In short, if you want to indicate different error exit statuses in a Unix environment, you can start with <code>1</code> and work your way up.</p>
-<p>On Linux, if you try any code outside the range 0-255, it will bitwise AND the code with <code>0xff</code>, effectively clamping it to that range.</p>
-<p>You can script the shell to later use these status codes to make decisions about what to do next.</p>
+<p>İlginç! Benim sistemimde <code>EXIT_FAILURE</code> değerinin <code>1</code> olduğunu görüyoruz. Spesifikasyon bunu açıkça belirtmez, dolayısıyla herhangi bir sayı olabilir. Ama deneyin; sizin sisteminizde de büyük ihtimalle <code>1</code>'dir.</p>
+<h3 data-number="18.2.1" id="other-exit-status-values"><span class="header-section-number">18.2.1</span> Diğer Çıkış Durum Değerleri</h3>
+<p><code>0</code> durumu kesinlikle başarı anlamına gelir, peki ya diğer tüm tamsayılar, hatta negatif olanlar?</p>
+<p>Burada C spesifikasyonunun dışına çıkıp Unix diyarına geçiyoruz. Genel olarak <code>0</code> başarı anlamına gelirken, sıfır olmayan pozitif bir sayı başarısızlık anlamına gelir. Yani yalnızca tek bir başarı türüne ve birden fazla başarısızlık türüne sahip olabilirsiniz. Bash çıkış kodunun 0 ile 255 arasında olması gerektiğini söyler, ancak bazı kodlar ayrılmıştır.</p>
+<p>Özetle, Unix ortamında farklı hata çıkış durumlarını belirtmek istiyorsanız <code>1</code> ile başlayıp yukarı doğru ilerleyebilirsiniz.</p>
+<p>Linux'ta, 0-255 aralığının dışındaki bir kodu denerseniz, kod üzerinde <code>0xff</code> ile bit düzeyinde AND (bitwise AND) işlemi uygulayarak onu bu aralığa sabitler (clamp eder).</p>
+<p>Bundan sonra ne yapılacağına karar vermek için bu durum kodlarını kullanacak şekilde kabuk betiği yazabilirsiniz.</p>
 <p></p>
-<h2 data-number="18.3" id="env-var"><span class="header-section-number">18.3</span> Environment Variables</h2>
+<h2 data-number="18.3" id="env-var"><span class="header-section-number">18.3</span> Çevre Değişkenleri</h2>
 <p></p>
-<p>Before I get into this, I need to warn you that C doesn’t specify what an environment variable is. So I’m going to describe the environment variable system that works on every major platform I’m aware of.</p>
-<p>Basically, the environment is the program that’s going to run your program, e.g. the bash shell. And it might have some bash variables defined. In case you didn’t know, the shell can make its own variables. Each shell is different, but in bash you can just type <code>set</code> and it’ll show you all of them.</p>
-<p>Here’s an excerpt from the 61 variables that are defined in my bash shell:</p>
+<p>Buna girmeden önce, C dilinin bir çevre değişkeninin ne olduğunu belirtmediği konusunda sizi uyarmalıyım. Bu yüzden bildiğim her büyük platformda çalışan çevre değişkeni sistemini anlatacağım.</p>
+<p>Temelde çevre (environment), programınızı çalıştıracak olan programdır, örneğin bash kabuğu. Ve tanımlanmış bazı bash değişkenlerine sahip olabilir. Bilmiyorsanız söyleyeyim, kabuk kendi değişkenlerini oluşturabilir. Her kabuk farklıdır, ancak bash içinde sadece <code>set</code> yazabilirsiniz ve size hepsini gösterir.</p>
+<p>İşte bash kabuğumda tanımlı olan 61 değişkenden bir kesit:</p>
 <div class="sourceCode" id="cb327"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb327-1"><a href="the-outside-environment.html#cb327-1" aria-hidden="true" tabindex="-1"></a>HISTFILE=/home/beej/.bash_history</span>
 <span id="cb327-2"><a href="the-outside-environment.html#cb327-2" aria-hidden="true" tabindex="-1"></a>HISTFILESIZE=500</span>
 <span id="cb327-3"><a href="the-outside-environment.html#cb327-3" aria-hidden="true" tabindex="-1"></a>HISTSIZE=500</span>
@@ -275,19 +275,19 @@
 <span id="cb327-5"><a href="the-outside-environment.html#cb327-5" aria-hidden="true" tabindex="-1"></a>HOSTNAME=FBILAPTOP</span>
 <span id="cb327-6"><a href="the-outside-environment.html#cb327-6" aria-hidden="true" tabindex="-1"></a>HOSTTYPE=x86_64</span>
 <span id="cb327-7"><a href="the-outside-environment.html#cb327-7" aria-hidden="true" tabindex="-1"></a>IFS=$&#39; \t\n&#39;</span></code></pre></div>
-<p>Notice they are in the form of key/value pairs. For example, one key is <code>HOSTTYPE</code> and its value is <code>x86_64</code>. From a C perspective, all values are strings, even if they’re numbers<a href="function-specifiers-alignment-specifiersoperators.html#fn126" class="footnote-ref" id="fnref126" role="doc-noteref"><sup>126</sup></a>.</p>
-<p>So, <em>anyway</em>! Long story short, it’s possible to get these values from inside your C program.</p>
+<p>Bunların anahtar/değer (key/value) çiftleri şeklinde olduğuna dikkat edin. Örneğin bir anahtar <code>HOSTTYPE</code> ve değeri <code>x86_64</code>'tür. C perspektifinden bakıldığında, sayılar olsalar bile tüm değerler metin dizisidir (string)<a href="function-specifiers-alignment-specifiersoperators.html#fn126" class="footnote-ref" id="fnref126" role="doc-noteref"><sup>126</sup></a>.</p>
+<p>Yani <em>her neyse</em>! Uzun lafın kısası, bu değerleri C programınızın içinden almak mümkündür.</p>
 <p></p>
-<p>Let’s write a program that uses the standard <code>getenv()</code> function to look up a value that you set in the shell.</p>
-<p><code>getenv()</code> will return a pointer to the value string, or else <code>NULL</code> if the environment variable doesn’t exist.</p>
+<p>Kabukta ayarladığınız bir değeri aramak için standart <code>getenv()</code> fonksiyonunu kullanan bir program yazalım.</p>
+<p><code>getenv()</code>, değer string'ine bir pointer döndürür veya çevre değişkeni mevcut değilse <code>NULL</code> döndürür.</p>
 <div class="sourceCode" id="cb328"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb328-1"><a href="the-outside-environment.html#cb328-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb328-2"><a href="the-outside-environment.html#cb328-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb328-3"><a href="the-outside-environment.html#cb328-3"></a></span>
 <span id="cb328-4"><a href="the-outside-environment.html#cb328-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb328-5"><a href="the-outside-environment.html#cb328-5"></a><span class="op">{</span></span>
-<span id="cb328-6"><a href="the-outside-environment.html#cb328-6"></a>    <span class="dt">char</span> <span class="op">*</span>val <span class="op">=</span> getenv<span class="op">(</span><span class="st">&quot;FROTZ&quot;</span><span class="op">);</span>  <span class="co">// Try to get the value</span></span>
+<span id="cb328-6"><a href="the-outside-environment.html#cb328-6"></a>    <span class="dt">char</span> <span class="op">*</span>val <span class="op">=</span> getenv<span class="op">(</span><span class="st">&quot;FROTZ&quot;</span><span class="op">);</span>  <span class="co">// Değeri almaya çalış</span></span>
 <span id="cb328-7"><a href="the-outside-environment.html#cb328-7"></a></span>
-<span id="cb328-8"><a href="the-outside-environment.html#cb328-8"></a>    <span class="co">// Check to make sure it exists</span></span>
+<span id="cb328-8"><a href="the-outside-environment.html#cb328-8"></a>    <span class="co">// Var olduğundan emin olmak için kontrol et</span></span>
 <span id="cb328-9"><a href="the-outside-environment.html#cb328-9"></a>    <span class="cf">if</span> <span class="op">(</span>val <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb328-10"><a href="the-outside-environment.html#cb328-10"></a>        printf<span class="op">(</span><span class="st">&quot;Cannot find the FROTZ environment variable</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb328-11"><a href="the-outside-environment.html#cb328-11"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
@@ -296,31 +296,31 @@
 <span id="cb328-14"><a href="the-outside-environment.html#cb328-14"></a>    printf<span class="op">(</span><span class="st">&quot;Value: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> val<span class="op">);</span></span>
 <span id="cb328-15"><a href="the-outside-environment.html#cb328-15"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>If I run this directly, I get this:</p>
+<p>Bunu doğrudan çalıştırırsam şunu elde ederim:</p>
 <div class="sourceCode" id="cb329"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb329-1"><a href="the-outside-environment.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./foo</span>
 <span id="cb329-2"><a href="the-outside-environment.html#cb329-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Cannot</span> find the FROTZ environment variable</span></code></pre></div>
-<p>which makes sense, since I haven’t set it yet.</p>
-<p>In bash, I can set it to something with<a href="function-specifiers-alignment-specifiersoperators.html#fn127" class="footnote-ref" id="fnref127" role="doc-noteref"><sup>127</sup></a>:</p>
+<p>ki henüz ayarlamadığım için bu gayet mantıklıdır.</p>
+<p>Bash'te onu bir şeye ayarlayabilirim<a href="function-specifiers-alignment-specifiersoperators.html#fn127" class="footnote-ref" id="fnref127" role="doc-noteref"><sup>127</sup></a>:</p>
 <div class="sourceCode" id="cb330"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb330-1"><a href="the-outside-environment.html#cb330-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export FROTZ=<span class="st">&quot;C is awesome!&quot;</span></span></code></pre></div>
-<p>Then if I run it, I get:</p>
+<p>Sonra çalıştırırsam şunu alırım:</p>
 <div class="sourceCode" id="cb331"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb331-1"><a href="the-outside-environment.html#cb331-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./foo</span>
 <span id="cb331-2"><a href="the-outside-environment.html#cb331-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Value:</span> C is awesome!</span></code></pre></div>
-<p>In this way, you can set up data in environment variables, and you can get it in your C code and modify your behavior accordingly.</p>
-<h3 data-number="18.3.1" id="setting-environment-variables"><span class="header-section-number">18.3.1</span> Setting Environment Variables</h3>
-<p>This isn’t standard, but a lot of systems provide ways to set environment variables.</p>
-<p>If on a Unix-like, look up the documentation for <code>putenv()</code>, <code>setenv()</code>, and <code>unsetenv()</code>. On Windows, see <code>_putenv()</code>.</p>
-<h3 data-number="18.3.2" id="unix-like-alternative-environment-variables"><span class="header-section-number">18.3.2</span> Unix-like Alternative Environment Variables</h3>
-<p>If you’re on a Unix-like system, odds are you have another couple ways of getting access to environment variables. Note that although the spec points this out as a common extension, it’s not truly part of the C standard. It is, however, part of the POSIX standard.</p>
+<p>Bu şekilde çevre değişkenlerinde veri hazırlayabilir ve bunu C kodunuzda alarak davranışınızı buna göre değiştirebilirsiniz.</p>
+<h3 data-number="18.3.1" id="setting-environment-variables"><span class="header-section-number">18.3.1</span> Çevre Değişkenlerini Ayarlamak</h3>
+<p>Bu standart değildir, ancak bir çok sistem çevre değişkenlerini ayarlamak için yollar sağlar.</p>
+<p>Unix benzeri bir sistemdeyseniz <code>putenv()</code>, <code>setenv()</code> ve <code>unsetenv()</code> dokümantasyonuna bakın. Windows'ta <code>_putenv()</code> fonksiyonuna bakın.</p>
+<h3 data-number="18.3.2" id="unix-like-alternative-environment-variables"><span class="header-section-number">18.3.2</span> Unix Benzeri Alternatif Çevre Değişkenleri</h3>
+<p>Unix benzeri bir sistemdeyseniz, çevre değişkenlerine erişmenin birkaç yoluna daha sahip olma ihtimaliniz yüksektir. Spesifikasyon bunun yaygın bir uzantı olduğunu belirtse de, C standardının tam olarak bir parçası olmadığını unutmayın. Bununla birlikte POSIX standardının bir parçasıdır.</p>
 <p></p>
-<p>One of these is a variable called <code>environ</code> that must be declared like so:</p>
+<p>Bunlardan biri şu şekilde bildirilmesi gereken <code>environ</code> adlı bir değişkendir:</p>
 <div class="sourceCode" id="cb332"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb332-1"><a href="the-outside-environment.html#cb332-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extern</span> <span class="dt">char</span> <span class="op">**</span>environ<span class="op">;</span></span></code></pre></div>
-<p>It’s an array of strings terminated with a <code>NULL</code> pointer.</p>
-<p>You should declare it yourself before you use it, or you might find it in the non-standard <code>&lt;unistd.h&gt;</code> header file.</p>
-<p>Each string is in the form <code>"key=value"</code> so you’ll have to split it and parse it yourself if you want to get the keys and values out.</p>
-<p>Here’s an example of looping through and printing out the environment variables a couple different ways:</p>
+<p>Bu, <code>NULL</code> pointer ile sonlandırılmış bir string dizisidir.</p>
+<p>Kullanmadan önce onu kendiniz bildirmelisiniz (declare etmelisiniz) veya standart dışı <code>&lt;unistd.h&gt;</code> başlık dosyasında bulabilirsiniz.</p>
+<p>Her string <code>"anahtar=değer"</code> biçimindedir, dolayısıyla anahtarları ve değerleri çıkarmak istiyorsanız onu kendiniz bölmeli ve ayrıştırmalısınız.</p>
+<p>İşte çevre değişkenleri arasında döngü kurmanın ve onları birkaç farklı yolla yazdırmanın bir örneği:</p>
 <div class="sourceCode" id="cb333"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb333-1"><a href="the-outside-environment.html#cb333-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb333-2"><a href="the-outside-environment.html#cb333-2"></a></span>
-<span id="cb333-3"><a href="the-outside-environment.html#cb333-3"></a><span class="kw">extern</span> <span class="dt">char</span> <span class="op">**</span>environ<span class="op">;</span>  <span class="co">// MUST be extern AND named &quot;environ&quot;</span></span>
+<span id="cb333-3"><a href="the-outside-environment.html#cb333-3"></a><span class="kw">extern</span> <span class="dt">char</span> <span class="op">**</span>environ<span class="op">;</span>  <span class="co">// extern OLMALI VE &quot;environ&quot; olarak adlandırılmalı</span></span>
 <span id="cb333-4"><a href="the-outside-environment.html#cb333-4"></a></span>
 <span id="cb333-5"><a href="the-outside-environment.html#cb333-5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb333-6"><a href="the-outside-environment.html#cb333-6"></a><span class="op">{</span></span>
@@ -328,37 +328,37 @@
 <span id="cb333-8"><a href="the-outside-environment.html#cb333-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span></span>
 <span id="cb333-9"><a href="the-outside-environment.html#cb333-9"></a>    <span class="op">}</span></span>
 <span id="cb333-10"><a href="the-outside-environment.html#cb333-10"></a></span>
-<span id="cb333-11"><a href="the-outside-environment.html#cb333-11"></a>    <span class="co">// Or you could do this:</span></span>
+<span id="cb333-11"><a href="the-outside-environment.html#cb333-11"></a>    <span class="co">// Veya şöyle de yapabilirsiniz:</span></span>
 <span id="cb333-12"><a href="the-outside-environment.html#cb333-12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> environ<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> NULL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb333-13"><a href="the-outside-environment.html#cb333-13"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> environ<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb333-14"><a href="the-outside-environment.html#cb333-14"></a>    <span class="op">}</span></span>
 <span id="cb333-15"><a href="the-outside-environment.html#cb333-15"></a><span class="op">}</span></span></code></pre></div>
-<p>For a bunch of output that looks like this:</p>
+<p>Şuna benzeyen bir sürü çıktı için:</p>
 <div class="sourceCode" id="cb334"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb334-1"><a href="the-outside-environment.html#cb334-1" aria-hidden="true" tabindex="-1"></a>SHELL=/bin/bash</span>
 <span id="cb334-2"><a href="the-outside-environment.html#cb334-2" aria-hidden="true" tabindex="-1"></a>COLORTERM=truecolor</span>
 <span id="cb334-3"><a href="the-outside-environment.html#cb334-3" aria-hidden="true" tabindex="-1"></a>TERM_PROGRAM_VERSION=1.53.2</span>
 <span id="cb334-4"><a href="the-outside-environment.html#cb334-4" aria-hidden="true" tabindex="-1"></a>LOGNAME=beej</span>
 <span id="cb334-5"><a href="the-outside-environment.html#cb334-5" aria-hidden="true" tabindex="-1"></a>HOME=/home/beej</span>
-<span id="cb334-6"><a href="the-outside-environment.html#cb334-6" aria-hidden="true" tabindex="-1"></a>... etc ...</span></code></pre></div>
-<p>Use <code>getenv()</code> if at all possible because it’s more portable. But if you have to iterate over environment variables, using <code>environ</code> might be the way to go.</p>
+<span id="cb334-6"><a href="the-outside-environment.html#cb334-6" aria-hidden="true" tabindex="-1"></a>... vb ...</span></code></pre></div>
+<p>Mümkünse <code>getenv()</code> kullanın çünkü daha taşınabilirdir (portable). Ancak çevre değişkenleri üzerinde gezinmeniz gerekiyorsa <code>environ</code> kullanmak izlenecek yol olabilir.</p>
 <p> </p>
-<p>Another non-standard way to get the environment variables is as a parameter to <code>main()</code>. It works much the same way, but you avoid needing to add your <code>extern</code> <code>environ</code> variable. <a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html" target="_blank" rel="noopener noreferrer">Not even the POSIX spec supports this</a><a href="function-specifiers-alignment-specifiersoperators.html#fn128" class="footnote-ref" id="fnref128" role="doc-noteref"><sup>128</sup></a> as far as I can tell, but it’s common in Unix land.</p>
+<p>Çevre değişkenlerini almanın standart dışı bir başka yolu da <code>main()</code> fonksiyonuna bir parametre olarak almaktır. Neredeyse aynı şekilde çalışır, ancak <code>extern</code> <code>environ</code> değişkeninizi ekleme ihtiyacını ortadan kaldırırsınız. <a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html" target="_blank" rel="noopener noreferrer">POSIX spesifikasyonu bile bunu desteklemez</a><a href="function-specifiers-alignment-specifiersoperators.html#fn128" class="footnote-ref" id="fnref128" role="doc-noteref"><sup>128</sup></a> görebildiğim kadarıyla, ancak Unix diyarında yaygındır.</p>
 <div class="sourceCode" id="cb335"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb335-1"><a href="the-outside-environment.html#cb335-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb335-2"><a href="the-outside-environment.html#cb335-2"></a></span>
 <span id="cb335-3"><a href="the-outside-environment.html#cb335-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>env<span class="op">)</span>  <span class="co">// &lt;-- env!</span></span>
 <span id="cb335-4"><a href="the-outside-environment.html#cb335-4"></a><span class="op">{</span></span>
-<span id="cb335-5"><a href="the-outside-environment.html#cb335-5"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argc<span class="op">;</span> <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argv<span class="op">;</span>  <span class="co">// Suppress unused warnings</span></span>
+<span id="cb335-5"><a href="the-outside-environment.html#cb335-5"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argc<span class="op">;</span> <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argv<span class="op">;</span>  <span class="co">// Kullanılmayan değişken uyarılarını bastır</span></span>
 <span id="cb335-6"><a href="the-outside-environment.html#cb335-6"></a></span>
 <span id="cb335-7"><a href="the-outside-environment.html#cb335-7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">char</span> <span class="op">**</span>p <span class="op">=</span> env<span class="op">;</span> <span class="op">*</span>p <span class="op">!=</span> NULL<span class="op">;</span> p<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb335-8"><a href="the-outside-environment.html#cb335-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span></span>
 <span id="cb335-9"><a href="the-outside-environment.html#cb335-9"></a>    <span class="op">}</span></span>
 <span id="cb335-10"><a href="the-outside-environment.html#cb335-10"></a></span>
-<span id="cb335-11"><a href="the-outside-environment.html#cb335-11"></a>    <span class="co">// Or you could do this:</span></span>
+<span id="cb335-11"><a href="the-outside-environment.html#cb335-11"></a>    <span class="co">// Veya şöyle de yapabilirsiniz:</span></span>
 <span id="cb335-12"><a href="the-outside-environment.html#cb335-12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> env<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> NULL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb335-13"><a href="the-outside-environment.html#cb335-13"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> env<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb335-14"><a href="the-outside-environment.html#cb335-14"></a>    <span class="op">}</span></span>
 <span id="cb335-15"><a href="the-outside-environment.html#cb335-15"></a><span class="op">}</span></span></code></pre></div>
-<p>Just like using <code>environ</code> but <em>even less portable</em>. It’s good to have goals.</p>
+<p>Tıpkı <code>environ</code> kullanmak gibi ama <em>daha da az taşınabilir</em>. Hedeflerin olması güzeldir.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

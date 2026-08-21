@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,21 +32,21 @@
 </head>
 <body>
 <div class="nav-header"><a href="multithreading.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="function-specifiers-alignment-specifiersoperators.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="40" id="chapter-atomics"><span class="header-section-number">40</span> Atomics</h1>
+<h1 data-number="40" id="chapter-atomics"><span class="header-section-number">40</span> Atomik İşlemler (Atomics)</h1>
 <blockquote>
-<p><em>“They tried and failed, all of them?”</em><br />
-<em>“Oh, no.” She shook her head. “They tried and died.”</em></p>
-<p>—Paul Atreides and The Reverend Mother Gaius Helen Mohiam, <em>Dune</em></p>
+<p><em>“Denediler ve başarısız mı oldular, hepsi mi?”</em><br />
+<em>“Oh, hayır.” Başını salladı. “Denediler ve öldüler.”</em></p>
+<p>—Paul Atreides ve Rahibe Ana Gaius Helen Mohiam, <em>Dune</em></p>
 </blockquote>
 <p></p>
-<p>This is one of the more challenging aspects of multithreading with C. But we’ll try to take it easy.</p>
-<p>Basically, I’ll talk about the more straightforward uses of atomic variables, what they are, and how they work, etc. And I’ll mention some of the more insanely-complex paths that are available to you.</p>
-<p>But I won’t go down those paths. Not only am I barely qualified to even write about them, but I figure if you know you need them, you already know more than I do.</p>
-<p>But there are some weird things out here even in the basics. So buckle your seatbelts, everyone, ‘cause Kansas is goin’ bye-bye.</p>
-<h2 data-number="40.1" id="testing-for-atomic-support"><span class="header-section-number">40.1</span> Testing for Atomic Support</h2>
+<p>Bu, C'de çoklu izlek (multithreading) kullanmanın en zorlu yönlerinden biridir. Ancak ağırdan almaya çalışacağız.</p>
+<p>Temel olarak, atomik değişkenlerin daha açık kullanım yollarından, ne olduklarından, nasıl çalıştıklarından vb. bahsedeceğim. Ve erişebileceğiniz daha delice karmaşık yollardan bazılarına da değineceğim.</p>
+<p>Ancak o yollara girmeyeceğim. Sadece onlar hakkında yazmak için zar zor kalifiye olmakla kalmıyorum, aynı zamanda onlara ihtiyacınız olduğunu biliyorsanız, zaten benden daha fazlasını bildiğinizi tahmin ediyorum.</p>
+<p>Ancak temel konularda bile tuhaf şeyler var. Bu yüzden kemerlerinizi bağlayın millet, çünkü Kansas elden gidiyor.</p>
+<h2 data-number="40.1" id="testing-for-atomic-support"><span class="header-section-number">40.1</span> Atomik Destek Testi</h2>
 <p></p>
-<p>Atomics are an optional feature. There’s a macro <code>__STDC_NO_ATOMICS__</code> that’s <code>1</code> if you <em>don’t</em> have atomics.</p>
-<p>That macro might not exist pre-C11, so we should test the language version with <code>__STDC_VERSION__</code><a href="function-specifiers-alignment-specifiersoperators.html#fn209" class="footnote-ref" id="fnref209" role="doc-noteref"><sup>209</sup></a>.</p>
+<p>Atomikler isteğe bağlı bir özelliktir. Atomik desteğine sahip <em>değilseniz</em> <code>1</code> olan bir <code>__STDC_NO_ATOMICS__</code> makrosu vardır.</p>
+<p>Bu makro C11 öncesinde bulunmayabilir, bu yüzden dil sürümünü <code>__STDC_VERSION__</code> ile test etmeliyiz<a href="function-specifiers-alignment-specifiersoperators.html#fn209" class="footnote-ref" id="fnref209" role="doc-noteref"><sup>209</sup></a>.</p>
 <div class="sourceCode" id="cb770"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb770-1"><a href="chapter-atomics.html#cb770-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __STDC_VERSION__ &lt; 201112L || __STDC_NO_ATOMICS__ == 1</span></span>
 <span id="cb770-2"><a href="chapter-atomics.html#cb770-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAS_ATOMICS </span><span class="dv">0</span></span>
 <span id="cb770-3"><a href="chapter-atomics.html#cb770-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
@@ -54,27 +54,27 @@
 <span id="cb770-5"><a href="chapter-atomics.html#cb770-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
 <p></p>
 <p></p>
-<p>If those tests pass, then you can safely include <code>&lt;stdatomic.h&gt;</code>, the header on which the rest of this chapter is based. But if there is no atomic support, that header might not even exist.</p>
-<p>On some systems, you might need to add <code>-latomic</code> to the end of your compilation command line to use any functions in the header file.</p>
+<p>Bu testler geçerse, bu bölümün geri kalanının dayandığı <code>&lt;stdatomic.h&gt;</code> başlık dosyasını güvenle dahil edebilirsiniz. Ancak atomik destek yoksa, bu başlık dosyası hiç var olmayabilir.</p>
+<p>Bazı sistemlerde, başlık dosyasındaki herhangi bir fonksiyonu kullanmak için derleme komut satırınızın sonuna <code>-latomic</code> eklemeniz gerekebilir.</p>
 <p></p>
-<h2 data-number="40.2" id="atomic-variables"><span class="header-section-number">40.2</span> Atomic Variables</h2>
-<p>Here’s <em>part</em> of how atomic variables work:</p>
-<p>If you have a shared atomic variable and you write to it from one thread, that write will be <em>all-or-nothing</em> in a different thread.</p>
-<p>That is, the other thread will see the entire write of, say, a 32-bit value. Not half of it. There’s no way for one thread to interrupt another that is in the <em>middle</em> of an atomic multi-byte write.</p>
-<p>It’s almost like there’s a little lock around the getting and setting of that one variable. (And there <em>might</em> be! See <a href="chapter-atomics.html#lock-free-atomic">Lock-Free Atomic Variables</a>, below.)</p>
-<p>And on that note, you can get away with never using atomics if you use mutexes to lock your critical sections. It’s just that there are a class of <em>lock-free data structures</em> that always allow other threads to make progress instead of being blocked by a mutex… but these are tough to create correctly from scratch, and are one of the things that are beyond the scope of the guide, sadly.</p>
-<p>That’s only part of the story. But it’s the part we’ll start with.</p>
-<p>Before we go further, how do you declare a variable to be atomic?</p>
-<p>First, include <code>&lt;stdatomic.h&gt;</code>.</p>
+<h2 data-number="40.2" id="atomic-variables"><span class="header-section-number">40.2</span> Atomik Değişkenler</h2>
+<p>İşte atomik değişkenlerin nasıl çalıştığının bir <em>kısmı</em>:</p>
+<p>Paylaşılan bir atomik değişkeniniz varsa ve buna bir thread'den yazarsanız, bu yazma başka bir thread'de <em>ya hep ya hiç (all-or-nothing)</em> şeklinde gerçekleşir.</p>
+<p>Yani diğer thread, örneğin 32-bitlik bir değerin yazılmasının tamamını görür. Yarısını değil. Bir thread'in, atomik bir çoklu bayt yazımının <em>ortasında</em> olan başka bir thread'i kesintiye uğratmasının hiçbir yolu yoktur.</p>
+<p>Neredeyse o tek değişkeni alma ve ayarlama işlemlerinin etrafında küçük bir kilit varmış gibidir. (Ve <em>olabilir</em> de! Aşağıdaki <a href="chapter-atomics.html#lock-free-atomic">Kilitsiz (Lock-Free) Atomik Değişkenler</a> bölümüne bakın.)</p>
+<p>Ve bu hususta, kritik bölümlerinizi kilitlemek için mutex'ler kullanıyorsanız, atomikleri hiç kullanmadan da idare edebilirsiniz. Sadece bir mutex tarafından engellenmek yerine diğer thread'lerin her zaman ilerlemesine izin veren bir <em>kilitsiz veri yapıları (lock-free data structures)</em> sınıfı vardır… fakat bunları sıfırdan doğru şekilde oluşturmak zordur ve ne yazık ki bu rehberin kapsamı dışında kalan şeylerden biridir.</p>
+<p>Bu hikayenin sadece bir parçası. Ancak başlayacağımız kısım bu.</p>
+<p>Daha ileri gitmeden önce, bir değişkeni nasıl atomik olarak tanımlarsınız?</p>
+<p>İlk olarak, <code>&lt;stdatomic.h&gt;</code> dosyasını dahil edin.</p>
 <p></p>
-<p>This gives us types such as <code>atomic_int</code>.</p>
-<p>And then we can simply declare variables to be of that type.</p>
-<p>But let’s do a demo where we have two threads. The first runs for a while and then sets a variable to a specific value, then exits. The other runs until it sees that value get set, and then it exits.</p>
+<p>Bu bize <code>atomic_int</code> gibi türler sağlar.</p>
+<p>Ve ardından değişkenleri sadece bu türde tanımlayabiliriz.</p>
+<p>Ancak iki thread'imizin olduğu bir gösteri yapalım. Birincisi bir süre çalışır ve ardından bir değişkeni belirli bir değere ayarlayıp çıkar. Diğeri ise o değerin ayarlandığını görene kadar çalışır ve ardından çıkar.</p>
 <div class="sourceCode" id="cb771"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb771-1"><a href="chapter-atomics.html#cb771-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb771-2"><a href="chapter-atomics.html#cb771-2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
 <span id="cb771-3"><a href="chapter-atomics.html#cb771-3"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
 <span id="cb771-4"><a href="chapter-atomics.html#cb771-4"></a></span>
-<span id="cb771-5"><a href="chapter-atomics.html#cb771-5"></a>atomic_int x<span class="op">;</span>   <span class="co">// THE POWER OF ATOMICS! BWHAHAHA!</span></span>
+<span id="cb771-5"><a href="chapter-atomics.html#cb771-5"></a>atomic_int x<span class="op">;</span>   <span class="co">// ATOMİKLERİN GÜCÜ! BUAHAHAHA!</span></span>
 <span id="cb771-6"><a href="chapter-atomics.html#cb771-6"></a></span>
 <span id="cb771-7"><a href="chapter-atomics.html#cb771-7"></a><span class="dt">int</span> thread1<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
 <span id="cb771-8"><a href="chapter-atomics.html#cb771-8"></a><span class="op">{</span></span>
@@ -95,7 +95,7 @@
 <span id="cb771-23"><a href="chapter-atomics.html#cb771-23"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
 <span id="cb771-24"><a href="chapter-atomics.html#cb771-24"></a></span>
 <span id="cb771-25"><a href="chapter-atomics.html#cb771-25"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 2: Waiting for 3490</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb771-26"><a href="chapter-atomics.html#cb771-26"></a>    <span class="cf">while</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">3490</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// spin here</span></span>
+<span id="cb771-26"><a href="chapter-atomics.html#cb771-26"></a>    <span class="cf">while</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">3490</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// burada dön (spin)</span></span>
 <span id="cb771-27"><a href="chapter-atomics.html#cb771-27"></a></span>
 <span id="cb771-28"><a href="chapter-atomics.html#cb771-28"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 2: Got 3490--exiting!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb771-29"><a href="chapter-atomics.html#cb771-29"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -117,8 +117,8 @@
 <span id="cb771-45"><a href="chapter-atomics.html#cb771-45"></a>    printf<span class="op">(</span><span class="st">&quot;Main    : And indeed, x == </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
 <span id="cb771-46"><a href="chapter-atomics.html#cb771-46"></a><span class="op">}</span></span></code></pre></div>
 <p></p>
-<p>The second thread spins in place, looking at the flag and waiting for it to get set to the value <code>3490</code>. And the first one does that.</p>
-<p>And I get this output:</p>
+<p>İkinci thread yerinde dönerek bayrağa bakar ve <code>3490</code> değerine ayarlanmasını bekler. Ve birincisi bunu yapar.</p>
+<p>Ve şu çıktıyı alıyorum:</p>
 <div class="sourceCode" id="cb772"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb772-1"><a href="chapter-atomics.html#cb772-1" aria-hidden="true" tabindex="-1"></a>Thread 1: Sleeping for 1.5 seconds</span>
 <span id="cb772-2"><a href="chapter-atomics.html#cb772-2" aria-hidden="true" tabindex="-1"></a>Thread 2: Waiting for 3490</span>
 <span id="cb772-3"><a href="chapter-atomics.html#cb772-3" aria-hidden="true" tabindex="-1"></a>Thread 1: Setting x to 3490</span>
@@ -126,16 +126,16 @@
 <span id="cb772-5"><a href="chapter-atomics.html#cb772-5" aria-hidden="true" tabindex="-1"></a>Thread 2: Got 3490--exiting!</span>
 <span id="cb772-6"><a href="chapter-atomics.html#cb772-6" aria-hidden="true" tabindex="-1"></a>Main    : Threads are done, so x better be 3490</span>
 <span id="cb772-7"><a href="chapter-atomics.html#cb772-7" aria-hidden="true" tabindex="-1"></a>Main    : And indeed, x == 3490</span></code></pre></div>
-<p>Look, ma! We’re accessing a variable from different threads and not using a mutex! And that’ll work every time thanks to the atomic nature of atomic variables.</p>
-<p>You might be wondering what happens if that’s a regular non-atomic <code>int</code>, instead. Well, on my system it still works… unless I do an optimized build in which case it hangs on thread 2 waiting to see the 3490 to get set<a href="function-specifiers-alignment-specifiersoperators.html#fn210" class="footnote-ref" id="fnref210" role="doc-noteref"><sup>210</sup></a>.</p>
-<p>But that’s just the beginning of the story. The next part is going to require more brain power and has to do with something called <em>synchronization</em>.</p>
-<h2 data-number="40.3" id="synchronization"><span class="header-section-number">40.3</span> Synchronization</h2>
+<p>Bak anne! Farklı thread'lerden bir değişkene erişiyoruz ve mutex kullanmıyoruz! Ve atomik değişkenlerin atomik yapısı sayesinde bu her seferinde çalışacaktır.</p>
+<p>Bunun yerine normal, atomik olmayan bir <code>int</code> olursa ne olacağını merak ediyor olabilirsiniz. Benim sistemimde yine de çalışıyor… tabii optimize edilmiş bir derleme yapmadığım sürece; bu durumda 3490'ın ayarlandığını görmek için thread 2 üzerinde asılı kalır<a href="function-specifiers-alignment-specifiersoperators.html#fn210" class="footnote-ref" id="fnref210" role="doc-noteref"><sup>210</sup></a>.</p>
+<p>Fakat bu hikayenin sadece başlangıcı. Bir sonraki kısım daha fazla beyin gücü gerektirecek ve <em>senkronizasyon (synchronization)</em> adı verilen bir şeyle ilgili.</p>
+<h2 data-number="40.3" id="synchronization"><span class="header-section-number">40.3</span> Senkronizasyon</h2>
 <p></p>
-<p>The next part of our story is all about when certain memory writes in one thread become visible to those in another thread.</p>
-<p>You might think, it’s right away, right? But it’s not. A number of things can go wrong. Weirdly wrong.</p>
-<p>The compiler might have rearranged memory accesses so that when you think you set a value relative to another might not be true. And even if the compiler didn’t, your CPU might have done it on the fly. Or maybe there’s something else about this architecture that causes writes on one CPU to be delayed before they’re visible on another.</p>
-<p>The good news is that we can condense all these potential troubles into one: unsynchronized memory accesses can appear out of order depending on which thread is doing the observing, as if the lines of code themselves had been rearranged.</p>
-<p>By way of example, which happens first in the following code, the write to <code>x</code> or the write to <code>y</code>?</p>
+<p>Hikayemizin bir sonraki bölümü, bir thread'deki belirli bellek yazımlarının başka bir thread'dekiler tarafından ne zaman görünür hale geldiği ile ilgilidir.</p>
+<p>Hemen olduğunu düşünebilirsiniz, değil mi? Ama değil. Pek çok şey yanlış gidebilir. Garip bir şekilde yanlış.</p>
+<p>Derleyici, bir değeri diğerine kıyasla ayarladığınızı düşündüğünüzde durumun doğru olmaması için bellek erişimlerini yeniden sıralamış olabilir. Derleyici yapmamış olsa bile, CPU'nuz bunu anında yapmış olabilir. Veya belki de bu mimari hakkında, bir CPU'daki yazımların başka bir CPU'da görünür hale gelmeden önce gecikmesine neden olan başka bir şey vardır.</p>
+<p>İyi haber şu ki, tüm bu potansiyel sorunları tek bir noktada toplayabiliriz: Senkronize edilmemiş bellek erişimleri, hangi thread'in gözlem yaptığına bağlı olarak, sanki kod satırlarının kendisi yeniden sıralanmış gibi sıra dışı görünebilir.</p>
+<p>Örnek vermek gerekirse, aşağıdaki kodda ilk olarak hangisi gerçekleşir; <code>x</code>'e yazma mı yoksa <code>y</code>'ye yazma mı?</p>
 <div class="sourceCode" id="cb773"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb773-1"><a href="chapter-atomics.html#cb773-1"></a><span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span>  <span class="co">// global</span></span>
 <span id="cb773-2"><a href="chapter-atomics.html#cb773-2"></a></span>
 <span id="cb773-3"><a href="chapter-atomics.html#cb773-3"></a><span class="co">// ...</span></span>
@@ -144,8 +144,8 @@
 <span id="cb773-6"><a href="chapter-atomics.html#cb773-6"></a>y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
 <span id="cb773-7"><a href="chapter-atomics.html#cb773-7"></a></span>
 <span id="cb773-8"><a href="chapter-atomics.html#cb773-8"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">);</span></span></code></pre></div>
-<p>Answer: we don’t know. The compiler or CPU could silently reverse lines 5 and 6 and we’d be none-the-wiser. The code would run single-threaded <em>as-if</em> it were executed in code order.</p>
-<p>In a multithreaded scenario, we might have something like this pseudocode:</p>
+<p>Cevap: Bilmiyoruz. Derleyici veya CPU 5 ve 6. satırları sessizce tersine çevirebilir ve biz de hiçbir şey fark edemeyebiliriz. Kod, tek thread'li olarak sanki kod sırasına göre yürütülmüş <em>gibi (as-if)</em> çalışır.</p>
+<p>Çoklu thread'li bir senaryoda, şu psödokod gibi bir şeye sahip olabiliriz:</p>
 <div class="sourceCode" id="cb774"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb774-1"><a href="chapter-atomics.html#cb774-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb774-2"><a href="chapter-atomics.html#cb774-2"></a></span>
 <span id="cb774-3"><a href="chapter-atomics.html#cb774-3"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
@@ -154,154 +154,154 @@
 <span id="cb774-6"><a href="chapter-atomics.html#cb774-6"></a><span class="op">}</span></span>
 <span id="cb774-7"><a href="chapter-atomics.html#cb774-7"></a></span>
 <span id="cb774-8"><a href="chapter-atomics.html#cb774-8"></a>thread2<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb774-9"><a href="chapter-atomics.html#cb774-9"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// spin</span></span>
-<span id="cb774-10"><a href="chapter-atomics.html#cb774-10"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2? ...or 0?</span></span>
+<span id="cb774-9"><a href="chapter-atomics.html#cb774-9"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// dön (spin)</span></span>
+<span id="cb774-10"><a href="chapter-atomics.html#cb774-10"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2 mi? ...yoksa 0 mı?</span></span>
 <span id="cb774-11"><a href="chapter-atomics.html#cb774-11"></a><span class="op">}</span></span></code></pre></div>
-<p>What is the output from thread 2?</p>
-<p>Well, if <code>x</code> gets assigned <code>2</code> <em>before</em> <code>y</code> is assigned <code>3</code>, then I’d expect the output to be the very sensible:</p>
+<p>Thread 2'nin çıktısı nedir?</p>
+<p>Eğer <code>x</code>, <code>y</code>'ye <code>3</code> atanmadan <em>önce</em> <code>2</code> olarak atanırsa, çıktının son derece mantıklı olmasını beklerim:</p>
 <div class="sourceCode" id="cb775"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb775-1"><a href="chapter-atomics.html#cb775-1" aria-hidden="true" tabindex="-1"></a>x is now 2 </span></code></pre></div>
-<p>But something sneaky could rearrange lines 4 and 5 causing us to see the value of <code>0</code> for <code>x</code> when we print it.</p>
-<p>In other words, all bets are off unless we can somehow say, “As of this point, I expect all previous writes in another thread to be visible in this thread.”</p>
-<p>Two threads <em>synchronize</em> when they agree on the state of shared memory. As we’ve seen, they’re not always in agreement with the code. So how do they agree?</p>
-<p>Using atomic variables can force the agreement<a href="function-specifiers-alignment-specifiersoperators.html#fn211" class="footnote-ref" id="fnref211" role="doc-noteref"><sup>211</sup></a>. If a thread writes to an atomic variable, it’s saying “anyone who reads this atomic variable in the future will also see all the changes I made to memory (atomic or not) up to and including the atomic variable”.</p>
-<p>Or, in more human terms, let’s sit around the conference table and make sure we’re on the same page as to which pieces of shared memory hold what values. You agree that the memory changes that you’d made up-to-and-including the atomic store will be visible to me after I do a load of the same atomic variable.</p>
-<p>So we can easily fix our example:</p>
+<p>Ancak kurnazca bir şey 4 ve 5. satırları yeniden sıralayabilir ve yazdırdığımızda <code>x</code> için <code>0</code> değerini görmemize neden olabilir.</p>
+<p>Başka bir deyişle, bir şekilde "Bu noktadan itibaren, başka bir thread'deki tüm önceki yazımların bu thread'de görünür olmasını bekliyorum" diyemediğimiz sürece hiçbir şey garanti değildir.</p>
+<p>İki thread, paylaşılan belleğin durumu konusunda anlaştıklarında <em>senkronize olurlar (synchronize)</em>. Gördüğümüz gibi, her zaman kodla aynı fikirde değillerdir. Peki nasıl anlaşıyorlar?</p>
+<p>Atomik değişkenleri kullanmak anlaşmayı zorlayabilir<a href="function-specifiers-alignment-specifiersoperators.html#fn211" class="footnote-ref" id="fnref211" role="doc-noteref"><sup>211</sup></a>. Bir thread bir atomik değişkene yazarsa, "gelecekte bu atomik değişkeni okuyan herkes, atomik değişken de dahil olmak üzere bellekte yaptığım tüm değişiklikleri (atomik olsun ya da olmasın) görecektir" demiş olur.</p>
+<p>Ya da daha insani bir dille ifade edersek, konferans masasının etrafına oturalım ve paylaşılan belleğin hangi parçalarının hangi değerleri tuttuğu konusunda aynı sayfada olduğumuzdan emin olalım. Aynı atomik değişkeni yükledikten (load) sonra, atomik kaydetmeye (store) kadar yaptığınız bellek değişikliklerinin bana görünür olacağını kabul ediyorsunuz.</p>
+<p>Böylece örneğimizi kolayca düzeltebiliriz:</p>
 <div class="sourceCode" id="cb776"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb776-1"><a href="chapter-atomics.html#cb776-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb776-2"><a href="chapter-atomics.html#cb776-2"></a>atomic <span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// Make y atomic</span></span>
+<span id="cb776-2"><a href="chapter-atomics.html#cb776-2"></a>atomic <span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// y'yi atomik yap</span></span>
 <span id="cb776-3"><a href="chapter-atomics.html#cb776-3"></a></span>
 <span id="cb776-4"><a href="chapter-atomics.html#cb776-4"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
 <span id="cb776-5"><a href="chapter-atomics.html#cb776-5"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb776-6"><a href="chapter-atomics.html#cb776-6"></a>    y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>             <span class="co">// Synchronize on write</span></span>
+<span id="cb776-6"><a href="chapter-atomics.html#cb776-6"></a>    y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>             <span class="co">// Yazma üzerinde senkronize ol</span></span>
 <span id="cb776-7"><a href="chapter-atomics.html#cb776-7"></a><span class="op">}</span></span>
 <span id="cb776-8"><a href="chapter-atomics.html#cb776-8"></a></span>
 <span id="cb776-9"><a href="chapter-atomics.html#cb776-9"></a>thread2<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb776-10"><a href="chapter-atomics.html#cb776-10"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// Synchronize on read</span></span>
-<span id="cb776-11"><a href="chapter-atomics.html#cb776-11"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2, period.</span></span>
+<span id="cb776-10"><a href="chapter-atomics.html#cb776-10"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// Okuma üzerinde senkronize ol</span></span>
+<span id="cb776-11"><a href="chapter-atomics.html#cb776-11"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2, nokta.</span></span>
 <span id="cb776-12"><a href="chapter-atomics.html#cb776-12"></a><span class="op">}</span></span></code></pre></div>
-<p>Because the threads synchronize across <code>y</code>, all writes in thread 1 that happened <em>before</em> the write to <code>y</code> are visible in thread 2 <em>after</em> the read from <code>y</code> (in the <code>while</code> loop).</p>
-<p>It’s important to note a couple things here:</p>
+<p>Thread'ler <code>y</code> üzerinden senkronize olduğundan, thread 1'de <code>y</code>'ye yazılmadan <em>önce</em> gerçekleşen tüm yazımlar, <code>y</code>'den okumadan (<code>while</code> döngüsünde) <em>sonra</em> thread 2'de görünür olur.</p>
+<p>Burada birkaç noktayı belirtmek önemlidir:</p>
 <ol type="1">
-<li><p>Nothing sleeps. The synchronization is not a blocking operation. Both threads are running full bore until they exit. Even the one stuck in the spin loop isn’t blocking anyone else from running.</p></li>
-<li><p>The synchronization happens when one thread reads an atomic variable another thread wrote. So when thread 2 reads <code>y</code>, all previous memory writes in thread 1 (namely setting <code>x</code>) will be visible in thread 2.</p></li>
-<li><p>Notice that <code>x</code> isn’t atomic. That’s OK because we’re not synchronizing over <code>x</code>, and the synchronization over <code>y</code> when we write it in thread 1 means that all previous writes—including <code>x</code>—in thread 1 will become visible to other threads… if those other threads read <code>y</code> to synchronize.</p></li>
+<li><p>Hiçbir şey uyumaz. Senkronizasyon engelleyici (blocking) bir işlem değildir. Her iki thread de çıkana kadar son hızda çalışır. Spin döngüsüne takılan thread bile başkasının çalışmasını engellemez.</p></li>
+<li><p>Senkronizasyon, bir thread başka bir thread'in yazdığı atomik değişkeni okuduğunda gerçekleşir. Yani thread 2 <code>y</code>'yi okuduğunda, thread 1'deki önceki tüm bellek yazımları (özellikle <code>x</code>'i ayarlamak) thread 2'de görünür olacaktır.</p></li>
+<li><p><code>x</code>'in atomik olmadığına dikkat edin. Bu sorun değil çünkü <code>x</code> üzerinden senkronize olmuyoruz ve thread 1'de yazdığımızda <code>y</code> üzerindeki senkronizasyon, thread 1'deki—<code>x</code> dahil—tüm önceki yazımların diğer thread'lere görünür olacağı anlamına gelir… tabii o diğer thread'ler senkronize olmak için <code>y</code>'yi okursa.</p></li>
 </ol>
-<p>Forcing this synchronization is inefficient and can be a lot slower than just using a regular variable. This is why we don’t use atomics unless we have to for a particular application.</p>
-<p>So that’s the basics. Let’s look deeper.</p>
+<p>Bu senkronizasyonu zorlamak verimsizdir ve sadece normal bir değişken kullanmaktan çok daha yavaş olabilir. Belirli bir uygulama için mecburen gerekmedikçe atomikleri kullanmamamızın nedeni budur.</p>
+<p>Temel bilgiler bunlar. Şimdi daha derine bakalım.</p>
 <p></p>
-<h2 data-number="40.4" id="acquire-and-release"><span class="header-section-number">40.4</span> Acquire and Release</h2>
+<h2 data-number="40.4" id="acquire-and-release"><span class="header-section-number">40.4</span> Edinme ve Serbest Bırakma (Acquire and Release)</h2>
 <p> </p>
-<p>More terminology! It’ll pay off to learn this now.</p>
-<p>When a thread reads an atomic variable, it is said to be an <em>acquire</em> operation.</p>
-<p>When a thread writes an atomic variable, it is said to be a <em>release</em> operation.</p>
-<p>What are these? Let’s line them up with terms you already know when it comes to atomic variables:</p>
-<p><strong>Read = Load = Acquire</strong>. Like when you compare an atomic variable or read it to copy it to another value.</p>
-<p><strong>Write = Store = Release</strong>. Like when you assign a value into an atomic variable.</p>
-<p>When using atomic variables with these acquire/release semantics, C spells out what can happen when.</p>
-<p>Acquire/release form the basis for the synchronization we just talked about.</p>
-<p>When a thread acquires an atomic variable, it can see values set in another thread that released that same variable.</p>
-<p>In other words:</p>
-<p>When a thread reads an atomic variable, it can see values set in another thread that wrote to that same variable.</p>
-<p>The synchronization happens across the acquire/release pair.</p>
-<p>More details:</p>
-<p>With read/load/acquire of a particular atomic variable:</p>
+<p>Daha fazla terminoloji! Bunu şimdi öğrenmek karşılığını verecektir.</p>
+<p>Bir thread bir atomik değişkeni okuduğunda, bunun bir <em>edinme (acquire)</em> işlemi olduğu söylenir.</p>
+<p>Bir thread bir atomik değişkene yazdığında, bunun bir <em>serbest bırakma (release)</em> işlemi olduğu söylenir.</p>
+<p>Bunlar nedir? Atomik değişkenler söz konusu olduğunda zaten bildiğiniz terimlerle bunları hizalayalım:</p>
+<p><strong>Read (Oku) = Load (Yükle) = Acquire (Edin)</strong>. Bir atomik değişkeni karşılaştırdığınızda veya başka bir değere kopyalamak için okuduğunuzda olduğu gibi.</p>
+<p><strong>Write (Yaz) = Store (Kaydet) = Release (Serbest Bırak)</strong>. Bir atomik değişkene değer atadığınızda olduğu gibi.</p>
+<p>Atomik değişkenleri bu edinme/serbest bırakma (acquire/release) semantikleriyle kullanırken, C neyin ne zaman gerçekleşebileceğini açıkça belirtir.</p>
+<p>Acquire/release, az önce bahsettiğimiz senkronizasyonun temelini oluşturur.</p>
+<p>Bir thread bir atomik değişkeni edindiğinde (acquire), aynı değişkeni serbest bırakan (release) başka bir thread'de ayarlanan değerleri görebilir.</p>
+<p>Başka bir deyişle:</p>
+<p>Bir thread bir atomik değişkeni okuduğunda, aynı değişkene yazan başka bir thread'de ayarlanan değerleri görebilir.</p>
+<p>Senkronizasyon, acquire/release ikilisi arasında gerçekleşir.</p>
+<p>Daha fazla detay:</p>
+<p>Belirli bir atomik değişkenin read/load/acquire işlemi ile:</p>
 <ul>
-<li><p>All writes (atomic or non-atomic) in another thread that happened before that other thread wrote/stored/released this atomic variable are now visible in this thread.</p></li>
-<li><p>The new value of the atomic variable set by the other thread is also visible in this thread.</p></li>
-<li><p>No reads or writes of any variables/memory in the current thread can be reordered to happen before this acquire.</p></li>
-<li><p>The acquire acts as a one-way barrier when it comes to code reordering; reads and writes in the current thread can be moved down from <em>before</em> the acquire to <em>after</em> it. But, more importantly for synchronization, nothing can move up from <em>after</em> the acquire to <em>before</em> it.</p></li>
+<li><p>Başka bir thread'de, o thread bu atomik değişkeni yazmadan/kaydetmeden/serbest bırakmadan önce gerçekleşen tüm yazımlar (atomik veya atomik olmayan) artık bu thread'de görünür durumdadır.</p></li>
+<li><p>Diğer thread tarafından ayarlanan atomik değişkenin yeni değeri de bu thread'de görünür durumdadır.</p></li>
+<li><p>Geçerli thread'deki hiçbir değişkenin/belleğin okuması veya yazması, bu acquire işleminden önce gerçekleşecek şekilde yeniden sıralanamaz.</p></li>
+<li><p>Acquire, kodun yeniden sıralanması söz konusu olduğunda tek yönlü bir engel (barrier) görevi görür; geçerli thread'deki okumalar ve yazmalar acquire <em>öncesinden</em> <em>sonrasına</em> kaydırılabilir. Ancak senkronizasyon için daha da önemlisi, hiçbir şey acquire <em>sonrasından</em> <em>öncesine</em> yukarı taşınamaz.</p></li>
 </ul>
-<p>With write/store/release of a particular atomic variable:</p>
+<p>Belirli bir atomik değişkenin write/store/release işlemi ile:</p>
 <ul>
-<li><p>All writes (atomic or non-atomic) in the current thread that happened before this release become visible to other threads that have read/loaded/acquired the same atomic variable.</p></li>
-<li><p>The value written to this atomic variable by this thread is also visible to other threads.</p></li>
-<li><p>No reads or writes of any variables/memory in the current thread can be reordered to happen after this release.</p></li>
-<li><p>The release acts as a one-way barrier when it comes to code reordering: reads and writes in the current thread can be moved up from <em>after</em> the release to <em>before</em> it. But, more importantly for synchronization, nothing can move down from <em>before</em> the release to <em>after</em> it.</p></li>
+<li><p>Geçerli thread'de bu release işleminden önce gerçekleşen tüm yazımlar (atomik veya atomik olmayan), aynı atomik değişkeni okuyan/yükleyen/edinmiş diğer thread'ler için görünür hale gelir.</p></li>
+<li><p>Bu thread tarafından bu atomik değişkene yazılan değer diğer thread'ler için de görünürdür.</p></li>
+<li><p>Geçerli thread'deki hiçbir değişkenin/belleğin okuması veya yazması, bu release işleminden sonra gerçekleşecek şekilde yeniden sıralanamaz.</p></li>
+<li><p>Release, kodun yeniden sıralanması söz konusu olduğunda tek yönlü bir engel (barrier) görevi görür: geçerli thread'deki okumalar ve yazmalar release <em>sonrasından</em> <em>öncesine</em> taşınabilir. Ancak senkronizasyon için daha önemlisi, hiçbir şey release <em>öncesinden</em> <em>sonrasına</em> aşağı kaydırılamaz.</p></li>
 </ul>
-<p>Again, the upshot is synchronization of memory from one thread to another. The second thread can be sure that variables and memory are written in the order the programmer intended.</p>
+<p>Yine netice, bir thread'den diğerine belleğin senkronize edilmesidir. İkinci thread, değişkenlerin ve belleğin programcının amaçladığı sırada yazıldığından emin olabilir.</p>
 <pre><code>int x, y, z = 0;
 atomic_int a = 0;
 
 thread1() {
     x = 10;
     y = 20;
-    a = 999;  // Release
+    a = 999;  // Release (Serbest Bırakma)
     z = 30;
 }
 
 thread2()
 {
-    while (a != 999) { } // Acquire
+    while (a != 999) { } // Acquire (Edinme)
 
-    assert(x == 10);  // never asserts, x is always 10
-    assert(y == 20);  // never asserts, y is always 20
+    assert(x == 10);  // asla assert etmez, x her zaman 10'dur
+    assert(y == 20);  // asla assert etmez, y her zaman 20'dir
 
-    assert(z == 0);  // might assert!!
+    assert(z == 0);  // assert edebilir!!
 }</code></pre>
-<p>In the above example, <code>thread2</code> can be sure of the values in <code>x</code> and <code>y</code> after it acquires <code>a</code> because they were set before <code>thread1</code> released the atomic <code>a</code>.</p>
-<p>But <code>thread2</code> can’t be sure of <code>z</code>’s value because it happened after the release. Maybe the assignment to <code>z</code> got moved before the assignment to <code>a</code>.</p>
-<p>An important note: releasing one atomic variable has no effect on acquires of different atomic variables. Each variable is isolated from the others.</p>
+<p>Yukarıdaki örnekte, <code>thread2</code>, <code>a</code>'yı edindikten (acquire) sonra <code>x</code> ve <code>y</code> değerlerinden emin olabilir çünkü bunlar <code>thread1</code> atomik <code>a</code>'yı serbest bırakmadan (release) önce ayarlanmıştır.</p>
+<p>Ancak <code>thread2</code>, <code>z</code>'nin değerinden emin olamaz çünkü o release işleminden sonra gerçekleşmiştir. Belki de <code>z</code>'ye atama işlemi <code>a</code>'ya atama işleminden önceye taşınmıştır.</p>
+<p>Önemli bir not: bir atomik değişkeni serbest bırakmanın (release), farklı atomik değişkenlerin edinilmesi (acquire) üzerinde hiçbir etkisi yoktur. Her değişken diğerlerinden izole edilmiştir.</p>
 <p> </p>
-<h2 data-number="40.5" id="sequential-consistency"><span class="header-section-number">40.5</span> Sequential Consistency</h2>
+<h2 data-number="40.5" id="sequential-consistency"><span class="header-section-number">40.5</span> Sıralı Tutarlılık (Sequential Consistency)</h2>
 <p></p>
-<p>You hanging in there? We’re through the meat of the simpler usage of atomics. And since we’re not even going to talk about the more complex uses here, you can relax a bit.</p>
-<p><em>Sequential consistency</em> is what’s called a <em>memory ordering</em>. There are many memory orderings, but sequential consistency is the sanest<a href="function-specifiers-alignment-specifiersoperators.html#fn212" class="footnote-ref" id="fnref212" role="doc-noteref"><sup>212</sup></a> C has to offer. It is also the default. You have to go out of your way to use other memory orderings.</p>
-<p>All the stuff we’ve been talking about so far has happened within the realm of sequential consistency.</p>
-<p>We’ve talked about how the compiler or CPU can rearrange memory reads and writes in a single thread as long as it follows the <em>as-if</em> rule.</p>
-<p>And we’ve seen how we can put the brakes on this behavior by synchronizing over atomic variables.</p>
-<p>Let’s formalize just a little more.</p>
-<p>If operations are <em>sequentially consistent</em>, it means at the end of the day, when all is said and done, all the threads can kick up their feet, open their beverage of choice, and all agree on the order in which memory changes occurred during the run. And that order is the one specified by the code.</p>
-<p>One won’t say, “But didn’t <em>B</em> happen before <em>A</em>?” if the rest of them say, “<em>A</em> definitely happened before <em>B</em>”. They’re all friends, here.</p>
-<p>In particular, within a thread, none of the acquires and releases can be reordered with respect to one another. This is in addition to the rules about what other memory accesses can be reordered around them.</p>
-<p>This rule gives an additional level of sanity to the progression of atomic loads/acquires and stores/releases.</p>
-<p>Every other memory order in C involves a relaxation of the reordering rules, either for acquires/releases or other memory accesses, atomic or otherwise. You’d do that if you <em>really</em> knew what you were doing and needed the speed boost. <em>Here be armies of dragons…</em></p>
-<p>More on that later, but for now, let’s stick to the safe and practical.</p>
+<p>Dayanıyor musunuz? Atomiklerin daha basit kullanımının ana kısmını bitirdik. Ve burada daha karmaşık kullanımlardan bahsetmeyeceğimiz bile düşünülürse, biraz rahatlayabilirsiniz.</p>
+<p><em>Sıralı tutarlılık (Sequential consistency)</em>, <em>bellek sıralaması (memory ordering)</em> adı verilen şeydir. Birçok bellek sıralaması vardır, ancak sıralı tutarlılık C'nin sunduğu en akla yatkın<a href="function-specifiers-alignment-specifiersoperators.html#fn212" class="footnote-ref" id="fnref212" role="doc-noteref"><sup>212</sup></a> olanıdır. Aynı zamanda varsayılardır. Diğer bellek sıralamalarını kullanmak için yolunuzu değiştirmeniz gerekir.</p>
+<p>Şimdiye kadar bahsettiğimiz her şey sıralı tutarlılık alanında gerçekleşti.</p>
+<p>Derleyicinin veya CPU'nun <em>gibi (as-if)</em> kuralına uyduğu sürece tek bir thread'deki bellek okumalarını ve yazmalarını nasıl yeniden sıralayabileceğinden bahsettik.</p>
+<p>Ve atomik değişkenler üzerinden senkronize olarak bu davranışa nasıl fren yaptırabileceğimizi gördük.</p>
+<p>Gelin bunu biraz daha resmileştirelim.</p>
+<p>İşlemler <em>sıralı tutarlı (sequentially consistent)</em> ise, günün sonunda, her şey söylenip yapıldığında, tüm thread'ler ayaklarını uzatabilir, istedikleri içeceği açabilir ve çalışma sırasında bellek değişikliklerinin gerçekleştiği sıra konusunda hepsi hemfikir olabilir. Ve bu sıra, kod tarafından belirtilen sıradır.</p>
+<p>Diğerleri "<em>A</em> kesinlikle <em>B</em>'den önce oldu" diyorsa biri kalkıp "Ama <em>B</em> <em>A</em>'dan önce olmadı mı?" demez. Burada hepsi dosttur.</p>
+<p>Özellikle, bir thread içinde hiçbir acquire ve release işlemi birbirine göre yeniden sıralanamaz. Bu, etraflarında diğer hangi bellek erişimlerinin yeniden sıralanabileceğine ilişkin kurallara ek olarak geçerlidir.</p>
+<p>Bu kural, atomik yüklemelerin/edinmelerin (loads/acquires) ve kaydetmelerin/serbest bırakmaların (stores/releases) ilerleyişine ek bir akıl sağlığı seviyesi kazandırır.</p>
+<p>C'deki diğer tüm bellek sıralamaları, gerek acquire/release işlemleri için gerekse atomik olan ya da olmayan diğer bellek erişimleri için yeniden sıralama kurallarının gevşetilmesini içerir. Bunu gerçekten ne yaptığınızı biliyorsanız ve hız artışına <em>gerçekten</em> ihtiyacınız varsa yaparsınız. <em>Buralar ejderha ordularıyla dolu…</em></p>
+<p>Daha fazlası sonra, ancak şimdilik güvenli ve pratik olana sadık kalalım.</p>
 <p></p>
-<h2 data-number="40.6" id="atomic-assignments-and-operators"><span class="header-section-number">40.6</span> Atomic Assignments and Operators</h2>
+<h2 data-number="40.6" id="atomic-assignments-and-operators"><span class="header-section-number">40.6</span> Atomik Atamalar ve Operatörler</h2>
 <p></p>
-<p>Certain operators on atomic variables are atomic. And others aren’t.</p>
-<p>Let’s start with a counter-example:</p>
+<p>Atomik değişkenler üzerindeki bazı operatörler atomiktir. Ve diğerleri değildir.</p>
+<p>Bir karşıt örnekle başlayalım:</p>
 <div class="sourceCode" id="cb778"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb778-1"><a href="chapter-atomics.html#cb778-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb778-2"><a href="chapter-atomics.html#cb778-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb778-3"><a href="chapter-atomics.html#cb778-3" aria-hidden="true" tabindex="-1"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb778-4"><a href="chapter-atomics.html#cb778-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span><span class="op">;</span>  <span class="co">// NOT atomic!</span></span>
+<span id="cb778-4"><a href="chapter-atomics.html#cb778-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span><span class="op">;</span>  <span class="co">// Atomik DEĞİL!</span></span>
 <span id="cb778-5"><a href="chapter-atomics.html#cb778-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Since there’s a read of <code>x</code> on the right hand side of the assignment and a write effectively on the left, these are two operations. Another thread could sneak in the middle and make you unhappy.</p>
-<p>But you <em>can</em> use the shorthand <code>+=</code> to get an atomic operation:</p>
+<p>Atamanın sağ tarafında <code>x</code>'in okunması ve sol tarafında etkili bir şekilde yazılması olduğundan, bunlar iki işlemdir. Başka bir thread araya sızabilir ve sizi mutsuz edebilir.</p>
+<p>Ancak atomik bir işlem elde etmek için <code>+=</code> kısayolunu <em>kullanabilirsiniz</em>:</p>
 <div class="sourceCode" id="cb779"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb779-1"><a href="chapter-atomics.html#cb779-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb779-2"><a href="chapter-atomics.html#cb779-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb779-3"><a href="chapter-atomics.html#cb779-3" aria-hidden="true" tabindex="-1"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb779-4"><a href="chapter-atomics.html#cb779-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">3</span><span class="op">;</span>   <span class="co">// ATOMIC!</span></span>
+<span id="cb779-4"><a href="chapter-atomics.html#cb779-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">3</span><span class="op">;</span>   <span class="co">// ATOMİK!</span></span>
 <span id="cb779-5"><a href="chapter-atomics.html#cb779-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>In that case, <code>x</code> will be atomically incremented by <code>3</code>—no other thread can jump in the middle.</p>
-<p>In particular, the following operators are atomic read-modify-write operations with sequential consistency, so use them with gleeful abandon. (In the example, <code>a</code> is atomic.)</p>
+<p>Bu durumda, <code>x</code> atomik olarak <code>3</code> artırılacaktır—başka hiçbir thread araya giremez.</p>
+<p>Özellikle, aşağıdaki operatörler sıralı tutarlılığa sahip atomik oku-değiştir-yaz (read-modify-write) işlemleridir, bu nedenle neşeyle kullanabilirsiniz. (Örnekte <code>a</code> atomiktir.)</p>
 <div class="sourceCode" id="cb780"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb780-1"><a href="chapter-atomics.html#cb780-1" aria-hidden="true" tabindex="-1"></a>a<span class="op">++</span>       a<span class="op">--</span>       <span class="op">--</span>a       <span class="op">++</span>a</span>
 <span id="cb780-2"><a href="chapter-atomics.html#cb780-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">+=</span> b    a <span class="op">-=</span> b    a <span class="op">*=</span> b    a <span class="op">/=</span> b    a <span class="op">%=</span> b</span>
 <span id="cb780-3"><a href="chapter-atomics.html#cb780-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">&amp;=</span> b    a <span class="op">|=</span> b    a <span class="op">^=</span> b    a <span class="op">&gt;&gt;=</span> b   a <span class="op">&lt;&lt;=</span> b</span></code></pre></div>
 <p></p>
-<h2 data-number="40.7" id="library-functions-that-automatically-synchronize"><span class="header-section-number">40.7</span> Library Functions that Automatically Synchronize</h2>
+<h2 data-number="40.7" id="library-functions-that-automatically-synchronize"><span class="header-section-number">40.7</span> Otomatik Olarak Senkronize Olan Kütüphane Fonksiyonları</h2>
 <p></p>
-<p>So far we’ve talked about how you can synchronize with atomic variables, but it turns out there are a few library functions that do some limited behind-the-scenes synchronization, themselves.</p>
+<p>Şimdiye kadar atomik değişkenlerle nasıl senkronize olabileceğinizden bahsettik, ancak ortaya çıktığı üzere kendileri sahne arkasında sınırlı bir senkronizasyon yapan birkaç kütüphane fonksiyonu vardır.</p>
 <div class="sourceCode" id="cb781"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb781-1"><a href="chapter-atomics.html#cb781-1" aria-hidden="true" tabindex="-1"></a>call_once<span class="op">()</span>      thrd_create<span class="op">()</span>       thrd_join<span class="op">()</span></span>
 <span id="cb781-2"><a href="chapter-atomics.html#cb781-2" aria-hidden="true" tabindex="-1"></a>mtx_lock<span class="op">()</span>       mtx_timedlock<span class="op">()</span>     mtx_trylock<span class="op">()</span></span>
 <span id="cb781-3"><a href="chapter-atomics.html#cb781-3" aria-hidden="true" tabindex="-1"></a>malloc<span class="op">()</span>         calloc<span class="op">()</span>            realloc<span class="op">()</span></span>
 <span id="cb781-4"><a href="chapter-atomics.html#cb781-4" aria-hidden="true" tabindex="-1"></a>aligned_alloc<span class="op">()</span></span></code></pre></div>
-<p><strong><code>call_once()</code></strong>—Synchronizes with all subsequent calls to <code>call_once()</code> for a particular flag. This way subsequent calls can rest assured that if another thread sets the flag, they will see it.</p>
-<p><strong><code>thrd_create()</code></strong>—Synchronizes with the beginning of the new thread. The new thread can be sure it will see all shared memory writes from the parent thread from before the <code>thrd_create()</code> call.</p>
-<p><strong><code>thrd_join()</code></strong>—When a thread dies, it synchronizes with this function. The thread that has called <code>thrd_join()</code> can be assured that it can see all the late thread’s shared writes.</p>
-<p><strong><code>mtx_lock()</code></strong>—Earlier calls to <code>mtx_unlock()</code> on the same mutex synchronize on this call. This is the case that most mirrors the acquire/release process we’ve already talked about. <code>mtx_unlock()</code> performs a release on the mutex variable, assuring any subsequent thread that makes an acquire with <code>mtx_lock()</code> can see all the shared memory changes in the critical section.</p>
-<p><strong><code>mtx_timedlock()</code></strong> and <strong><code>mtx_trylock()</code></strong>—Similar to the situation with <code>mtx_lock()</code>, if this call succeeds, earlier calls to <code>mtx_unlock()</code> synchronize with this one.</p>
-<p><strong>Dynamic Memory Functions</strong>: if you allocate memory, it synchronizes with the previous deallocation of that same memory. And allocations and deallocations of that particular memory region happen in a single total order that all threads can agree upon. I <em>think</em> the idea here is that the deallocation can wipe the region if it chooses, and we want to be sure that a subsequent allocation doesn’t see the non-wiped data. Someone let me know if there’s more to it.</p>
+<p><strong><code>call_once()</code></strong>—Belirli bir bayrak için sonraki tüm <code>call_once()</code> çağrılarıyla senkronize olur. Bu şekilde sonraki çağrılar, başka bir thread bayrağı ayarlarsa onu göreceklerinden emin olabilirler.</p>
+<p><strong><code>thrd_create()</code></strong>—Yeni thread'in başlangıcıyla senkronize olur. Yeni thread, parent (üst) thread'den <code>thrd_create()</code> çağrısından önceki tüm paylaşılan bellek yazımlarını göreceğinden emin olabilir.</p>
+<p><strong><code>thrd_join()</code></strong>—Bir thread sonlandığında, bu fonksiyonla senkronize olur. <code>thrd_join()</code> çağıran thread, sonlanan thread'in tüm paylaşılan yazımlarını görebileceğinden emin olabilir.</p>
+<p><strong><code>mtx_lock()</code></strong>—Aynı mutex üzerindeki önceki <code>mtx_unlock()</code> çağrıları bu çağrıda senkronize olur. Bu, daha önce bahsettiğimiz acquire/release sürecini en çok yansıtan durumdur. <code>mtx_unlock()</code>, mutex değişkeni üzerinde bir release gerçekleştirerek, <code>mtx_lock()</code> ile edinme (acquire) yapan sonraki tüm thread'lerin kritik bölümdeki tüm paylaşılan bellek değişikliklerini görebilmesini sağlar.</p>
+<p><strong><code>mtx_timedlock()</code></strong> ve <strong><code>mtx_trylock()</code></strong>—<code>mtx_lock()</code> durumuna benzer şekilde, bu çağrı başarılı olursa, önceki <code>mtx_unlock()</code> çağrıları bu çağrıyla senkronize olur.</p>
+<p><strong>Dinamik Bellek Fonksiyonları</strong>: Bellek tahsis ederseniz, bu aynı belleğin önceki serbest bırakılmasıyla (deallocation) senkronize olur. Ve o belirli bellek bölgesinin tahsisleri ve serbest bırakılmaları, tüm thread'lerin üzerinde anlaşabileceği tek bir toplam sırada gerçekleşir. Buradaki fikrin, serbest bırakma işleminin isterse bölgeyi temizleyebilmesi ve sonraki bir tahsisin temizlenmemiş verileri görmediğinden emin olmak istememiz olduğunu <em>düşünüyorum</em>. Bundan daha fazlası varsa biri bana haber versin.</p>
 <p></p>
-<h2 data-number="40.8" id="atomic-type-specifier-qualifier"><span class="header-section-number">40.8</span> Atomic Type Specifier, Qualifier</h2>
-<p>Let’s take it down a notch and see what types we have available, and how we can even make new atomic types.</p>
+<h2 data-number="40.8" id="atomic-type-specifier-qualifier"><span class="header-section-number">40.8</span> Atomik Tür Belirteci ve Niteleyicisi (Type Specifier, Qualifier)</h2>
+<p>Vitesi biraz küçültelim ve hangi türlerin mevcut olduğunu ve hatta yeni atomik türleri nasıl oluşturabileceğimizi görelim.</p>
 <p></p>
-<p>First things first, let’s look at the built-in atomic types and what they are <code>typedef</code>’d to. (Spoiler: <code>_Atomic</code> is a type qualifier!)</p>
+<p>İlk iş olarak, yerleşik atomik türlere ve bunların nelere <code>typedef</code> edildiğine bakalım. (Spoiler: <code>_Atomic</code> bir tür niteleyicisidir!)</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Atomic type</th>
-<th>Longhand equivalent</th>
+<th>Atomik Tür</th>
+<th>Uzun yazım karşılığı</th>
 </tr>
 </thead>
 <tbody>
@@ -456,38 +456,38 @@ thread2()
 </tbody>
 </table>
 <p></p>
-<p>Use those at will! They’re consistent with the atomic aliases found in C++, if that helps.</p>
-<p>But what if you want more?</p>
-<p>You can do it either with a type qualifier or type specifier.</p>
+<p>Bunları dilediğiniz gibi kullanın! Eğer faydası olacaksa, C++'ta bulunan atomik takma adlarla tutarlıdırlar.</p>
+<p>Peki ya daha fazlasını isterseniz?</p>
+<p>Bunu bir tür niteleyicisi (type qualifier) veya tür belirteci (type specifier) ile yapabilirsiniz.</p>
 <p></p>
-<p>First, specifier! It’s the keyword <code>_Atomic</code> with a type in parens after<a href="function-specifiers-alignment-specifiersoperators.html#fn213" class="footnote-ref" id="fnref213" role="doc-noteref"><sup>213</sup></a>—suitable for use with <code>typedef</code>:</p>
+<p>İlk olarak, belirteç! Parantez içinde bir tür ile devam eden <code>_Atomic</code> anahtar kelimesidir<a href="function-specifiers-alignment-specifiersoperators.html#fn213" class="footnote-ref" id="fnref213" role="doc-noteref"><sup>213</sup></a>—<code>typedef</code> ile kullanıma uygundur:</p>
 <div class="sourceCode" id="cb782"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb782-1"><a href="chapter-atomics.html#cb782-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">_Atomic</span><span class="op">(</span><span class="dt">double</span><span class="op">)</span> atomic_double<span class="op">;</span></span>
 <span id="cb782-2"><a href="chapter-atomics.html#cb782-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb782-3"><a href="chapter-atomics.html#cb782-3" aria-hidden="true" tabindex="-1"></a>atomic_double f<span class="op">;</span></span></code></pre></div>
-<p>Restrictions on the specifier: the type you’re making atomic can’t be of type array or function, nor can it be atomic or otherwise qualified.</p>
+<p>Belirteç üzerindeki kısıtlamalar: Atomik hale getirdiğiniz tür bir dizi veya fonksiyon türünde olamaz, atomik veya başka bir niteleyiciye sahip olamaz.</p>
 <p> </p>
-<p>Next, qualifier! It’s the keyword <code>_Atomic</code> <em>without</em> a type in parens.</p>
-<p>So these do similar things<a href="function-specifiers-alignment-specifiersoperators.html#fn214" class="footnote-ref" id="fnref214" role="doc-noteref"><sup>214</sup></a>:</p>
-<div class="sourceCode" id="cb783"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb783-1"><a href="chapter-atomics.html#cb783-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> i<span class="op">;</span>   <span class="co">// type specifier</span></span>
-<span id="cb783-2"><a href="chapter-atomics.html#cb783-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span>  j<span class="op">;</span>   <span class="co">// type qualifier</span></span></code></pre></div>
-<p>The thing is, you can include other type qualifiers with the latter:</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb784-1"><a href="chapter-atomics.html#cb784-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">volatile</span> <span class="dt">int</span> k<span class="op">;</span>   <span class="co">// qualified atomic variable</span></span></code></pre></div>
-<p>Restrictions on the qualifier: the type you’re making atomic can’t be of type array or function.</p>
+<p>Sırada niteleyici var! Parantez içinde bir tür <em>olmayan</em> <code>_Atomic</code> anahtar kelimesidir.</p>
+<p>Bu yüzden bunlar benzer şeyler yapar<a href="function-specifiers-alignment-specifiersoperators.html#fn214" class="footnote-ref" id="fnref214" role="doc-noteref"><sup>214</sup></a>:</p>
+<div class="sourceCode" id="cb783"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb783-1"><a href="chapter-atomics.html#cb783-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> i<span class="op">;</span>   <span class="co">// tür belirteci (type specifier)</span></span>
+<span id="cb783-2"><a href="chapter-atomics.html#cb783-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span>  j<span class="op">;</span>   <span class="co">// tür niteleyicisi (type qualifier)</span></span></code></pre></div>
+<p>Mesele şu ki, ikincisiyle diğer tür niteleyicilerini de dahil edebilirsiniz:</p>
+<div class="sourceCode" id="cb784"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb784-1"><a href="chapter-atomics.html#cb784-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">volatile</span> <span class="dt">int</span> k<span class="op">;</span>   <span class="co">// niteleyici eklenmiş atomik değişken</span></span></code></pre></div>
+<p>Niteleyici üzerindeki kısıtlamalar: Atomik yaptığınız tür dizi veya fonksiyon türünde olamaz.</p>
 <p></p>
-<h2 data-number="40.9" id="lock-free-atomic"><span class="header-section-number">40.9</span> Lock-Free Atomic Variables</h2>
+<h2 data-number="40.9" id="lock-free-atomic"><span class="header-section-number">40.9</span> Kilitsiz (Lock-Free) Atomik Değişkenler</h2>
 <p></p>
-<p>Hardware architectures are limited in the amount of data they can atomically read and write. It depends on how it’s wired together. And it varies.</p>
-<p>If you use an atomic type, you can be assured that accesses to that type will be atomic… but there’s a catch: if the hardware can’t do it, it’s done with a lock, instead.</p>
-<p>So the atomic access becomes lock-access-unlock, which is rather slower and has some implications for signal handlers.</p>
-<p><a href="chapter-atomics.html#atomic-flags">Atomic flags</a>, below, is the only atomic type that is guaranteed to be lock-free in all conforming implementations. In typical desktop/laptop computer world, other larger types are likely lock-free.</p>
-<p>Luckily, we have a couple ways to determine if a particular type is a lock-free atomic or not.</p>
-<p>First of all, some macros—you can use these at compile time with <code>#if</code>. They apply to both signed and unsigned types.</p>
+<p>Donanım mimarileri atomik olarak okuyabilecekleri ve yazabilecekleri veri miktarıyla sınırlıdır. Nasıl kablolandığına bağlıdır. Ve değişiklik gösterir.</p>
+<p>Atomik bir tür kullanırsanız, o türe erişimlerin atomik olacağından emin olabilirsiniz… ancak bir püf noktası var: donanım bunu yapamıyorsa, bunun yerine bir kilit ile yapılır.</p>
+<p>Böylece atomik erişim kilit-erişim-kilit aç (lock-access-unlock) haline gelir ki bu oldukça yavaştır ve sinyal işleyicileri (signal handlers) için bazı sonuçları vardır.</p>
+<p>Aşağıdaki <a href="chapter-atomics.html#atomic-flags">Atomik bayraklar (Atomic flags)</a>, tüm uyumlu uygulamalarda kilitsiz (lock-free) olması garanti edilen tek atomik türdür. Tipik masaüstü/dizüstü bilgisayar dünyasında, diğer daha büyük türler de muhtemelen kilitsizdir.</p>
+<p>Neyse ki, belirli bir türün kilitsiz bir atomik olup olmadığını belirlemenin birkaç yolu var.</p>
+<p>İlk olarak, bazı makrolar—bunları <code>#if</code> ile derleme zamanında kullanabilirsiniz. Hem işaretli hem de işaretsiz türler için geçerlidirler.</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Atomic Type</th>
-<th>Lock Free Macro</th>
+<th>Atomik Tür</th>
+<th>Kilitsiz (Lock-Free) Makro</th>
 </tr>
 </thead>
 <tbody>
@@ -533,58 +533,58 @@ thread2()
 </tr>
 </tbody>
 </table>
-<p>These macros can interestingly have <em>three</em> different values:</p>
+<p>İlginç bir şekilde bu makrolar <em>üç</em> farklı değere sahip olabilir:</p>
 <table>
 <thead>
 <tr>
-<th>Value</th>
-<th>Meaning</th>
+<th>Değer</th>
+<th>Anlamı</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>0</code></td>
-<td>Never lock-free.</td>
+<td>Asla kilitsiz (lock-free) değil.</td>
 </tr>
 <tr>
 <td><code>1</code></td>
-<td><em>Sometimes</em> lock-free.</td>
+<td>Bazen kilitsiz (lock-free).</td>
 </tr>
 <tr>
 <td><code>2</code></td>
-<td>Always lock-free.</td>
+<td>Her zaman kilitsiz (lock-free).</td>
 </tr>
 </tbody>
 </table>
-<p>Wait—how can something be <em>sometimes</em> lock-free? This just means the answer isn’t known at compile-time, but could later be known at runtime. Maybe the answer varies depending on whether or not you’re running this code on Genuine Intel or AMD, or something like that<a href="function-specifiers-alignment-specifiersoperators.html#fn215" class="footnote-ref" id="fnref215" role="doc-noteref"><sup>215</sup></a>.</p>
-<p>But you can always test at runtime with the <code>atomic_is_lock_free()</code> function. This function returns true or false if the particular type is atomic right now.</p>
-<p>So why do we care?</p>
-<p>Lock-free is faster, so maybe there’s a speed concern that you’d code around another way. Or maybe you need to use an atomic variable in a signal handler.</p>
+<p>Bekleyin—bir şey nasıl <em>bazen</em> kilitsiz olabilir? Bu sadece cevabın derleme zamanında bilinmediği, ancak daha sonra çalışma zamanında bilinebileceği anlamına gelir. Belki de cevap, bu kodu Orijinal Intel mi yoksa AMD üzerinde mi çalıştırdığınıza bağlı olarak değişiyordur ya da buna benzer bir şeydir<a href="function-specifiers-alignment-specifiersoperators.html#fn215" class="footnote-ref" id="fnref215" role="doc-noteref"><sup>215</sup></a>.</p>
+<p>Ancak her zaman <code>atomic_is_lock_free()</code> fonksiyonu ile çalışma zamanında test edebilirsiniz. Bu fonksiyon, o an belirli türün atomik olup olmadığına göre true veya false döndürür.</p>
+<p>Peki neden önemseyelim?</p>
+<p>Kilitsiz (lock-free) daha hızlıdır, bu yüzden belki de başka bir şekilde kodlayacağınız bir hız endişesi vardır. Ya da belki bir sinyal işleyicide (signal handler) atomik bir değişken kullanmanız gerekiyordur.</p>
 <p></p>
-<h3 data-number="40.9.1" id="signal-handlers-and-lock-free-atomics"><span class="header-section-number">40.9.1</span> Signal Handlers and Lock-Free Atomics</h3>
+<h3 data-number="40.9.1" id="signal-handlers-and-lock-free-atomics"><span class="header-section-number">40.9.1</span> Sinyal İşleyiciler ve Kilitsiz Atomikler</h3>
 <p> </p>
-<p>If you read or write a shared variable (static storage duration or <code>_Thread_Local</code>) in a signal handler, it’s undefined behavior [gasp!]… Unless you do one of the following:</p>
+<p>Bir sinyal işleyicide (signal handler) paylaşılan bir değişkeni (statik depolama süresi veya <code>_Thread_Local</code>) okur veya yazarsanız, bu tanımsız davranıştır <em>(undefined behavior)</em> [dehşet!]… Aşağıdakilerden birini yapmadığınız sürece:</p>
 <ol type="1">
-<li><p>Write to a variable of type <code>volatile sig_atomic_t</code>.</p></li>
-<li><p>Read or write a lock-free atomic variable.</p></li>
+<li><p><code>volatile sig_atomic_t</code> türündeki bir değişkene yazmak.</p></li>
+<li><p>Kilitsiz bir atomik değişkeni okumak veya yazmak.</p></li>
 </ol>
-<p>As far as I can tell, lock-free atomic variables are one of the few ways you get portably get information out of a signal handler.</p>
-<p>The spec is a bit vague, in my read, about the memory order when it comes to acquiring or releasing atomic variables in the signal handler. C++ says, and it makes sense, that such accesses are unsequenced with respect to the rest of the program<a href="function-specifiers-alignment-specifiersoperators.html#fn216" class="footnote-ref" id="fnref216" role="doc-noteref"><sup>216</sup></a>. The signal can be raised, after all, at any time. So I’m assuming C’s behavior is similar.</p>
+<p>Görebildiğim kadarıyla, kilitsiz atomik değişkenler bir sinyal işleyiciden taşınabilir şekilde bilgi almanın birkaç yolundan biridir.</p>
+<p>Sinyal işleyicideki atomik değişkenlerin edinilmesi veya serbest bırakılması söz konusu olduğunda, benim okumama göre spesifikasyon bellek sıralaması hakkında biraz muğlaktır. C++, bu tür erişimlerin programın geri kalanına göre sırasız (unsequenced) olduğunu söyler ve bu mantıklıdır<a href="function-specifiers-alignment-specifiersoperators.html#fn216" class="footnote-ref" id="fnref216" role="doc-noteref"><sup>216</sup></a>. Sonuçta sinyal her an tetiklenebilir. Bu yüzden C'nin davranışının da benzer olduğunu varsayıyorum.</p>
 <p> </p>
-<h2 data-number="40.10" id="atomic-flags"><span class="header-section-number">40.10</span> Atomic Flags</h2>
+<h2 data-number="40.10" id="atomic-flags"><span class="header-section-number">40.10</span> Atomik Bayraklar (Atomic Flags)</h2>
 <p> </p>
-<p>There’s only one type the standard guarantees will be a lock-free atomic: <code>atomic_flag</code>. This is an opaque type for <a href="https://en.wikipedia.org/wiki/Test-and-set" target="_blank" rel="noopener noreferrer">test-and-set</a><a href="function-specifiers-alignment-specifiersoperators.html#fn217" class="footnote-ref" id="fnref217" role="doc-noteref"><sup>217</sup></a> operations.</p>
-<p>It can be either <em>set</em> or <em>clear</em>. You can initialize it to clear with:</p>
+<p>Standartın kilitsiz (lock-free) bir atomik olacağını garanti ettiği yalnızca tek bir tür vardır: <code>atomic_flag</code>. Bu, <a href="https://en.wikipedia.org/wiki/Test-and-set" target="_blank" rel="noopener noreferrer">test et ve ayarla (test-and-set)</a><a href="function-specifiers-alignment-specifiersoperators.html#fn217" class="footnote-ref" id="fnref217" role="doc-noteref"><sup>217</sup></a> işlemleri için opak (opaque) bir türdür.</p>
+<p><em>Set (ayarlanmış)</em> veya <em>clear (temizlenmiş)</em> olabilir. Şununla temizlenmiş olarak ilklendirebilirsiniz:</p>
 <p></p>
 <div class="sourceCode" id="cb785"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb785-1"><a href="chapter-atomics.html#cb785-1" aria-hidden="true" tabindex="-1"></a>atomic_flag f <span class="op">=</span> ATOMIC_FLAG_INIT<span class="op">;</span></span></code></pre></div>
 <p></p>
 <p></p>
-<p>You can set the flag atomically with <code>atomic_flag_test_and_set()</code>, which will set the flag and return its previous status as a <code>_Bool</code> (true for set).</p>
+<p>Bayrağı <code>atomic_flag_test_and_set()</code> ile atomik olarak ayarlayabilirsiniz; bu, bayrağı ayarlar ve önceki durumunu bir <code>_Bool</code> olarak döndürür (set ise true).</p>
 <p></p>
-<p>You can clear the flag atomically with <code>atomic_flag_clear()</code>.</p>
-<p>Here’s an example where we init the flag to clear, set it twice, then clear it again.</p>
+<p>Bayrağı <code>atomic_flag_clear()</code> ile atomik olarak temizleyebilirsiniz.</p>
+<p>İşte bayrağı temiz olarak ilklendirdiğimiz, iki kez ayarladığımız ve ardından tekrar temizlediğimiz bir örnek.</p>
 <div class="sourceCode" id="cb786"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb786-1"><a href="chapter-atomics.html#cb786-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb786-2"><a href="chapter-atomics.html#cb786-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span><span class="pp">   </span><span class="co">// Not needed in C23</span></span>
+<span id="cb786-2"><a href="chapter-atomics.html#cb786-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span><span class="pp">   </span><span class="co">// C23'te gerekli değil</span></span>
 <span id="cb786-3"><a href="chapter-atomics.html#cb786-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
 <span id="cb786-4"><a href="chapter-atomics.html#cb786-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb786-5"><a href="chapter-atomics.html#cb786-5" aria-hidden="true" tabindex="-1"></a>atomic_flag f <span class="op">=</span> ATOMIC_FLAG_INIT<span class="op">;</span></span>
@@ -602,10 +602,10 @@ thread2()
 <span id="cb786-17"><a href="chapter-atomics.html#cb786-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Value was: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span>           <span class="co">// 0</span></span>
 <span id="cb786-18"><a href="chapter-atomics.html#cb786-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<h2 data-number="40.11" id="atomic-structs-and-unions"><span class="header-section-number">40.11</span> Atomic <code>struct</code>s and <code>union</code>s</h2>
+<h2 data-number="40.11" id="atomic-structs-and-unions"><span class="header-section-number">40.11</span> Atomik <code>struct</code> ve <code>union</code> Yapıları</h2>
 <p></p>
-<p>Using the <code>_Atomic</code> qualifier or specifier, you can make atomic <code>struct</code>s or <code>union</code>s! Pretty astounding.</p>
-<p>If there’s not a lot of data in there (i.e. a handful of bytes), the resulting atomic type might be lock-free. Test it with <code>atomic_is_lock_free()</code>.</p>
+<p><code>_Atomic</code> niteleyicisini veya belirtecini kullanarak atomik <code>struct</code> veya <code>union</code> yapıları yapabilirsiniz! Oldukça şaşırtıcı.</p>
+<p>İçinde çok fazla veri yoksa (yani bir avuç bayt), ortaya çıkan atomik tür kilitsiz (lock-free) olabilir. <code>atomic_is_lock_free()</code> ile test edin.</p>
 <div class="sourceCode" id="cb787"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb787-1"><a href="chapter-atomics.html#cb787-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb787-2"><a href="chapter-atomics.html#cb787-2"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
 <span id="cb787-3"><a href="chapter-atomics.html#cb787-3"></a></span>
@@ -619,7 +619,7 @@ thread2()
 <span id="cb787-11"><a href="chapter-atomics.html#cb787-11"></a></span>
 <span id="cb787-12"><a href="chapter-atomics.html#cb787-12"></a>    printf<span class="op">(</span><span class="st">&quot;Is lock free: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> atomic_is_lock_free<span class="op">(&amp;</span>p<span class="op">));</span></span>
 <span id="cb787-13"><a href="chapter-atomics.html#cb787-13"></a><span class="op">}</span></span></code></pre></div>
-<p>Here’s the catch: you can’t access fields of an atomic <code>struct</code> or <code>union</code>… so what’s the point? Well, you can atomically <em>copy</em> the entire <code>struct</code> into a non-atomic variable and then use it. You can atomically copy the other way, too.</p>
+<p>İşte püf noktası: Atomik bir <code>struct</code> veya <code>union</code> yapısının alanlarına erişemezsiniz… öyleyse espri nedir? Pekala, tüm <code>struct</code> yapısını atomik olmayan bir değişkene atomik olarak <em>kopyalayabilir</em> ve ardından kullanabilirsiniz. Diğer yönde de atomik olarak kopyalayabilirsiniz.</p>
 <div class="sourceCode" id="cb788"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb788-1"><a href="chapter-atomics.html#cb788-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb788-2"><a href="chapter-atomics.html#cb788-2"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
 <span id="cb788-3"><a href="chapter-atomics.html#cb788-3"></a></span>
@@ -632,185 +632,185 @@ thread2()
 <span id="cb788-10"><a href="chapter-atomics.html#cb788-10"></a>    <span class="kw">_Atomic</span><span class="op">(</span><span class="kw">struct</span> point<span class="op">)</span> p<span class="op">;</span></span>
 <span id="cb788-11"><a href="chapter-atomics.html#cb788-11"></a>    <span class="kw">struct</span> point t<span class="op">;</span></span>
 <span id="cb788-12"><a href="chapter-atomics.html#cb788-12"></a></span>
-<span id="cb788-13"><a href="chapter-atomics.html#cb788-13"></a>    p <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> point<span class="op">){</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">};</span>  <span class="co">// Atomic copy</span></span>
+<span id="cb788-13"><a href="chapter-atomics.html#cb788-13"></a>    p <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> point<span class="op">){</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">};</span>  <span class="co">// Atomik kopyalama</span></span>
 <span id="cb788-14"><a href="chapter-atomics.html#cb788-14"></a></span>
-<span id="cb788-15"><a href="chapter-atomics.html#cb788-15"></a>    <span class="co">//printf(&quot;%f\n&quot;, p.x);  // Error</span></span>
+<span id="cb788-15"><a href="chapter-atomics.html#cb788-15"></a>    <span class="co">//printf(&quot;%f\n&quot;, p.x);  // Hata</span></span>
 <span id="cb788-16"><a href="chapter-atomics.html#cb788-16"></a></span>
-<span id="cb788-17"><a href="chapter-atomics.html#cb788-17"></a>    t <span class="op">=</span> p<span class="op">;</span>   <span class="co">// Atomic copy</span></span>
+<span id="cb788-17"><a href="chapter-atomics.html#cb788-17"></a>    t <span class="op">=</span> p<span class="op">;</span>   <span class="co">// Atomik kopyalama</span></span>
 <span id="cb788-18"><a href="chapter-atomics.html#cb788-18"></a></span>
-<span id="cb788-19"><a href="chapter-atomics.html#cb788-19"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">.</span>x<span class="op">);</span>  <span class="co">// OK!</span></span>
+<span id="cb788-19"><a href="chapter-atomics.html#cb788-19"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">.</span>x<span class="op">);</span>  <span class="co">// Tamam!</span></span>
 <span id="cb788-20"><a href="chapter-atomics.html#cb788-20"></a><span class="op">}</span></span></code></pre></div>
-<p>You can also declare a <code>struct</code> where individual fields are atomic. It is implementation defined if atomic types are allowed on bitfields.</p>
+<p>Bireysel alanların atomik olduğu bir <code>struct</code> da tanımlayabilirsiniz. Bit alanlarında (bitfields) atomik türlere izin verilip verilmediği uygulamaya bağlı davranıştır <em>(implementation defined)</em>.</p>
 <p></p>
-<h2 data-number="40.12" id="atomic-pointers"><span class="header-section-number">40.12</span> Atomic Pointers</h2>
+<h2 data-number="40.12" id="atomic-pointers"><span class="header-section-number">40.12</span> Atomik Pointer'lar</h2>
 <p></p>
-<p>Just a note here about placement of <code>_Atomic</code> when it comes to pointers.</p>
-<p>First, pointers to atomics (i.e. the pointer value is not atomic, but the thing it points to is):</p>
+<p>Pointer'lar söz konusu olduğunda <code>_Atomic</code> yerleşimi hakkında küçük bir not.</p>
+<p>İlk olarak, atomiklere işaret eden pointer'lar (yani pointer değerinin kendisi atomik değildir, ancak gösterdiği şey atomiktir):</p>
 <div class="sourceCode" id="cb789"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb789-1"><a href="chapter-atomics.html#cb789-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> x<span class="op">;</span></span>
-<span id="cb789-2"><a href="chapter-atomics.html#cb789-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// p is a pointer to an atomic int</span></span>
+<span id="cb789-2"><a href="chapter-atomics.html#cb789-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// p atomik bir int'e işaret eden pointer'dır</span></span>
 <span id="cb789-3"><a href="chapter-atomics.html#cb789-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb789-4"><a href="chapter-atomics.html#cb789-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
-<p>Second, atomic pointers to non-atomic values (i.e. the pointer value itself is atomic, but the thing it points to is not):</p>
+<span id="cb789-4"><a href="chapter-atomics.html#cb789-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// Tamam!</span></span></code></pre></div>
+<p>İkinci olarak, atomik olmayan değerlere işaret eden atomik pointer'lar (yani pointer değerinin kendisi atomiktir, ancak gösterdiği şey değildir):</p>
 <div class="sourceCode" id="cb790"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb790-1"><a href="chapter-atomics.html#cb790-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">;</span></span>
-<span id="cb790-2"><a href="chapter-atomics.html#cb790-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p is an atomic pointer to an int</span></span>
+<span id="cb790-2"><a href="chapter-atomics.html#cb790-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p bir int'e işaret eden atomik pointer'dır</span></span>
 <span id="cb790-3"><a href="chapter-atomics.html#cb790-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb790-4"><a href="chapter-atomics.html#cb790-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
-<p>Lastly, atomic pointers to atomic values (i.e. the pointer and the thing it points to are both atomic):</p>
+<span id="cb790-4"><a href="chapter-atomics.html#cb790-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// Tamam!</span></span></code></pre></div>
+<p>Son olarak, atomik değerlere işaret eden atomik pointer'lar (yani hem pointer hem de gösterdiği şey atomiktir):</p>
 <div class="sourceCode" id="cb791"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb791-1"><a href="chapter-atomics.html#cb791-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> x<span class="op">;</span></span>
-<span id="cb791-2"><a href="chapter-atomics.html#cb791-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p is an atomic pointer to an atomic int</span></span>
+<span id="cb791-2"><a href="chapter-atomics.html#cb791-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p atomik bir int'e işaret eden atomik pointer'dır</span></span>
 <span id="cb791-3"><a href="chapter-atomics.html#cb791-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb791-4"><a href="chapter-atomics.html#cb791-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
+<span id="cb791-4"><a href="chapter-atomics.html#cb791-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// Tamam!</span></span></code></pre></div>
 <p></p>
-<h2 data-number="40.13" id="memory-order"><span class="header-section-number">40.13</span> Memory Order</h2>
+<h2 data-number="40.13" id="memory-order"><span class="header-section-number">40.13</span> Bellek Sıralaması (Memory Order)</h2>
 <p> </p>
-<p>We’ve already talked about sequential consistency, which is the sensible one of the bunch. But there are a number of other ones:</p>
+<p>Gruptaki en makul olan sıralı tutarlılıktan (sequential consistency) zaten bahsettik. Ancak başka bellek sıralamaları da mevcuttur:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
 <th><code>memory_order</code></th>
-<th>Description</th>
+<th>Açıklama</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>memory_order_seq_cst</code></td>
-<td>Sequential Consistency</td>
+<td>Sıralı Tutarlılık (Sequential Consistency)</td>
 </tr>
 <tr>
 <td><code>memory_order_acq_rel</code></td>
-<td>Acquire/Release</td>
+<td>Edinme/Serbest Bırakma (Acquire/Release)</td>
 </tr>
 <tr>
 <td><code>memory_order_release</code></td>
-<td>Release</td>
+<td>Serbest Bırakma (Release)</td>
 </tr>
 <tr>
 <td><code>memory_order_acquire</code></td>
-<td>Acquire</td>
+<td>Edinme (Acquire)</td>
 </tr>
 <tr>
 <td><code>memory_order_consume</code></td>
-<td>Consume</td>
+<td>Tüketme (Consume)</td>
 </tr>
 <tr>
 <td><code>memory_order_relaxed</code></td>
-<td>Relaxed</td>
+<td>Gevşetilmiş (Relaxed)</td>
 </tr>
 </tbody>
 </table>
-<p>You can specify other ones with certain library functions. For example, you can add a value to an atomic variable like this:</p>
+<p>Belirli kütüphane fonksiyonlarıyla diğerlerini belirtebilirsiniz. Örneğin, bir atomik değişkene şu şekilde bir değer ekleyebilirsiniz:</p>
 <div class="sourceCode" id="cb792"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb792-1"><a href="chapter-atomics.html#cb792-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb792-2"><a href="chapter-atomics.html#cb792-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb792-3"><a href="chapter-atomics.html#cb792-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span>  <span class="co">// Sequential consistency, the default</span></span></code></pre></div>
-<p>Or you can do the same with this library function:</p>
+<span id="cb792-3"><a href="chapter-atomics.html#cb792-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span>  <span class="co">// Sıralı tutarlılık, varsayılan</span></span></code></pre></div>
+<p>Veya aynı şeyi bu kütüphane fonksiyonu ile yapabilirsiniz:</p>
 <p></p>
 <div class="sourceCode" id="cb793"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb793-1"><a href="chapter-atomics.html#cb793-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb793-2"><a href="chapter-atomics.html#cb793-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb793-3"><a href="chapter-atomics.html#cb793-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span>  <span class="co">// Sequential consistency, the default</span></span></code></pre></div>
+<span id="cb793-3"><a href="chapter-atomics.html#cb793-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span>  <span class="co">// Sıralı tutarlılık, varsayılan</span></span></code></pre></div>
 <p></p>
-<p>Or you can do the same thing with an explicit memory ordering:</p>
+<p>Veya açık bir bellek sıralamasıyla aynı şeyi yapabilirsiniz:</p>
 <p></p>
 <div class="sourceCode" id="cb794"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb794-1"><a href="chapter-atomics.html#cb794-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb794-2"><a href="chapter-atomics.html#cb794-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb794-3"><a href="chapter-atomics.html#cb794-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add_explicit<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> memory_order_seq_cst<span class="op">);</span></span></code></pre></div>
-<p>But what if we didn’t want sequential consistency? And you wanted acquire/release instead for whatever reason? Just name it:</p>
+<p>Peki ya sıralı tutarlılık istemiyorsanız? Ve herhangi bir nedenle yerine acquire/release istiyorsanız? Sadece adını belirtin:</p>
 <div class="sourceCode" id="cb795"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb795-1"><a href="chapter-atomics.html#cb795-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb795-2"><a href="chapter-atomics.html#cb795-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb795-3"><a href="chapter-atomics.html#cb795-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add_explicit<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> memory_order_acq_rel<span class="op">);</span></span></code></pre></div>
 <p></p>
-<p>We’ll do a breakdown of the different memory orders, below. Don’t mess with anything other than sequential consistency unless you know what you’re doing. It’s really easy to make mistakes that will cause rare, hard-to-repro failures.</p>
-<h3 data-number="40.13.1" id="sequential-consistency-1"><span class="header-section-number">40.13.1</span> Sequential Consistency</h3>
+<p>Aşağıda farklı bellek sıralamalarının bir dökümünü yapacağız. Ne yaptığınızı bilmediğiniz sürece sıralı tutarlılık haricinde bir şeyle oynamayın. Nadir görülen, yeniden üretilmesi zor arızalara neden olacak hatalar yapmak çok kolaydır.</p>
+<h3 data-number="40.13.1" id="sequential-consistency-1"><span class="header-section-number">40.13.1</span> Sıralı Tutarlılık (Sequential Consistency)</h3>
 <p> </p>
 <ul>
-<li>Load operations acquire (see below).</li>
-<li>Store operations release (see below).</li>
-<li>Read-modify-write operations acquire then release.</li>
+<li>Yükleme (load) işlemleri acquire eder (aşağıya bakın).</li>
+<li>Kaydetme (store) işlemleri release eder (aşağıya bakın).</li>
+<li>Oku-değiştir-yaz (read-modify-write) işlemleri önce acquire sonra release eder.</li>
 </ul>
-<p>Also, in order to maintain the total order of acquires and releases, no acquires or releases will be reordered with respect to each other. (The acquire/release rules do not forbid reordering a release followed by an acquire. But the sequentially consistent rules do.)</p>
+<p>Ayrıca, acquire ve release işlemlerinin toplam sırasını korumak için, hiçbir acquire veya release işlemi birbiriyle ilgili olarak yeniden sıralanamaz. (Acquire/release kuralları, ardından bir acquire gelen bir release işleminin yeniden sıralanmasını yasaklamaz. Ancak sıralı tutarlılık kuralları yasaklar.)</p>
 <p> </p>
-<h3 data-number="40.13.2" id="acquire"><span class="header-section-number">40.13.2</span> Acquire</h3>
+<h3 data-number="40.13.2" id="acquire"><span class="header-section-number">40.13.2</span> Acquire (Edinme)</h3>
 <p> </p>
-<p>This is what happens on a load/read operation on an atomic variable.</p>
+<p>Bir atomik değişken üzerindeki load/read (yükleme/okuma) işleminde gerçekleşen şey budur.</p>
 <ul>
-<li><p>If another thread released this atomic variable, all the writes that thread did are now visible in this thread.</p></li>
-<li><p>Memory accesses in this thread that happen after this load can’t be reordered before it.</p></li>
+<li><p>Başka bir thread bu atomik değişkeni serbest bıraktıysa (release), o thread'in yaptığı tüm yazımlar artık bu thread'de görünürdür.</p></li>
+<li><p>Bu thread'de bu yüklemeden sonra gerçekleşen bellek erişimleri onun öncesine çekilerek yeniden sıralanamaz.</p></li>
 </ul>
 <p> </p>
-<h3 data-number="40.13.3" id="release"><span class="header-section-number">40.13.3</span> Release</h3>
+<h3 data-number="40.13.3" id="release"><span class="header-section-number">40.13.3</span> Release (Serbest Bırakma)</h3>
 <p> </p>
-<p>This is what happens on a store/write of an atomic variable.</p>
+<p>Bir atomik değişkenin store/write (kaydetme/yazma) işleminde gerçekleşen şey budur.</p>
 <ul>
-<li><p>If another thread later acquires this atomic variable, all memory writes in this thread before its atomic write become visible to that other thread.</p></li>
-<li><p>Memory accesses in this thread that happen before the release can’t be reordered after it.</p></li>
+<li><p>Başka bir thread daha sonra bu atomik değişkeni edinirse (acquire), bu thread'deki atomik yazmadan önceki tüm bellek yazımları o diğer thread için görünür hale gelir.</p></li>
+<li><p>Bu thread'de bu release işleminden önce gerçekleşen bellek erişimleri onun sonrasına çekilerek yeniden sıralanamaz.</p></li>
 </ul>
 <p> </p>
-<h3 data-number="40.13.4" id="consume"><span class="header-section-number">40.13.4</span> Consume</h3>
+<h3 data-number="40.13.4" id="consume"><span class="header-section-number">40.13.4</span> Consume (Tüketme)</h3>
 <p> </p>
-<p>This is an odd one, similar to a less-strict version of acquire. It affects memory accesses that are <em>data dependent</em> on the atomic variable.</p>
-<p>Being “data dependent” vaguely means that the atomic variable is used in a calculation.</p>
-<p>That is, if a thread consumes an atomic variable then all the operations in that thread that go on to use that atomic variable will be able to see the memory writes in the releasing thread.</p>
-<p>Compare to acquire where memory writes in the releasing thread will be visible to <em>all</em> operations in the current thread, not just the data-dependent ones.</p>
-<p>Also like acquire, there is a restriction on which operations can be reordered <em>before</em> the consume. With acquire, you couldn’t reorder anything before it. With consume, you can’t reorder anything that depends on the loaded atomic value before it.</p>
+<p>Bu garip bir kuraldır, acquire'ın daha az katı bir versiyonuna benzer. Atomik değişkene <em>veri bağımlı (data dependent)</em> olan bellek erişimlerini etkiler.</p>
+<p>"Veri bağımlı" olmak, belirsiz bir şekilde atomik değişkenin bir hesaplamada kullanıldığı anlamına gelir.</p>
+<p>Yani bir thread bir atomik değişkeni tüketirse (consume), o thread'deki o atomik değişkeni kullanmaya devam eden tüm işlemler, serbest bırakan (releasing) thread'deki bellek yazımlarını görebilecektir.</p>
+<p>Serbest bırakan thread'deki bellek yazımlarının yalnızca veri bağımlı olanlara değil, geçerli thread'deki <em>tüm</em> işlemlere görünür olacağı acquire ile karşılaştırın.</p>
+<p>Yine acquire gibi, consume işleminden <em>önce</em> hangi işlemlerin yeniden sıralanabileceği konusunda bir kısıtlama vardır. Acquire ile öncesine hiçbir şeyi yeniden sıralayamazdınız. Consume ile, yüklenen atomik değere bağlı olan hiçbir şeyi öncesine yeniden sıralayamazsınız.</p>
 <p> </p>
-<h3 data-number="40.13.5" id="acquirerelease"><span class="header-section-number">40.13.5</span> Acquire/Release</h3>
+<h3 data-number="40.13.5" id="acquirerelease"><span class="header-section-number">40.13.5</span> Acquire/Release (Edinme/Serbest Bırakma)</h3>
 <p> </p>
-<p>This only applies to read-modify-write operations. It’s an acquire and release bundled into one.</p>
+<p>Bu yalnızca oku-değiştir-yaz (read-modify-write) işlemleri için geçerlidir. Birleştirilmiş bir acquire ve release işlemidir.</p>
 <ul>
-<li>An acquire happens for the read.</li>
-<li>A release happens for the write.</li>
+<li>Okuma için bir acquire gerçekleşir.</li>
+<li>Yazma için bir release gerçekleşir.</li>
 </ul>
 <p> </p>
-<h3 data-number="40.13.6" id="relaxed"><span class="header-section-number">40.13.6</span> Relaxed</h3>
+<h3 data-number="40.13.6" id="relaxed"><span class="header-section-number">40.13.6</span> Relaxed (Gevşetilmiş)</h3>
 <p> </p>
-<p>No rules; it’s anarchy! Everyone can reorder everything everywhere! Dogs and cats living together—mass hysteria!</p>
-<p>Actually, there is a rule. Atomic reads and writes are still all-or-nothing. But the operations can be reordered whimsically and there is zero synchronization between threads.</p>
-<p>There are a few use cases for this memory order, which you can find with a tiny bit of searching, e.g. simple counters.</p>
-<p>And you can use a fence to force synchronization after a bunch of relaxed writes.</p>
+<p>Kural yok; tam bir anarşi! Herkes her şeyi her yerde yeniden sıralayabilir! Kedi ve köpekler bir arada yaşıyor—toplu histeri!</p>
+<p>Aslında bir kural var. Atomik okumalar ve yazmalar hala ya hep ya hiçtir (all-or-nothing). Ancak işlemler keyfi olarak yeniden sıralanabilir ve thread'ler arasında sıfır senkronizasyon vardır.</p>
+<p>Küçük bir aramayla bulabileceğiniz bu bellek sıralaması için birkaç kullanım durumu vardır, örneğin basit sayaçlar.</p>
+<p>Ve bir dizi relaxed yazımından sonra senkronizasyonu zorlamak için bir çit (fence) kullanabilirsiniz.</p>
 <p> </p>
-<h2 data-number="40.14" id="fences"><span class="header-section-number">40.14</span> Fences</h2>
+<h2 data-number="40.14" id="fences"><span class="header-section-number">40.14</span> Çitler (Fences)</h2>
 <p></p>
-<p>You know how the releases and acquires of atomic variables occur as you read and write them?</p>
-<p>Well, it’s possible to do a release or acquire <em>without</em> an atomic variable, as well.</p>
-<p>This is called a <em>fence</em>. So if you want all the writes in a thread to be visible elsewhere, you can put up a release fence in one thread and an acquire fence in another, just like with how atomic variables work.</p>
-<p>Since a consume operation doesn’t really make sense on a fence<a href="function-specifiers-alignment-specifiersoperators.html#fn218" class="footnote-ref" id="fnref218" role="doc-noteref"><sup>218</sup></a>, <code>memory_order_consume</code> is treated as an acquire.</p>
-<p>You can put up a fence with any specified order:</p>
+<p>Atomik değişkenlerin serbest bırakılmaları (release) ve edinilmelerinin (acquire) onları okuduğunuzda ve yazdığınızda nasıl gerçekleştiğini biliyorsunuz, değil mi?</p>
+<p>Pekala, bir atomik değişken <em>olmadan</em> da bir release veya acquire yapmak mümkündür.</p>
+<p>Buna <em>çit (fence)</em> denir. Bu nedenle bir thread'deki tüm yazımların başka bir yerde görünür olmasını istiyorsanız, tıpkı atomik değişkenlerin çalışma şeklinde olduğu gibi bir thread'de bir release fence ve diğerinde bir acquire fence kurabilirsiniz.</p>
+<p>Bir çit (fence) üzerinde consume işleminin pek bir anlamı olmadığından<a href="function-specifiers-alignment-specifiersoperators.html#fn218" class="footnote-ref" id="fnref218" role="doc-noteref"><sup>218</sup></a>, <code>memory_order_consume</code> bir acquire olarak değerlendirilir.</p>
+<p>Belirtilen herhangi bir sıralama ile bir çit (fence) kurabilirsiniz:</p>
 <p></p>
 <div class="sourceCode" id="cb796"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb796-1"><a href="chapter-atomics.html#cb796-1" aria-hidden="true" tabindex="-1"></a>atomic_thread_fence<span class="op">(</span>memory_order_release<span class="op">);</span></span></code></pre></div>
 <p> </p>
-<p>There’s also a light version of a fence for use with signal handlers, called <code>atomic_signal_fence()</code>.</p>
-<p>It works just the same way as <code>atomic_thread_fence()</code>, except:</p>
+<p>Sinyal işleyicilerle kullanım için <code>atomic_signal_fence()</code> adında bir çitin hafif versiyonu da vardır.</p>
+<p>Aşağıdakiler haricinde tıpkı <code>atomic_thread_fence()</code> gibi çalışır:</p>
 <ul>
-<li><p>It only deals with visibility of values within the same thread; there is no synchronization with other threads.</p></li>
-<li><p>No hardware fence instructions are emitted.</p></li>
+<li><p>Yalnızca aynı thread içindeki değerlerin görünürlüğü ile ilgilenir; diğer thread'lerle senkronizasyon yoktur.</p></li>
+<li><p>Hiçbir donanım çit (fence) komutu üretilmez.</p></li>
 </ul>
-<p>If you want to be sure the side effects of non-atomic operations (and relaxed atomic operations) are visible in the signal handler, you can use this fence.</p>
-<p>The idea is that the signal handler is executing in <em>this</em> thread, not another, so this is a lighter-weight way of making sure changes outside the signal handler are visible within it (i.e. they haven’t been reordered).</p>
+<p>Atomik olmayan işlemlerin (ve gevşetilmiş atomik işlemlerin) yan etkilerinin sinyal işleyicide görünür olduğundan emin olmak istiyorsanız bu çiti kullanabilirsiniz.</p>
+<p>Fikir şudur ki, sinyal işleyici başka bir thread'de değil <em>bu</em> thread'de yürütülmektedir, dolayısıyla bu, sinyal işleyici dışındaki değişikliklerin onun içinde görünür olduğundan (yani yeniden sıralanmadıklarından) emin olmanın daha hafif siklet bir yoludur.</p>
 <p> </p>
-<h2 data-number="40.15" id="references"><span class="header-section-number">40.15</span> References</h2>
-<p>If you want to learn more about this stuff, here are some of the things that helped me plow through it:</p>
+<h2 data-number="40.15" id="references"><span class="header-section-number">40.15</span> Kaynakça</h2>
+<p>Bu konular hakkında daha fazla bilgi edinmek istiyorsanız, bu süreçte bana yardımcı olan bazı şeyler şunlardır:</p>
 <ul>
-<li><p>Herb Sutter’s <em><code>atomic&lt;&gt;</code> Weapons</em> talk:</p>
+<li><p>Herb Sutter'ın <code>atomic&lt;&gt;</code> Weapons konuşması:</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=A8eCGOqgvH4" target="_blank" rel="noopener noreferrer">Part 1</a><a href="function-specifiers-alignment-specifiersoperators.html#fn219" class="footnote-ref" id="fnref219" role="doc-noteref"><sup>219</sup></a></li>
 <li><a href="https://www.youtube.com/watch?v=KeLBd2EJLOU" target="_blank" rel="noopener noreferrer">part 2</a><a href="function-specifiers-alignment-specifiersoperators.html#fn220" class="footnote-ref" id="fnref220" role="doc-noteref"><sup>220</sup></a></li>
 </ul></li>
-<li><p><a href="https://preshing.com/archives/" target="_blank" rel="noopener noreferrer">Jeff Preshing’s materials</a><a href="function-specifiers-alignment-specifiersoperators.html#fn221" class="footnote-ref" id="fnref221" role="doc-noteref"><sup>221</sup></a>, in particular:</p>
+<li><p><a href="https://preshing.com/archives/" target="_blank" rel="noopener noreferrer">Jeff Preshing'in materyalleri</a><a href="function-specifiers-alignment-specifiersoperators.html#fn221" class="footnote-ref" id="fnref221" role="doc-noteref"><sup>221</sup></a>, özellikle:</p>
 <ul>
-<li><a href="https://preshing.com/20120612/an-introduction-to-lock-free-programming/" target="_blank" rel="noopener noreferrer">An Introduction to Lock-Free Programming</a><a href="function-specifiers-alignment-specifiersoperators.html#fn222" class="footnote-ref" id="fnref222" role="doc-noteref"><sup>222</sup></a></li>
-<li><a href="https://preshing.com/20120913/acquire-and-release-semantics/" target="_blank" rel="noopener noreferrer">Acquire and Release Semantics</a><a href="function-specifiers-alignment-specifiersoperators.html#fn223" class="footnote-ref" id="fnref223" role="doc-noteref"><sup>223</sup></a></li>
+<li><a href="https://preshing.com/20120612/an-introduction-to-lock-free-programming/" target="_blank" rel="noopener noreferrer">Kilitsiz (Lock-Free) Programlamaya Giriş</a><a href="function-specifiers-alignment-specifiersoperators.html#fn222" class="footnote-ref" id="fnref222" role="doc-noteref"><sup>222</sup></a></li>
+<li><a href="https://preshing.com/20120913/acquire-and-release-semantics/" target="_blank" rel="noopener noreferrer">Edinme ve Serbest Bırakma (Acquire and Release) Semantikleri</a><a href="function-specifiers-alignment-specifiersoperators.html#fn223" class="footnote-ref" id="fnref223" role="doc-noteref"><sup>223</sup></a></li>
 <li><a href="https://preshing.com/20130702/the-happens-before-relation/" target="_blank" rel="noopener noreferrer">The <em>Happens-Before</em> Relation</a><a href="function-specifiers-alignment-specifiersoperators.html#fn224" class="footnote-ref" id="fnref224" role="doc-noteref"><sup>224</sup></a></li>
 <li><a href="https://preshing.com/20130823/the-synchronizes-with-relation/" target="_blank" rel="noopener noreferrer">The <em>Synchronizes-With</em> Relation</a><a href="function-specifiers-alignment-specifiersoperators.html#fn225" class="footnote-ref" id="fnref225" role="doc-noteref"><sup>225</sup></a></li>
-<li><a href="https://preshing.com/20140709/the-purpose-of-memory_order_consume-in-cpp11/" target="_blank" rel="noopener noreferrer">The Purpose of <code>memory_order_consume</code> in C++11</a><a href="function-specifiers-alignment-specifiersoperators.html#fn226" class="footnote-ref" id="fnref226" role="doc-noteref"><sup>226</sup></a></li>
-<li><a href="https://preshing.com/20150402/you-can-do-any-kind-of-atomic-read-modify-write-operation/" target="_blank" rel="noopener noreferrer">You Can Do Any Kind of Atomic Read-Modify-Write Operation</a><a href="function-specifiers-alignment-specifiersoperators.html#fn227" class="footnote-ref" id="fnref227" role="doc-noteref"><sup>227</sup></a></li>
+<li><a href="https://preshing.com/20140709/the-purpose-of-memory_order_consume-in-cpp11/" target="_blank" rel="noopener noreferrer">C++11'de <code>memory_order_consume</code> Kullanım Amacı</a><a href="function-specifiers-alignment-specifiersoperators.html#fn226" class="footnote-ref" id="fnref226" role="doc-noteref"><sup>226</sup></a></li>
+<li><a href="https://preshing.com/20150402/you-can-do-any-kind-of-atomic-read-modify-write-operation/" target="_blank" rel="noopener noreferrer">Her Türlü Atomik Oku-Değiştir-Yaz İşlemini Yapabilirsiniz</a><a href="function-specifiers-alignment-specifiersoperators.html#fn227" class="footnote-ref" id="fnref227" role="doc-noteref"><sup>227</sup></a></li>
 </ul></li>
 <li><p>CPPReference:</p>
 <ul>
-<li><a href="https://en.cppreference.com/w/c/atomic/memory_order" target="_blank" rel="noopener noreferrer">Memory Order</a><a href="function-specifiers-alignment-specifiersoperators.html#fn228" class="footnote-ref" id="fnref228" role="doc-noteref"><sup>228</sup></a></li>
-<li><a href="https://en.cppreference.com/w/c/language/atomic" target="_blank" rel="noopener noreferrer">Atomic Types</a><a href="function-specifiers-alignment-specifiersoperators.html#fn229" class="footnote-ref" id="fnref229" role="doc-noteref"><sup>229</sup></a></li>
+<li><a href="https://en.cppreference.com/w/c/atomic/memory_order" target="_blank" rel="noopener noreferrer">Bellek Sıralaması (Memory Order)</a><a href="function-specifiers-alignment-specifiersoperators.html#fn228" class="footnote-ref" id="fnref228" role="doc-noteref"><sup>228</sup></a></li>
+<li><a href="https://en.cppreference.com/w/c/language/atomic" target="_blank" rel="noopener noreferrer">Atomik Türler</a><a href="function-specifiers-alignment-specifiersoperators.html#fn229" class="footnote-ref" id="fnref229" role="doc-noteref"><sup>229</sup></a></li>
 </ul></li>
-<li><p>Bruce Dawson’s <a href="https://docs.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming" target="_blank" rel="noopener noreferrer">Lockless Programming Considerations</a><a href="function-specifiers-alignment-specifiersoperators.html#fn230" class="footnote-ref" id="fnref230" role="doc-noteref"><sup>230</sup></a></p></li>
-<li><p>The helpful and knowledgeable folks on <a href="https://www.reddit.com/r/C_Programming/" target="_blank" rel="noopener noreferrer">r/C_Programming</a><a href="function-specifiers-alignment-specifiersoperators.html#fn231" class="footnote-ref" id="fnref231" role="doc-noteref"><sup>231</sup></a></p></li>
+<li><p>Bruce Dawson'ın <a href="https://docs.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming" target="_blank" rel="noopener noreferrer">Kilitsiz Programlama Hususları</a><a href="function-specifiers-alignment-specifiersoperators.html#fn230" class="footnote-ref" id="fnref230" role="doc-noteref"><sup>230</sup></a></p></li>
+<li><p><a href="https://www.reddit.com/r/C_Programming/" target="_blank" rel="noopener noreferrer">r/C_Programming</a> topluluğundaki yardımsever ve bilgili insanlar<a href="function-specifiers-alignment-specifiersoperators.html#fn231" class="footnote-ref" id="fnref231" role="doc-noteref"><sup>231</sup></a></p></li>
 </ul>
 <p></p>
 <!-- BG_NEW_CHAPTER -->

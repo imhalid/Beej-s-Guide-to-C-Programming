@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
     (function() {
@@ -32,32 +32,32 @@
 </head>
 <body>
 <div class="nav-header"><a href="complex-numbers.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="date-and-time-functionality.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="37" id="fixed-width-integer-types"><span class="header-section-number">37</span> Fixed Width Integer Types</h1>
+<h1 data-number="37" id="fixed-width-integer-types"><span class="header-section-number">37</span> Sabit Genişlikli Tamsayı Türleri</h1>
 <p></p>
-<p>C has all those small, bigger, and biggest integer types like <code>int</code> and <code>long</code> and all that. And you can look in <a href="types-ii-way-more-types.html#limits-macros">the section on limits</a> to see what the largest int is with <code>INT_MAX</code> and so on.</p>
-<p>How big are those types? That is, how many bytes do they take up? We could use <code>sizeof</code> to get that answer.</p>
-<p>But what if I wanted to go the other way? What if I needed a type that was exactly 32 bits (4 bytes) or at least 16 bits or somesuch?</p>
-<p>How can we declare a type that’s a certain size?</p>
-<p>The header <code>&lt;stdint.h&gt;</code> gives us a way.</p>
-<h2 data-number="37.1" id="the-bit-sized-types"><span class="header-section-number">37.1</span> The Bit-Sized Types</h2>
-<p>For both signed and unsigned integers, we can specify a type that is a certain number of bits, with some caveats, of course.</p>
-<p>And there are three main classes of these types (in these examples, the <code>N</code> would be replaced by a certain number of bits):</p>
+<p>C, <code>int</code> ve <code>long</code> gibi küçük, daha büyük ve en büyük tamsayı türlerinin tümüne sahiptir. Ve <code>INT_MAX</code> ile en büyük int'in ne olduğunu görmek için <a href="types-ii-way-more-types.html#limits-macros">sınırlar bölümüne</a> bakabilirsiniz.</p>
+<p>Bu türler ne kadar büyüktür? Yani kaç bayt kaplarlar? Bu cevabı almak için <code>sizeof</code> kullanabiliriz.</p>
+<p>Peki ya diğer yoldan gitmek isteseydim? Ya tam olarak 32 bit (4 bayt) veya en az 16 bitlik ya da buna benzer bir türe ihtiyacım olsaydı?</p>
+<p>Belli bir boyutta olan bir türü nasıl bildirebiliriz?</p>
+<p><code>&lt;stdint.h&gt;</code> başlık dosyası bize bir yol sunar.</p>
+<h2 data-number="37.1" id="the-bit-sized-types"><span class="header-section-number">37.1</span> Bit Boyutlu Türler</h2>
+<p>Hem işaretli (signed) hem de işaretsiz (unsigned) tamsayılar için, elbette bazı uyarılara rağmen belirli sayıda bitten oluşan bir tür belirtebiliriz.</p>
+<p>Ve bu türlerin üç ana sınıfı vardır (bu örneklerde <code>N</code> yerine belirli bir bit sayısı gelecektir):</p>
 <ul>
-<li>Integers of exactly a certain size (<code>intN_t</code>)</li>
-<li>Integers that are at least a certain size (<code>int_leastN_t</code>)</li>
-<li>Integers that are at least a certain size and are as fast as possible (<code>int_fastN_t</code>)<a href="function-specifiers-alignment-specifiersoperators.html#fn189" class="footnote-ref" id="fnref189" role="doc-noteref"><sup>189</sup></a></li>
+<li>Tam olarak belirli bir boyuttaki tamsayılar (<code>intN_t</code>)</li>
+<li>En az belirli bir boyuttaki tamsayılar (<code>int_leastN_t</code>)</li>
+<li>En az belirli bir boyutta olan ve mümkün olduğunca hızlı olan tamsayılar (<code>int_fastN_t</code>)<a href="function-specifiers-alignment-specifiersoperators.html#fn189" class="footnote-ref" id="fnref189" role="doc-noteref"><sup>189</sup></a></li>
 </ul>
-<p>How much faster is <code>fast</code>? Definitely maybe some amount faster. Probably. The spec doesn’t say how much faster, just that they’ll be the fastest on this architecture. Most C compilers are pretty good, though, so you’ll probably only see this used in places where the most possible speed needs to be guaranteed (rather than just hoping the compiler is producing pretty-dang-fast code, which it is).</p>
-<p>Finally, these unsigned number types have a leading <code>u</code> to differentiate them.</p>
-<p>For example, these types have the corresponding listed meaning:</p>
+<p><code>fast</code> ne kadar daha hızlıdır? Kesinlikle belki bir miktar daha hızlıdır. Muhtemelen. Spesifikasyon ne kadar hızlı olduğunu söylemez, sadece bu mimaride en hızlısı olacağını söyler. Çoğu C derleyicisi oldukça iyidir, bu nedenle bunu muhtemelen yalnızca mümkün olan en yüksek hızın garanti edilmesi gereken yerlerde görürsünüz (derleyicinin oldukça hızlı bir kod ürettiğini ummak yerine, ki zaten öyle yapar).</p>
+<p>Son olarak, bu işaretsiz sayı türleri, onları ayırt etmek için başında bir <code>u</code> harfine sahiptir.</p>
+<p>Örneğin, bu türler listelenen karşılık gelen anlamlara sahiptir:</p>
 <p> </p>
-<div class="sourceCode" id="cb717"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb717-1"><a href="fixed-width-integer-types.html#cb717-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int32_t</span> w<span class="op">;</span>        <span class="co">// w is exactly 32 bits, signed</span></span>
-<span id="cb717-2"><a href="fixed-width-integer-types.html#cb717-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> x<span class="op">;</span>       <span class="co">// x is exactly 16 bits, unsigned</span></span>
+<div class="sourceCode" id="cb717"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb717-1"><a href="fixed-width-integer-types.html#cb717-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int32_t</span> w<span class="op">;</span>        <span class="co">// w tam olarak 32 bittir, işaretli</span></span>
+<span id="cb717-2"><a href="fixed-width-integer-types.html#cb717-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> x<span class="op">;</span>       <span class="co">// x tam olarak 16 bittir, işaretsiz</span></span>
 <span id="cb717-3"><a href="fixed-width-integer-types.html#cb717-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb717-4"><a href="fixed-width-integer-types.html#cb717-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least8_t</span> y<span class="op">;</span>   <span class="co">// y is at least 8 bits, signed</span></span>
+<span id="cb717-4"><a href="fixed-width-integer-types.html#cb717-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least8_t</span> y<span class="op">;</span>   <span class="co">// y en az 8 bittir, işaretli</span></span>
 <span id="cb717-5"><a href="fixed-width-integer-types.html#cb717-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb717-6"><a href="fixed-width-integer-types.html#cb717-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint_fast64_t</span> z<span class="op">;</span>  <span class="co">// z is the fastest representation at least 64 bits, unsigned</span></span></code></pre></div>
-<p>The following types are guaranteed to be defined:</p>
+<span id="cb717-6"><a href="fixed-width-integer-types.html#cb717-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint_fast64_t</span> z<span class="op">;</span>  <span class="co">// z en az 64 bitlik en hızlı temsil şeklidir, işaretsiz</span></span></code></pre></div>
+<p>Aşağıdaki türlerin tanımlanmış olması garanti edilir:</p>
 <div class="sourceCode" id="cb718"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb718-1"><a href="fixed-width-integer-types.html#cb718-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least8_t</span>      <span class="dt">uint_least8_t</span></span>
 <span id="cb718-2"><a href="fixed-width-integer-types.html#cb718-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least16_t</span>     <span class="dt">uint_least16_t</span></span>
 <span id="cb718-3"><a href="fixed-width-integer-types.html#cb718-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least32_t</span>     <span class="dt">uint_least32_t</span></span>
@@ -67,24 +67,24 @@
 <span id="cb718-7"><a href="fixed-width-integer-types.html#cb718-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int_fast16_t</span>      <span class="dt">uint_fast16_t</span></span>
 <span id="cb718-8"><a href="fixed-width-integer-types.html#cb718-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int_fast32_t</span>      <span class="dt">uint_fast32_t</span></span>
 <span id="cb718-9"><a href="fixed-width-integer-types.html#cb718-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int_fast64_t</span>      <span class="dt">uint_fast64_t</span></span></code></pre></div>
-<p>There might be others of different widths, as well, but those are optional.</p>
-<p>Hey! Where are the fixed types like <code>int16_t</code>? Turns out those are entirely optional…unless certain conditions are met<a href="function-specifiers-alignment-specifiersoperators.html#fn190" class="footnote-ref" id="fnref190" role="doc-noteref"><sup>190</sup></a>. And if you have an average run-of-the-mill modern computer system, those conditions probably are met. And if they are, you’ll have these types:</p>
+<p>Farklı genişliklerde başkaları da olabilir, ancak bunlar isteğe bağlıdır.</p>
+<p>Hey! <code>int16_t</code> gibi sabit türler nerede? Görünüşe göre bunlar tamamen isteğe bağlıdır… belirli koşullar karşılanmadığı sürece<a href="function-specifiers-alignment-specifiersoperators.html#fn190" class="footnote-ref" id="fnref190" role="doc-noteref"><sup>190</sup></a>. Ve sıradan modern bir bilgisayar sistemine sahipseniz, bu koşullar muhtemelen karşılanıyordur. Ve eğer karşılanıyorsa, şu türlere sahip olursunuz:</p>
 <div class="sourceCode" id="cb719"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb719-1"><a href="fixed-width-integer-types.html#cb719-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int8_t</span>      <span class="dt">uint8_t</span></span>
 <span id="cb719-2"><a href="fixed-width-integer-types.html#cb719-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int16_t</span>     <span class="dt">uint16_t</span></span>
 <span id="cb719-3"><a href="fixed-width-integer-types.html#cb719-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int32_t</span>     <span class="dt">uint32_t</span></span>
 <span id="cb719-4"><a href="fixed-width-integer-types.html#cb719-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int64_t</span>     <span class="dt">uint64_t</span></span></code></pre></div>
-<p>Other variants with different widths might be defined, but they’re optional.</p>
+<p>Farklı genişliklere sahip diğer varyantlar tanımlanabilir, ancak bunlar isteğe bağlıdır.</p>
 <p> </p>
-<h2 data-number="37.2" id="maximum-integer-size-type"><span class="header-section-number">37.2</span> Maximum Integer Size Type</h2>
-<p>There’s a type you can use that holds the largest representable integers available on the system, both signed and unsigned:</p>
+<h2 data-number="37.2" id="maximum-integer-size-type"><span class="header-section-number">37.2</span> Maksimum Tamsayı Boyutu Türü</h2>
+<p>Sistemde temsil edilebilen hem işaretli hem de işaretsiz en büyük tamsayıları tutan kullanabileceğiniz bir tür vardır:</p>
 <p> </p>
 <div class="sourceCode" id="cb720"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb720-1"><a href="fixed-width-integer-types.html#cb720-1" aria-hidden="true" tabindex="-1"></a><span class="dt">intmax_t</span></span>
 <span id="cb720-2"><a href="fixed-width-integer-types.html#cb720-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uintmax_t</span></span></code></pre></div>
 <p> </p>
-<p>Use these types when you want to go as big as possible.</p>
-<p>Obviously values from any other integer types of the same sign will fit in this type, necessarily.</p>
-<h2 data-number="37.3" id="using-fixed-size-constants"><span class="header-section-number">37.3</span> Using Fixed Size Constants</h2>
-<p>If you have a constant that you want to have fit in a certain number of bits, you can use these macros to automatically append the proper suffix onto the number (e.g. <code>22L</code> or <code>3490ULL</code>).</p>
+<p>Mümkün olduğunca büyük değerlerle çalışmak istediğinizde bu türleri kullanın.</p>
+<p>Aynı işarete sahip diğer tamsayı türlerinden gelen değerler, zorunlu olarak bu türe sığacaktır.</p>
+<h2 data-number="37.3" id="using-fixed-size-constants"><span class="header-section-number">37.3</span> Sabit Boyutlu Sabitlerin Kullanımı</h2>
+<p>Belirli sayıda bite sığmasını istediğiniz bir sabitiniz varsa, sayıya otomatik olarak uygun soneki (örn. <code>22L</code> veya <code>3490ULL</code>) eklemek için bu makroları kullanabilirsiniz.</p>
 <p> </p>
 <div class="sourceCode" id="cb721"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb721-1"><a href="fixed-width-integer-types.html#cb721-1" aria-hidden="true" tabindex="-1"></a>INT8_C<span class="op">(</span>x<span class="op">)</span>     UINT8_C<span class="op">(</span>x<span class="op">)</span></span>
 <span id="cb721-2"><a href="fixed-width-integer-types.html#cb721-2" aria-hidden="true" tabindex="-1"></a>INT16_C<span class="op">(</span>x<span class="op">)</span>    UINT16_C<span class="op">(</span>x<span class="op">)</span></span>
@@ -92,13 +92,13 @@
 <span id="cb721-4"><a href="fixed-width-integer-types.html#cb721-4" aria-hidden="true" tabindex="-1"></a>INT64_C<span class="op">(</span>x<span class="op">)</span>    UINT64_C<span class="op">(</span>x<span class="op">)</span></span>
 <span id="cb721-5"><a href="fixed-width-integer-types.html#cb721-5" aria-hidden="true" tabindex="-1"></a>INTMAX_C<span class="op">(</span>x<span class="op">)</span>   UINTMAX_C<span class="op">(</span>x<span class="op">)</span></span></code></pre></div>
 <p> </p>
-<p>Again, these work only with constant integer values.</p>
-<p>For example, we can use one of these to assign constant values like so:</p>
+<p>Yine, bunlar yalnızca sabit tamsayı değerleriyle çalışır.</p>
+<p>Örneğin, sabit değerleri şu şekilde atamak için bunlardan birini kullanabiliriz:</p>
 <div class="sourceCode" id="cb722"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb722-1"><a href="fixed-width-integer-types.html#cb722-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> x <span class="op">=</span> UINT16_C<span class="op">(</span><span class="dv">12</span><span class="op">);</span></span>
 <span id="cb722-2"><a href="fixed-width-integer-types.html#cb722-2" aria-hidden="true" tabindex="-1"></a><span class="dt">intmax_t</span> y <span class="op">=</span> INTMAX_C<span class="op">(</span><span class="dv">3490</span><span class="op">);</span></span></code></pre></div>
 <p> </p>
-<h2 data-number="37.4" id="limits-of-fixed-size-integers"><span class="header-section-number">37.4</span> Limits of Fixed Size Integers</h2>
-<p>We also have some limits defined so you can get the maximum and minimum values for these types:</p>
+<h2 data-number="37.4" id="limits-of-fixed-size-integers"><span class="header-section-number">37.4</span> Sabit Boyutlu Tamsayıların Sınırları</h2>
+<p>Bu türler için maksimum ve minimum değerleri alabilmeniz için tanımlanmış bazı sınırlarımız da vardır:</p>
 <p> </p>
 <div class="sourceCode" id="cb723"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb723-1"><a href="fixed-width-integer-types.html#cb723-1" aria-hidden="true" tabindex="-1"></a>INT8_MAX           INT8_MIN           UINT8_MAX</span>
 <span id="cb723-2"><a href="fixed-width-integer-types.html#cb723-2" aria-hidden="true" tabindex="-1"></a>INT16_MAX          INT16_MIN          UINT16_MAX</span>
@@ -117,28 +117,28 @@
 <span id="cb723-15"><a href="fixed-width-integer-types.html#cb723-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb723-16"><a href="fixed-width-integer-types.html#cb723-16" aria-hidden="true" tabindex="-1"></a>INTMAX_MAX         INTMAX_MIN         UINTMAX_MAX</span></code></pre></div>
 <p> </p>
-<p>Note the <code>MIN</code> for all the unsigned types is <code>0</code>, so, as such, there’s no macro for it.</p>
+<p>Tüm işaretsiz türler için <code>MIN</code> değerinin <code>0</code> olduğuna dikkat edin, bu nedenle bunun için bir makro yoktur.</p>
 <p> </p>
-<h2 data-number="37.5" id="format-specifiers"><span class="header-section-number">37.5</span> Format Specifiers</h2>
-<p>In order to print these types, you need to send the right format specifier to <code>printf()</code>. (And the same issue for getting input with <code>scanf()</code>.)</p>
-<p>But how are you going to know what size the types are under the hood? Luckily, once again, C provides some macros to help with this.</p>
-<p>All this can be found in <code>&lt;inttypes.h&gt;</code>.</p>
-<p>Now, we have a bunch of macros. Like a complexity explosion of macros. So I’m going to stop listing out every one and just put the lowercase letter <code>n</code> in the place where you should put <code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code> depending on your needs.</p>
-<p>Let’s look at the macros for printing signed integers:</p>
+<h2 data-number="37.5" id="format-specifiers"><span class="header-section-number">37.5</span> Format Belirteçleri</h2>
+<p>Bu türleri yazdırmak için <code>printf()</code> fonksiyonuna doğru format belirtecini göndermeniz gerekir. (Ve <code>scanf()</code> ile girdi alırken de aynı durum geçerlidir.)</p>
+<p>Peki türlerin kaputun altında hangi boyutta olduğunu nasıl bileceksiniz? Şanslısınız ki, C bu konuda yardımcı olacak bazı makrolar sunuyor.</p>
+<p>Tüm bunlar <code>&lt;inttypes.h&gt;</code> içinde bulunabilir.</p>
+<p>Şimdi bir sürü makromuz var. Adeta bir makro karmaşıklık patlaması. Bu yüzden her birini tek tek listelemeyi bırakıp, ihtiyaçlarınıza göre <code>8</code>, <code>16</code>, <code>32</code> veya <code>64</code> koymanız gereken yere küçük <code>n</code> harfini koyacağım.</p>
+<p>İşaretli tamsayıları yazdırmak için makrolara bakalım:</p>
 <p> </p>
 <div class="sourceCode" id="cb724"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb724-1"><a href="fixed-width-integer-types.html#cb724-1" aria-hidden="true" tabindex="-1"></a>PRIdn    PRIdLEASTn    PRIdFASTn    PRIdMAX</span>
 <span id="cb724-2"><a href="fixed-width-integer-types.html#cb724-2" aria-hidden="true" tabindex="-1"></a>PRIin    PRIiLEASTn    PRIiFASTn    PRIiMAX</span></code></pre></div>
-<p>Look for the patterns there. You can see there are variants for the fixed, least, fast, and max types.</p>
-<p>And you also have a lowercase <code>d</code> and a lowercase <code>i</code>. Those correspond to the <code>printf()</code> format specifiers <code>%d</code> and <code>%i</code>.</p>
-<p>So if I have something of type:</p>
+<p>Oradaki kalıplara bakın. Sabit (fixed), en az (least), hızlı (fast) ve maksimum (max) türleri için varyantlar olduğunu görebilirsiniz.</p>
+<p>Ayrıca küçük bir <code>d</code> ve küçük bir <code>i</code> harfine sahipsiniz. Bunlar <code>printf()</code> format belirteçleri olan <code>%d</code> ve <code>%i</code> ile uyuşur.</p>
+<p>Öyleyse şu türde bir şeye sahipsem:</p>
 <div class="sourceCode" id="cb725"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb725-1"><a href="fixed-width-integer-types.html#cb725-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int_least16_t</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span></code></pre></div>
-<p>I can print that with the equivalent format specifier for <code>%d</code> by using <code>PRIdLEAST16</code>.</p>
-<p>But how? How do we use that macro?</p>
-<p>First of all, that macro specifies a string containing the letter or letters <code>printf()</code> needs to use to print that type. Like, for example, it could be <code>"d"</code> or <code>"ld"</code>.</p>
-<p>So all we need to do is embed that in our format string to the <code>printf()</code> call.</p>
-<p>To do this, we can take advantage of a fact about C that you might have forgotten: adjacent string literals are automatically concatenated to a single string. E.g.:</p>
-<div class="sourceCode" id="cb726"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb726-1"><a href="fixed-width-integer-types.html#cb726-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Hello, &quot;</span> <span class="st">&quot;world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">// Prints &quot;Hello, world!&quot;</span></span></code></pre></div>
-<p>And since these macros are string literals, we can use them like so:</p>
+<p>Bunu <code>PRIdLEAST16</code> kullanarak <code>%d</code> eşdeğeri format belirteci ile yazdırabilirim.</p>
+<p>Ama nasıl? Bu makroyu nasıl kullanırız?</p>
+<p>Öncelikle, bu makro <code>printf()</code> fonksiyonunun o türü yazdırmak için kullanması gereken harf veya harfleri içeren bir metin dizisi (string) belirtir. Örneğin, <code>"d"</code> veya <code>"ld"</code> olabilir.</p>
+<p>Tek yapmamız gereken bunu <code>printf()</code> çağrısındaki format dizimizin içine yerleştirmektir.</p>
+<p>Bunu yapmak için, C hakkında unutmuş olabileceğiniz bir gerçekten yararlanabiliriz: bitişik metin değişmezleri (string literals) otomatik olarak tek bir string olarak birleştirilir. Örneğin:</p>
+<div class="sourceCode" id="cb726"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb726-1"><a href="fixed-width-integer-types.html#cb726-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Hello, &quot;</span> <span class="st">&quot;world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">// &quot;Hello, world!&quot; yazdırır</span></span></code></pre></div>
+<p>Ve bu makrolar metin değişmezleri olduğu için onları şu şekilde kullanabiliriz:</p>
 <div class="sourceCode" id="cb727"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb727-1"><a href="fixed-width-integer-types.html#cb727-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb727-2"><a href="fixed-width-integer-types.html#cb727-2"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
 <span id="cb727-3"><a href="fixed-width-integer-types.html#cb727-3"></a><span class="pp">#include </span><span class="im">&lt;inttypes.h&gt;</span></span>
@@ -150,16 +150,16 @@
 <span id="cb727-9"><a href="fixed-width-integer-types.html#cb727-9"></a>    printf<span class="op">(</span><span class="st">&quot;The value is %&quot;</span> PRIdLEAST16 <span class="st">&quot;!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
 <span id="cb727-10"><a href="fixed-width-integer-types.html#cb727-10"></a><span class="op">}</span></span></code></pre></div>
 <p> </p>
-<p>We also have a pile of macros for printing unsigned types:</p>
+<p>İşaretsiz türleri yazdırmak için de bir sürü makromuz var:</p>
 <p> </p>
 <div class="sourceCode" id="cb728"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb728-1"><a href="fixed-width-integer-types.html#cb728-1" aria-hidden="true" tabindex="-1"></a>PRIon    PRIoLEASTn    PRIoFASTn    PRIoMAX</span>
 <span id="cb728-2"><a href="fixed-width-integer-types.html#cb728-2" aria-hidden="true" tabindex="-1"></a>PRIun    PRIuLEASTn    PRIuFASTn    PRIuMAX</span>
 <span id="cb728-3"><a href="fixed-width-integer-types.html#cb728-3" aria-hidden="true" tabindex="-1"></a>PRIxn    PRIxLEASTn    PRIxFASTn    PRIxMAX</span>
 <span id="cb728-4"><a href="fixed-width-integer-types.html#cb728-4" aria-hidden="true" tabindex="-1"></a>PRIXn    PRIXLEASTn    PRIXFASTn    PRIXMAX</span></code></pre></div>
-<p>In this case, <code>o</code>, <code>u</code>, <code>x</code>, and <code>X</code> correspond to the documented format specifiers in <code>printf()</code>.</p>
-<p>And, as before, the lowercase <code>n</code> should be substituted with <code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.</p>
+<p>Bu durumda <code>o</code>, <code>u</code>, <code>x</code> ve <code>X</code>, <code>printf()</code> içinde belgelenen format belirteçlerine karşılık gelir.</p>
+<p>Ve, daha önce olduğu gibi, küçük <code>n</code> harfi yerine <code>8</code>, <code>16</code>, <code>32</code> veya <code>64</code> gelmelidir.</p>
 <p> </p>
-<p>But just when you think you had enough of the macros, it turns out we have a complete complementary set of them for <code>scanf()</code>!</p>
+<p>Ama tam makrolardan bıktığınızı düşündüğünüz anda, <code>scanf()</code> için de bunların eksiksiz bir tamamlayıcı seti olduğu ortaya çıkıyor!</p>
 <p> </p>
 <div class="sourceCode" id="cb729"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb729-1"><a href="fixed-width-integer-types.html#cb729-1" aria-hidden="true" tabindex="-1"></a>SCNdn    SCNdLEASTn    SCNdFASTn    SCNdMAX</span>
 <span id="cb729-2"><a href="fixed-width-integer-types.html#cb729-2" aria-hidden="true" tabindex="-1"></a>SCNin    SCNiLEASTn    SCNiFASTn    SCNiMAX</span>
@@ -167,7 +167,7 @@
 <span id="cb729-4"><a href="fixed-width-integer-types.html#cb729-4" aria-hidden="true" tabindex="-1"></a>SCNun    SCNuLEASTn    SCNuFASTn    SCNuMAX</span>
 <span id="cb729-5"><a href="fixed-width-integer-types.html#cb729-5" aria-hidden="true" tabindex="-1"></a>SCNxn    SCNxLEASTn    SCNxFASTn    SCNxMAX</span></code></pre></div>
 <p> </p>
-<p>Remember: when you want to print out a fixed size integer type with <code>printf()</code> or <code>scanf()</code>, grab the correct corresponding format specifer from <code>&lt;inttypes.h&gt;</code>.</p>
+<p>Unutmayın: Sabit boyutlu bir tamsayı türünü <code>printf()</code> veya <code>scanf()</code> ile yazdırmak veya okumak istediğinizde, <code>&lt;inttypes.h&gt;</code> dosyasından karşılık gelen doğru format belirtecini alın.</p>
 <p></p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

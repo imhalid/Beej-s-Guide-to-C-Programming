@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,26 +32,26 @@
 </head>
 <body>
 <div class="nav-header"><span class="nav-btn disabled" style="visibility:hidden;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></span><span class="nav-btn disabled" style="visibility:hidden;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></div><hr>
-<h1 data-number="41" id="function-specifiers-alignment-specifiersoperators"><span class="header-section-number">41</span> Function Specifiers, Alignment Specifiers/Operators</h1>
-<p>These don’t see a heck of a lot of use in my experience, but we’ll cover them here for the sake of completeness.</p>
-<h2 data-number="41.1" id="function-specifiers"><span class="header-section-number">41.1</span> Function Specifiers</h2>
+<h1 data-number="41" id="function-specifiers-alignment-specifiersoperators"><span class="header-section-number">41</span> Fonksiyon Belirteçleri, Hizalama Belirteçleri/Operatörleri</h1>
+<p>Deneyimlerime göre bunlar pek fazla kullanılmaz, ancak eksiksizlik olsun diye burada ele alacağız.</p>
+<h2 data-number="41.1" id="function-specifiers"><span class="header-section-number">41.1</span> Fonksiyon Belirteçleri</h2>
 <p></p>
-<p>When you declare a function, you can give the compiler a couple tips about how the functions could or will be used. This enables or encourages the compiler to make certain optimizations.</p>
-<h3 data-number="41.1.1" id="inline-for-speedmaybe"><span class="header-section-number">41.1.1</span> <code>inline</code> for Speed—Maybe</h3>
+<p>Bir fonksiyon tanımladığınızda, derleyiciye fonksiyonların nasıl kullanılabileceği veya kullanılacağı hakkında birkaç ipucu verebilirsiniz. Bu, derleyicinin belirli optimizasyonlar yapmasını sağlar veya teşvik eder.</p>
+<h3 data-number="41.1.1" id="inline-for-speedmaybe"><span class="header-section-number">41.1.1</span> Hız İçin <code>inline</code>—Belki</h3>
 <p></p>
-<p>You can declare a function to be inline like this:</p>
+<p>Bir fonksiyonu şu şekilde inline (satır içi) olarak tanımlayabilirsiniz:</p>
 <div class="sourceCode" id="cb797"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb797-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb797-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">inline</span> <span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb797-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb797-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
 <span id="cb797-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb797-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This is meant to encourage the compiler to make this function call as fast as possible. And, historically, one way to do this was <em>inlining</em>, which means that the body of the function would be embedded in its entirety where the call was made. This would avoid all the overhead of setting up the function call and tearing it down at the expense of larger code size as the function was copied all over the place instead of being reused.</p>
-<p>The quick-and-dirty things to remember are:</p>
+<p>Bu, derleyiciyi bu fonksiyon çağrısını mümkün olduğunca hızlı yapmaya teşvik etmeyi amaçlar. Ve tarihsel olarak bunu yapmanın bir yolu <em>inlining</em> (satır içine alma) idi; yani fonksiyonun gövdesi, çağrının yapıldığı yere tamamen gömülürdü. Bu, fonksiyonun tekrar kullanılmak yerine her yere kopyalanması nedeniyle kod boyutunun büyümesi pahasına, fonksiyon çağrısını kurma ve kaldırma ek yükünün tamamını önlerdi.</p>
+<p>Hatırlanması gereken pratik ve kestirme noktalar şunlardır:</p>
 <ol type="1">
-<li><p>You probably don’t need to use <code>inline</code> for speed. Modern compilers know what’s best.</p></li>
-<li><p>If you do use it for speed, use it with file scope, i.e. <code>static    inline</code>. This avoids the messy rules of external linkage and inline functions.</p></li>
+<li><p>Hız için <code>inline</code> kullanmanıza muhtemelen gerek yoktur. Modern derleyiciler neyin en iyisi olduğunu bilir.</p></li>
+<li><p>Hız için kullanıyorsanız, dosya kapsamında (file scope) kullanın, yani <code>static inline</code>. Bu, harici bağlama (external linkage) ve inline fonksiyonların karmaşık kurallarını önler.</p></li>
 </ol>
-<p>Stop reading this section now.</p>
-<p>Glutton for punishment, eh?</p>
-<p>Let’s try leaving the <code>static</code> off.</p>
+<p>Bu bölümü okumayı şimdi bırakın.</p>
+<p>Eziyete meraklısınız, değil mi?</p>
+<p><code>static</code> ifadesini çıkarmayı deneyelim.</p>
 <div class="sourceCode" id="cb798"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb798-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb798-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-2"></a></span>
 <span id="cb798-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-3"></a><span class="kw">inline</span> <span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
@@ -63,67 +63,67 @@
 <span id="cb798-9"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-9"></a><span class="op">{</span></span>
 <span id="cb798-10"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
 <span id="cb798-11"><a href="function-specifiers-alignment-specifiersoperators.html#cb798-11"></a><span class="op">}</span></span></code></pre></div>
-<p><code>gcc</code> gives a linker error on <code>add()</code><a href="function-specifiers-alignment-specifiersoperators.html#fn232" class="footnote-ref" id="fnref232" role="doc-noteref"><sup>232</sup></a>. The spec requires that if you have a non-<code>extern</code> inline function you must also provide a version with external linkage.</p>
-<p>So you’d have to have an <code>extern</code> version somewhere else for this to work. If the compiler has both an <code>inline</code> function in the current file and an external version of the same function elsewhere, it gets to choose which one to call. So I highly recommend they be the same.</p>
-<p>Another thing you can do is to declare the function as <code>extern inline</code>. This will attempt to inline in the same file (for speed), but will also create a version with external linkage.</p>
+<p><code>gcc</code>, <code>add()</code> üzerinde bir bağlayıcı (linker) hatası verir<a href="function-specifiers-alignment-specifiersoperators.html#fn232" class="footnote-ref" id="fnref232" role="doc-noteref"><sup>232</sup></a>. Spesifikasyon, <code>extern</code> olmayan bir inline fonksiyonunuz varsa, harici bağlama (external linkage) sahip bir sürüm de sağlamanızı gerektirir.</p>
+<p>Bu yüzden bunun çalışması için başka bir yerde bir <code>extern</code> sürümüne sahip olmanız gerekir. Derleyici hem geçerli dosyada bir <code>inline</code> fonksiyona hem de başka bir yerde aynı fonksiyonun harici bir sürümüne sahipse, hangisini çağıracağını kendisi seçer. Bu yüzden bunların aynı olmasını şiddetle tavsiye ederim.</p>
+<p>Yapabileceğiniz başka bir şey de fonksiyonu <code>extern inline</code> olarak tanımlamaktır. Bu, aynı dosyada satır içine almaya çalışır (hız için), ancak harici bağlama sahip bir sürüm de oluşturur.</p>
 <p></p>
-<h3 data-number="41.1.2" id="noreturn"><span class="header-section-number">41.1.2</span> <code>noreturn</code> and <code>_Noreturn</code></h3>
+<h3 data-number="41.1.2" id="noreturn"><span class="header-section-number">41.1.2</span> <code>noreturn</code> ve <code>_Noreturn</code></h3>
 <p> </p>
-<p>This indicates to the compiler that a particular function will not ever return to its caller, i.e. the program will exit by some mechanism before the function returns.</p>
-<p>It allows the compiler to perhaps perform some optimizations around the function call.</p>
-<p>It also allows you to indicate to other devs that some program logic depends on a function <em>not</em> returning.</p>
-<p>You’ll likely never need to use this, but you’ll see it on some library calls like <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-exit" target="_blank" rel="noopener noreferrer"><code>exit()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn233" class="footnote-ref" id="fnref233" role="doc-noteref"><sup>233</sup></a> and <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-abort" target="_blank" rel="noopener noreferrer"><code>abort()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn234" class="footnote-ref" id="fnref234" role="doc-noteref"><sup>234</sup></a>.</p>
-<p>The built-in keyword is <code>_Noreturn</code>, but if it doesn’t break your existing code, everyone would recommend including <code>&lt;stdnoreturn.h&gt;</code> and using the easier-to-read <code>noreturn</code> instead.</p>
-<p>It’s undefined behavior if a function specified as <code>noreturn</code> actually does return. It’s computationally dishonest, see.</p>
-<p>Here’s an example of using <code>noreturn</code> correctly:</p>
+<p>Bu, derleyiciye belirli bir fonksiyonun kendisini çağıran fonksiyona asla geri dönmeyeceğini, yani fonksiyon dönmeden önce programın bir mekanizmayla çıkış yapacağını belirtir.</p>
+<p>Derleyicinin fonksiyon çağrısı etrafında belki bazı optimizasyonlar yapmasına izin verir.</p>
+<p>Ayrıca diğer geliştiricilere, bazı program mantıklarının bir fonksiyonun geri <em>dönmemesine</em> bağlı olduğunu belirtmenizi sağlar.</p>
+<p>Bunu kullanmaya muhtemelen hiç ihtiyaç duymayacaksınız, ancak <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-exit" target="_blank" rel="noopener noreferrer"><code>exit()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn233" class="footnote-ref" id="fnref233" role="doc-noteref"><sup>233</sup></a> ve <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-abort" target="_blank" rel="noopener noreferrer"><code>abort()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn234" class="footnote-ref" id="fnref234" role="doc-noteref"><sup>234</sup></a> gibi bazı kütüphane çağrılarında göreceksiniz.</p>
+<p>Yerleşik anahtar kelime <code>_Noreturn</code>'dür, ancak mevcut kodunuzu bozmuyorsa herkes <code>&lt;stdnoreturn.h&gt;</code> başlık dosyasını dahil edip yerine daha kolay okunan <code>noreturn</code> kullanmanızı önerir.</p>
+<p><code>noreturn</code> olarak belirtilen bir fonksiyonun aslında geri dönmesi tanımsız davranıştır <em>(undefined behavior)</em>. Görüyorsunuz ya, hesaplamalı olarak dürüstçe bir hareket değildir.</p>
+<p>İşte <code>noreturn</code>'ün doğru kullanımına bir örnek:</p>
 <div class="sourceCode" id="cb799"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb799-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb799-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
 <span id="cb799-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-3"></a><span class="pp">#include </span><span class="im">&lt;stdnoreturn.h&gt;</span></span>
 <span id="cb799-4"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-4"></a></span>
-<span id="cb799-5"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-5"></a>noreturn <span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="co">// This function should never return!</span></span>
+<span id="cb799-5"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-5"></a>noreturn <span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="co">// Bu fonksiyon asla geri dönmemelidir!</span></span>
 <span id="cb799-6"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-6"></a><span class="op">{</span></span>
 <span id="cb799-7"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-7"></a>    printf<span class="op">(</span><span class="st">&quot;Happy days</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb799-8"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-8"></a></span>
-<span id="cb799-9"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-9"></a>    exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span>            <span class="co">// And it doesn&#39;t return--it exits here!</span></span>
+<span id="cb799-9"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-9"></a>    exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span>            <span class="co">// Ve geri dönmez--burada çıkar!</span></span>
 <span id="cb799-10"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-10"></a><span class="op">}</span></span>
 <span id="cb799-11"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-11"></a></span>
 <span id="cb799-12"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb799-13"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-13"></a><span class="op">{</span></span>
 <span id="cb799-14"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-14"></a>    foo<span class="op">();</span></span>
 <span id="cb799-15"><a href="function-specifiers-alignment-specifiersoperators.html#cb799-15"></a><span class="op">}</span></span></code></pre></div>
-<p>If the compiler detects that a <code>noreturn</code> function could return, it might warn you, helpfully.</p>
-<p>Replacing the <code>foo()</code> function with this:</p>
+<p>Derleyici, bir <code>noreturn</code> fonksiyonunun geri dönebileceğini tespit ederse, faydalı bir şekilde sizi uyarabilir.</p>
+<p><code>foo()</code> fonksiyonunu şununla değiştirmek:</p>
 <div class="sourceCode" id="cb800"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb800-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb800-1" aria-hidden="true" tabindex="-1"></a>noreturn <span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb800-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb800-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb800-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb800-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Breakin&#39; the law</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb800-4"><a href="function-specifiers-alignment-specifiersoperators.html#cb800-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>gets me a warning:</p>
+<p>bana bir uyarı verir:</p>
 <div class="sourceCode" id="cb801"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb801-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb801-1" aria-hidden="true" tabindex="-1"></a>foo.c:7:1: warning: function declared &#39;noreturn&#39; should not return</span></code></pre></div>
 <p> </p>
-<h2 data-number="41.2" id="alignment-specifiers-and-operators"><span class="header-section-number">41.2</span> Alignment Specifiers and Operators</h2>
+<h2 data-number="41.2" id="alignment-specifiers-and-operators"><span class="header-section-number">41.2</span> Hizalama Belirteçleri ve Operatörleri</h2>
 <p></p>
-<p><a href="https://en.wikipedia.org/wiki/Data_structure_alignment" target="_blank" rel="noopener noreferrer"><em>Alignment</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn235" class="footnote-ref" id="fnref235" role="doc-noteref"><sup>235</sup></a> is all about multiples of addresses on which objects can be stored. Can you store this at any address? Or must it be a starting address that’s divisible by 2? Or 8? Or 16?</p>
-<p>If you’re coding up something low-level like a memory allocator that interfaces with your OS, you might need to consider this. Most devs go their careers without using this functionality in C.</p>
-<h3 data-number="41.2.1" id="alignas-and-_alignas"><span class="header-section-number">41.2.1</span> <code>alignas</code> and <code>_Alignas</code></h3>
+<p><a href="https://en.wikipedia.org/wiki/Data_structure_alignment" target="_blank" rel="noopener noreferrer"><em>Hizalama (Alignment)</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn235" class="footnote-ref" id="fnref235" role="doc-noteref"><sup>235</sup></a> tamamen nesnelerin saklanabileceği adres katları hakkındadır. Bunu herhangi bir adreste saklayabilir misiniz? Yoksa 2'ye bölünebilen bir başlangıç adresi mi olmalı? Ya da 8'e? Veya 16'ya?</p>
+<p>İşletim sisteminizle arayüz oluşturan bir bellek tahsis edici (memory allocator) gibi alt seviye bir şey kodluyorsanız, bunu dikkate almanız gerekebilir. Çoğu geliştirici kariyerlerini C'de bu işlevi hiç kullanmadan tamamlar.</p>
+<h3 data-number="41.2.1" id="alignas-and-_alignas"><span class="header-section-number">41.2.1</span> <code>alignas</code> ve <code>_Alignas</code></h3>
 <p> </p>
-<p>This isn’t a function. Rather, it’s an <em>alignment specifier</em> that you can use with a variable declaration.</p>
-<p>The built-in specifier is <code>_Alignas</code>, but the header <code>&lt;stdalign.h&gt;</code> defines it as <code>alignas</code> for something better looking.</p>
-<p>If you need your <code>char</code> to be aligned like an <code>int</code>, you can force it like this when you declare it:</p>
+<p>Bu bir fonksiyon değildir. Aksine, bir değişken tanımıyla birlikte kullanabileceğiniz bir <em>hizalama belirtecidir</em>.</p>
+<p>Yerleşik belirteç <code>_Alignas</code>'tır, ancak <code>&lt;stdalign.h&gt;</code> başlık dosyası daha hoş görünmesi için bunu <code>alignas</code> olarak tanımlar.</p>
+<p>Bir <code>char</code> değişkeninizin bir <code>int</code> gibi hizalanmasına ihtiyacınız varsa, tanımlarken bunu şu şekilde zorlayabilirsiniz:</p>
 <div class="sourceCode" id="cb802"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb802-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> c<span class="op">;</span></span></code></pre></div>
-<p>You can also pass a constant value or expression in for the alignment. This has to be something supported by the system, but the spec stops short of dictating what values you can put in there. Small powers of 2 (1, 2, 4, 8, and 16) are generally safe bets.</p>
-<div class="sourceCode" id="cb803"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb803-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb803-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dv">8</span><span class="op">)</span> c<span class="op">;</span>   <span class="co">// align on 8-byte boundaries</span></span></code></pre></div>
-<p>If you want to align at the maximum used alignment by your system, include <code>&lt;stddef.h&gt;</code> and use the type <code>max_align_t</code>, like so:</p>
+<p>Hizalama için sabit bir değer veya ifade de geçirebilirsiniz. Bu, sistem tarafından desteklenen bir şey olmalıdır, ancak spesifikasyon oraya hangi değerleri koyabileceğinizi dikte etmekten kaçınır. 2'nin küçük kuvvetleri (1, 2, 4, 8 ve 16) genellikle güvenli tercihlerdir.</p>
+<div class="sourceCode" id="cb803"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb803-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb803-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dv">8</span><span class="op">)</span> c<span class="op">;</span>   <span class="co">// 8-baytlık sınırlarla hizala</span></span></code></pre></div>
+<p>Sisteminiz tarafından kullanılan maksimum hizalamaya göre hizalamak istiyorsanız, <code>&lt;stddef.h&gt;</code> dosyasını dahil edin ve <code>max_align_t</code> türünü şu şekilde kullanın:</p>
 <div class="sourceCode" id="cb804"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb804-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dt">max_align_t</span><span class="op">)</span> c<span class="op">;</span></span></code></pre></div>
-<p>You could potentially <em>over-align</em> by specifying an alignment more than that of <code>max_align_t</code>, but whether or not such things are allowed is system dependent.</p>
+<p><code>max_align_t</code> değerinden daha fazla bir hizalama belirterek potansiyel olarak <em>aşırı hizalama (over-align)</em> yapabilirsiniz, ancak bu tür şeylere izin verilip verilmediği sisteme bağlıdır.</p>
 <p> </p>
-<h3 data-number="41.2.2" id="alignof-and-_alignof"><span class="header-section-number">41.2.2</span> <code>alignof</code> and <code>_Alignof</code></h3>
+<h3 data-number="41.2.2" id="alignof-and-_alignof"><span class="header-section-number">41.2.2</span> <code>alignof</code> ve <code>_Alignof</code></h3>
 <p> </p>
-<p>This operator will return the address multiple a particular type uses for alignment on this system. For example, maybe <code>char</code>s are aligned every 1 address, and <code>int</code>s are aligned every 4 addresses.</p>
-<p>The built-in operator is <code>_Alignof</code>, but the header <code>&lt;stdalign.h&gt;</code> defines it as <code>alignof</code> if you want to look cooler.</p>
-<p>Here’s a program that will print out the alignments of a variety of different types. Again, these will vary from system to system. Note that the type <code>max_align_t</code> will give you the maximum alignment used by the system.</p>
+<p>Bu operatör, belirli bir türün bu sistemde hizalama için kullandığı adres katını döndürür. Örneğin, belki <code>char</code>'lar her 1 adreste bir ve <code>int</code>'ler her 4 adreste bir hizalanır.</p>
+<p>Yerleşik operatör <code>_Alignof</code>'tur, ancak daha havalı görünmek istiyorsanız <code>&lt;stdalign.h&gt;</code> başlık dosyası bunu <code>alignof</code> olarak tanımlar.</p>
+<p>İşte çeşitli farklı türlerin hizalamalarını yazdıracak bir program. Yine, bunlar sistemden sisteme değişecektir. <code>max_align_t</code> türünün size sistem tarafından kullanılan maksimum hizalamayı vereceğini unutmayın.</p>
 <div class="sourceCode" id="cb805"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb805-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-1"></a><span class="pp">#include </span><span class="im">&lt;stdalign.h&gt;</span></span>
-<span id="cb805-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-2"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span><span class="pp">     </span><span class="co">// for printf()</span></span>
-<span id="cb805-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-3"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span><span class="pp">    </span><span class="co">// for max_align_t</span></span>
+<span id="cb805-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-2"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span><span class="pp">     </span><span class="co">// printf() için</span></span>
+<span id="cb805-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-3"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span><span class="pp">    </span><span class="co">// max_align_t için</span></span>
 <span id="cb805-4"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-4"></a></span>
 <span id="cb805-5"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-5"></a><span class="kw">struct</span> t <span class="op">{</span></span>
 <span id="cb805-6"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-6"></a>    <span class="dt">int</span> a<span class="op">;</span></span>
@@ -143,7 +143,7 @@
 <span id="cb805-20"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-20"></a>    printf<span class="op">(</span><span class="st">&quot;struct t   : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="kw">struct</span> t<span class="op">));</span></span>
 <span id="cb805-21"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-21"></a>    printf<span class="op">(</span><span class="st">&quot;max_align_t: </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">max_align_t</span><span class="op">));</span></span>
 <span id="cb805-22"><a href="function-specifiers-alignment-specifiersoperators.html#cb805-22"></a><span class="op">}</span></span></code></pre></div>
-<p>Output on my system:</p>
+<p>Benim sistemimdeki çıktı:</p>
 <div class="sourceCode" id="cb806"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb806-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb806-1" aria-hidden="true" tabindex="-1"></a>char       : 1</span>
 <span id="cb806-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb806-2" aria-hidden="true" tabindex="-1"></a>short      : 2</span>
 <span id="cb806-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb806-3" aria-hidden="true" tabindex="-1"></a>int        : 4</span>
@@ -154,16 +154,16 @@
 <span id="cb806-8"><a href="function-specifiers-alignment-specifiersoperators.html#cb806-8" aria-hidden="true" tabindex="-1"></a>struct t   : 16</span>
 <span id="cb806-9"><a href="function-specifiers-alignment-specifiersoperators.html#cb806-9" aria-hidden="true" tabindex="-1"></a>max_align_t: 16</span></code></pre></div>
 <p> </p>
-<h2 data-number="41.3" id="memalignment-function"><span class="header-section-number">41.3</span> <code>memalignment()</code> Function</h2>
+<h2 data-number="41.3" id="memalignment-function"><span class="header-section-number">41.3</span> <code>memalignment()</code> Fonksiyonu</h2>
 <p></p>
-<p>New in C23!</p>
-<p>(Caveat: none of my compilers support this function yet, so the code is largely untested.)</p>
-<p><code>alignof</code> is great if you know the type of your data. But what if you’re <em>woefully ignorant</em> of the type, and only have a pointer to the data?</p>
-<p>How could that even happen?</p>
-<p>Well, with our good friend the <code>void*</code>, of course. We can’t pass that to <code>alignof</code>, but what if we need to know the alignment of the thing it points to?</p>
-<p>We might want to know this if we’re about to use the memory for something that has significant alignment needs. For example, atomic and floating types often behave badly if misaligned.</p>
-<p>So with this function we can check the alignment of some data as long as we have a pointer to that data, even if it’s a <code>void*</code>.</p>
-<p>Let’s do a quick test to see if a void pointer is well-aligned for use as an atomic type, and, if so, let’s get a variable to use it as that type:</p>
+<p>C23'te Yeni!</p>
+<p>(Uyarı: Derleyicilerimin hiçbiri henüz bu fonksiyonu desteklemiyor, bu nedenle kod büyük ölçüde test edilmemiştir.)</p>
+<p>Verilerinizin türünü biliyorsanız <code>alignof</code> harikadır. Peki ya türden <em>fena halde habersizseniz</em> ve elinizde yalnızca veriye işaret eden bir pointer varsa?</p>
+<p>Bu nasıl olabilir ki?</p>
+<p>Tabii ki iyi dostumuz <code>void*</code> ile. Bunu <code>alignof</code>'a geçiremeyiz, peki ya gösterdiği şeyin hizalamasını bilmemiz gerekiyorsa?</p>
+<p>Belleği önemli hizalama ihtiyaçları olan bir şey için kullanmak üzereysek bunu bilmek isteyebiliriz. Örneğin, atomik ve kayan noktalı türler yanlış hizalandıklarında genellikle kötü davranırlar.</p>
+<p>Bu nedenle, bu fonksiyonla, bir <code>void*</code> olsa bile, o veriye işaret eden bir pointer elimizde olduğu sürece bazı verilerin hizalamasını kontrol edebiliriz.</p>
+<p>Bir void pointer'ın atomik bir tür olarak kullanılmak üzere iyi hizalanmış olup olmadığını görmek için hızlı bir test yapalım ve öyleyse, o tür olarak kullanmak için bir değişken alalım:</p>
 <div class="sourceCode" id="cb807"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb807-1"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>p<span class="op">)</span></span>
 <span id="cb807-2"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb807-3"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>memalignment<span class="op">(</span>p<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">alignof</span><span class="op">(</span>atomic <span class="dt">int</span><span class="op">))</span> <span class="op">{</span></span>
@@ -173,9 +173,9 @@
 <span id="cb807-7"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-7" aria-hidden="true" tabindex="-1"></a>        puts<span class="op">(</span><span class="st">&quot;This pointer is no good as an atomic int</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb807-8"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb807-9"><a href="function-specifiers-alignment-specifiersoperators.html#cb807-9" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
-<p>I suspect you will rarely (to the point of never, likely) need to use this function unless you’re doing some low-level stuff.</p>
+<p>Alt seviye işler yapmadığınız sürece bu fonksiyonu kullanmaya nadiren (muhtemelen hiç) ihtiyaç duyacağınızdan şüpheleniyorum.</p>
 <p></p>
-<p>And there you have it. Alignment!</p>
+<p>İşte böyle. Hizalama!</p>
 <p></p>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
@@ -411,7 +411,7 @@
 <li id="fn229"><p>https://en.cppreference.com/w/c/language/atomic<a href="chapter-atomics.html#fnref229" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn230"><p>https://docs.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming<a href="chapter-atomics.html#fnref230" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn231"><p>https://www.reddit.com/r/C_Programming/<a href="chapter-atomics.html#fnref231" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn232"><p>Unless you compile with optimizations on (probably)! But I think when it does this, it’s not behaving to spec.<a href="function-specifiers-alignment-specifiersoperators.html#fnref232" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn232"><p>Derlemeyi optimizasyonlar açık olarak yapmadığınız sürece (muhtemelen)! Ancak bunu yaptığında spesifikasyona uygun davranmadığını düşünüyorum.<a href="function-specifiers-alignment-specifiersoperators.html#fnref232" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn233"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-exit<a href="function-specifiers-alignment-specifiersoperators.html#fnref233" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn234"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-abort<a href="function-specifiers-alignment-specifiersoperators.html#fnref234" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn235"><p>https://en.wikipedia.org/wiki/Data_structure_alignment<a href="function-specifiers-alignment-specifiersoperators.html#fnref235" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

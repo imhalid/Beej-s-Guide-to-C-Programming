@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,96 +32,96 @@
 </head>
 <body>
 <div class="nav-header"><a href="types-iii-conversions.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="multifile-projects.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="16" id="types-iv-qualifiers-and-specifiers"><span class="header-section-number">16</span> Types IV: Qualifiers and Specifiers</h1>
-<p>Now that we have some more types under our belts, turns out we can give these types some additional attributes that control their behavior. These are the <em>type qualifiers</em> and <em>storage-class specifiers</em>.</p>
-<h2 data-number="16.1" id="type-qualifiers"><span class="header-section-number">16.1</span> Type Qualifiers</h2>
+<h1 data-number="16" id="types-iv-qualifiers-and-specifiers"><span class="header-section-number">16</span> Türler IV: Niteleyiciler ve Belirteçler</h1>
+<p>Artık elimizin altında birkaç tür daha olduğuna göre, bu türlere davranışlarını kontrol eden bazı ek nitelikler kazandırabileceğimiz ortaya çıkıyor. Bunlar <em>tür niteleyicileri</em> (type qualifiers) ve <em>depolama sınıfı belirteçleridir</em> (storage-class specifiers).</p>
+<h2 data-number="16.1" id="type-qualifiers"><span class="header-section-number">16.1</span> Tür Niteleyicileri</h2>
 <p></p>
-<p>These are going to allow you to declare constant values, and also to give the compiler optimization hints that it can use.</p>
+<p>Bunlar sabit değerler bildirmenize ve ayrıca derleyiciye kullanabileceği optimizasyon ipuçları vermenize olanak tanır.</p>
 <h3 data-number="16.1.1" id="const"><span class="header-section-number">16.1.1</span> <code>const</code></h3>
 <p></p>
-<p>This is the most common type qualifier you’ll see. It means the variable is constant, and any attempt to modify it will result in a very angry compiler.</p>
+<p>Bu, göreceğiniz en yaygın tür niteleyicisidir. Değişkenin sabit olduğu anlamına gelir ve onu değiştirme yönündeki her türlü girişim, derleyicinin fazlasıyla öfkelenmesiyle sonuçlanır.</p>
 <div class="sourceCode" id="cb264"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb264-1"><a href="types-iv-qualifiers-and-specifiers.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb264-2"><a href="types-iv-qualifiers-and-specifiers.html#cb264-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb264-3"><a href="types-iv-qualifiers-and-specifiers.html#cb264-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>  <span class="co">// COMPILER PUKING SOUNDS, can&#39;t assign to a constant</span></span></code></pre></div>
-<p>You can’t change a <code>const</code> value.</p>
-<p>Often you see <code>const</code> in parameter lists for functions:</p>
+<span id="cb264-3"><a href="types-iv-qualifiers-and-specifiers.html#cb264-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>  <span class="co">// DERLEYİCİ KUSMA SESLERİ, bir sabite atama yapılamaz</span></span></code></pre></div>
+<p>Bir <code>const</code> değerini değiştiremezsiniz.</p>
+<p>Genellikle <code>const</code> ifadesini fonksiyonların parametre listelerinde görürsünüz:</p>
 <div class="sourceCode" id="cb265"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb265-1"><a href="types-iv-qualifiers-and-specifiers.html#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">const</span> <span class="dt">int</span> x<span class="op">)</span></span>
 <span id="cb265-2"><a href="types-iv-qualifiers-and-specifiers.html#cb265-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb265-3"><a href="types-iv-qualifiers-and-specifiers.html#cb265-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x <span class="op">+</span> <span class="dv">30</span><span class="op">);</span>  <span class="co">// OK, doesn&#39;t modify &quot;x&quot;</span></span>
+<span id="cb265-3"><a href="types-iv-qualifiers-and-specifiers.html#cb265-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x <span class="op">+</span> <span class="dv">30</span><span class="op">);</span>  <span class="co">// OK, &quot;x&quot;i değiştirmez</span></span>
 <span id="cb265-4"><a href="types-iv-qualifiers-and-specifiers.html#cb265-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h4 data-number="16.1.1.1" id="const-and-pointers"><span class="header-section-number">16.1.1.1</span> <code>const</code> and Pointers</h4>
+<h4 data-number="16.1.1.1" id="const-and-pointers"><span class="header-section-number">16.1.1.1</span> <code>const</code> ve Pointer'lar</h4>
 <p></p>
-<p>This one gets a little funky, because there are two usages that have two meanings when it comes to pointers.</p>
-<p>For one thing, we can make it so you can’t change the thing the pointer points to. You do this by putting the <code>const</code> up front with the type name (before the asterisk) in the type declaration.</p>
+<p>Bu konu biraz kafa karıştırıcı olabilir, çünkü pointer'lar söz konusu olduğunda iki farklı kullanım ve iki farklı anlam vardır.</p>
+<p>Birincisi, pointer'ın işaret ettiği şeyi değiştirilemez hale getirebiliriz. Bunu, tür bildiriminde <code>const</code> ifadesini tür adının önüne (yıldız işaretinden önce) koyarak yaparsınız.</p>
 <div class="sourceCode" id="cb266"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb266-1"><a href="types-iv-qualifiers-and-specifiers.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">10</span><span class="op">,</span> <span class="dv">20</span><span class="op">};</span></span>
 <span id="cb266-2"><a href="types-iv-qualifiers-and-specifiers.html#cb266-2" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> x<span class="op">;</span> </span>
 <span id="cb266-3"><a href="types-iv-qualifiers-and-specifiers.html#cb266-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-4"><a href="types-iv-qualifiers-and-specifiers.html#cb266-4" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// We can modify p, no problem</span></span>
+<span id="cb266-4"><a href="types-iv-qualifiers-and-specifiers.html#cb266-4" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// p&#39;yi değiştirebiliriz, sorun yok</span></span>
 <span id="cb266-5"><a href="types-iv-qualifiers-and-specifiers.html#cb266-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-6"><a href="types-iv-qualifiers-and-specifiers.html#cb266-6" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">30</span><span class="op">;</span> <span class="co">// Compiler error! Can&#39;t change what it points to</span></span></code></pre></div>
-<p>Somewhat confusingly, these two things are equivalent:</p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb267-1"><a href="types-iv-qualifiers-and-specifiers.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// Can&#39;t modify what p points to</span></span>
-<span id="cb267-2"><a href="types-iv-qualifiers-and-specifiers.html#cb267-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="dt">const</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// Can&#39;t modify what p points to, just like the previous line</span></span></code></pre></div>
-<p>Great, so we can’t change the thing the pointer points to, but we can change the pointer itself. What if we want the other way around? We want to be able to change what the pointer points to, but <em>not</em> the pointer itself?</p>
-<p>Just move the <code>const</code> after the asterisk in the declaration:</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb268-1"><a href="types-iv-qualifiers-and-specifiers.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>   <span class="co">// We can&#39;t modify &quot;p&quot; with pointer arithmetic</span></span>
+<span id="cb266-6"><a href="types-iv-qualifiers-and-specifiers.html#cb266-6" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">30</span><span class="op">;</span> <span class="co">// Derleyici hatası! İşaret ettiği şeyi değiştiremezsiniz</span></span></code></pre></div>
+<p>Biraz kafa karıştırıcı olsa da, şu iki ifade birbirine eşdeğerdir:</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb267-1"><a href="types-iv-qualifiers-and-specifiers.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// p&#39;nin işaret ettiği şey değiştirilemez</span></span>
+<span id="cb267-2"><a href="types-iv-qualifiers-and-specifiers.html#cb267-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="dt">const</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// Önceki satırla aynı şekilde p&#39;nin işaret ettiği şey değiştirilemez</span></span></code></pre></div>
+<p>Harika, yani pointer'ın gösterdiği şeyi değiştiremiyoruz, ama pointer'ın kendisini değiştirebiliyoruz. Peki tam tersini istersek? Pointer'ın gösterdiği şeyi değiştirebilmek, ama pointer'ın <em>kendisini</em> değiştirememek istersek?</p>
+<p>Bildirimde <code>const</code> anahtar kelimesini yıldız işaretinden sonraya taşımanız yeterlidir:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb268-1"><a href="types-iv-qualifiers-and-specifiers.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>   <span class="co">// &quot;p&quot; değerini pointer aritmetiği ile değiştiremeyiz</span></span>
 <span id="cb268-2"><a href="types-iv-qualifiers-and-specifiers.html#cb268-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb268-3"><a href="types-iv-qualifiers-and-specifiers.html#cb268-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Compiler error!</span></span></code></pre></div>
-<p>But we can modify what they point to:</p>
+<span id="cb268-3"><a href="types-iv-qualifiers-and-specifiers.html#cb268-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Derleyici hatası!</span></span></code></pre></div>
+<p>Fakat işaret ettikleri değeri değiştirebiliriz:</p>
 <div class="sourceCode" id="cb269"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb269-1"><a href="types-iv-qualifiers-and-specifiers.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
 <span id="cb269-2"><a href="types-iv-qualifiers-and-specifiers.html#cb269-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
 <span id="cb269-3"><a href="types-iv-qualifiers-and-specifiers.html#cb269-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb269-4"><a href="types-iv-qualifiers-and-specifiers.html#cb269-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>   <span class="co">// Set &quot;x&quot; to 20, no problem</span></span></code></pre></div>
-<p>You can also make both things <code>const</code>:</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb270-1"><a href="types-iv-qualifiers-and-specifiers.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>  <span class="co">// Can&#39;t modify p or *p!</span></span></code></pre></div>
-<p>Finally, if you have multiple levels of indirection, you should <code>const</code> the appropriate levels. Just because a pointer is <code>const</code>, doesn’t mean the pointer it points to must also be. You can explicitly set them like in the following examples:</p>
+<span id="cb269-4"><a href="types-iv-qualifiers-and-specifiers.html#cb269-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>   <span class="co">// &quot;x&quot; değerini 20 yap, sorun yok</span></span></code></pre></div>
+<p>Ayrıca her iki şeyi de <code>const</code> yapabilirsiniz:</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb270-1"><a href="types-iv-qualifiers-and-specifiers.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>  <span class="co">// Ne p&#39;yi ne de *p&#39;yi değiştirebilirsiniz!</span></span></code></pre></div>
+<p>Son olarak, birden fazla dolaylı yönlendirme (indirection) seviyeniz varsa, uygun seviyeleri <code>const</code> yapmalısınız. Bir pointer'ın <code>const</code> olması, işaret ettiği pointer'ın da <code>const</code> olması gerektiği anlamına gelmez. Aşağıdaki örneklerde olduğu gibi bunları açıkça belirtebilirsiniz:</p>
 <div class="sourceCode" id="cb271"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb271-1"><a href="types-iv-qualifiers-and-specifiers.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">**</span>p<span class="op">;</span></span>
 <span id="cb271-2"><a href="types-iv-qualifiers-and-specifiers.html#cb271-2" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// OK!</span></span>
 <span id="cb271-3"><a href="types-iv-qualifiers-and-specifiers.html#cb271-3" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// OK!</span></span>
 <span id="cb271-4"><a href="types-iv-qualifiers-and-specifiers.html#cb271-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb271-5"><a href="types-iv-qualifiers-and-specifiers.html#cb271-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">**</span><span class="dt">const</span> p<span class="op">;</span></span>
-<span id="cb271-6"><a href="types-iv-qualifiers-and-specifiers.html#cb271-6" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Error!</span></span>
+<span id="cb271-6"><a href="types-iv-qualifiers-and-specifiers.html#cb271-6" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Hata!</span></span>
 <span id="cb271-7"><a href="types-iv-qualifiers-and-specifiers.html#cb271-7" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// OK!</span></span>
 <span id="cb271-8"><a href="types-iv-qualifiers-and-specifiers.html#cb271-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb271-9"><a href="types-iv-qualifiers-and-specifiers.html#cb271-9" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb271-10"><a href="types-iv-qualifiers-and-specifiers.html#cb271-10" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// OK!</span></span>
-<span id="cb271-11"><a href="types-iv-qualifiers-and-specifiers.html#cb271-11" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Error!</span></span>
+<span id="cb271-11"><a href="types-iv-qualifiers-and-specifiers.html#cb271-11" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Hata!</span></span>
 <span id="cb271-12"><a href="types-iv-qualifiers-and-specifiers.html#cb271-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb271-13"><a href="types-iv-qualifiers-and-specifiers.html#cb271-13" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span></span>
-<span id="cb271-14"><a href="types-iv-qualifiers-and-specifiers.html#cb271-14" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Error!</span></span>
-<span id="cb271-15"><a href="types-iv-qualifiers-and-specifiers.html#cb271-15" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Error!</span></span></code></pre></div>
+<span id="cb271-14"><a href="types-iv-qualifiers-and-specifiers.html#cb271-14" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Hata!</span></span>
+<span id="cb271-15"><a href="types-iv-qualifiers-and-specifiers.html#cb271-15" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Hata!</span></span></code></pre></div>
 <p></p>
-<h4 data-number="16.1.1.2" id="const-correctness"><span class="header-section-number">16.1.1.2</span> <code>const</code> Correctness</h4>
+<h4 data-number="16.1.1.2" id="const-correctness"><span class="header-section-number">16.1.1.2</span> <code>const</code> Doğruluğu (Const Correctness)</h4>
 <p></p>
-<p>One more thing I have to mention is that the compiler will warn on something like this:</p>
+<p>Bahsetmem gereken bir şey daha var: Derleyici şuna benzer bir durumda uyarı verecektir:</p>
 <div class="sourceCode" id="cb272"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb272-1"><a href="types-iv-qualifiers-and-specifiers.html#cb272-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb272-2"><a href="types-iv-qualifiers-and-specifiers.html#cb272-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span></code></pre></div>
-<p>saying something to the effect of:</p>
+<p>şuna benzer bir şey söyleyerek:</p>
 <div class="sourceCode" id="cb273"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb273-1"><a href="types-iv-qualifiers-and-specifiers.html#cb273-1" aria-hidden="true" tabindex="-1"></a>initialization discards &#39;const&#39; qualifier from pointer type target</span></code></pre></div>
-<p>What’s happening there?</p>
-<p>Well, we need to look at the types on either side of the assignment:</p>
+<p>Orada ne oluyor?</p>
+<p>Atamanın her iki tarafındaki türlere bakmamız gerekiyor:</p>
 <div class="sourceCode" id="cb274"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb274-1"><a href="types-iv-qualifiers-and-specifiers.html#cb274-1" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb274-2"><a href="types-iv-qualifiers-and-specifiers.html#cb274-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
 <span id="cb274-3"><a href="types-iv-qualifiers-and-specifiers.html#cb274-3" aria-hidden="true" tabindex="-1"></a><span class="co">//    ^       ^</span></span>
 <span id="cb274-4"><a href="types-iv-qualifiers-and-specifiers.html#cb274-4" aria-hidden="true" tabindex="-1"></a><span class="co">//    |       |</span></span>
 <span id="cb274-5"><a href="types-iv-qualifiers-and-specifiers.html#cb274-5" aria-hidden="true" tabindex="-1"></a><span class="co">//  int*    const int*</span></span></code></pre></div>
-<p>The compiler is warning us that the value on the right side of the assignment is <code>const</code>, but the one of the left is not. And the compiler is letting us know that it is discarding the “const-ness” of the expression on the right.</p>
-<p>That is, we <em>can</em> still try to do the following, but it’s just wrong. The compiler will warn, and it’s undefined behavior:</p>
+<p>Derleyici, atamanın sağ tarafındaki değerin <code>const</code> olduğu, ancak sol tarafındakinin olmadığı konusunda bizi uyarıyor. Ve derleyici, sağdaki ifadenin "const-luk" özelliğini göz ardı ettiğini bize bildiriyor.</p>
+<p>Yani, yine de aşağıdakini yapmayı <em>deneyebiliriz</em>, ancak bu sadece yanlıştır. Derleyici uyarı verecektir ve bu tanımsız davranıştır (undefined behavior):</p>
 <div class="sourceCode" id="cb275"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb275-1"><a href="types-iv-qualifiers-and-specifiers.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb275-2"><a href="types-iv-qualifiers-and-specifiers.html#cb275-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
 <span id="cb275-3"><a href="types-iv-qualifiers-and-specifiers.html#cb275-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb275-4"><a href="types-iv-qualifiers-and-specifiers.html#cb275-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">40</span><span class="op">;</span>  <span class="co">// Undefined behavior--maybe it modifies &quot;x&quot;, maybe not!</span></span>
+<span id="cb275-4"><a href="types-iv-qualifiers-and-specifiers.html#cb275-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">40</span><span class="op">;</span>  <span class="co">// Tanımsız davranış--belki &quot;x&quot;i değiştirir, belki değiştirmez!</span></span>
 <span id="cb275-5"><a href="types-iv-qualifiers-and-specifiers.html#cb275-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb275-6"><a href="types-iv-qualifiers-and-specifiers.html#cb275-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 40, if you&#39;re lucky</span></span></code></pre></div>
+<span id="cb275-6"><a href="types-iv-qualifiers-and-specifiers.html#cb275-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// Şanslıysanız 40</span></span></code></pre></div>
 <p> </p>
 <h3 data-number="16.1.2" id="restrict"><span class="header-section-number">16.1.2</span> <code>restrict</code></h3>
 <p></p>
-<p>TLDR: you never have to use this and you can ignore it every time you see it. If you use it correctly, you will likely realize some performance gain. If you use it incorrectly, you will realize undefined behavior.</p>
-<p><code>restrict</code> is a hint to the compiler that a particular piece of memory will only be accessed by one pointer and never another. (That is, there will be no aliasing of the particular object the <code>restrict</code> pointer points to.) If a developer declares a pointer to be <code>restrict</code> and then accesses the object it points to in another way (e.g. via another pointer), the behavior is undefined.</p>
-<p>Basically you’re telling C, “Hey—I guarantee that this one single pointer is the only way I access this memory, and if I’m lying, you can pull undefined behavior on me.”</p>
-<p>And C uses that information to perform certain optimizations. For instance, if you’re dereferencing the <code>restrict</code> pointer repeatedly in a loop, C might decide to cache the result in a register and only store the final result once the loop completes. If any other pointer referred to that same memory and accessed it in the loop, the results would not be accurate.</p>
-<p>(Note that <code>restrict</code> has no effect if the object pointed to is never written to. It’s all about optimizations surrounding writes to memory.)</p>
-<p>Let’s write a function to swap two variables, and we’ll use the <code>restrict</code> keyword to assure C that we’ll never pass in pointers to the same thing. And then let’s blow it and try passing in pointers to the same thing.</p>
+<p>Özetle (TLDR): Bunu asla kullanmak zorunda değilsiniz ve ne zaman görseniz göz ardı edebilirsiniz. Doğru kullanırsanız, muhtemelen bir performans artışı sağlarsınız. Yanlış kullanırsanız, tanımsız davranış (undefined behavior) ile karşılaşırsınız.</p>
+<p><code>restrict</code>, derleyiciye belirli bir bellek bölgesine yalnızca tek bir pointer tarafından erişileceği ve başka hiçbir pointer tarafından erişilmeyeceği yönünde verilen bir ipucudur. (Yani, <code>restrict</code> pointer'ının işaret ettiği nesnenin başka bir takma adı [aliasing] olmayacaktır.) Bir geliştirici bir pointer'ı <code>restrict</code> olarak bildirir ve ardından işaret ettiği nesneye başka bir yolla (örneğin başka bir pointer üzerinden) erişirse, davranış tanımsızdır.</p>
+<p>Temel olarak C'ye şöyle diyorsunuz: "Hey—bu bellek alanına eriştiğim tek yolun bu tek pointer olduğuna garanti veriyorum ve yalan söylüyorsam üzerime tanımsız davranış salabilirsin."</p>
+<p>Ve C bu bilgiyi belirli optimizasyonları gerçekleştirmek için kullanır. Örneğin, bir döngü içinde <code>restrict</code> pointer'ının değerini tekrar tekrar dolaylı olarak okuyorsanız (dereference), C sonucu bir yazmaçta (register) önbelleğe almaya ve son sonucu yalnızca döngü tamamlandığında saklamaya karar verebilir. Başka bir pointer aynı belleğe başvurup döngü içinde ona erişseydi, sonuçlar doğru olmazdı.</p>
+<p>(Not: İşaret edilen nesneye hiçbir zaman yazılmıyorsa <code>restrict</code> niteleyicisinin hiçbir etkisi yoktur. Her şey belleğe yapılan yazmalarla ilgili optimizasyonlarla ilgilidir.)</p>
+<p>İki değişkenin değerini takas eden (swap) bir fonksiyon yazalım ve C'ye aynı nesneye işaret eden pointer'ları asla geçirmeyeceğimizin güvencesini vermek için <code>restrict</code> anahtar kelimesini kullanalım. Ve ardından işi batırıp aynı nesneye işaret eden pointer'lar geçirmeyi deneyelim.</p>
 <div class="sourceCode" id="cb276"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb276-1"><a href="types-iv-qualifiers-and-specifiers.html#cb276-1"></a><span class="dt">void</span> swap<span class="op">(</span><span class="dt">int</span> <span class="op">*</span><span class="dt">restrict</span> a<span class="op">,</span> <span class="dt">int</span> <span class="op">*</span><span class="dt">restrict</span> b<span class="op">)</span></span>
 <span id="cb276-2"><a href="types-iv-qualifiers-and-specifiers.html#cb276-2"></a><span class="op">{</span></span>
 <span id="cb276-3"><a href="types-iv-qualifiers-and-specifiers.html#cb276-3"></a>    <span class="dt">int</span> t<span class="op">;</span></span>
@@ -135,64 +135,64 @@
 <span id="cb276-11"><a href="types-iv-qualifiers-and-specifiers.html#cb276-11"></a><span class="op">{</span></span>
 <span id="cb276-12"><a href="types-iv-qualifiers-and-specifiers.html#cb276-12"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
 <span id="cb276-13"><a href="types-iv-qualifiers-and-specifiers.html#cb276-13"></a></span>
-<span id="cb276-14"><a href="types-iv-qualifiers-and-specifiers.html#cb276-14"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span>  <span class="co">// OK! &quot;a&quot; and &quot;b&quot;, above, point to different things</span></span>
+<span id="cb276-14"><a href="types-iv-qualifiers-and-specifiers.html#cb276-14"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span>  <span class="co">// OK! Yukarıdaki &quot;a&quot; ve &quot;b&quot; farklı şeyleri işaret ediyor</span></span>
 <span id="cb276-15"><a href="types-iv-qualifiers-and-specifiers.html#cb276-15"></a></span>
-<span id="cb276-16"><a href="types-iv-qualifiers-and-specifiers.html#cb276-16"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>x<span class="op">);</span>  <span class="co">// Undefined behavior! &quot;a&quot; and &quot;b&quot; point to the same thing</span></span>
+<span id="cb276-16"><a href="types-iv-qualifiers-and-specifiers.html#cb276-16"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>x<span class="op">);</span>  <span class="co">// Tanımsız davranış! &quot;a&quot; ve &quot;b&quot; aynı şeyi işaret ediyor</span></span>
 <span id="cb276-17"><a href="types-iv-qualifiers-and-specifiers.html#cb276-17"></a><span class="op">}</span></span></code></pre></div>
-<p>If we were to take out the <code>restrict</code> keywords, above, that would allow both calls to work safely. But then the compiler might not be able to optimize.</p>
-<p><code>restrict</code> has block scope, that is, the restriction only lasts for the scope it’s used. If it’s in a parameter list for a function, it’s in the block scope of that function.</p>
-<p>If the restricted pointer points to an array, it only applies to the individual objects in the array. Other pointers could read and write from the array as long as they didn’t read or write any of the same elements as the restricted one.</p>
-<p>If it’s outside any function in file scope, the restriction covers the entire program.</p>
-<p>You’re likely to see this in library functions like <code>printf()</code>:</p>
+<p>Yukarıdaki <code>restrict</code> anahtar kelimelerini çıkarsaydık, bu her iki çağrının da güvenli bir şekilde çalışmasını sağlardı. Ancak o zaman derleyici optimizasyon yapamayabilirdi.</p>
+<p><code>restrict</code> blok kapsamına (block scope) sahiptir, yani kısıtlama yalnızca kullanıldığı kapsam süresince geçerlidir. Bir fonksiyonun parametre listesindeyse, o fonksiyonun blok kapsamındadır.</p>
+<p>Kısıtlanmış pointer bir diziye işaret ediyorsa, kısıtlama yalnızca dizideki bireysel nesnelere uygulanır. Başka pointer'lar, kısıtlanmış pointer ile aynı elemanlardan herhangi birini okumadıkları veya yazmadıkları sürece diziden okuma ve yazma yapabilirler.</p>
+<p>Herhangi bir fonksiyonun dışında dosya kapsamında (file scope) ise, kısıtlama tüm programı kapsar.</p>
+<p>Bunu <code>printf()</code> gibi kütüphane fonksiyonlarında görmeniz muhtemeldir:</p>
 <div class="sourceCode" id="cb277"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb277-1"><a href="types-iv-qualifiers-and-specifiers.html#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> printf<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span> <span class="dt">restrict</span> format<span class="op">,</span> <span class="op">...);</span></span></code></pre></div>
-<p>Again, that’s just telling the compiler that inside the <code>printf()</code> function, there will be only one pointer that refers to any part of that <code>format</code> string.</p>
-<p>One last note: if you’re using array notation in your function parameter for some reason instead of pointer notation, you can use <code>restrict</code> like so:</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb278-1"><a href="types-iv-qualifiers-and-specifiers.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span><span class="op">])</span>     <span class="co">// With no size</span></span>
+<p>Yine bu, derleyiciye <code>printf()</code> fonksiyonu içinde bu <code>format</code> string'inin herhangi bir parçasına başvuran yalnızca tek bir pointer olacağını söyler.</p>
+<p>Son bir not: Bir sebepten dolayı fonksiyon parametrenizde pointer gösterimi yerine dizi gösterimi kullanıyorsanız, <code>restrict</code> ifadesini şu şekilde kullanabilirsiniz:</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb278-1"><a href="types-iv-qualifiers-and-specifiers.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span><span class="op">])</span>     <span class="co">// Boyut olmadan</span></span>
 <span id="cb278-2"><a href="types-iv-qualifiers-and-specifiers.html#cb278-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb278-3"><a href="types-iv-qualifiers-and-specifiers.html#cb278-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span> <span class="dv">10</span><span class="op">])</span>  <span class="co">// Or with a size</span></span></code></pre></div>
-<p>But pointer notation would be more common.</p>
+<span id="cb278-3"><a href="types-iv-qualifiers-and-specifiers.html#cb278-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span> <span class="dv">10</span><span class="op">])</span>  <span class="co">// Veya bir boyut ile</span></span></code></pre></div>
+<p>Ancak pointer gösterimi daha yaygındır.</p>
 <p></p>
 <h3 data-number="16.1.3" id="volatile"><span class="header-section-number">16.1.3</span> <code>volatile</code></h3>
 <p></p>
-<p>You’re unlikely to see or need this unless you’re dealing with hardware directly.</p>
-<p><code>volatile</code> tells the compiler that a value might change behind its back and should be looked up every time.</p>
-<p>An example might be where the compiler is looking in memory at an address that continuously updates behind the scenes, e.g. some kind of hardware timer.</p>
-<p>If the compiler decides to optimize that and store the value in a register for a protracted time, the value in memory will update and won’t be reflected in the register.</p>
-<p>By declaring something <code>volatile</code>, you’re telling the compiler, “Hey, the thing this points at might change at any time for reasons outside this program code.”</p>
+<p>Doğrudan donanımla ilgilenmediğiniz sürece bunu görmeniz veya buna ihtiyaç duymanız pek olası değildir.</p>
+<p><code>volatile</code>, derleyiciye bir değerin arkasından gizlice değişebileceğini ve her defasında yeniden bakılması gerektiğini söyler.</p>
+<p>Bir örnek: Derleyicinin bellekte arka planda sürekli güncellenen bir adrese bakması olabilir, örneğin bir tür donanım zamanlayıcısı (timer).</p>
+<p>Derleyici bunu optimize etmeye ve değeri uzun süre bir yazmaçta (register) tutmaya karar verirse, bellekteki değer güncellenecek ve yazmaca yansımayacaktır.</p>
+<p>Bir şeyi <code>volatile</code> olarak bildirerek derleyiciye şöyle demiş olursunuz: "Hey, bu şeyin işaret ettiği değer bu program kodunun dışındaki nedenlerden dolayı her an değişebilir."</p>
 <div class="sourceCode" id="cb279"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb279-1"><a href="types-iv-qualifiers-and-specifiers.html#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span></span></code></pre></div>
 <h3 data-number="16.1.4" id="atomic"><span class="header-section-number">16.1.4</span> <code>_Atomic</code></h3>
-<p>This is an optional C feature that we’ll talk about in <a href="chapter-atomics.html#chapter-atomics">the Atomics chapter</a>.</p>
+<p>Bu, <a href="chapter-atomics.html#chapter-atomics">Bölünemez İşlemler (Atomics) bölümünde</a> ele alacağımız isteğe bağlı bir C özelliğidir.</p>
 <p> </p>
-<h2 data-number="16.2" id="storage-class-specifiers"><span class="header-section-number">16.2</span> Storage-Class Specifiers</h2>
+<h2 data-number="16.2" id="storage-class-specifiers"><span class="header-section-number">16.2</span> Depolama Sınıfı Belirteçleri</h2>
 <p></p>
-<p>Storage-class specifiers are similar to type quantifiers. They give the compiler more information about the type of a variable.</p>
+<p>Depolama sınıfı belirteçleri tür niteleyicilerine benzer. Derleyiciye bir değişkenin türü hakkında daha fazla bilgi verirler.</p>
 <h3 data-number="16.2.1" id="auto"><span class="header-section-number">16.2.1</span> <code>auto</code></h3>
 <p></p>
-<p>You barely ever see this keyword, since <code>auto</code> is the default for block scope variables. It’s implied.</p>
-<p>These are the same:</p>
+<p>Bu anahtar kelimeyi neredeyse hiç görmezsiniz, çünkü <code>auto</code> blok kapsamındaki (block scope) değişkenler için varsayılandır. Örtük olarak mevcuttur.</p>
+<p>Şunlar aynıdır:</p>
 <div class="sourceCode" id="cb280"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb280-1"><a href="types-iv-qualifiers-and-specifiers.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb280-2"><a href="types-iv-qualifiers-and-specifiers.html#cb280-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">;</span>         <span class="co">// auto is the default...</span></span>
-<span id="cb280-3"><a href="types-iv-qualifiers-and-specifiers.html#cb280-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> <span class="dt">int</span> a<span class="op">;</span>    <span class="co">// So this is redundant</span></span>
+<span id="cb280-2"><a href="types-iv-qualifiers-and-specifiers.html#cb280-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">;</span>         <span class="co">// auto varsayılandır...</span></span>
+<span id="cb280-3"><a href="types-iv-qualifiers-and-specifiers.html#cb280-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> <span class="dt">int</span> a<span class="op">;</span>    <span class="co">// Dolayısıyla bu gereksizdir</span></span>
 <span id="cb280-4"><a href="types-iv-qualifiers-and-specifiers.html#cb280-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The <code>auto</code> keyword indicates that this object has <em>automatic storage duration</em>. That is, it exists in the scope in which it is defined, and is automatically deallocated when the scope is exited.</p>
-<p>One gotcha about automatic variables is that their value is indeterminate until you explicitly initialize them. We say they’re full of “random” or “garbage” data, though neither of those really makes me happy. In any case, you won’t know what’s in it unless you initialize it.</p>
+<p><code>auto</code> anahtar kelimesi, bu nesnenin <em>otomatik depolama süresine</em> (automatic storage duration) sahip olduğunu gösterir. Yani tanımlandığı kapsam içinde var olur ve kapsamdan çıkıldığında otomatik olarak bellekten kaldırılır.</p>
+<p>Otomatik değişkenlerle ilgili bir püf nokta, açıkça ilk değer ataması (initialize) yapana kadar değerlerinin belirsiz olmasıdır. İçlerinin "rastgele" veya "çöp" veriyle dolu olduğunu söyleriz, her ne kadar bu ifadelerin ikisi de beni pek mutlu etmese de. Her halükarda, ilk değer atamadığınız sürece içinde ne olduğunu bilemezsiniz.</p>
 <p></p>
-<p>Always initialize all automatic variables before use!</p>
+<p>Tüm otomatik değişkenleri kullanmadan önce her zaman ilk değerle başlatın!</p>
 <h3 data-number="16.2.2" id="static"><span class="header-section-number">16.2.2</span> <code>static</code></h3>
 <p></p>
-<p>This keyword has two meanings, depending on if the variable is file scope or block scope.</p>
-<p>Let’s start with block scope.</p>
-<h4 data-number="16.2.2.1" id="static-in-block-scope"><span class="header-section-number">16.2.2.1</span> <code>static</code> in Block Scope</h4>
+<p>Bu anahtar kelime, değişkenin dosya kapsamında mı yoksa blok kapsamında mı olduğuna bağlı olarak iki farklı anlama gelir.</p>
+<p>Blok kapsamı (block scope) ile başlayalım.</p>
+<h4 data-number="16.2.2.1" id="static-in-block-scope"><span class="header-section-number">16.2.2.1</span> Blok Kapsamında <code>static</code></h4>
 <p></p>
-<p>In this case, we’re basically saying, “I just want a single instance of this variable to exist, shared between calls.”</p>
-<p>That is, its value will persist between calls.</p>
-<p><code>static</code> in block scope with an initializer will only be initialized one time on program startup, not each time the function is called.</p>
-<p>Let’s do an example:</p>
+<p>Bu durumda temel olarak şöyle demiş oluyoruz: "Bu değişkenin çağrılar arasında paylaşılan tek bir örneğinin var olmasını istiyorum."</p>
+<p>Yani değeri fonksiyon çağrıları arasında korunacaktır.</p>
+<p>Bir ilk değer ataması içeren blok kapsamındaki <code>static</code>, fonksiyon her çağrıldığında değil, yalnızca program başlatıldığında bir kez ilk değerini alır.</p>
+<p>Bir örnek yapalım:</p>
 <div class="sourceCode" id="cb281"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb281-1"><a href="types-iv-qualifiers-and-specifiers.html#cb281-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb281-2"><a href="types-iv-qualifiers-and-specifiers.html#cb281-2"></a></span>
 <span id="cb281-3"><a href="types-iv-qualifiers-and-specifiers.html#cb281-3"></a><span class="dt">void</span> counter<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb281-4"><a href="types-iv-qualifiers-and-specifiers.html#cb281-4"></a><span class="op">{</span></span>
-<span id="cb281-5"><a href="types-iv-qualifiers-and-specifiers.html#cb281-5"></a>    <span class="dt">static</span> <span class="dt">int</span> count <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// This is initialized one time</span></span>
+<span id="cb281-5"><a href="types-iv-qualifiers-and-specifiers.html#cb281-5"></a>    <span class="dt">static</span> <span class="dt">int</span> count <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// Bu bir kez başlatılır</span></span>
 <span id="cb281-6"><a href="types-iv-qualifiers-and-specifiers.html#cb281-6"></a></span>
 <span id="cb281-7"><a href="types-iv-qualifiers-and-specifiers.html#cb281-7"></a>    printf<span class="op">(</span><span class="st">&quot;This has been called </span><span class="sc">%d</span><span class="st"> time(s)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">);</span></span>
 <span id="cb281-8"><a href="types-iv-qualifiers-and-specifiers.html#cb281-8"></a></span>
@@ -206,97 +206,97 @@
 <span id="cb281-16"><a href="types-iv-qualifiers-and-specifiers.html#cb281-16"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 3 time(s)&quot;</span></span>
 <span id="cb281-17"><a href="types-iv-qualifiers-and-specifiers.html#cb281-17"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 4 time(s)&quot;</span></span>
 <span id="cb281-18"><a href="types-iv-qualifiers-and-specifiers.html#cb281-18"></a><span class="op">}</span></span></code></pre></div>
-<p>See how the value of <code>count</code> persists between calls?</p>
-<p>One thing of note is that <code>static</code> block scope variables are initialized to <code>0</code> by default.</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb282-1"><a href="types-iv-qualifiers-and-specifiers.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo<span class="op">;</span>      <span class="co">// Default starting value is `0`...</span></span>
-<span id="cb282-2"><a href="types-iv-qualifiers-and-specifiers.html#cb282-2" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// So the `0` assignment is redundant</span></span></code></pre></div>
-<p>Finally, be advised that if you’re writing multithreaded programs, you have to be sure you don’t let multiple threads trample the same variable.</p>
+<p><code>count</code> değişkeninin değerinin çağrılar arasında nasıl korunduğunu gördünüz mü?</p>
+<p>Dikkat edilmesi gereken bir husus, blok kapsamındaki <code>static</code> değişkenlerin varsayılan olarak <code>0</code> değeriyle başlatılmasıdır.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb282-1"><a href="types-iv-qualifiers-and-specifiers.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo<span class="op">;</span>      <span class="co">// Varsayılan başlangıç değeri `0` dır...</span></span>
+<span id="cb282-2"><a href="types-iv-qualifiers-and-specifiers.html#cb282-2" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// Dolayısıyla `0` ataması gereksizdir</span></span></code></pre></div>
+<p>Son olarak, çoklu izlekli (multithreaded) programlar yazıyorsanız, birden fazla izleğin (thread) aynı değişkeni çiğnemesine izin vermediğinizden emin olmanız gerektiği konusunda uyarılalım.</p>
 <p></p>
-<h4 data-number="16.2.2.2" id="static-in-file-scope"><span class="header-section-number">16.2.2.2</span> <code>static</code> in File Scope</h4>
+<h4 data-number="16.2.2.2" id="static-in-file-scope"><span class="header-section-number">16.2.2.2</span> Dosya Kapsamında <code>static</code></h4>
 <p></p>
-<p>When you get out to file scope, outside any blocks, the meaning rather changes.</p>
-<p>Variables at file scope already persist between function calls, so that behavior is already there.</p>
-<p>Instead what <code>static</code> means in this context is that this variable isn’t visible outside of this particular source file. Kinda like “global”, but only in this file.</p>
-<p>More on that in the section about building with multiple source files.</p>
+<p>Herhangi bir bloğun dışında, dosya kapsamına çıktığınızda anlam oldukça değişir.</p>
+<p>Dosya kapsamındaki değişkenler zaten fonksiyon çağrıları arasında varlığını sürdürür, dolayısıyla bu davranış zaten mevcuttur.</p>
+<p>Bunun yerine <code>static</code> anahtar kelimesinin bu bağlamdaki anlamı, bu değişkenin söz konusu kaynak dosya dışında görünür olmamasıdır. Bir nevi "küresel" (global) gibidir, ancak yalnızca bu dosya içindedir.</p>
+<p>Birden fazla kaynak dosyasıyla derleme yapma hakkındaki bölümde bununla ilgili daha fazla bilgi bulabilirsiniz.</p>
 <p> </p>
 <h3 data-number="16.2.3" id="extern"><span class="header-section-number">16.2.3</span> <code>extern</code></h3>
 <p></p>
-<p>The <code>extern</code> storage-class specifier gives us a way to refer to objects in other source files.</p>
-<p>Let’s say, for example, the file <code>bar.c</code> had the following as its entirety:</p>
+<p><code>extern</code> depolama sınıfı belirteci, diğer kaynak dosyalardaki nesnelere başvurmamızı sağlar.</p>
+<p>Örneğin, <code>bar.c</code> dosyasının içeriğinin tamamen şundan ibaret olduğunu varsayalım:</p>
 <div class="sourceCode" id="cb283"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb283-1"><a href="types-iv-qualifiers-and-specifiers.html#cb283-1"></a><span class="co">// bar.c</span></span>
 <span id="cb283-2"><a href="types-iv-qualifiers-and-specifiers.html#cb283-2"></a></span>
 <span id="cb283-3"><a href="types-iv-qualifiers-and-specifiers.html#cb283-3"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">37</span><span class="op">;</span></span></code></pre></div>
-<p>Just that. Declaring a new <code>int a</code> in file scope.</p>
-<p>But what if we had another source file, <code>foo.c</code>, and we wanted to refer to the <code>a</code> that’s in <code>bar.c</code>?</p>
-<p>It’s easy with the <code>extern</code> keyword:</p>
+<p>Sadece bu kadar. Dosya kapsamında yeni bir <code>int a</code> bildirimi.</p>
+<p>Peki ya <code>foo.c</code> adında başka bir kaynak dosyamız olsaydı ve <code>bar.c</code> içindeki <code>a</code> değişkenine başvurmak isteseydik?</p>
+<p><code>extern</code> anahtar kelimesi ile bu çok kolaydır:</p>
 <div class="sourceCode" id="cb284"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb284-1"><a href="types-iv-qualifiers-and-specifiers.html#cb284-1"></a><span class="co">// foo.c</span></span>
 <span id="cb284-2"><a href="types-iv-qualifiers-and-specifiers.html#cb284-2"></a></span>
 <span id="cb284-3"><a href="types-iv-qualifiers-and-specifiers.html#cb284-3"></a><span class="kw">extern</span> <span class="dt">int</span> a<span class="op">;</span></span>
 <span id="cb284-4"><a href="types-iv-qualifiers-and-specifiers.html#cb284-4"></a></span>
 <span id="cb284-5"><a href="types-iv-qualifiers-and-specifiers.html#cb284-5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb284-6"><a href="types-iv-qualifiers-and-specifiers.html#cb284-6"></a><span class="op">{</span></span>
-<span id="cb284-7"><a href="types-iv-qualifiers-and-specifiers.html#cb284-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// 37, from bar.c!</span></span>
+<span id="cb284-7"><a href="types-iv-qualifiers-and-specifiers.html#cb284-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// bar.c&#39;den gelen 37!</span></span>
 <span id="cb284-8"><a href="types-iv-qualifiers-and-specifiers.html#cb284-8"></a></span>
 <span id="cb284-9"><a href="types-iv-qualifiers-and-specifiers.html#cb284-9"></a>    a <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
 <span id="cb284-10"><a href="types-iv-qualifiers-and-specifiers.html#cb284-10"></a></span>
-<span id="cb284-11"><a href="types-iv-qualifiers-and-specifiers.html#cb284-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Same &quot;a&quot; from bar.c, but it&#39;s now 99</span></span>
+<span id="cb284-11"><a href="types-iv-qualifiers-and-specifiers.html#cb284-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// bar.c&#39;deki aynı &quot;a&quot;, ama artık 99</span></span>
 <span id="cb284-12"><a href="types-iv-qualifiers-and-specifiers.html#cb284-12"></a><span class="op">}</span></span></code></pre></div>
-<p>We could have also made the <code>extern int a</code> in block scope, and it still would have referred to the <code>a</code> in <code>bar.c</code>:</p>
+<p>Ayrıca <code>extern int a</code> bildirimini blok kapsamında da yapabilirdik ve yine de <code>bar.c</code> içindeki <code>a</code> değişkenine başvuruyor olurdu:</p>
 <div class="sourceCode" id="cb285"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb285-1"><a href="types-iv-qualifiers-and-specifiers.html#cb285-1"></a><span class="co">// foo.c</span></span>
 <span id="cb285-2"><a href="types-iv-qualifiers-and-specifiers.html#cb285-2"></a></span>
 <span id="cb285-3"><a href="types-iv-qualifiers-and-specifiers.html#cb285-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb285-4"><a href="types-iv-qualifiers-and-specifiers.html#cb285-4"></a><span class="op">{</span></span>
 <span id="cb285-5"><a href="types-iv-qualifiers-and-specifiers.html#cb285-5"></a>    <span class="kw">extern</span> <span class="dt">int</span> a<span class="op">;</span></span>
 <span id="cb285-6"><a href="types-iv-qualifiers-and-specifiers.html#cb285-6"></a></span>
-<span id="cb285-7"><a href="types-iv-qualifiers-and-specifiers.html#cb285-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// 37, from bar.c!</span></span>
+<span id="cb285-7"><a href="types-iv-qualifiers-and-specifiers.html#cb285-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// bar.c&#39;den gelen 37!</span></span>
 <span id="cb285-8"><a href="types-iv-qualifiers-and-specifiers.html#cb285-8"></a></span>
 <span id="cb285-9"><a href="types-iv-qualifiers-and-specifiers.html#cb285-9"></a>    a <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
 <span id="cb285-10"><a href="types-iv-qualifiers-and-specifiers.html#cb285-10"></a></span>
-<span id="cb285-11"><a href="types-iv-qualifiers-and-specifiers.html#cb285-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Same &quot;a&quot; from bar.c, but it&#39;s now 99</span></span>
+<span id="cb285-11"><a href="types-iv-qualifiers-and-specifiers.html#cb285-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// bar.c&#39;deki aynı &quot;a&quot;, ama artık 99</span></span>
 <span id="cb285-12"><a href="types-iv-qualifiers-and-specifiers.html#cb285-12"></a><span class="op">}</span></span></code></pre></div>
-<p>Now, if <code>a</code> in <code>bar.c</code> had been marked <code>static</code>. this wouldn’t have worked. <code>static</code> variables at file scope are not visible outside that file.</p>
-<p>A final note about <code>extern</code> on functions. For functions, <code>extern</code> is the default, so it’s redundant. You can declare a function <code>static</code> if you only want it visible in a single source file.</p>
+<p>Şimdi, eğer <code>bar.c</code> içindeki <code>a</code> değişkeni <code>static</code> olarak işaretlenmiş olsaydı bu çalışmazdı. Dosya kapsamındaki <code>static</code> değişkenler o dosyanın dışında görünür değildir.</p>
+<p>Fonksiyonlarda <code>extern</code> kullanımı hakkında son bir not. Fonksiyonlar için <code>extern</code> varsayılardır, bu yüzden kullanımı gereksizdir. Bir fonksiyonun yalnızca tek bir kaynak dosyada görünür olmasını istiyorsanız onu <code>static</code> olarak bildirebilirsiniz.</p>
 <p></p>
 <h3 data-number="16.2.4" id="register"><span class="header-section-number">16.2.4</span> <code>register</code></h3>
 <p></p>
-<p>This is a keyword to hint to the compiler that this variable is frequently-used, and should be made as fast as possible to access. The compiler is under no obligation to agree to it.</p>
-<p>Now, modern C compiler optimizers are pretty effective at figuring this out themselves, so it’s rare to see these days.</p>
-<p>But if you must:</p>
+<p>Bu, derleyiciye bu değişkenin sık kullanıldığı ve erişiminin mümkün olduğunca hızlı yapılması gerektiği yönünde ipucu veren bir anahtar kelimedir. Derleyicinin buna uyma zorunluluğu yoktur.</p>
+<p>Günümüzde modern C derleyici optimizasyon araçları bunu kendileri belirlemede oldukça başarılıdır, bu yüzden bugünlerde bunu görmek nadirdir.</p>
+<p>Ama yine de kullanmak isterseniz:</p>
 <div class="sourceCode" id="cb286"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb286-1"><a href="types-iv-qualifiers-and-specifiers.html#cb286-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb286-2"><a href="types-iv-qualifiers-and-specifiers.html#cb286-2"></a></span>
 <span id="cb286-3"><a href="types-iv-qualifiers-and-specifiers.html#cb286-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb286-4"><a href="types-iv-qualifiers-and-specifiers.html#cb286-4"></a><span class="op">{</span></span>
-<span id="cb286-5"><a href="types-iv-qualifiers-and-specifiers.html#cb286-5"></a>    <span class="dt">register</span> <span class="dt">int</span> a<span class="op">;</span>   <span class="co">// Make &quot;a&quot; as fast to use as possible.</span></span>
+<span id="cb286-5"><a href="types-iv-qualifiers-and-specifiers.html#cb286-5"></a>    <span class="dt">register</span> <span class="dt">int</span> a<span class="op">;</span>   <span class="co">// &quot;a&quot; değişkeninin kullanımını olabildiğince hızlı yap.</span></span>
 <span id="cb286-6"><a href="types-iv-qualifiers-and-specifiers.html#cb286-6"></a></span>
 <span id="cb286-7"><a href="types-iv-qualifiers-and-specifiers.html#cb286-7"></a>    <span class="cf">for</span> <span class="op">(</span>a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> a<span class="op">++)</span></span>
 <span id="cb286-8"><a href="types-iv-qualifiers-and-specifiers.html#cb286-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span></span>
 <span id="cb286-9"><a href="types-iv-qualifiers-and-specifiers.html#cb286-9"></a><span class="op">}</span></span></code></pre></div>
-<p>It does come at a price, however. You can’t take the address of a register:</p>
+<p>Ancak bunun bir bedeli vardır. Bir register değişkeninin adresini alamazsınız:</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb287-1"><a href="types-iv-qualifiers-and-specifiers.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">;</span></span>
-<span id="cb287-2"><a href="types-iv-qualifiers-and-specifiers.html#cb287-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span>    <span class="co">// COMPILER ERROR! Can&#39;t take address of a register</span></span></code></pre></div>
-<p>The same applies to any part of an array:</p>
+<span id="cb287-2"><a href="types-iv-qualifiers-and-specifiers.html#cb287-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span>    <span class="co">// DERLEYİCİ HATASI! Bir register&#39;ın adresi alınamaz</span></span></code></pre></div>
+<p>Aynı durum bir dizinin herhangi bir parçası için de geçerlidir:</p>
 <div class="sourceCode" id="cb288"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb288-1"><a href="types-iv-qualifiers-and-specifiers.html#cb288-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
-<span id="cb288-2"><a href="types-iv-qualifiers-and-specifiers.html#cb288-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> a<span class="op">;</span>  <span class="co">// COMPILER ERROR! Can&#39;t take address of a[0]</span></span></code></pre></div>
-<p>Or dereferencing part of an array:</p>
+<span id="cb288-2"><a href="types-iv-qualifiers-and-specifiers.html#cb288-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> a<span class="op">;</span>  <span class="co">// DERLEYİCİ HATASI! a[0]&#39;ın adresi alınamaz</span></span></code></pre></div>
+<p>Veya dizinin bir elemanının değerini dolaylı yoldan almak için de:</p>
 <div class="sourceCode" id="cb289"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb289-1"><a href="types-iv-qualifiers-and-specifiers.html#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
 <span id="cb289-2"><a href="types-iv-qualifiers-and-specifiers.html#cb289-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb289-3"><a href="types-iv-qualifiers-and-specifiers.html#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="op">*(</span>a <span class="op">+</span> <span class="dv">2</span><span class="op">);</span>  <span class="co">// COMPILER ERROR! Address of a[0] taken</span></span></code></pre></div>
-<p>Interestingly, for the equivalent with array notation, gcc only warns:</p>
+<span id="cb289-3"><a href="types-iv-qualifiers-and-specifiers.html#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="op">*(</span>a <span class="op">+</span> <span class="dv">2</span><span class="op">);</span>  <span class="co">// DERLEYİCİ HATASI! a[0]&#39;ın adresi alındı</span></span></code></pre></div>
+<p>İlginç bir şekilde, dizi gösterimiyle eşdeğer olan kullanım için gcc yalnızca uyarı verir:</p>
 <div class="sourceCode" id="cb290"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb290-1"><a href="types-iv-qualifiers-and-specifiers.html#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
 <span id="cb290-2"><a href="types-iv-qualifiers-and-specifiers.html#cb290-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb290-3"><a href="types-iv-qualifiers-and-specifiers.html#cb290-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> a<span class="op">[</span><span class="dv">2</span><span class="op">];</span>  <span class="co">// COMPILER </span><span class="al">WARNING</span><span class="co">!</span></span></code></pre></div>
-<p>with:</p>
+<span id="cb290-3"><a href="types-iv-qualifiers-and-specifiers.html#cb290-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> a<span class="op">[</span><span class="dv">2</span><span class="op">];</span>  <span class="co">// DERLEYİCİ UYARISI!</span></span></code></pre></div>
+<p>şununla:</p>
 <div class="sourceCode" id="cb291"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb291-1"><a href="types-iv-qualifiers-and-specifiers.html#cb291-1" aria-hidden="true" tabindex="-1"></a>warning: ISO C forbids subscripting ‘register’ array</span></code></pre></div>
-<p>The fact that you can’t take the address of a register variable frees the compiler up to make optimizations around that assumption if it hasn’t figured them out already. Also adding <code>register</code> to a <code>const</code> variable prevents one from accidentally passing its pointer to another function that willfully ignore its constness<a href="function-specifiers-alignment-specifiersoperators.html#fn117" class="footnote-ref" id="fnref117" role="doc-noteref"><sup>117</sup></a>.</p>
-<p>A bit of historic backstory, here: deep inside the CPU are little dedicated “variables” called <a href="https://en.wikipedia.org/wiki/Processor_register" target="_blank" rel="noopener noreferrer"><em>registers</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn118" class="footnote-ref" id="fnref118" role="doc-noteref"><sup>118</sup></a>. They are super fast to access compared to RAM, so using them gets you a speed boost. But they’re not in RAM, so they don’t have an associated memory address (which is why you can’t take the address-of or get a pointer to them).</p>
-<p>But, like I said, modern compilers are really good at producing optimal code, using registers whenever possible regardless of whether or not you specified the <code>register</code> keyword. Not only that, but the spec allows them to just treat it as if you’d typed <code>auto</code>, if they want. So no guarantees.</p>
+<p>Bir register değişkeninin adresini alamıyor oluşunuz, derleyici henüz bu optimizasyonu yapmadıysa bile bu varsayım etrafında optimizasyon yapabilmesini sağlar. Ayrıca <code>const</code> bir değişkene <code>register</code> eklemek, onun pointer'ının constness özelliğini kasten göz ardı eden başka bir fonksiyona kazara geçirilmesini önler<a href="function-specifiers-alignment-specifiersoperators.html#fn117" class="footnote-ref" id="fnref117" role="doc-noteref"><sup>117</sup></a>.</p>
+<p>Burada biraz tarihsel arka plan bilgisi verelim: İşlemcinin (CPU) derinliklerinde <a href="https://en.wikipedia.org/wiki/Processor_register" target="_blank" rel="noopener noreferrer"><em>yazmaçlar</em> (registers)</a><a href="function-specifiers-alignment-specifiersoperators.html#fn118" class="footnote-ref" id="fnref118" role="doc-noteref"><sup>118</sup></a> adı verilen küçük özel "değişkenler" bulunur. Bunlara erişim RAM'e kıyasla süper hızlıdır, dolayısıyla bunları kullanmak size hız artışı sağlar. Ancak RAM'de olmadıkları için ilişkili bir bellek adresleri yoktur (bu yüzden adreslerini alamaz veya onlara işaret eden bir pointer elde edemezsiniz).</p>
+<p>Fakat söylediğim gibi, modern derleyiciler <code>register</code> anahtar kelimesini belirtip belirtmediğinize bakmaksızın mümkün olan her durumda yazmaçları kullanarak optimum kod üretme konusunda gerçekten çok iyidir. Sadece bu da değil, standart derleyicilerin isterlerse buna sanki <code>auto</code> yazmışsınız gibi davranmalarına da izin verir. Dolayısıyla bir garanti yoktur.</p>
 <p></p>
 <h3 data-number="16.2.5" id="thread_local"><span class="header-section-number">16.2.5</span> <code>_Thread_local</code></h3>
 <p></p>
-<p>When you’re using multiple threads and you have some variables in either global or <code>static</code> block scope, this is a way to make sure that each thread gets its own copy of the variable. This’ll help you avoid race conditions and threads stepping on each other’s toes.</p>
-<p>If you’re in block scope, you have to use this along with either <code>extern</code> or <code>static</code>.</p>
-<p>Also, if you include <code>&lt;threads.h&gt;</code>, you can use the rather more palatable <code>thread_local</code> as an alias for the uglier <code>_Thread_local</code>.</p>
-<p>More information can be found in the <a href="multithreading.html#thread-local">Threads section</a>.</p>
+<p>Birden fazla izlek (thread) kullandığınızda ve küresel ya da <code>static</code> blok kapsamında bazı değişkenleriniz olduğunda, her izleğin değişkenin kendi kopyasını almasını sağlamanın yolu budur. Bu, yarış koşullarından (race conditions) ve izleklerin birbirinin ayağına basmasından kaçınmanıza yardımcı olur.</p>
+<p>Blok kapsamındaysanız, bunu <code>extern</code> veya <code>static</code> ile birlikte kullanmanız gerekir.</p>
+<p>Ayrıca <code>&lt;threads.h&gt;</code> başlık dosyasını dahil ederseniz, daha çirkin olan <code>_Thread_local</code> yerine daha göze hoş gelen <code>thread_local</code> takma adını kullanabilirsiniz.</p>
+<p>Daha fazla bilgi <a href="multithreading.html#thread-local">İzlekler (Threads) bölümünde</a> bulunabilir.</p>
 <p> </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C

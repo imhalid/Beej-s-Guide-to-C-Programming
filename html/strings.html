@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,37 +32,37 @@
 </head>
 <body>
 <div class="nav-header"><a href="arrays.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="structs.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="7" id="strings"><span class="header-section-number">7</span> Strings</h1>
-<p>Finally! Strings! What could be simpler?</p>
-<p>Well, turns out strings aren’t actually strings in C. That’s right! They’re pointers! Of course they are!</p>
-<p>Much like arrays, strings in C <em>barely exist</em>.</p>
-<p>But let’s check it out—it’s not really such a big deal.</p>
-<h2 data-number="7.1" id="string-literals"><span class="header-section-number">7.1</span> String Literals</h2>
-<p>Before we start, let’s talk about string literals in C. These are sequences of characters in <em>double</em> quotes (<code>"</code>). (Single quotes enclose characters, and are a different animal entirely.)</p>
-<p>Examples:</p>
+<h1 data-number="7" id="strings"><span class="header-section-number">7</span> Metin Dizileri (Strings)</h1>
+<p>Nihayet! String'ler (metin dizileri)! Bundan daha basit ne olabilir ki?</p>
+<p>Şey, meğer C'de string'ler aslında bildiğimiz string'ler değilmiş. Aynen öyle! Onlar da pointer! Tabii ki öyleler!</p>
+<p>Tıpkı diziler gibi, C'de string'ler de <em>zar zor var olurlar</em>.</p>
+<p>Ama gelin inceleyelim—aslında o kadar da büyük bir olay değil.</p>
+<h2 data-number="7.1" id="string-literals"><span class="header-section-number">7.1</span> String Sabitleri (String Literals)</h2>
+<p>Başlamadan önce C'deki string sabitleri (string literals) hakkında konuşalım. Bunlar <em>çift</em> tırnak (<code>"</code>) içindeki karakter dizileridir. (Tek tırnaklar karakterleri kapsar ve tamamen farklı bir canlı türüdür.)</p>
+<p>Örnekler:</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb113-1"><a href="strings.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span></span>
 <span id="cb113-2"><a href="strings.html#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;This is a test.&quot;</span></span>
 <span id="cb113-3"><a href="strings.html#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;When asked if this string had quotes in it, she replied, </span><span class="sc">\&quot;</span><span class="st">It does.</span><span class="sc">\&quot;</span><span class="st">&quot;</span></span></code></pre></div>
-<p>The first one has a newline at the end—quite a common thing to see.</p>
-<p>The last one has quotes embedded within it, but you see each is preceded by (we say “escaped by”) a backslash (<code>\</code>) indicating that a literal quote belongs in the string at this point. This is how the C compiler can tell the difference between printing a double quote and the double quote at the end of the string.</p>
-<h2 data-number="7.2" id="string-variables"><span class="header-section-number">7.2</span> String Variables</h2>
-<p>Now that we know how to make a string literal, let’s assign it to a variable so we can do something with it.</p>
+<p>İlki sonunda yeni satır karakteri içerir—görmesi oldukça yaygın bir şey.</p>
+<p>Sonuncusu içinde tırnak işaretleri barındırır, ancak her birinin önünde bu noktada string'e literal bir tırnak işaretinin ait olduğunu belirten bir ters eğik çizgi (<code>\</code>) (kaçış karakteri / escaped) görürsünüz. C derleyicisi bir çift tırnak yazdırmak ile string'in sonundaki çift tırnak arasındaki farkı bu şekilde anlar.</p>
+<h2 data-number="7.2" id="string-variables"><span class="header-section-number">7.2</span> String Değişkenleri</h2>
+<p>Artık bir string sabiti oluşturmayı bildiğimize göre, onunla bir şeyler yapabilmek için onu bir değişkene atayalım.</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb114-1"><a href="strings.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
-<p>Check out that type: pointer to a <code>char</code>. The string variable <code>s</code> is actually a pointer to the first character in that string, namely the <code>H</code>.</p>
-<p>And we can print it with the <code>%s</code> (for “string”) format specifier:</p>
+<p>Şu türe dikkat edin: <code>char</code> göstericisi (pointer to <code>char</code>). <code>s</code> string değişkeni aslında o string'deki ilk karaktere, yani <code>H</code> harfine bir pointer'dır.</p>
+<p>Ve onu <code>%s</code> ("string" için) format belirteci ile yazdırabiliriz:</p>
 <div class="sourceCode" id="cb115"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb115-1"><a href="strings.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
 <span id="cb115-2"><a href="strings.html#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb115-3"><a href="strings.html#cb115-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;Hello, world!&quot;</span></span></code></pre></div>
 <p></p>
-<h2 data-number="7.3" id="string-variables-as-arrays"><span class="header-section-number">7.3</span> String Variables as Arrays</h2>
-<p> Another option is this, nearly equivalent to the above <code>char*</code> usage:</p>
+<h2 data-number="7.3" id="string-variables-as-arrays"><span class="header-section-number">7.3</span> Dizi Olarak String Değişkenleri</h2>
+<p> Başka bir seçenek de yukarıdaki <code>char*</code> kullanımıyla neredeyse eşdeğer olan şudur:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb116-1"><a href="strings.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[</span><span class="dv">14</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
 <span id="cb116-2"><a href="strings.html#cb116-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb116-3"><a href="strings.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="co">// or, if we were properly lazy and have the compiler</span></span>
-<span id="cb116-4"><a href="strings.html#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="co">// figure the length for us:</span></span>
+<span id="cb116-3"><a href="strings.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="co">// veya tam anlamıyla tembellik edip derleyicinin</span></span>
+<span id="cb116-4"><a href="strings.html#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="co">// uzunluğu bizim yerimize hesaplamasını istersek:</span></span>
 <span id="cb116-5"><a href="strings.html#cb116-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb116-6"><a href="strings.html#cb116-6" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
-<p>This means you can use array notation to access characters in a string. Let’s do exactly that to print all the characters in a string on the same line:</p>
+<p>Bu, bir string'deki karakterlere erişmek için dizi notasyonunu kullanabileceğiniz anlamına gelir. Bir string'deki tüm karakterleri aynı satırda yazdırmak için tam olarak bunu yapalım:</p>
 <div class="sourceCode" id="cb117"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb117-1"><a href="strings.html#cb117-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb117-2"><a href="strings.html#cb117-2"></a></span>
 <span id="cb117-3"><a href="strings.html#cb117-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -73,39 +73,39 @@
 <span id="cb117-8"><a href="strings.html#cb117-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb117-9"><a href="strings.html#cb117-9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb117-10"><a href="strings.html#cb117-10"></a><span class="op">}</span></span></code></pre></div>
-<p>Note that we’re using the format specifier <code>%c</code> to print a single character.</p>
-<p>Also, check this out. The program will still work fine if we change the definition of <code>s</code> to be a <code>char*</code> type:</p>
+<p>Tek bir karakter yazdırmak için <code>%c</code> format belirtecini kullandığımıza dikkat edin.</p>
+<p>Ayrıca şuna da bakın. <code>s</code> tanımını bir <code>char*</code> türü yapacak şekilde değiştirsek bile program yine sorunsuz çalışacaktır:</p>
 <div class="sourceCode" id="cb118"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb118-1"><a href="strings.html#cb118-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb118-2"><a href="strings.html#cb118-2"></a></span>
 <span id="cb118-3"><a href="strings.html#cb118-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb118-4"><a href="strings.html#cb118-4"></a><span class="op">{</span></span>
-<span id="cb118-5"><a href="strings.html#cb118-5"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span>   <span class="co">// char* here</span></span>
+<span id="cb118-5"><a href="strings.html#cb118-5"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span>   <span class="co">// Burası char*</span></span>
 <span id="cb118-6"><a href="strings.html#cb118-6"></a></span>
 <span id="cb118-7"><a href="strings.html#cb118-7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">13</span><span class="op">;</span> i<span class="op">++)</span></span>
-<span id="cb118-8"><a href="strings.html#cb118-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// But still use arrays here...?</span></span>
+<span id="cb118-8"><a href="strings.html#cb118-8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// Ama yine de dizileri mi kullanıyoruz...?</span></span>
 <span id="cb118-9"><a href="strings.html#cb118-9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb118-10"><a href="strings.html#cb118-10"></a><span class="op">}</span></span></code></pre></div>
-<p>And we still can use array notation to get the job done when printing it out! This is surprising, but is still only because we haven’t talked about array/pointer equivalence yet. But this is yet another hint that arrays and pointers are the same thing, deep down. </p>
-<h2 data-number="7.4" id="string-initializers"><span class="header-section-number">7.4</span> String Initializers</h2>
-<p> We’ve already seen some examples with initializing string variables with string literals:</p>
+<p>Ve ekrana yazdırırken işi halletmek için hala dizi notasyonunu kullanabiliyoruz! Bu şaşırtıcıdır, ancak sadece henüz dizi/pointer eşdeğerliği hakkında konuşmadığımız içindir. Bu da derinlerde dizilerin ve pointer'ların aynı şey olduğuna dair bir başka ipucudur. </p>
+<h2 data-number="7.4" id="string-initializers"><span class="header-section-number">7.4</span> String İlklendiricileri (String Initializers)</h2>
+<p> String değişkenlerini string sabitleriyle ilklendirmeye dair bazı örnekler görmüştük:</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb119-1"><a href="strings.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
 <span id="cb119-2"><a href="strings.html#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, again!&quot;</span><span class="op">;</span></span></code></pre></div>
-<p>But these two initializations are subtly different. A string literal, similar to an integer literal, has its memory automatically managed by the compiler for you! With an integer, i.e. a fixed size piece of data, the compiler can pretty easily manage it. But strings are a variable-byte beast which the compiler tames by tossing into a chunk of memory, and giving you a pointer to it.</p>
-<p>This form points to wherever that string was placed. Typically, that place is in a land faraway from the rest of your program’s memory – read-only memory – for reasons related to performance &amp; safety.</p>
+<p>Ancak bu iki ilklendirme ince bir şekilde birbirinden farklıdır. Bir string sabiti, bir tamsayı sabitine benzer şekilde, belleği derleyici tarafından sizin için otomatik olarak yönetilen bir şeydir! Bir tamsayı ile, yani sabit boyutlu bir veri parçasıyla, derleyici onu oldukça kolay yönetebilir. Ancak string'ler, derleyicinin bir bellek yığınına atıp size ona bir pointer vererek ehlileştirdiği değişken baytlı bir canavardır.</p>
+<p>Bu biçim, o string'in yerleştirildiği yere işaret eder. Tipik olarak, performans ve güvenlik nedenleriyle o yer, programınızın belleğinin geri kalanından uzak bir diyardır – salt okunur bellek (read-only memory).</p>
 <div class="sourceCode" id="cb120"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb120-1"><a href="strings.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
-<p>So, if you try to mutate that string with this:</p>
+<p>Yani şu şekilde o string'i değiştirmeye (mutate etmeye) çalışırsanız:</p>
 <div class="sourceCode" id="cb121"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb121-1"><a href="strings.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
 <span id="cb121-2"><a href="strings.html#cb121-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb121-3"><a href="strings.html#cb121-3" aria-hidden="true" tabindex="-1"></a>s<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span>  <span class="co">// BAD NEWS: tried to mutate a string literal!</span></span></code></pre></div>
-<p>The behavior is undefined. Probably, depending on your system, a crash will result.</p>
-<p>But declaring it as an array is different. The compiler doesn’t stow those bytes in another part of town, they’re right down the street. This one is a mutable <em>copy</em> of the string – one we can change at will:</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb122-1"><a href="strings.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, again!&quot;</span><span class="op">;</span>  <span class="co">// t is an array copy of the string </span></span>
-<span id="cb122-2"><a href="strings.html#cb122-2" aria-hidden="true" tabindex="-1"></a>t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span> <span class="co">//  No problem</span></span>
+<span id="cb121-3"><a href="strings.html#cb121-3" aria-hidden="true" tabindex="-1"></a>s<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span>  <span class="co">// KÖTÜ HABER: bir string sabitini değiştirmeye çalıştı!</span></span></code></pre></div>
+<p>Davranış tanımsızdır (undefined behavior). Muhtemelen sisteminize bağlı olarak bir çökme ile sonuçlanacaktır.</p>
+<p>Ancak bunu bir dizi olarak tanımlamak farklıdır. Derleyici bu baytları şehrin başka bir yerine istiflemez, tam sokağın aşağısındadırlar. Bu, istediğimiz zaman değiştirebileceğimiz string'in değiştirilebilir bir <em>kopyasıdır</em>:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb122-1"><a href="strings.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, again!&quot;</span><span class="op">;</span>  <span class="co">// t string'in dizi kopyasıdır</span></span>
+<span id="cb122-2"><a href="strings.html#cb122-2" aria-hidden="true" tabindex="-1"></a>t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span> <span class="co">//  Problem yok</span></span>
 <span id="cb122-3"><a href="strings.html#cb122-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb122-4"><a href="strings.html#cb122-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span>  <span class="co">// &quot;zello, again!&quot;</span></span></code></pre></div>
-<p>So remember: if you have a pointer to a string literal, don’t try to change it! And if you use a string in double quotes to initialize an array, that’s not actually a string literal. </p>
-<h2 data-number="7.5" id="getting-string-length"><span class="header-section-number">7.5</span> Getting String Length</h2>
-<p> You can’t, since C doesn’t track it for you. And when I say “can’t”, I actually mean “can”<a href="function-specifiers-alignment-specifiersoperators.html#fn64" class="footnote-ref" id="fnref64" role="doc-noteref"><sup>64</sup></a>. There’s a function in <code>&lt;string.h&gt;</code> called <code>strlen()</code> that can be used to compute the length of any string in bytes<a href="function-specifiers-alignment-specifiersoperators.html#fn65" class="footnote-ref" id="fnref65" role="doc-noteref"><sup>65</sup></a>.</p>
+<p>Bu yüzden unutmayın: Bir string sabitine pointer'ınız varsa onu değiştirmeye çalışmayın! Ve bir diziyi ilklendirmek için çift tırnaklı bir string kullanırsanız, bu aslında bir string sabiti değildir. </p>
+<h2 data-number="7.5" id="getting-string-length"><span class="header-section-number">7.5</span> String Uzunluğunu Almak</h2>
+<p> Alamazsınız, çünkü C bunu sizin için takip etmez. Ve "alamazsınız" derken aslında "alabilirsiniz" demek istiyorum<a href="function-specifiers-alignment-specifiersoperators.html#fn64" class="footnote-ref" id="fnref64" role="doc-noteref"><sup>64</sup></a>. <code>&lt;string.h&gt;</code> içinde, herhangi bir string'in bayt cinsinden uzunluğunu hesaplamak için kullanılabilen <code>strlen()</code> adında bir fonksiyon vardır<a href="function-specifiers-alignment-specifiersoperators.html#fn65" class="footnote-ref" id="fnref65" role="doc-noteref"><sup>65</sup></a>.</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb123-1"><a href="strings.html#cb123-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb123-2"><a href="strings.html#cb123-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
 <span id="cb123-3"><a href="strings.html#cb123-3"></a></span>
@@ -115,42 +115,42 @@
 <span id="cb123-7"><a href="strings.html#cb123-7"></a></span>
 <span id="cb123-8"><a href="strings.html#cb123-8"></a>    printf<span class="op">(</span><span class="st">&quot;The string is </span><span class="sc">%zu</span><span class="st"> bytes long.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strlen<span class="op">(</span>s<span class="op">));</span></span>
 <span id="cb123-9"><a href="strings.html#cb123-9"></a><span class="op">}</span></span></code></pre></div>
-<p>The <code>strlen()</code> function returns type <code>size_t</code>, which is an integer type so you can use it for integer math. We print <code>size_t</code> with <code>%zu</code>.</p>
-<p>The above program prints:</p>
+<p><code>strlen()</code> fonksiyonu <code>size_t</code> türünde bir değer döndürür; bu tamsayı türündedir, böylece tamsayı matematiği için kullanabilirsiniz. <code>size_t</code> türünü <code>%zu</code> ile yazdırırız.</p>
+<p>Yukarıdaki program şunu yazdırır:</p>
 <div class="sourceCode" id="cb124"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb124-1"><a href="strings.html#cb124-1" aria-hidden="true" tabindex="-1"></a>The string is 13 bytes long.</span></code></pre></div>
-<p>Great! So it <em>is</em> possible to get the string length! </p>
-<p>But… if C doesn’t track the length of the string anywhere, how does it know how long the string is?</p>
-<h2 data-number="7.6" id="string-termination"><span class="header-section-number">7.6</span> String Termination</h2>
-<p> C does strings a little differently than many programming languages, and in fact differently than almost every modern programming language.</p>
-<p>When you’re making a new language, you have basically two options for storing a string in memory:</p>
+<p>Harika! Yani string uzunluğunu almak <em>mümkünmüş</em>! </p>
+<p>Ama… C hiçbir yerde string'in uzunluğunu takip etmiyorsa, string'in ne kadar uzun olduğunu nasıl biliyor?</p>
+<h2 data-number="7.6" id="string-termination"><span class="header-section-number">7.6</span> String Sonlandırma (String Termination)</h2>
+<p> C string'leri diğer birçok programlama dilinden ve hatta neredeyse tüm modern programlama dillerinden biraz farklı yapar.</p>
+<p>Yeni bir dil yaparken bir string'i bellekte saklamak için temel olarak iki seçeneğiniz vardır:</p>
 <ol type="1">
-<li><p>Store the bytes of the string along with a number indicating the length of the string.</p></li>
-<li><p>Store the bytes of the string, and mark the end of the string with a special byte called the <em>terminator</em>.</p></li>
+<li><p>String'in baytlarını, string'in uzunluğunu belirten bir sayı ile birlikte saklamak.</p></li>
+<li><p>String'in baytlarını saklamak ve string'in sonunu <em>sonlandırıcı (terminator)</em> adı verilen özel bir bayt ile işaretlemek.</p></li>
 </ol>
-<p>If you want strings longer than 255 characters, option 1 requires at least two bytes to store the length. Whereas option 2 only requires one byte to terminate the string. So a bit of savings there.</p>
-<p>Of course, these days it seems ridiculous to worry about saving a byte (or 3—lots of languages will happily let you have strings that are 4 gigabytes in length). But back in the day, it was a bigger deal.</p>
-<p>So C took approach #2. In C, a “string” is defined by two basic characteristics:</p>
+<p>255 karakterden uzun string'ler istiyorsanız 1. seçenek uzunluğu saklamak için en az iki bayt gerektirir. Oysa 2. seçenek string'i sonlandırmak için yalnızca tek bir bayt gerektirir. Yani orada ufak bir tasarruf var.</p>
+<p>Elbette bugünlerde bir bayt (veya 3 bayt – çoğu dil memnuniyetle 4 gigabayt uzunluğunda string'lere izin verir) tasarruf etme konusunda endişelenmek komik görünüyor. Ama zamanında bu daha büyük bir olaydı.</p>
+<p>Bu yüzden C 2. yaklaşımı benimsedi. C'de bir "string" iki temel özellikle tanımlanır:</p>
 <ul>
-<li>A pointer to the first character in the string.</li>
-<li>A zero-valued byte (or <code>NUL</code> character<a href="function-specifiers-alignment-specifiersoperators.html#fn66" class="footnote-ref" id="fnref66" role="doc-noteref"><sup>66</sup></a>) somewhere in memory after the pointer that indicates the end of the string.</li>
+<li>String'deki ilk karaktere bir pointer (gösterici).</li>
+<li>String'in sonunu gösteren, pointer'dan sonra belleğin bir yerindeki sıfır değerli bir bayt (veya <code>NUL</code> karakteri<a href="function-specifiers-alignment-specifiersoperators.html#fn66" class="footnote-ref" id="fnref66" role="doc-noteref"><sup>66</sup></a>).</li>
 </ul>
-<p>A <code>NUL</code> character can be written in C code as <code>\0</code>, though you don’t often have to do this.</p>
-<p>When you include a string in double quotes in your code, the <code>NUL</code> character is automatically, implicitly included.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb125-1"><a href="strings.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello!&quot;</span><span class="op">;</span>  <span class="co">// Actually &quot;Hello!\0&quot; behind the scenes</span></span></code></pre></div>
-<p>So with this in mind, let’s write our own <code>strlen()</code> function that counts <code>char</code>s in a string until it finds a <code>NUL</code>.</p>
-<p>The procedure is to look down the string for a single <code>NUL</code> character, counting as we go<a href="function-specifiers-alignment-specifiersoperators.html#fn67" class="footnote-ref" id="fnref67" role="doc-noteref"><sup>67</sup></a>:</p>
+<p>Bir <code>NUL</code> karakteri C kodunda <code>\0</code> olarak yazılabilir, ancak bunu sık sık yapmak zorunda kalmazsınız.</p>
+<p>Kodunuza çift tırnak içinde bir string dahil ettiğinizde <code>NUL</code> karakteri otomatik ve örtük (implicit) olarak dahil edilir.</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb125-1"><a href="strings.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello!&quot;</span><span class="op">;</span>  <span class="co">// Arka planda aslında &quot;Hello!\0&quot;</span></span></code></pre></div>
+<p>Bunu aklımızda tutarak, bir <code>NUL</code> bulana kadar bir string'deki <code>char</code>'ları sayan kendi <code>strlen()</code> fonksiyonumuzu yazalım.</p>
+<p>Prosedür, ilerledikçe sayarak tek bir <code>NUL</code> karakteri için string boyunca ileriye bakmaktır<a href="function-specifiers-alignment-specifiersoperators.html#fn67" class="footnote-ref" id="fnref67" role="doc-noteref"><sup>67</sup></a>:</p>
 <div class="sourceCode" id="cb126"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb126-1"><a href="strings.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
 <span id="cb126-2"><a href="strings.html#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb126-3"><a href="strings.html#cb126-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb126-4"><a href="strings.html#cb126-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb126-5"><a href="strings.html#cb126-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>s<span class="op">[</span>count<span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span>  <span class="co">// Single quotes for single char</span></span>
+<span id="cb126-5"><a href="strings.html#cb126-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>s<span class="op">[</span>count<span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span>  <span class="co">// Tek karakter için tek tırnak</span></span>
 <span id="cb126-6"><a href="strings.html#cb126-6" aria-hidden="true" tabindex="-1"></a>        count<span class="op">++;</span></span>
 <span id="cb126-7"><a href="strings.html#cb126-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb126-8"><a href="strings.html#cb126-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> count<span class="op">;</span></span>
 <span id="cb126-9"><a href="strings.html#cb126-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>And that’s basically how the built-in <code>strlen()</code> gets the job done. </p>
-<h2 data-number="7.7" id="copying-a-string"><span class="header-section-number">7.7</span> Copying a String</h2>
-<p> You can’t copy a string through the assignment operator (<code>=</code>). All that does is make a copy of the pointer to the first character… so you end up with two pointers to the same string:</p>
+<p>Ve dahili <code>strlen()</code> fonksiyonu temel olarak işi bu şekilde halleder. </p>
+<h2 data-number="7.7" id="copying-a-string"><span class="header-section-number">7.7</span> Bir String'i Kopyalamak</h2>
+<p> Atama operatörü (<code>=</code>) aracılığıyla bir string'i kopyalayamazsınız. Tüm yaptığı ilk karaktere olan pointer'ın bir kopyasını oluşturmaktır… böylece aynı string'e iki pointer ile kalakalırsınız:</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb127-1"><a href="strings.html#cb127-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb127-2"><a href="strings.html#cb127-2"></a></span>
 <span id="cb127-3"><a href="strings.html#cb127-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -158,40 +158,40 @@
 <span id="cb127-5"><a href="strings.html#cb127-5"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
 <span id="cb127-6"><a href="strings.html#cb127-6"></a>    <span class="dt">char</span> <span class="op">*</span>t<span class="op">;</span></span>
 <span id="cb127-7"><a href="strings.html#cb127-7"></a></span>
-<span id="cb127-8"><a href="strings.html#cb127-8"></a>    <span class="co">// This makes a copy of the pointer, not a copy of the string!</span></span>
+<span id="cb127-8"><a href="strings.html#cb127-8"></a>    <span class="co">// Bu pointer'ın kopyasını oluşturur, string'in kopyasını değil!</span></span>
 <span id="cb127-9"><a href="strings.html#cb127-9"></a>    t <span class="op">=</span> s<span class="op">;</span></span>
 <span id="cb127-10"><a href="strings.html#cb127-10"></a></span>
-<span id="cb127-11"><a href="strings.html#cb127-11"></a>    <span class="co">// We modify t</span></span>
+<span id="cb127-11"><a href="strings.html#cb127-11"></a>    <span class="co">// t'yi değiştiriyoruz</span></span>
 <span id="cb127-12"><a href="strings.html#cb127-12"></a>    t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span></span>
 <span id="cb127-13"><a href="strings.html#cb127-13"></a></span>
-<span id="cb127-14"><a href="strings.html#cb127-14"></a>    <span class="co">// But printing s shows the modification!</span></span>
-<span id="cb127-15"><a href="strings.html#cb127-15"></a>    <span class="co">// Because t and s point to the same string!</span></span>
+<span id="cb127-14"><a href="strings.html#cb127-14"></a>    <span class="co">// Ama s'yi yazdırmak değişikliği gösterir!</span></span>
+<span id="cb127-15"><a href="strings.html#cb127-15"></a>    <span class="co">// Çünkü t ve s aynı string'i gösteriyor!</span></span>
 <span id="cb127-16"><a href="strings.html#cb127-16"></a></span>
 <span id="cb127-17"><a href="strings.html#cb127-17"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;zello, world!&quot;</span></span>
 <span id="cb127-18"><a href="strings.html#cb127-18"></a><span class="op">}</span></span></code></pre></div>
-<p>If you want to make a copy of a string, you have to copy it a byte at a time—this means that you’re going to take the individual bytes of the string from one place in memory and duplicate them somewhere else in memory. This is made easier with the <code>strcpy()</code> function.<a href="function-specifiers-alignment-specifiersoperators.html#fn68" class="footnote-ref" id="fnref68" role="doc-noteref"><sup>68</sup></a></p>
-<p>Before you copy the string, make sure you have room to copy it into, i.e. the destination array that’s going to hold the characters needs to be at least as long as the string you’re copying.</p>
+<p>Bir string'in kopyasını almak istiyorsanız onu her seferinde bir bayt kopyalamanız gerekir—bu, string'in münferit baytlarını bellekteki bir yerden alıp bellekteki başka bir yerde çoğaltacağınız anlamına gelir. Bu işlem <code>strcpy()</code> fonksiyonu ile kolaylaştırılmıştır.<a href="function-specifiers-alignment-specifiersoperators.html#fn68" class="footnote-ref" id="fnref68" role="doc-noteref"><sup>68</sup></a></p>
+<p>String'i kopyalamadan önce içine kopyalayacak yeriniz olduğundan emin olun, yani karakterleri tutacak hedef dizinin en az kopyaladığınız string kadar uzun olması gerekir.</p>
 <div class="sourceCode" id="cb128"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb128-1"><a href="strings.html#cb128-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb128-2"><a href="strings.html#cb128-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
 <span id="cb128-3"><a href="strings.html#cb128-3"></a></span>
 <span id="cb128-4"><a href="strings.html#cb128-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb128-5"><a href="strings.html#cb128-5"></a><span class="op">{</span></span>
 <span id="cb128-6"><a href="strings.html#cb128-6"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
-<span id="cb128-7"><a href="strings.html#cb128-7"></a>    <span class="dt">char</span> t<span class="op">[</span><span class="dv">100</span><span class="op">];</span>  <span class="co">// Each char is one byte, so plenty of room</span></span>
+<span id="cb128-7"><a href="strings.html#cb128-7"></a>    <span class="dt">char</span> t<span class="op">[</span><span class="dv">100</span><span class="op">];</span>  <span class="co">// Her char bir bayttır, dolayısıyla bolca yer var</span></span>
 <span id="cb128-8"><a href="strings.html#cb128-8"></a></span>
-<span id="cb128-9"><a href="strings.html#cb128-9"></a>    <span class="co">// This makes a copy of the string!</span></span>
+<span id="cb128-9"><a href="strings.html#cb128-9"></a>    <span class="co">// Bu string'in kopyasını oluşturur!</span></span>
 <span id="cb128-10"><a href="strings.html#cb128-10"></a>    strcpy<span class="op">(</span>t<span class="op">,</span> s<span class="op">);</span></span>
 <span id="cb128-11"><a href="strings.html#cb128-11"></a></span>
-<span id="cb128-12"><a href="strings.html#cb128-12"></a>    <span class="co">// We modify t</span></span>
+<span id="cb128-12"><a href="strings.html#cb128-12"></a>    <span class="co">// t'yi değiştiriyoruz</span></span>
 <span id="cb128-13"><a href="strings.html#cb128-13"></a>    t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span></span>
 <span id="cb128-14"><a href="strings.html#cb128-14"></a></span>
-<span id="cb128-15"><a href="strings.html#cb128-15"></a>    <span class="co">// And s remains unaffected because it&#39;s a different string</span></span>
+<span id="cb128-15"><a href="strings.html#cb128-15"></a>    <span class="co">// Ve s etkilenmeden kalır çünkü farklı bir string'dir</span></span>
 <span id="cb128-16"><a href="strings.html#cb128-16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;Hello, world!&quot;</span></span>
 <span id="cb128-17"><a href="strings.html#cb128-17"></a></span>
-<span id="cb128-18"><a href="strings.html#cb128-18"></a>    <span class="co">// But t has been changed</span></span>
+<span id="cb128-18"><a href="strings.html#cb128-18"></a>    <span class="co">// Ama t değişti</span></span>
 <span id="cb128-19"><a href="strings.html#cb128-19"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span>  <span class="co">// &quot;zello, world!&quot;</span></span>
 <span id="cb128-20"><a href="strings.html#cb128-20"></a><span class="op">}</span></span></code></pre></div>
-<p>Notice with <code>strcpy()</code>, the destination pointer is the first argument, and the source pointer is the second. A mnemonic I use to remember this is that it’s the order you would have put <code>t</code> and <code>s</code> if an assignment <code>=</code> worked for strings, with the source on the right and the destination on the left. </p>
+<p><code>strcpy()</code> ile hedef pointer'ın ilk argüman, kaynak pointer'ın ise ikinci argüman olduğuna dikkat edin. Bunu hatırlamak için kullandığım anımsatıcı (hafıza tekniği), kaynak sağda ve hedef solda olmak üzere string'ler için atama <code>=</code> çalışsaydı <code>t</code> ve <code>s</code> diziliminin olacağı sıra olmasıdır. </p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
     (function() {
@@ -32,19 +32,19 @@
 </head>
 <body>
 <div class="nav-header"><a href="pointers-iii-pointers-to-pointers-and-more.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="variadic-functions.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
-<h1 data-number="24" id="bitwise-operations"><span class="header-section-number">24</span> Bitwise Operations</h1>
+<h1 data-number="24" id="bitwise-operations"><span class="header-section-number">24</span> Bit Düzeyinde İşlemler</h1>
 <p></p>
-<p>These numeric operations effectively allow you to manipulate individual bits in variables, fitting since C is such a low-level langauge<a href="function-specifiers-alignment-specifiersoperators.html#fn152" class="footnote-ref" id="fnref152" role="doc-noteref"><sup>152</sup></a>.</p>
-<p>If you’re not familiar with bitwise operations, <a href="https://en.wikipedia.org/wiki/Bitwise_operation" target="_blank" rel="noopener noreferrer">Wikipedia has a good bitwise article</a><a href="function-specifiers-alignment-specifiersoperators.html#fn153" class="footnote-ref" id="fnref153" role="doc-noteref"><sup>153</sup></a>.</p>
-<h2 data-number="24.1" id="bitwise-and-or-xor-and-not"><span class="header-section-number">24.1</span> Bitwise AND, OR, XOR, and NOT</h2>
-<p>For each of these, the <a href="types-iii-conversions.html#usual-arithmetic-conversions">usual arithmetic conversions</a> take place on the operands (which in this case must be an integer type), and then the appropriate bitwise operation is performed.</p>
+<p>Bu sayısal işlemler, C'nin bu kadar alt seviye bir dil olmasına uygun şekilde, değişkenlerdeki tekil bitleri manipüle etmenize etkili bir şekilde olanak tanır<a href="function-specifiers-alignment-specifiersoperators.html#fn152" class="footnote-ref" id="fnref152" role="doc-noteref"><sup>152</sup></a>.</p>
+<p>Bit düzeyinde işlemlere alışkın değilseniz, <a href="https://en.wikipedia.org/wiki/Bitwise_operation" target="_blank" rel="noopener noreferrer">Wikipedia'da güzel bir bitwise makalesi var</a><a href="function-specifiers-alignment-specifiersoperators.html#fn153" class="footnote-ref" id="fnref153" role="doc-noteref"><sup>153</sup></a>.</p>
+<h2 data-number="24.1" id="bitwise-and-or-xor-and-not"><span class="header-section-number">24.1</span> Bit Düzeyinde AND, OR, XOR ve NOT</h2>
+<p>Bunların her biri için, işlenenler üzerinde (ki bu durumda bir tamsayı türü olmalıdırlar) <a href="types-iii-conversions.html#usual-arithmetic-conversions">olağan aritmetik dönüşümler</a> gerçekleşir ve ardından uygun bit düzeyinde işlem yürütülür.</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Operation</th>
-<th style="text-align: center;">Operator</th>
-<th>Example</th>
+<th>İşlem</th>
+<th style="text-align: center;">Operatör</th>
+<th>Örnek</th>
 </tr>
 </thead>
 <tbody>
@@ -70,15 +70,15 @@
 </tr>
 </tbody>
 </table>
-<p>Note how they’re similar to the Boolean operators <code>&amp;&amp;</code> and <code>||</code>.</p>
-<p>These have assignment shorthand variants similar to <code>+=</code> and <code>-=</code>:</p>
+<p>Bunların <code>&amp;&amp;</code> ve <code>||</code> Mantıksal (Boolean) operatörlerine ne kadar benzediğine dikkat edin.</p>
+<p>Bunların <code>+=</code> ve <code>-=</code> operatörlerine benzer kısa atama eşdeğerleri vardır:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Operator</th>
-<th>Example</th>
-<th>Longhand equivalent</th>
+<th>Operatör</th>
+<th>Örnek</th>
+<th>Uzun Yazım Eşdeğeri</th>
 </tr>
 </thead>
 <tbody>
@@ -99,39 +99,39 @@
 </tr>
 </tbody>
 </table>
-<h2 data-number="24.2" id="bitwise-shift"><span class="header-section-number">24.2</span> Bitwise Shift</h2>
-<p>For these, the <a href="types-iii-conversions.html#integer-promotions">integer promotions</a> are performed on each operand (which must be an integer type) and then a bitwise shift is executed. The type of the result is the type of the promoted left operand.</p>
-<p>New bits are filled with zeros, with a possible exception noted in the implementation-defined behavior, below.</p>
+<h2 data-number="24.2" id="bitwise-shift"><span class="header-section-number">24.2</span> Bit Kaydırma</h2>
+<p>Bunlar için, her bir işlenen üzerinde (ki bir tamsayı türü olmalıdır) <a href="types-iii-conversions.html#integer-promotions">tamsayı terfileri</a> (integer promotions) gerçekleştirilir ve ardından bit kaydırma işlemi yürütülür. Sonucun türü, terfi ettirilmiş sol işlenenin türüdür.</p>
+<p>Yeni bitler sıfırlarla doldurulur; aşağıda belirtilen uygulamaya bağlı davranıştaki olası bir istisna hariç.</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Operation</th>
-<th style="text-align: center;">Operator</th>
-<th>Example</th>
+<th>İşlem</th>
+<th style="text-align: center;">Operatör</th>
+<th>Örnek</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Shift left</td>
+<td>Sola kaydırma</td>
 <td style="text-align: center;"><code>&lt;&lt;</code></td>
 <td><code>a = b &lt;&lt; c</code></td>
 </tr>
 <tr>
-<td>Shift right</td>
+<td>Sağa kaydırma</td>
 <td style="text-align: center;"><code>&gt;&gt;</code></td>
 <td><code>a = b &gt;&gt; c</code></td>
 </tr>
 </tbody>
 </table>
-<p>There’s also the same similar shorthand for shifting:</p>
+<p>Kaydırma için de benzer kısa yazımlar mevcuttur:</p>
 <p> </p>
 <table>
 <thead>
 <tr>
-<th>Operator</th>
-<th>Example</th>
-<th>Longhand equivalent</th>
+<th>Operatör</th>
+<th>Örnek</th>
+<th>Uzun Yazım Eşdeğeri</th>
 </tr>
 </thead>
 <tbody>
@@ -147,8 +147,8 @@
 </tr>
 </tbody>
 </table>
-<p>Watch for undefined behavior: no negative shifts, and no shifts that are larger than the size of the promoted left operand.</p>
-<p>Also watch for implementation-defined behavior: if you right-shift a negative number, the results are implementation-defined. (It’s perfectly fine to right-shift a signed <code>int</code>, just make sure it’s positive.)</p>
+<p>Tanımsız davranışa (undefined behavior) dikkat edin: Negatif kaydırma yapılamaz ve terfi ettirilmiş sol işlenenin boyutundan daha büyük kaydırma yapılamaz.</p>
+<p>Ayrıca uygulamaya bağlı davranışa (implementation-defined behavior) dikkat edin: Negatif bir sayıyı sağa kaydırırsanız, sonuçlar uygulamaya bağlıdır. (İşaretli [signed] bir <code>int</code> türünü sağa kaydırmakta bir sakınca yoktur, sadece pozitif olduğundan emin olun.)</p>
 <p></p>
 <!-- BG_NEW_CHAPTER -->
 <!-- Beej's guide to C
