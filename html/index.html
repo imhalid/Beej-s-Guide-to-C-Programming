@@ -37,11 +37,6 @@
       function applySavedTheme(t) {
         var theme = t || localStorage.getItem("bgc-theme") || "dark-obsidian";
         document.documentElement.setAttribute("data-theme", theme);
-        var bg = "#1c1d22";
-        if (theme === "cyber-neon") bg = "#1b1424";
-        else if (theme === "nordic-slate") bg = "#1b2228";
-        else if (theme === "light-tech") bg = "#fcfcfc";
-        document.write('<style>html, body, .app-layout, .content-viewport, iframe, .content-frame { background-color: ' + bg + ' !important; }</style>');
       }
       applySavedTheme();
 

@@ -289,6 +289,66 @@ document.addEventListener('DOMContentLoaded', () => {
     'memcpy': 'Bellek Kopyalama: Bir bellek bloğundaki baytları başka bir bellek alanına kopyalar.'
   };
 
+  // 0ms Instant Custom Theme-Aware Tooltip Engine
+  let tooltipEl = null;
+
+  function initCustomTooltipEngine() {
+    tooltipEl = document.createElement('div');
+    tooltipEl.id = 'custom-tooltip';
+    tooltipEl.className = 'custom-tooltip-popup';
+    document.body.appendChild(tooltipEl);
+
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target.closest('[data-tooltip-title]');
+      if (!target) return;
+
+      const title = target.getAttribute('data-tooltip-title');
+      const body = target.getAttribute('data-tooltip-body') || '';
+
+      tooltipEl.innerHTML = `<strong>${title}</strong>${body}`;
+      tooltipEl.classList.add('show');
+      positionTooltip(e, target);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!tooltipEl || !tooltipEl.classList.contains('show')) return;
+      const target = e.target.closest('[data-tooltip-title]');
+      if (target) {
+        positionTooltip(e, target);
+      } else {
+        tooltipEl.classList.remove('show');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const target = e.target.closest('[data-tooltip-title]');
+      if (target && (!e.relatedTarget || !e.relatedTarget.closest('[data-tooltip-title]'))) {
+        if (tooltipEl) tooltipEl.classList.remove('show');
+      }
+    });
+  }
+
+  function positionTooltip(e, target) {
+    if (!tooltipEl) return;
+    const tooltipWidth = tooltipEl.offsetWidth || 280;
+    const tooltipHeight = tooltipEl.offsetHeight || 60;
+
+    let left = e.clientX + 10;
+    let top = e.clientY - tooltipHeight - 10;
+
+    if (top < 10) {
+      top = e.clientY + 15;
+    }
+    if (left + tooltipWidth > window.innerWidth - 10) {
+      left = window.innerWidth - tooltipWidth - 10;
+    }
+
+    tooltipEl.style.left = left + 'px';
+    tooltipEl.style.top = top + 'px';
+  }
+
+  initCustomTooltipEngine();
+
   // C Glossary Tooltips
   function applyGlossaryTooltips(container) {
     if (!container) return;
@@ -298,7 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const word = node.textContent.trim().toLowerCase();
         if (C_GLOSSARY[word] && !node.classList.contains('has-tooltip')) {
           node.classList.add('has-tooltip');
-          node.setAttribute('title', '💡 C Terimi: ' + C_GLOSSARY[word]);
+          node.removeAttribute('title');
+          node.setAttribute('data-tooltip-title', '💡 C Terimi: ' + node.textContent.trim());
+          node.setAttribute('data-tooltip-body', C_GLOSSARY[word]);
         }
       });
     } catch (e) {}
@@ -350,7 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           if (text) {
             const fnNum = fnId.replace('fn', '');
-            ref.setAttribute('title', '📝 Dipnot [' + fnNum + ']: ' + text);
+            ref.removeAttribute('title');
+            ref.setAttribute('data-tooltip-title', '📝 Dipnot [' + fnNum + ']');
+            ref.setAttribute('data-tooltip-body', text);
           }
         }
       });
@@ -393,29 +457,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nameBadge) nameBadge.textContent = themeObj.name;
     if (btn) btn.setAttribute('title', `Tema Değiştir (Sıradaki: ${nextThemeObj.name})`);
 
-    if (iframe && iframe.contentWindow) {
-      try {
-        iframe.contentWindow.postMessage({ type: 'SET_THEME', themeId: themeId }, '*');
-      } catch (e) {}
-
-      try {
-        if (iframe.contentWindow.document && iframe.contentWindow.document.documentElement) {
-          iframe.contentWindow.document.documentElement.setAttribute('data-theme', themeId);
-        }
-      } catch (e) {}
-    }
   }
 
   applyTheme(themes[currentThemeIndex].id);
 
-  const themeBtn = document.getElementById('theme-toggle-btn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', (e) => {
+  // Global Click Delegation for Theme Toggle and Command Palette Triggers
+  document.addEventListener('click', (e) => {
+    const themeBtn = e.target.closest('#theme-toggle-btn, .theme-toggle-btn');
+    if (themeBtn) {
       e.preventDefault();
+      e.stopPropagation();
       currentThemeIndex = (currentThemeIndex + 1) % themes.length;
       applyTheme(themes[currentThemeIndex].id);
-    });
-  }
+      return;
+    }
+
+    const cmdBtn = e.target.closest('#cmd-palette-trigger, .cmd-trigger-btn');
+    if (cmdBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      openCmdPalette();
+      return;
+    }
+  });
 
   // ==========================================================================
   // Command Palette & Semantic Search Modal (Cmd/Ctrl + Shift + F)
@@ -446,14 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cmdPalette.classList.remove('active');
     cmdPalette.setAttribute('aria-hidden', 'true');
     selectedResultIndex = 0;
-  }
-
-  if (cmdTrigger) {
-    cmdTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      openCmdPalette();
-    });
   }
 
   if (cmdBackdrop) {
