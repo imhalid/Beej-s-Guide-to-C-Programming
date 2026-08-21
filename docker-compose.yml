@@ -1,0 +1,9 @@
+services:
+  c-guide-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: c-guide-frontend
+    restart: unless-stopped
+    ports:
+      - "8085:80"
