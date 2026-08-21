@@ -4,8 +4,13 @@
   <script>
     (function() {
       function applySavedTheme(t) {
-        var theme = t || localStorage.getItem("bgc-theme");
-        if (theme) document.documentElement.setAttribute("data-theme", theme);
+        var theme = t || localStorage.getItem("bgc-theme") || "dark-obsidian";
+        document.documentElement.setAttribute("data-theme", theme);
+        var bg = "#1c1d22";
+        if (theme === "cyber-neon") bg = "#1b1424";
+        else if (theme === "nordic-slate") bg = "#1b2228";
+        else if (theme === "light-tech") bg = "#fcfcfc";
+        document.write('<style>html, body, .app-layout, .content-viewport, iframe, .content-frame { background-color: ' + bg + ' !important; }</style>');
       }
       applySavedTheme();
 
@@ -20,6 +25,17 @@
           applySavedTheme(e.newValue);
         }
       });
+
+      // Synchronously determine target iframe page from URL hash or localStorage before DOM parse
+      try {
+        var hash = window.location.hash ? window.location.hash.substring(1) : '';
+        var saved = localStorage.getItem('bgc-last-page');
+        var targetPage = hash || saved || 'foreword.html';
+        if (!targetPage || targetPage === 'index.html' || targetPage === 'about:blank') {
+          targetPage = 'foreword.html';
+        }
+        window.__INITIAL_PAGE__ = targetPage;
+      } catch (err) {}
     })();
   </script>
   
@@ -690,7 +706,15 @@
       </svg>
       <span class="theme-name-badge">Dark Obsidian</span>
     </button>
-    <iframe name="content-frame" id="content-frame" src="foreword.html" class="content-frame" title="Bölüm İçeriği"></iframe>
+    <iframe name="content-frame" id="content-frame" class="content-frame" title="Bölüm İçeriği"></iframe>
+    <script>
+      (function() {
+        var f = document.getElementById('content-frame');
+        if (f && window.__INITIAL_PAGE__) {
+          f.src = window.__INITIAL_PAGE__;
+        }
+      })();
+    </script>
   </main>
 
   <!-- Command Palette Modal (Cmd/Ctrl + Shift + F) -->

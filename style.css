@@ -1,11 +1,18 @@
 
 /* ==========================================================================
-   Global Reset: Disable all Shadows and Transitions
+   Global Reset & Layout Stability Setup
    ========================================================================== */
 *, *::before, *::after {
   box-shadow: none !important;
-  transition: none !important;
-  animation: none !important;
+}
+
+html, body {
+  scrollbar-gutter: stable;
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
 }
 
 /* ==========================================================================
@@ -55,13 +62,13 @@
   --scrollbar-thumb-hover: oklch(48% 0.02 260);
   --scrollbar-track: var(--bg-main);
 
-  /* Centralized Border Radius System (All radii derive from --radius-base) */
-  --radius-base: 8px;
-  --radius-xs: calc(var(--radius-base) * 0.5);   /* 4px */
-  --radius-sm: calc(var(--radius-base) * 0.75);  /* 6px */
-  --radius-md: var(--radius-base);               /* 8px */
-  --radius-lg: calc(var(--radius-base) * 1.5);   /* 12px */
-  --radius-full: 9999px;
+  /* Centralized Border Radius System (All radii set to 0px globally) */
+  --radius-base: 0px;
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 0px;
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
@@ -175,38 +182,39 @@
   --scrollbar-track: var(--bg-main);
 }
 
-/* Theme 4: Clean Light Tech (VS Code & IntelliJ Inspired Multi-Color Theory Palette) */
+/* Theme 4: Clean Light Tech (Modern Hybrid Light Mode with Dark Code Blocks) */
 :root[data-theme="light-tech"], [data-theme="light-tech"] {
   --bg-main: oklch(98.8% 0.002 260);
   --bg-sidebar: oklch(96.2% 0.005 260);
   --bg-card: oklch(93.5% 0.008 260);
-  --bg-code: oklch(96.8% 0.005 260);
+  --bg-code: oklch(13.5% 0.012 260);         /* Dark Slate Code Block Background */
+  --text-code: oklch(92% 0.005 260);         /* Bright Off-White Unhighlighted Code Text */
   --border-color: oklch(88% 0.01 260);
   --text-body: oklch(25% 0.01 260);
   --text-bold: oklch(12% 0.015 260);
   --text-muted: oklch(46% 0.015 260);
   --link-color: oklch(45% 0.24 255);
   --link-hover: oklch(35% 0.26 250);
-  --code-inline-fg: oklch(38% 0.22 290);
+  --code-inline-fg: oklch(36% 0.22 25);
   --code-inline-bg: oklch(94.5% 0.008 260);
   --code-inline-border: oklch(87% 0.015 260);
 
-  /* VS Code Light & IntelliJ Inspired Rich Multi-Color Theory Palette */
-  --syn-kw: oklch(42% 0.28 290);    /* Cobalt Royal Blue/Violet for keywords (int, void, return, if, for) */
-  --syn-dt: oklch(40% 0.18 200);    /* Deep Teal Cyan for data types (char, float, double, size_t) */
-  --syn-st: oklch(42% 0.22 145);    /* Emerald Green for strings ("Hello, world!") */
-  --syn-ch: oklch(42% 0.22 145);    /* Emerald Green for chars ('a') */
-  --syn-im: oklch(42% 0.22 145);    /* Emerald Green for header files (<stdio.h>) */
-  --syn-sc: oklch(52% 0.26 40);     /* Coral Amber Orange for escape sequences (\n, %c) */
-  --syn-co: oklch(48% 0.02 260);    /* Slate Gray for comments (// ...) */
-  --syn-fu: oklch(44% 0.22 75);     /* Warm Ochre Gold for functions (printf, main) */
-  --syn-pp: oklch(45% 0.26 345);    /* Vivid Magenta Rose for preprocessor (#include, #define) */
-  --syn-dv: oklch(48% 0.22 55);     /* Vivid Amber Orange for numbers (13, 0) */
-  --syn-cn: oklch(48% 0.24 45);     /* Burnt Orange for constants (NULL, EOF) */
-  --syn-op: oklch(20% 0.01 260);    /* Dark Charcoal for operators (=, <, ++, *) */
-  --syn-va: oklch(24% 0.12 250);    /* Deep Slate Navy for variables (s, i) */
-  --syn-at: oklch(42% 0.22 310);    /* Plum Violet for attributes */
-  --syn-al: oklch(45% 0.26 25);     /* Crimson Red for alerts */
+  /* High-Contrast Dark Syntax Highlighting Palette for Hybrid Code Blocks */
+  --syn-kw: oklch(76% 0.22 345);    /* Coral Pink for keywords (int, void, return, if, for) */
+  --syn-dt: oklch(79% 0.18 190);    /* Vivid Cyan for data types (char, float, size_t) */
+  --syn-st: oklch(82% 0.17 145);    /* Emerald Green for strings ("Hello, world!") */
+  --syn-ch: oklch(84% 0.16 125);    /* Lime Green for chars ('a') */
+  --syn-im: oklch(82% 0.17 145);    /* Emerald Green for headers (<stdio.h>) */
+  --syn-sc: oklch(85% 0.20 40);     /* Coral Orange for escape sequences (\n, %c) */
+  --syn-co: oklch(62% 0.02 260);    /* Soft Slate Gray for comments (// ...) */
+  --syn-fu: oklch(82% 0.18 290);    /* Vivid Lavender/Purple for functions (printf, main) */
+  --syn-pp: oklch(82% 0.18 60);     /* Amber Orange for preprocessor (#include, #define) */
+  --syn-dv: oklch(85% 0.18 95);     /* Golden Yellow for numbers (13, 0) */
+  --syn-cn: oklch(84% 0.19 40);     /* Coral Constants (NULL, EOF) */
+  --syn-op: oklch(80% 0.12 280);    /* Soft Lavender for operators (=, <, ++, *) */
+  --syn-va: oklch(88% 0.14 210);    /* Soft Ice Blue for variables (s, i) */
+  --syn-at: oklch(81% 0.16 310);    /* Orchid Violet */
+  --syn-al: oklch(75% 0.22 25);     /* Crimson Red */
 
   --scrollbar-thumb: oklch(78% 0.015 260);
   --scrollbar-thumb-hover: oklch(60% 0.02 260);
@@ -476,13 +484,38 @@ body.app-layout {
   color: var(--text-bold);
 }
 
-/* Content Viewport */
+/* Content Viewport & View Transitions API */
 .content-viewport {
   flex: 1;
   height: 100vh;
   position: relative;
   overflow: hidden;
   background-color: var(--bg-main);
+  view-transition-name: content-viewport;
+}
+
+::view-transition-old(content-viewport),
+::view-transition-new(content-viewport) {
+  animation-duration: 0.22s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(content-viewport) {
+  animation-name: bgc-page-out;
+}
+
+::view-transition-new(content-viewport) {
+  animation-name: bgc-page-in;
+}
+
+@keyframes bgc-page-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.985); }
+}
+
+@keyframes bgc-page-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .content-frame {
@@ -652,7 +685,7 @@ div.sourceCode {
 
 pre.sourceCode {
   background-color: var(--bg-code);
-  color: var(--text-bold);
+  color: var(--text-code, var(--text-bold));
   padding: 18px 22px;
   border-radius: var(--radius-lg);
   overflow-x: auto;
@@ -860,7 +893,6 @@ tr:hover td {
   padding-top: 14vh;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.18s ease, visibility 0.18s ease;
 }
 
 .cmd-palette-overlay.active {
@@ -875,8 +907,6 @@ tr:hover td {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .cmd-palette-modal {
@@ -891,12 +921,6 @@ tr:hover td {
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
-  transform: translateY(-8px) scale(0.99);
-  transition: transform 0.18s ease;
-}
-
-.cmd-palette-overlay.active .cmd-palette-modal {
-  transform: translateY(0) scale(1);
 }
 
 .cmd-palette-header {

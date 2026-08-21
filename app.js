@@ -41,6 +41,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Page location persistence & active link highlighting
+  function savePageLocation(targetLocation) {
+    if (!targetLocation || targetLocation === 'index.html' || targetLocation === 'about:blank') return;
+    try {
+      localStorage.setItem('bgc-last-page', targetLocation);
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + targetLocation);
+      } else {
+        window.location.hash = targetLocation;
+      }
+      setActiveLink(targetLocation);
+    } catch (e) {}
+  }
+
+  function changeIframePage(targetUrl) {
+    if (!iframe || !targetUrl) return;
+    
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        iframe.src = targetUrl;
+      });
+    } else {
+      iframe.classList.add('loading');
+      iframe.src = targetUrl;
+    }
+  }
+
   // Active Link Highlighting in TOC
   function setActiveLink(matchingHref) {
     if (!tocNav) return;
@@ -59,16 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (matched) {
       matched.classList.add('active');
-      matched.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
   }
 
   if (tocNav) {
     const links = tocNav.querySelectorAll('a');
     links.forEach(a => {
-      a.addEventListener('click', function() {
-        links.forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
+      a.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default browser anchor jump and scroll behavior
+        const href = this.getAttribute('href');
+        if (href) {
+          savePageLocation(href);
+          changeIframePage(href);
+        }
         if (sidebar && sidebar.classList.contains('open')) {
           sidebar.classList.remove('open');
         }
@@ -95,12 +125,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if (iframe) {
     iframe.addEventListener('load', () => {
       try {
-        const path = iframe.contentWindow.location.pathname;
-        const page = path.substring(path.lastIndexOf('/') + 1);
-        const hash = iframe.contentWindow.location.hash;
-        if (page) {
-          setActiveLink(page + hash);
+        let page = '';
+        let hash = '';
+        try {
+          const path = iframe.contentWindow.location.pathname;
+          page = path.substring(path.lastIndexOf('/') + 1);
+          hash = iframe.contentWindow.location.hash;
+        } catch (corsErr) {}
+        
+        if (hash) {
+          try {
+            const targetEl = iframe.contentWindow.document.querySelector(hash);
+            if (targetEl) {
+              targetEl.scrollIntoView({ block: 'start', behavior: 'auto' });
+            }
+          } catch (anchorErr) {}
         }
+
+        if (page && page !== 'index.html' && page !== 'about:blank') {
+          savePageLocation(page + hash);
+        }
+
         handleExternalLinks(iframe.contentWindow.document);
         applyTheme(themes[currentThemeIndex].id);
       } catch (e) {
@@ -323,11 +368,36 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const qClean = query.toLowerCase().trim();
     const results = [];
-    window.SEARCH_INDEX.forEach(item => {
-      const score = calculateSemanticScore(query, item);
+
+    window.SEARCH_INDEX.forEach(rawItem => {
+      let score = calculateSemanticScore(query, rawItem);
+      let fileWithHash = rawItem.file;
+      let matchedSectionTitle = '';
+
+      // Check if query matches specific heading ID or title inside this file
+      if (rawItem.headings && rawItem.headings.length) {
+        for (let h of rawItem.headings) {
+          const hTitleClean = h.title.toLowerCase();
+          if (hTitleClean.includes(qClean) || (h.id && qClean.includes(h.id))) {
+            score = Math.max(score, 88);
+            fileWithHash = rawItem.file + '#' + h.id;
+            matchedSectionTitle = h.title;
+            break;
+          }
+        }
+      }
+
       if (score >= 12) {
-        results.push({ item, score });
+        results.push({
+          item: {
+            ...rawItem,
+            file: fileWithHash,
+            matchedSectionTitle: matchedSectionTitle
+          },
+          score: score
+        });
       }
     });
 
@@ -386,8 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
     results.forEach((res, idx) => {
       const isSelected = idx === selectedResultIndex ? 'selected' : '';
       
-      let sectionSnippet = '';
-      if (res.item.headings && res.item.headings.length) {
+      let sectionSnippet = res.item.matchedSectionTitle || '';
+      if (!sectionSnippet && res.item.headings && res.item.headings.length) {
         sectionSnippet = res.item.headings.slice(0, 2).map(h => h.title).join('  ·  ');
       }
 
@@ -436,12 +506,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function navigateToResult(item) {
     if (!item) return;
+    const targetFile = item.file;
+    savePageLocation(targetFile);
+
     if (iframe) {
-      iframe.src = item.file;
-    } else {
-      window.location.href = item.file;
+      const parts = targetFile.split('#');
+      const targetPage = parts[0];
+      const targetHash = parts[1] ? '#' + parts[1] : '';
+
+      try {
+        const path = iframe.contentWindow.location.pathname;
+        const currentPage = path.substring(path.lastIndexOf('/') + 1);
+
+        if (currentPage === targetPage && targetHash) {
+          // Same page: Scroll directly to section anchor element inside iframe instantly
+          const elem = iframe.contentWindow.document.querySelector(targetHash);
+          if (elem) {
+            elem.scrollIntoView({ block: 'start', behavior: 'auto' });
+          } else {
+            iframe.contentWindow.location.hash = targetHash;
+          }
+        } else {
+          // Different page: Load new page with View Transitions API
+          changeIframePage(targetFile);
+        }
+      } catch (e) {
+        changeIframePage(targetFile);
+      }
     }
-    setActiveLink(item.file);
     closeCmdPalette();
   }
 
