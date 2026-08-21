@@ -115,7 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
           } catch (e) {}
           currentLoadedPage = pageFile;
           savePageLocation(targetUrl);
-          handleExternalLinks(mainContentBody);
+          handleInternalLinks(mainContentBody);
+          applyGlossaryTooltips(mainContentBody);
+          applyFootnoteTooltips(mainContentBody);
 
           const savedScrollY = localStorage.getItem('bgc-scroll-' + pageFile);
 
@@ -249,19 +251,113 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Ensure external links open in new tab
-  function handleExternalLinks(doc) {
-    if (!doc) return;
+  // Handle ALL Internal Links in Main Content Container (Prev/Next Chapter, Footnotes, Hash Links)
+  function handleInternalLinks(container) {
+    if (!container) return;
     try {
-      const extLinks = doc.querySelectorAll('a[href^="http://"], a[href^="https://"]');
-      extLinks.forEach(a => {
-        a.setAttribute('target', '_blank');
-        a.setAttribute('rel', 'noopener noreferrer');
+      const allLinks = container.querySelectorAll('a[href]');
+      allLinks.forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href) return;
+        if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+          a.setAttribute('target', '_blank');
+          a.setAttribute('rel', 'noopener noreferrer');
+        } else {
+          a.removeAttribute('target');
+          a.onclick = function(e) {
+            e.preventDefault();
+            loadChapterContent(href, true);
+          };
+        }
       });
     } catch (e) {}
   }
 
-  handleExternalLinks(document);
+  // C Terms Glossary Data
+  const C_GLOSSARY = {
+    'malloc': 'Bellek Tahsisi (Memory Allocation): Heap alanından dinamik olarak belirtilen bayt kadar yer ayırır.',
+    'free': 'Bellek Serbest Bırakma: malloc/calloc ile ayrılan heap belleğini sisteme geri iade eder.',
+    'sizeof': 'Tür Boyutu Operatörü: Bir değişkenin veya veri türünün bellekte kapladığı bayt sayısını verir.',
+    'size_t': 'İşaretsiz Tamsayı Türü: stddef.h içinde tanımlı, bellek boyutlarını temsil eden işaretsiz tamsayı türü.',
+    'pointer': 'İşaretçi (Pointer): Bir değişkenin değerini değil, bellekteki adresini saklayan değişken.',
+    'struct': 'Yapı (Structure): Farklı türlerdeki değişkenleri tek bir çatı altında toplayan özel veri türü.',
+    'typedef': 'Tür Takma Adı: Var olan bir veri türüne yeni ve okunabilir bir isim verir.',
+    'null': 'Boş İşaretçi Sabiti: Hiçbir geçerli bellek adresini göstermeyen 0 değerli adres sabiti.',
+    'const': 'Sabit Niteleyicisi: Değişkenin değerinin ilk atamadan sonra değiştirilmesini engeller.',
+    'volatile': 'Değişken Niteleyicisi: Derleyiciye bu değişkenin donanım tarafından her an değiştirilebileceğini bildirir.',
+    'void': 'Boş Tür: Fonksiyonun değer döndürmediğini veya parametre almadığını gösterir.',
+    'memcpy': 'Bellek Kopyalama: Bir bellek bloğundaki baytları başka bir bellek alanına kopyalar.'
+  };
+
+  // C Glossary Tooltips
+  function applyGlossaryTooltips(container) {
+    if (!container) return;
+    try {
+      const codeNodes = container.querySelectorAll('code');
+      codeNodes.forEach(node => {
+        const word = node.textContent.trim().toLowerCase();
+        if (C_GLOSSARY[word] && !node.classList.contains('has-tooltip')) {
+          node.classList.add('has-tooltip');
+          node.setAttribute('title', '💡 C Terimi: ' + C_GLOSSARY[word]);
+        }
+      });
+    } catch (e) {}
+  }
+
+  let globalFootnoteMap = {};
+
+  // Pre-load all 235 footnotes globally so tooltips work across every chapter
+  async function loadGlobalFootnotes() {
+    try {
+      const resp = await fetch('function-specifiers-alignment-specifiersoperators.html');
+      if (!resp.ok) return;
+      const htmlText = await resp.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const items = doc.querySelectorAll('#footnotes li[id]');
+      items.forEach(item => {
+        const id = item.getAttribute('id');
+        let text = item.textContent.replace(/↩︎/g, '').replace(/\s+/g, ' ').trim();
+        if (id) {
+          globalFootnoteMap[id] = text;
+        }
+      });
+
+      if (mainContentBody) {
+        applyFootnoteTooltips(mainContentBody);
+      }
+    } catch (e) {}
+  }
+
+  loadGlobalFootnotes();
+
+  // Interactive Footnote Tooltips across Application
+  function applyFootnoteTooltips(container) {
+    if (!container) return;
+    try {
+      const fnRefs = container.querySelectorAll('.footnote-ref, sup a, a[href*="#fn"]');
+      fnRefs.forEach(ref => {
+        const href = ref.getAttribute('href') || '';
+        const fnIdMatch = href.match(/#?(fn\d+)/);
+        if (fnIdMatch) {
+          const fnId = fnIdMatch[1];
+          let text = globalFootnoteMap[fnId];
+          if (!text) {
+            const targetFn = container.querySelector('#' + fnId);
+            if (targetFn) {
+              text = targetFn.textContent.replace(/↩︎/g, '').replace(/\s+/g, ' ').trim();
+            }
+          }
+          if (text) {
+            const fnNum = fnId.replace('fn', '');
+            ref.setAttribute('title', '📝 Dipnot [' + fnNum + ']: ' + text);
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
+
 
   // Initial Chapter Load
   const initialPage = window.__INITIAL_FULL_PAGE__ || window.__INITIAL_PAGE__ || 'foreword.html';

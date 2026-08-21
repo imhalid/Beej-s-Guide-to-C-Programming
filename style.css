@@ -1159,6 +1159,26 @@ tr:hover td {
   gap: 4px;
 }
 
+/* C Glossary & Footnote Tooltips */
+code.has-tooltip {
+  text-decoration: underline dotted var(--link-color);
+  cursor: help;
+}
+
+/* Dedicated Footnote List */
+.all-footnotes-list .footnote-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.all-footnotes-list .footnote-card h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--link-color) !important;
+}
+
 .cmd-palette-footer kbd {
   font-family: var(--font-mono);
   font-size: 0.68rem;
