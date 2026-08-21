@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="nav-header"><a href="typedef-making-new-types.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="manual-memory-allocation.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
+<h1 data-number="11" id="pointers2"><span class="header-section-number">11</span> Pointers II: Arithmetic</h1>
+<p></p>
+<p>Time to get more into it with a number of new pointer topics! If you’re not up to speed with pointers, <a href="pointers.html#pointers">check out the first section in the guide on the matter</a>.</p>
+<h2 data-number="11.1" id="pointer-arithmetic"><span class="header-section-number">11.1</span> Pointer Arithmetic</h2>
+<p>Turns out you can do math on pointers, notably addition and subtraction.</p>
+<p>But what does it mean when you do that?</p>
+<p>In short, if you have a pointer to a type, adding one to the pointer moves to the next item of that type directly after it in memory.</p>
+<p>It’s <strong>important</strong> to remember that as we move pointers around and look at different places in memory, we need to make sure that we’re always pointing to a valid place in memory before we dereference. If we’re off in the weeds and we try to see what’s there, the behavior is undefined and a crash is a common result.</p>
+<p>This is a little chicken-and-eggy with <a href="pointers2.html#arraypointerequiv">Array/Pointer Equivalence, below</a>, but we’re going to give it a shot, anyway.</p>
+<h3 data-number="11.1.1" id="adding-to-pointers"><span class="header-section-number">11.1.1</span> Adding to Pointers</h3>
+<p>First, let’s take an array of numbers.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb173-1"><a href="pointers2.html#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span></code></pre></div>
+<p>Then let’s get a pointer to the first element in that array:</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb174-1"><a href="pointers2.html#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb174-2"><a href="pointers2.html#cb174-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-3"><a href="pointers2.html#cb174-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">[</span><span class="dv">0</span><span class="op">];</span>  <span class="co">// Or &quot;int *p = a;&quot; works just as well</span></span></code></pre></div>
+<p>Then let’s print the value there by dereferencing the pointer:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb175-1"><a href="pointers2.html#cb175-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// Prints 11</span></span></code></pre></div>
+<p>Now let’s use pointer arithmetic to print the next element in the array, the one at index 1:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb176-1"><a href="pointers2.html#cb176-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>p <span class="op">+</span> <span class="dv">1</span><span class="op">));</span>  <span class="co">// Prints 22!!</span></span></code></pre></div>
+<p>What happened there? C knows that <code>p</code> is a pointer to an <code>int</code>. So it knows the <code>sizeof</code> an <code>int</code><a href="function-specifiers-alignment-specifiersoperators.html#fn84" class="footnote-ref" id="fnref84" role="doc-noteref"><sup>84</sup></a> and it knows to skip that many bytes to get to the next <code>int</code> after the first one!</p>
+<p>In fact, the prior example could be written these two equivalent ways:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb177-1"><a href="pointers2.html#cb177-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>        <span class="co">// Prints 11</span></span>
+<span id="cb177-2"><a href="pointers2.html#cb177-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>p <span class="op">+</span> <span class="dv">0</span><span class="op">));</span>  <span class="co">// Prints 11</span></span></code></pre></div>
+<p>because adding <code>0</code> to a pointer results in the same pointer.</p>
+<p>Let’s think of the upshot here. We can iterate over elements of an array this way instead of using an array:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb178-1"><a href="pointers2.html#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb178-2"><a href="pointers2.html#cb178-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-3"><a href="pointers2.html#cb178-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">[</span><span class="dv">0</span><span class="op">];</span>  <span class="co">// Or &quot;int *p = a;&quot; works just as well</span></span>
+<span id="cb178-4"><a href="pointers2.html#cb178-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-5"><a href="pointers2.html#cb178-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb178-6"><a href="pointers2.html#cb178-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>p <span class="op">+</span> i<span class="op">));</span>  <span class="co">// Same as p[i]!</span></span>
+<span id="cb178-7"><a href="pointers2.html#cb178-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And that works the same as if we used array notation! Oooo! Getting closer to that array/pointer equivalence thing! More on this later in this chapter.</p>
+<p>But what’s actually happening, here? How does it work?</p>
+<p>Remember from early on that memory is like a big array, where a byte is stored at each array index?</p>
+<p>And the array index into memory has a few names:</p>
+<ul>
+<li>Index into memory</li>
+<li>Location</li>
+<li>Address</li>
+<li><em>Pointer!</em></li>
+</ul>
+<p>So a pointer is an index into memory, somewhere.</p>
+<p>For a random example, say that a number 3490 was stored at address (“index”) 23,237,489,202. If we have an <code>int</code> pointer to that 3490, that value of that pointer is 23,237,489,202… because the pointer is the memory address. Different words for the same thing.</p>
+<p>And now let’s say we have another number, 4096, stored right after the 3490 at address 23,237,489,210 (8 higher than the 3490 because each <code>int</code> in this example is 8 bytes long).</p>
+<p>If we add <code>1</code> to that pointer, it actually jumps ahead <code>sizeof(int)</code> bytes to the next <code>int</code>. It knows to jump that far ahead because it’s an <code>int</code> pointer. If it were a <code>float</code> pointer, it’d jump <code>sizeof(float)</code> bytes ahead to get to the next float!</p>
+<p>So you can look at the next <code>int</code>, by adding <code>1</code> to the pointer, the one after that by adding <code>2</code> to the pointer, and so on.</p>
+<h3 data-number="11.1.2" id="changing-pointers"><span class="header-section-number">11.1.2</span> Changing Pointers</h3>
+<p>We saw how we could add an integer to a pointer in the previous section. This time, let’s <em>modify the pointer, itself</em>.</p>
+<p>You can just add (or subtract) integer values directly to (or from) any pointer!</p>
+<p>Let’s do that example again, except with a couple changes. First, I’m going to add a <code>999</code> to the end of our numbers to act as a sentinel value. This will let us know where the end of the data is.</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb179-1"><a href="pointers2.html#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">,</span> <span class="dv">999</span><span class="op">};</span>  <span class="co">// Add 999 here as a sentinel</span></span>
+<span id="cb179-2"><a href="pointers2.html#cb179-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb179-3"><a href="pointers2.html#cb179-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">[</span><span class="dv">0</span><span class="op">];</span>  <span class="co">// p points to the 11</span></span></code></pre></div>
+<p>And we also have <code>p</code> pointing to the element at index <code>0</code> of <code>a</code>, namely <code>11</code>, just like before.</p>
+<p>Now—let’s start <em>incrementing</em> <code>p</code> so that it points at subsequent elements of the array. We’ll do this until <code>p</code> points to the <code>999</code>; that is, we’ll do it until <code>*p == 999</code>:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb180-1"><a href="pointers2.html#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(*</span>p <span class="op">!=</span> <span class="dv">999</span><span class="op">)</span> <span class="op">{</span>       <span class="co">// While the thing p points to isn&#39;t 999</span></span>
+<span id="cb180-2"><a href="pointers2.html#cb180-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>   <span class="co">// Print it</span></span>
+<span id="cb180-3"><a href="pointers2.html#cb180-3" aria-hidden="true" tabindex="-1"></a>    p<span class="op">++;</span>                  <span class="co">// Move p to point to the next int!</span></span>
+<span id="cb180-4"><a href="pointers2.html#cb180-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Pretty crazy, right?</p>
+<p>When we give it a run, first <code>p</code> points to <code>11</code>. Then we increment <code>p</code>, and it points to <code>22</code>, and then again, it points to <code>33</code>. And so on, until it points to <code>999</code> and we quit.</p>
+<h3 data-number="11.1.3" id="subtracting-pointers"><span class="header-section-number">11.1.3</span> Subtracting Pointers</h3>
+<p> You can subtract a value from a pointer to get to earlier address, as well, just like we were adding to them before.</p>
+<p>But we can also subtract two pointers to find the difference between them, e.g. we can calculate how many <code>int</code>s there are between two <code>int*</code>s. The catch is that this only works within a single array<a href="function-specifiers-alignment-specifiersoperators.html#fn85" class="footnote-ref" id="fnref85" role="doc-noteref"><sup>85</sup></a>—if the pointers point to anything else, you get undefined behavior.</p>
+<p>Remember how strings are <code>char*</code>s in C? Let’s see if we can use this to write another variant of <code>strlen()</code> to compute the length of a string that utilizes pointer subtraction.</p>
+<p>The idea is that if we have a pointer to the beginning of the string, we can find a pointer to the end of the string by scanning ahead for the <code>NUL</code> character.</p>
+<p>And if we have a pointer to the beginning of the string, and we computed the pointer to the end of the string, we can just subtract the two pointers to come up with the length!</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb181-1"><a href="pointers2.html#cb181-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb181-2"><a href="pointers2.html#cb181-2"></a></span>
+<span id="cb181-3"><a href="pointers2.html#cb181-3"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
+<span id="cb181-4"><a href="pointers2.html#cb181-4"></a><span class="op">{</span></span>
+<span id="cb181-5"><a href="pointers2.html#cb181-5"></a>    <span class="co">// Start scanning from the beginning of the string</span></span>
+<span id="cb181-6"><a href="pointers2.html#cb181-6"></a>    <span class="dt">char</span> <span class="op">*</span>p <span class="op">=</span> s<span class="op">;</span></span>
+<span id="cb181-7"><a href="pointers2.html#cb181-7"></a></span>
+<span id="cb181-8"><a href="pointers2.html#cb181-8"></a>    <span class="co">// Scan until we find the NUL character</span></span>
+<span id="cb181-9"><a href="pointers2.html#cb181-9"></a>    <span class="cf">while</span> <span class="op">(*</span>p <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span></span>
+<span id="cb181-10"><a href="pointers2.html#cb181-10"></a>        p<span class="op">++;</span></span>
+<span id="cb181-11"><a href="pointers2.html#cb181-11"></a></span>
+<span id="cb181-12"><a href="pointers2.html#cb181-12"></a>    <span class="co">// Return the difference in pointers</span></span>
+<span id="cb181-13"><a href="pointers2.html#cb181-13"></a>    <span class="cf">return</span> p <span class="op">-</span> s<span class="op">;</span></span>
+<span id="cb181-14"><a href="pointers2.html#cb181-14"></a><span class="op">}</span></span>
+<span id="cb181-15"><a href="pointers2.html#cb181-15"></a></span>
+<span id="cb181-16"><a href="pointers2.html#cb181-16"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb181-17"><a href="pointers2.html#cb181-17"></a><span class="op">{</span></span>
+<span id="cb181-18"><a href="pointers2.html#cb181-18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> my_strlen<span class="op">(</span><span class="st">&quot;Hello, world!&quot;</span><span class="op">));</span>  <span class="co">// Prints &quot;13&quot;</span></span>
+<span id="cb181-19"><a href="pointers2.html#cb181-19"></a><span class="op">}</span></span></code></pre></div>
+<p>Remember that you can only use pointer subtraction between two pointers that point to the same array! </p>
+<h2 data-number="11.2" id="arraypointerequiv"><span class="header-section-number">11.2</span> Array/Pointer Equivalence</h2>
+<p> We’re finally ready to talk about this! We’ve seen plenty of examples of places where we’ve intermixed array notation, but let’s give out the <em>fundamental formula of array/pointer equivalence</em>:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb182-1"><a href="pointers2.html#cb182-1" aria-hidden="true" tabindex="-1"></a>a<span class="op">[</span>b<span class="op">]</span> <span class="op">==</span> <span class="op">*(</span>a <span class="op">+</span> b<span class="op">)</span></span></code></pre></div>
+<p>Study that! Those are equivalent and can be used interchangeably!</p>
+<p>I’ve oversimplified a bit, because in my above example <code>a</code> and <code>b</code> can both be expressions, and we might want a few more parentheses to force order of operations in case the expressions are complex.</p>
+<p>The spec is specific, as always, declaring (in C11 §6.5.2.1¶2):</p>
+<blockquote>
+<p><code>E1[E2]</code> is identical to <code>(*((E1)+(E2)))</code></p>
+</blockquote>
+<p>but that’s a little harder to grok. Just make sure you include parentheses if the expressions are complicated so all your math happens in the right order.</p>
+<p>This means we can <em>decide</em> if we’re going to use array or pointer notation for any array or pointer (assuming it points to an element of an array).</p>
+<p>Let’s use an array and pointer with both array and pointer notation:</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb183-1"><a href="pointers2.html#cb183-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb183-2"><a href="pointers2.html#cb183-2"></a></span>
+<span id="cb183-3"><a href="pointers2.html#cb183-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb183-4"><a href="pointers2.html#cb183-4"></a><span class="op">{</span></span>
+<span id="cb183-5"><a href="pointers2.html#cb183-5"></a>    <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb183-6"><a href="pointers2.html#cb183-6"></a></span>
+<span id="cb183-7"><a href="pointers2.html#cb183-7"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> a<span class="op">;</span>  <span class="co">// p points to the first element of a, 11</span></span>
+<span id="cb183-8"><a href="pointers2.html#cb183-8"></a></span>
+<span id="cb183-9"><a href="pointers2.html#cb183-9"></a>    <span class="co">// Print all elements of the array a variety of ways:</span></span>
+<span id="cb183-10"><a href="pointers2.html#cb183-10"></a></span>
+<span id="cb183-11"><a href="pointers2.html#cb183-11"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb183-12"><a href="pointers2.html#cb183-12"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]);</span>      <span class="co">// Array notation with a</span></span>
+<span id="cb183-13"><a href="pointers2.html#cb183-13"></a></span>
+<span id="cb183-14"><a href="pointers2.html#cb183-14"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb183-15"><a href="pointers2.html#cb183-15"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">[</span>i<span class="op">]);</span>      <span class="co">// Array notation with p</span></span>
+<span id="cb183-16"><a href="pointers2.html#cb183-16"></a></span>
+<span id="cb183-17"><a href="pointers2.html#cb183-17"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb183-18"><a href="pointers2.html#cb183-18"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>a <span class="op">+</span> i<span class="op">));</span>  <span class="co">// Pointer notation with a</span></span>
+<span id="cb183-19"><a href="pointers2.html#cb183-19"></a></span>
+<span id="cb183-20"><a href="pointers2.html#cb183-20"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb183-21"><a href="pointers2.html#cb183-21"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>p <span class="op">+</span> i<span class="op">));</span>  <span class="co">// Pointer notation with p</span></span>
+<span id="cb183-22"><a href="pointers2.html#cb183-22"></a></span>
+<span id="cb183-23"><a href="pointers2.html#cb183-23"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb183-24"><a href="pointers2.html#cb183-24"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*(</span>p<span class="op">++));</span>    <span class="co">// Moving pointer p</span></span>
+<span id="cb183-25"><a href="pointers2.html#cb183-25"></a>        <span class="co">//printf(&quot;%d\n&quot;, *(a++));    // Moving array variable a--ERROR!</span></span>
+<span id="cb183-26"><a href="pointers2.html#cb183-26"></a><span class="op">}</span></span></code></pre></div>
+<p>So you can see that in general, if you have an array variable, you can use pointer or array notion to access elements. Same with a pointer variable.</p>
+<p>The one big difference is that you can <em>modify</em> a pointer to point to a different address, but you can’t do that with an array variable. <!--
+6.3.2.1p2 --> In other words, you can’t assign into an array variable at all—only into individual elements of that array.</p>
+<p>If you really want to copy one array to another, you have to use a function like <code>memcpy()</code> (or a loop) to make that happen.</p>
+<h3 data-number="11.2.1" id="arraypointer-equivalence-in-function-calls"><span class="header-section-number">11.2.1</span> Array/Pointer Equivalence in Function Calls</h3>
+<p>This is where you’ll encounter this concept the most, for sure.</p>
+<p>If you have a function that takes a pointer argument, e.g.:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb184-1"><a href="pointers2.html#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span></code></pre></div>
+<p>this means you can pass either an array or a pointer to this function and have it work!</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb185-1"><a href="pointers2.html#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Antelopes&quot;</span><span class="op">;</span></span>
+<span id="cb185-2"><a href="pointers2.html#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>t <span class="op">=</span> <span class="st">&quot;Wombats&quot;</span><span class="op">;</span></span>
+<span id="cb185-3"><a href="pointers2.html#cb185-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-4"><a href="pointers2.html#cb185-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> my_strlen<span class="op">(</span>s<span class="op">));</span>  <span class="co">// Works!</span></span>
+<span id="cb185-5"><a href="pointers2.html#cb185-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> my_strlen<span class="op">(</span>t<span class="op">));</span>  <span class="co">// Works, too!</span></span></code></pre></div>
+<p>And it’s also why these two function signatures are equivalent:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb186-1"><a href="pointers2.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span>    <span class="co">// Works!</span></span>
+<span id="cb186-2"><a href="pointers2.html#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> s<span class="op">[])</span>   <span class="co">// Works, too!</span></span></code></pre></div>
+<p></p>
+<h2 data-number="11.3" id="void-pointers"><span class="header-section-number">11.3</span> <code>void</code> Pointers</h2>
+<p></p>
+<p>You’ve already seen the <code>void</code> keyword used with functions that indicates no parameters or no return value, but this is an entirely separate, unrelated animal.</p>
+<p>A <code>void*</code> is definitely a pointer to an existing <em>thing</em>. But the <code>void</code> part of it indicates that we don’t know the <em>type</em> of the thing. And sometimes, believe it or not, that’s really useful. It enables us to write code that’s a little more type-agnostic, which is some nice flexibility to have in a typed language like C.</p>
+<p>There are basically two use cases for this—let’s check them out and see if we can demystify it a bit.</p>
+<p></p>
+<ol type="1">
+<li><p>A function is going to operate on something byte-by-byte. For example, <code>memcpy()</code> copies bytes of memory from one pointer to another, but those pointers can point to any type. <code>memcpy()</code> takes advantage of the fact that if you iterate through <code>char*</code>s, you’re iterating through the bytes of an object no matter what type the object is. More on this in the <a href="pointers-iii-pointers-to-pointers-and-more.html#multibyte-values">Multibyte Values</a> subsection.</p></li>
+<li><p>Another function is calling a function you passed to it (a callback), and it’s passing you data. You know the type of the data, but the function calling you doesn’t. So it passes you <code>void*</code>s—’cause it doesn’t know the type—and you convert those to the type you need. The built-in <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-qsort" target="_blank" rel="noopener noreferrer"><code>qsort()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn86" class="footnote-ref" id="fnref86" role="doc-noteref"><sup>86</sup></a> and <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-bsearch" target="_blank" rel="noopener noreferrer"><code>bsearch()</code></a><a href="function-specifiers-alignment-specifiersoperators.html#fn87" class="footnote-ref" id="fnref87" role="doc-noteref"><sup>87</sup></a> use this technique.</p></li>
+</ol>
+<p>Let’s look at an example, the built-in <code>memcpy()</code> function:</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb187-1"><a href="pointers2.html#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>memcpy<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">void</span> <span class="op">*</span>s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<p>This function copies <code>n</code> bytes of memory starting from address <code>s2</code> into the memory starting at address <code>s1</code>.</p>
+<p>But look! <code>s1</code> and <code>s2</code> are <code>void*</code>s! Why? What does it mean? Let’s run more examples to see.</p>
+<p>For instance, we could copy a string with <code>memcpy()</code> (though <code>strcpy()</code> is more appropriate for strings):</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb188-1"><a href="pointers2.html#cb188-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb188-2"><a href="pointers2.html#cb188-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb188-3"><a href="pointers2.html#cb188-3"></a></span>
+<span id="cb188-4"><a href="pointers2.html#cb188-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb188-5"><a href="pointers2.html#cb188-5"></a><span class="op">{</span></span>
+<span id="cb188-6"><a href="pointers2.html#cb188-6"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Goats!&quot;</span><span class="op">;</span></span>
+<span id="cb188-7"><a href="pointers2.html#cb188-7"></a>    <span class="dt">char</span> t<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb188-8"><a href="pointers2.html#cb188-8"></a></span>
+<span id="cb188-9"><a href="pointers2.html#cb188-9"></a>    memcpy<span class="op">(</span>t<span class="op">,</span> s<span class="op">,</span> <span class="dv">7</span><span class="op">);</span>  <span class="co">// Copy 7 bytes--including the NUL terminator!</span></span>
+<span id="cb188-10"><a href="pointers2.html#cb188-10"></a></span>
+<span id="cb188-11"><a href="pointers2.html#cb188-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span>  <span class="co">// &quot;Goats!&quot;</span></span>
+<span id="cb188-12"><a href="pointers2.html#cb188-12"></a><span class="op">}</span></span></code></pre></div>
+<p>Or we can copy some <code>int</code>s:</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb189-1"><a href="pointers2.html#cb189-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb189-2"><a href="pointers2.html#cb189-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb189-3"><a href="pointers2.html#cb189-3"></a></span>
+<span id="cb189-4"><a href="pointers2.html#cb189-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb189-5"><a href="pointers2.html#cb189-5"></a><span class="op">{</span></span>
+<span id="cb189-6"><a href="pointers2.html#cb189-6"></a>    <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">};</span></span>
+<span id="cb189-7"><a href="pointers2.html#cb189-7"></a>    <span class="dt">int</span> b<span class="op">[</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb189-8"><a href="pointers2.html#cb189-8"></a></span>
+<span id="cb189-9"><a href="pointers2.html#cb189-9"></a>    memcpy<span class="op">(</span>b<span class="op">,</span> a<span class="op">,</span> <span class="dv">3</span> <span class="op">*</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>  <span class="co">// Copy 3 ints of data</span></span>
+<span id="cb189-10"><a href="pointers2.html#cb189-10"></a></span>
+<span id="cb189-11"><a href="pointers2.html#cb189-11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">[</span><span class="dv">1</span><span class="op">]);</span>  <span class="co">// 22</span></span>
+<span id="cb189-12"><a href="pointers2.html#cb189-12"></a><span class="op">}</span></span></code></pre></div>
+<p>That one’s a little wild—you see what we did there with <code>memcpy()</code>? We copied the data from <code>a</code> to <code>b</code>, but we had to specify how many <em>bytes</em> to copy, and an <code>int</code> is more than one byte.</p>
+<p>OK, then—how many bytes does an <code>int</code> take? Answer: depends on the system. But we can tell how many bytes any type takes with the <code>sizeof</code> operator.</p>
+<p>So there’s the answer: an <code>int</code> takes <code>sizeof(int)</code> bytes of memory to store.</p>
+<p>And if we have 3 of them in our array, like we did in that example, the entire space used for the 3 <code>int</code>s must be <code>3 * sizeof(int)</code>.</p>
+<p>(In the string example, earlier, it would have been more technically accurate to copy <code>7 * sizeof(char)</code> bytes. But <code>char</code>s are always one byte large, by definition, so that just devolves into <code>7 * 1</code>.)</p>
+<p>We could even copy a <code>float</code> or a <code>struct</code> with <code>memcpy()</code>! (Though this is abusive—we should just use <code>=</code> for that):</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb190-1"><a href="pointers2.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> antelope my_antelope<span class="op">;</span></span>
+<span id="cb190-2"><a href="pointers2.html#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> antelope my_clone_antelope<span class="op">;</span></span>
+<span id="cb190-3"><a href="pointers2.html#cb190-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-4"><a href="pointers2.html#cb190-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ...</span></span>
+<span id="cb190-5"><a href="pointers2.html#cb190-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-6"><a href="pointers2.html#cb190-6" aria-hidden="true" tabindex="-1"></a>memcpy<span class="op">(&amp;</span>my_clone_antelope<span class="op">,</span> <span class="op">&amp;</span>my_antelope<span class="op">,</span> <span class="kw">sizeof</span> my_antelope<span class="op">);</span></span></code></pre></div>
+<p>Look at how versatile <code>memcpy()</code> is! If you have a pointer to a source and a pointer to a destination, and you have the number of bytes you want to copy, you can copy <em>any type of data</em>.</p>
+<p>Imagine if we didn’t have <code>void*</code>. We’d have to write specialized <code>memcpy()</code> functions for each type:</p>
+<p></p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb191-1"><a href="pointers2.html#cb191-1" aria-hidden="true" tabindex="-1"></a>memcpy_int<span class="op">(</span><span class="dt">int</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">int</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb191-2"><a href="pointers2.html#cb191-2" aria-hidden="true" tabindex="-1"></a>memcpy_float<span class="op">(</span><span class="dt">float</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">float</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb191-3"><a href="pointers2.html#cb191-3" aria-hidden="true" tabindex="-1"></a>memcpy_double<span class="op">(</span><span class="dt">double</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb191-4"><a href="pointers2.html#cb191-4" aria-hidden="true" tabindex="-1"></a>memcpy_char<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb191-5"><a href="pointers2.html#cb191-5" aria-hidden="true" tabindex="-1"></a>memcpy_unsigned_char<span class="op">(</span><span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb191-6"><a href="pointers2.html#cb191-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-7"><a href="pointers2.html#cb191-7" aria-hidden="true" tabindex="-1"></a><span class="co">// etc... blech!</span></span></code></pre></div>
+<p>Much better to just use <code>void*</code> and have one function that can do it all.</p>
+<p>That’s the power of <code>void*</code>. You can write a function that doesn’t care about the variable’s type and is still able to do things with it.</p>
+<p>But with great power comes great responsibility. Maybe not <em>that</em> great in this case, but there are some limits.</p>
+<p></p>
+<ol type="1">
+<li>You cannot do pointer arithmetic on a <code>void*</code>.</li>
+<li>You cannot dereference a <code>void*</code>.</li>
+<li>You cannot use the arrow operator on a <code>void*</code>, since it’s also a dereference.</li>
+<li>You cannot use array notation on a <code>void*</code>, since it’s also a dereference, as well<a href="function-specifiers-alignment-specifiersoperators.html#fn88" class="footnote-ref" id="fnref88" role="doc-noteref"><sup>88</sup></a>.</li>
+</ol>
+<p>And if you think about it, these rules make sense. All those operations rely on knowing the <code>sizeof</code> the type of data pointed to, and with <code>void*</code>, we don’t know the size of the data being pointed to—it could be anything!</p>
+<p></p>
+<p>But wait—if you can’t dereference a <code>void*</code> what good can it ever do you?</p>
+<p>Like with <code>memcpy()</code>, it helps you write generic functions that can handle multiple types of data. But the secret is that, deep down, <em>you convert the <code>void*</code> to another type before you use it</em>!</p>
+<p>And conversion is easy: you can just assign into a variable of the desired type<a href="function-specifiers-alignment-specifiersoperators.html#fn89" class="footnote-ref" id="fnref89" role="doc-noteref"><sup>89</sup></a>.</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb192-1"><a href="pointers2.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a <span class="op">=</span> <span class="ch">&#39;X&#39;</span><span class="op">;</span>  <span class="co">// A single char</span></span>
+<span id="cb192-2"><a href="pointers2.html#cb192-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-3"><a href="pointers2.html#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span>  <span class="co">// p points to the &#39;X&#39;</span></span>
+<span id="cb192-4"><a href="pointers2.html#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>q <span class="op">=</span> p<span class="op">;</span>   <span class="co">// q also points to the &#39;X&#39;</span></span>
+<span id="cb192-5"><a href="pointers2.html#cb192-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-6"><a href="pointers2.html#cb192-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// ERROR--cannot dereference void*!</span></span>
+<span id="cb192-7"><a href="pointers2.html#cb192-7" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>q<span class="op">);</span>  <span class="co">// Prints &quot;X&quot;</span></span></code></pre></div>
+<p> Let’s write our own <code>memcpy()</code> to try this out. We can copy bytes (<code>char</code>s), and we know the number of bytes because it’s passed in.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb193-1"><a href="pointers2.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>my_memcpy<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">void</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">int</span> byte_count<span class="op">)</span></span>
+<span id="cb193-2"><a href="pointers2.html#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb193-3"><a href="pointers2.html#cb193-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Convert void*s to char*s</span></span>
+<span id="cb193-4"><a href="pointers2.html#cb193-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> src<span class="op">,</span> <span class="op">*</span>d <span class="op">=</span> dest<span class="op">;</span></span>
+<span id="cb193-5"><a href="pointers2.html#cb193-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-6"><a href="pointers2.html#cb193-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Now that we have char*s, we can dereference and copy them</span></span>
+<span id="cb193-7"><a href="pointers2.html#cb193-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>byte_count<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb193-8"><a href="pointers2.html#cb193-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>d<span class="op">++</span> <span class="op">=</span> <span class="op">*</span>s<span class="op">++;</span></span>
+<span id="cb193-9"><a href="pointers2.html#cb193-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb193-10"><a href="pointers2.html#cb193-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-11"><a href="pointers2.html#cb193-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Most of these functions return the destination, just in case</span></span>
+<span id="cb193-12"><a href="pointers2.html#cb193-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// that&#39;s useful to the caller.</span></span>
+<span id="cb193-13"><a href="pointers2.html#cb193-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest<span class="op">;</span></span>
+<span id="cb193-14"><a href="pointers2.html#cb193-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Right there at the beginning, we copy the <code>void*</code>s into <code>char*</code>s so that we can use them as <code>char*</code>s. It’s as easy as that.</p>
+<p>Then some fun in a while loop, where we decrement <code>byte_count</code> until it becomes false (<code>0</code>). Remember that with post-decrement, the value of the expression is computed (for <code>while</code> to use) and <em>then</em> the variable is decremented.</p>
+<p>And some fun in the copy, where we assign <code>*d = *s</code> to copy the byte, but we do it with post-increment so that both <code>d</code> and <code>s</code> move to the next byte after the assignment is made.</p>
+<p>Lastly, most memory and string functions return a copy of a pointer to the destination just in case the caller wants to use it.</p>
+<p>Now that we’ve done that, I just want to quickly point out that we can use this technique to iterate over the bytes of <em>any</em> object in C, <code>float</code>s, <code>struct</code>s, or anything! </p>
+<p> <span id="qsort-example">Let’s</span> run one more real-world example with the built-in <code>qsort()</code> routine that can sort <em>anything</em> thanks to the magic of <code>void*</code>s.</p>
+<p>(In the following example, you can ignore the word <code>const</code>, which we haven’t covered yet.)</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb194-1"><a href="pointers2.html#cb194-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb194-2"><a href="pointers2.html#cb194-2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb194-3"><a href="pointers2.html#cb194-3"></a></span>
+<span id="cb194-4"><a href="pointers2.html#cb194-4"></a><span class="co">// The type of structure we&#39;re going to sort</span></span>
+<span id="cb194-5"><a href="pointers2.html#cb194-5"></a><span class="kw">struct</span> animal <span class="op">{</span></span>
+<span id="cb194-6"><a href="pointers2.html#cb194-6"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb194-7"><a href="pointers2.html#cb194-7"></a>    <span class="dt">int</span> leg_count<span class="op">;</span></span>
+<span id="cb194-8"><a href="pointers2.html#cb194-8"></a><span class="op">};</span></span>
+<span id="cb194-9"><a href="pointers2.html#cb194-9"></a></span>
+<span id="cb194-10"><a href="pointers2.html#cb194-10"></a><span class="co">// This is a comparison function called by qsort() to help it determine</span></span>
+<span id="cb194-11"><a href="pointers2.html#cb194-11"></a><span class="co">// what exactly to sort by. We&#39;ll use it to sort an array of struct</span></span>
+<span id="cb194-12"><a href="pointers2.html#cb194-12"></a><span class="co">// animals by leg_count.</span></span>
+<span id="cb194-13"><a href="pointers2.html#cb194-13"></a><span class="dt">int</span> compar<span class="op">(</span><span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem2<span class="op">)</span></span>
+<span id="cb194-14"><a href="pointers2.html#cb194-14"></a><span class="op">{</span></span>
+<span id="cb194-15"><a href="pointers2.html#cb194-15"></a>    <span class="co">// We know we&#39;re sorting struct animals, so let&#39;s make both</span></span>
+<span id="cb194-16"><a href="pointers2.html#cb194-16"></a>    <span class="co">// arguments pointers to struct animals</span></span>
+<span id="cb194-17"><a href="pointers2.html#cb194-17"></a>    <span class="dt">const</span> <span class="kw">struct</span> animal <span class="op">*</span>animal1 <span class="op">=</span> elem1<span class="op">;</span></span>
+<span id="cb194-18"><a href="pointers2.html#cb194-18"></a>    <span class="dt">const</span> <span class="kw">struct</span> animal <span class="op">*</span>animal2 <span class="op">=</span> elem2<span class="op">;</span></span>
+<span id="cb194-19"><a href="pointers2.html#cb194-19"></a></span>
+<span id="cb194-20"><a href="pointers2.html#cb194-20"></a>    <span class="co">// Return &lt;0 =0 or &gt;0 depending on whatever we want to sort by.</span></span>
+<span id="cb194-21"><a href="pointers2.html#cb194-21"></a></span>
+<span id="cb194-22"><a href="pointers2.html#cb194-22"></a>    <span class="co">// Let&#39;s sort ascending by leg_count, so we&#39;ll return the difference</span></span>
+<span id="cb194-23"><a href="pointers2.html#cb194-23"></a>    <span class="co">// in the leg_counts</span></span>
+<span id="cb194-24"><a href="pointers2.html#cb194-24"></a>    <span class="cf">if</span> <span class="op">(</span>animal1<span class="op">-&gt;</span>leg_count <span class="op">&gt;</span> animal2<span class="op">-&gt;</span>leg_count<span class="op">)</span></span>
+<span id="cb194-25"><a href="pointers2.html#cb194-25"></a>        <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb194-26"><a href="pointers2.html#cb194-26"></a>    </span>
+<span id="cb194-27"><a href="pointers2.html#cb194-27"></a>    <span class="cf">if</span> <span class="op">(</span>animal1<span class="op">-&gt;</span>leg_count <span class="op">&lt;</span> animal2<span class="op">-&gt;</span>leg_count<span class="op">)</span></span>
+<span id="cb194-28"><a href="pointers2.html#cb194-28"></a>        <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb194-29"><a href="pointers2.html#cb194-29"></a></span>
+<span id="cb194-30"><a href="pointers2.html#cb194-30"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb194-31"><a href="pointers2.html#cb194-31"></a><span class="op">}</span></span>
+<span id="cb194-32"><a href="pointers2.html#cb194-32"></a></span>
+<span id="cb194-33"><a href="pointers2.html#cb194-33"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb194-34"><a href="pointers2.html#cb194-34"></a><span class="op">{</span></span>
+<span id="cb194-35"><a href="pointers2.html#cb194-35"></a>    <span class="co">// Let&#39;s build an array of 4 struct animals with different</span></span>
+<span id="cb194-36"><a href="pointers2.html#cb194-36"></a>    <span class="co">// characteristics. This array is out of order by leg_count, but</span></span>
+<span id="cb194-37"><a href="pointers2.html#cb194-37"></a>    <span class="co">// we&#39;ll sort it in a second.</span></span>
+<span id="cb194-38"><a href="pointers2.html#cb194-38"></a>    <span class="kw">struct</span> animal a<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb194-39"><a href="pointers2.html#cb194-39"></a>        <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Dog&quot;</span><span class="op">,</span> <span class="op">.</span>leg_count<span class="op">=</span><span class="dv">4</span><span class="op">},</span></span>
+<span id="cb194-40"><a href="pointers2.html#cb194-40"></a>        <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Monkey&quot;</span><span class="op">,</span> <span class="op">.</span>leg_count<span class="op">=</span><span class="dv">2</span><span class="op">},</span></span>
+<span id="cb194-41"><a href="pointers2.html#cb194-41"></a>        <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Antelope&quot;</span><span class="op">,</span> <span class="op">.</span>leg_count<span class="op">=</span><span class="dv">4</span><span class="op">},</span></span>
+<span id="cb194-42"><a href="pointers2.html#cb194-42"></a>        <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Snake&quot;</span><span class="op">,</span> <span class="op">.</span>leg_count<span class="op">=</span><span class="dv">0</span><span class="op">}</span></span>
+<span id="cb194-43"><a href="pointers2.html#cb194-43"></a>    <span class="op">};</span></span>
+<span id="cb194-44"><a href="pointers2.html#cb194-44"></a></span>
+<span id="cb194-45"><a href="pointers2.html#cb194-45"></a>    <span class="co">// Call qsort() to sort the array. qsort() needs to be told exactly</span></span>
+<span id="cb194-46"><a href="pointers2.html#cb194-46"></a>    <span class="co">// what to sort this data by, and we&#39;ll do that inside the compar()</span></span>
+<span id="cb194-47"><a href="pointers2.html#cb194-47"></a>    <span class="co">// function.</span></span>
+<span id="cb194-48"><a href="pointers2.html#cb194-48"></a>    <span class="co">//</span></span>
+<span id="cb194-49"><a href="pointers2.html#cb194-49"></a>    <span class="co">// This call is saying: qsort array a, which has 4 elements, and</span></span>
+<span id="cb194-50"><a href="pointers2.html#cb194-50"></a>    <span class="co">// each element is sizeof(struct animal) bytes big, and this is the</span></span>
+<span id="cb194-51"><a href="pointers2.html#cb194-51"></a>    <span class="co">// function that will compare any two elements.</span></span>
+<span id="cb194-52"><a href="pointers2.html#cb194-52"></a>    qsort<span class="op">(</span>a<span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> animal<span class="op">),</span> compar<span class="op">);</span></span>
+<span id="cb194-53"><a href="pointers2.html#cb194-53"></a></span>
+<span id="cb194-54"><a href="pointers2.html#cb194-54"></a>    <span class="co">// Print them all out</span></span>
+<span id="cb194-55"><a href="pointers2.html#cb194-55"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb194-56"><a href="pointers2.html#cb194-56"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">].</span>leg_count<span class="op">,</span> a<span class="op">[</span>i<span class="op">].</span>name<span class="op">);</span></span>
+<span id="cb194-57"><a href="pointers2.html#cb194-57"></a>    <span class="op">}</span></span>
+<span id="cb194-58"><a href="pointers2.html#cb194-58"></a><span class="op">}</span></span></code></pre></div>
+<p>As long as you give <code>qsort()</code> a function that can compare two items that you have in your array to be sorted, it can sort anything. And it does this without needing to have the types of the items hardcoded in there anywhere. <code>qsort()</code> just rearranges blocks of bytes based on the results of the <code>compar()</code> function you passed in. </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div class="nav-header"><a href="typedef-making-new-types.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="manual-memory-allocation.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div></body>
+</html>

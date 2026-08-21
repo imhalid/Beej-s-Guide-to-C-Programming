@@ -76,6 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Ensure external links open in new tab
+  function handleExternalLinks(doc) {
+    if (!doc) return;
+    try {
+      const extLinks = doc.querySelectorAll('a[href^="http://"], a[href^="https://"]');
+      extLinks.forEach(a => {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+      });
+    } catch (e) {
+      // Ignored
+    }
+  }
+
+  handleExternalLinks(document);
+
   if (iframe) {
     iframe.addEventListener('load', () => {
       try {
@@ -85,9 +101,59 @@ document.addEventListener('DOMContentLoaded', () => {
         if (page) {
           setActiveLink(page + hash);
         }
+        handleExternalLinks(iframe.contentWindow.document);
+        applyTheme(themes[currentThemeIndex].id);
       } catch (e) {
         // Fallback
       }
+    });
+  }
+
+  // ==========================================================================
+  // Multi-Theme Switching System
+  // ==========================================================================
+
+  const themes = [
+    { id: 'dark-obsidian', name: 'Dark Obsidian' },
+    { id: 'cyber-neon', name: 'Cyber Neon' },
+    { id: 'nordic-slate', name: 'Nordic Slate' },
+    { id: 'light-tech', name: 'Light Tech' }
+  ];
+
+  let currentThemeIndex = 0;
+  const savedTheme = localStorage.getItem('bgc-theme');
+  if (savedTheme) {
+    const foundIdx = themes.findIndex(t => t.id === savedTheme);
+    if (foundIdx !== -1) currentThemeIndex = foundIdx;
+  }
+
+  function applyTheme(themeId) {
+    document.documentElement.setAttribute('data-theme', themeId);
+    localStorage.setItem('bgc-theme', themeId);
+    
+    const themeObj = themes.find(t => t.id === themeId) || themes[0];
+    const nextThemeObj = themes[(currentThemeIndex + 1) % themes.length];
+    
+    const nameBadge = document.querySelector('.theme-name-badge');
+    const btn = document.getElementById('theme-toggle-btn');
+    if (nameBadge) nameBadge.textContent = themeObj.name;
+    if (btn) btn.setAttribute('title', `Tema Değiştir (Sıradaki: ${nextThemeObj.name})`);
+
+    if (iframe && iframe.contentWindow && iframe.contentWindow.document) {
+      try {
+        iframe.contentWindow.document.documentElement.setAttribute('data-theme', themeId);
+      } catch (e) {}
+    }
+  }
+
+  applyTheme(themes[currentThemeIndex].id);
+
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      applyTheme(themes[currentThemeIndex].id);
     });
   }
 
@@ -110,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cmdPalette.setAttribute('aria-hidden', 'false');
     if (cmdInput) {
       cmdInput.value = '';
-      cmdInput.focus();
+      setTimeout(() => cmdInput.focus(), 50);
     }
     renderCmdResults([]);
   }
@@ -123,19 +189,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (cmdTrigger) {
-    cmdTrigger.addEventListener('click', openCmdPalette);
+    cmdTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openCmdPalette();
+    });
   }
+
   if (cmdBackdrop) {
     cmdBackdrop.addEventListener('click', closeCmdPalette);
   }
 
   // Global Keyboard Shortcuts (Cmd/Ctrl + Shift + F or Cmd/Ctrl + K)
   window.addEventListener('keydown', (e) => {
-    const isCmdShiftF = (e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'F' || e.key === 'f');
-    const isCmdK = (e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K');
+    const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+    const isKeyF = e.code === 'KeyF' || e.key === 'F' || e.key === 'f';
+    const isKeyK = e.code === 'KeyK' || e.key === 'K' || e.key === 'k';
 
-    if (isCmdShiftF || isCmdK) {
+    if (isCmdOrCtrl && (e.shiftKey && isKeyF || isKeyK)) {
       e.preventDefault();
+      e.stopPropagation();
       if (cmdPalette && cmdPalette.classList.contains('active')) {
         closeCmdPalette();
       } else {
@@ -149,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Modal Arrow & Enter Navigation
     if (cmdPalette && cmdPalette.classList.contains('active')) {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -170,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
-  });
+  }, true);
 
   // Semantic Search Scoring Engine
   function calculateSemanticScore(query, item) {
@@ -312,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cmdResults.innerHTML = html;
 
-    // Click handlers for result items
     const items = cmdResults.querySelectorAll('.cmd-result-item');
     items.forEach(el => {
       el.addEventListener('click', () => {
@@ -341,6 +412,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!item) return;
     if (iframe) {
       iframe.src = item.file;
+    } else {
+      window.location.href = item.file;
     }
     setActiveLink(item.file);
     closeCmdPalette();

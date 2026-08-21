@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="nav-header"><a href="setjmp-longjmp.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="complex-numbers.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
+<h1 data-number="35" id="incomplete-types"><span class="header-section-number">35</span> Incomplete Types</h1>
+<p></p>
+<p>It might surprise you to learn that this builds without error:</p>
+<div class="sourceCode" id="cb687"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb687-1"><a href="incomplete-types.html#cb687-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extern</span> <span class="dt">int</span> a<span class="op">[];</span></span>
+<span id="cb687-2"><a href="incomplete-types.html#cb687-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb687-3"><a href="incomplete-types.html#cb687-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb687-4"><a href="incomplete-types.html#cb687-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb687-5"><a href="incomplete-types.html#cb687-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> foo <span class="op">*</span>x<span class="op">;</span></span>
+<span id="cb687-6"><a href="incomplete-types.html#cb687-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> bar <span class="op">*</span>y<span class="op">;</span></span>
+<span id="cb687-7"><a href="incomplete-types.html#cb687-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">enum</span> baz <span class="op">*</span>z<span class="op">;</span></span>
+<span id="cb687-8"><a href="incomplete-types.html#cb687-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>We never gave a size for <code>a</code>. And we have pointers to <code>struct</code>s <code>foo</code>, <code>bar</code>, and <code>baz</code> that never seem to be declared anywhere.</p>
+<p>And the only warnings I get are that <code>x</code>, <code>y</code>, and <code>z</code> are unused.</p>
+<p>These are examples of <em>incomplete types</em>.</p>
+<p>An incomplete type is a type the size (i.e. the size you’d get back from <code>sizeof</code>) for which is not known. Another way to think of it is a type that you haven’t finished declaring.</p>
+<p>You can have a pointer to an incomplete type, but you can’t dereference it or use pointer arithmetic on it. And you can’t <code>sizeof</code> it.</p>
+<p>So what can you do with it?</p>
+<h2 data-number="35.1" id="use-case-self-referential-structures"><span class="header-section-number">35.1</span> Use Case: Self-Referential Structures</h2>
+<p></p>
+<p>I only know of one real use case: forward references to <code>struct</code>s or <code>union</code>s with self-referential or co-dependent structures. (I’m going to use <code>struct</code> for the rest of these examples, but they all apply equally to <code>union</code>s, as well.)</p>
+<p>Let’s do the classic example first.</p>
+<p>But before I do, know this! As you declare a <code>struct</code>, the <code>struct</code> is incomplete until the closing brace is reached!</p>
+<div class="sourceCode" id="cb688"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb688-1"><a href="incomplete-types.html#cb688-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> antelope <span class="op">{</span>              <span class="co">// struct antelope is incomplete here</span></span>
+<span id="cb688-2"><a href="incomplete-types.html#cb688-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">;</span>             <span class="co">// Still incomplete</span></span>
+<span id="cb688-3"><a href="incomplete-types.html#cb688-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> stomach_fullness<span class="op">;</span>    <span class="co">// Still incomplete</span></span>
+<span id="cb688-4"><a href="incomplete-types.html#cb688-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> top_speed<span class="op">;</span>           <span class="co">// Still incomplete</span></span>
+<span id="cb688-5"><a href="incomplete-types.html#cb688-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>nickname<span class="op">;</span>            <span class="co">// Still incomplete</span></span>
+<span id="cb688-6"><a href="incomplete-types.html#cb688-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span>                             <span class="co">// NOW it&#39;s complete.</span></span></code></pre></div>
+<p>So what? Seems sane enough.</p>
+<p>But what if we’re doing a linked list? Each linked list node needs to have a reference to another node. But how can we create a reference to another node if we haven’t finished even declaring the node yet?</p>
+<p>C’s allowance for incomplete types makes it possible. We can’t declare a node, but we <em>can</em> declare a pointer to one, even if it’s incomplete!</p>
+<div class="sourceCode" id="cb689"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb689-1"><a href="incomplete-types.html#cb689-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> node <span class="op">{</span></span>
+<span id="cb689-2"><a href="incomplete-types.html#cb689-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> val<span class="op">;</span></span>
+<span id="cb689-3"><a href="incomplete-types.html#cb689-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> node <span class="op">*</span>next<span class="op">;</span>  <span class="co">// struct node is incomplete, but that&#39;s OK!</span></span>
+<span id="cb689-4"><a href="incomplete-types.html#cb689-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Even though the <code>struct node</code> is incomplete on line 3, we can still declare a pointer to one<a href="function-specifiers-alignment-specifiersoperators.html#fn184" class="footnote-ref" id="fnref184" role="doc-noteref"><sup>184</sup></a>.</p>
+<p>We can do the same thing if we have two different <code>struct</code>s that refer to each other:</p>
+<div class="sourceCode" id="cb690"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb690-1"><a href="incomplete-types.html#cb690-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> a <span class="op">{</span></span>
+<span id="cb690-2"><a href="incomplete-types.html#cb690-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> b <span class="op">*</span>x<span class="op">;</span>  <span class="co">// Refers to a `struct b`</span></span>
+<span id="cb690-3"><a href="incomplete-types.html#cb690-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb690-4"><a href="incomplete-types.html#cb690-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb690-5"><a href="incomplete-types.html#cb690-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> b <span class="op">{</span></span>
+<span id="cb690-6"><a href="incomplete-types.html#cb690-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> a <span class="op">*</span>x<span class="op">;</span>  <span class="co">// Refers to a `struct a`</span></span>
+<span id="cb690-7"><a href="incomplete-types.html#cb690-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>We’d never be able to make that pair of structures without the relaxed rules for incomplete types.</p>
+<p></p>
+<h2 data-number="35.2" id="incomplete-type-error-messages"><span class="header-section-number">35.2</span> Incomplete Type Error Messages</h2>
+<p>Are you getting errors like these?</p>
+<div class="sourceCode" id="cb691"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb691-1"><a href="incomplete-types.html#cb691-1" aria-hidden="true" tabindex="-1"></a>invalid application of ‘sizeof’ to incomplete type</span>
+<span id="cb691-2"><a href="incomplete-types.html#cb691-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb691-3"><a href="incomplete-types.html#cb691-3" aria-hidden="true" tabindex="-1"></a>invalid use of undefined type</span>
+<span id="cb691-4"><a href="incomplete-types.html#cb691-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb691-5"><a href="incomplete-types.html#cb691-5" aria-hidden="true" tabindex="-1"></a>dereferencing pointer to incomplete type</span></code></pre></div>
+<p>Most likely culprit: you probably forgot to <code>#include</code> the header file that declares the type.</p>
+<h2 data-number="35.3" id="other-incomplete-types"><span class="header-section-number">35.3</span> Other Incomplete Types</h2>
+<p>Declaring a <code>struct</code> or <code>union</code> with no body makes an incomplete type, e.g. <code>struct foo;</code>.</p>
+<p><code>enums</code> are incomplete until the closing brace.</p>
+<p><code>void</code> is an incomplete type.</p>
+<p>Arrays declared <code>extern</code> with no size are incomplete, e.g.:</p>
+<div class="sourceCode" id="cb692"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb692-1"><a href="incomplete-types.html#cb692-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extern</span> <span class="dt">int</span> a<span class="op">[];</span></span></code></pre></div>
+<p>If it’s a non-<code>extern</code> array with no size followed by an initializer, it’s incomplete until the closing brace of the initializer.</p>
+<h2 data-number="35.4" id="use-case-arrays-in-header-files"><span class="header-section-number">35.4</span> Use Case: Arrays in Header Files</h2>
+<p>It can be useful to declare incomplete array types in header files. In those cases, the actual storage (where the complete array is declared) should be in a single <code>.c</code> file. If you put it in the <code>.h</code> file, it will be duplicated every time the header file is included.</p>
+<p>So what you can do is make a header file with an incomplete type that refers to the array, like so:</p>
+<div class="sourceCode" id="cb693"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb693-1"><a href="incomplete-types.html#cb693-1"></a><span class="co">// File: bar.h</span></span>
+<span id="cb693-2"><a href="incomplete-types.html#cb693-2"></a></span>
+<span id="cb693-3"><a href="incomplete-types.html#cb693-3"></a><span class="pp">#ifndef BAR_H</span></span>
+<span id="cb693-4"><a href="incomplete-types.html#cb693-4"></a><span class="pp">#define BAR_H</span></span>
+<span id="cb693-5"><a href="incomplete-types.html#cb693-5"></a></span>
+<span id="cb693-6"><a href="incomplete-types.html#cb693-6"></a><span class="kw">extern</span> <span class="dt">int</span> my_array<span class="op">[];</span>  <span class="co">// Incomplete type</span></span>
+<span id="cb693-7"><a href="incomplete-types.html#cb693-7"></a></span>
+<span id="cb693-8"><a href="incomplete-types.html#cb693-8"></a><span class="pp">#endif</span></span></code></pre></div>
+<p>And the in the <code>.c</code> file, actually define the array:</p>
+<div class="sourceCode" id="cb694"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb694-1"><a href="incomplete-types.html#cb694-1"></a><span class="co">// File: bar.c</span></span>
+<span id="cb694-2"><a href="incomplete-types.html#cb694-2"></a></span>
+<span id="cb694-3"><a href="incomplete-types.html#cb694-3"></a><span class="dt">int</span> my_array<span class="op">[</span><span class="dv">1024</span><span class="op">];</span>     <span class="co">// Complete type!</span></span></code></pre></div>
+<p>Then you can include the header from as many places as you’d like, and every one of those places will refer to the same underlying <code>my_array</code>.</p>
+<div class="sourceCode" id="cb695"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb695-1"><a href="incomplete-types.html#cb695-1"></a><span class="co">// File: foo.c</span></span>
+<span id="cb695-2"><a href="incomplete-types.html#cb695-2"></a></span>
+<span id="cb695-3"><a href="incomplete-types.html#cb695-3"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb695-4"><a href="incomplete-types.html#cb695-4"></a><span class="pp">#include </span><span class="im">&quot;bar.h&quot;</span><span class="pp">    </span><span class="co">// includes the incomplete type for my_array</span></span>
+<span id="cb695-5"><a href="incomplete-types.html#cb695-5"></a></span>
+<span id="cb695-6"><a href="incomplete-types.html#cb695-6"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb695-7"><a href="incomplete-types.html#cb695-7"></a><span class="op">{</span></span>
+<span id="cb695-8"><a href="incomplete-types.html#cb695-8"></a>    my_array<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb695-9"><a href="incomplete-types.html#cb695-9"></a></span>
+<span id="cb695-10"><a href="incomplete-types.html#cb695-10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> my_array<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
+<span id="cb695-11"><a href="incomplete-types.html#cb695-11"></a><span class="op">}</span></span></code></pre></div>
+<p>When compiling multiple files, remember to specify all the <code>.c</code> files to the compiler, but not the <code>.h</code> files, e.g.:</p>
+<div class="sourceCode" id="cb696"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb696-1"><a href="incomplete-types.html#cb696-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> foo foo.c bar.c</span></code></pre></div>
+<h2 data-number="35.5" id="completing-incomplete-types"><span class="header-section-number">35.5</span> Completing Incomplete Types</h2>
+<p>If you have an incomplete type, you can complete it by defining the complete <code>struct</code>, <code>union</code>, <code>enum</code>, or array in the same scope.</p>
+<div class="sourceCode" id="cb697"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb697-1"><a href="incomplete-types.html#cb697-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo<span class="op">;</span>        <span class="co">// incomplete type</span></span>
+<span id="cb697-2"><a href="incomplete-types.html#cb697-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb697-3"><a href="incomplete-types.html#cb697-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">*</span>p<span class="op">;</span>     <span class="co">// pointer, no problem</span></span>
+<span id="cb697-4"><a href="incomplete-types.html#cb697-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb697-5"><a href="incomplete-types.html#cb697-5" aria-hidden="true" tabindex="-1"></a><span class="co">// struct foo f;   // Error: incomplete type!</span></span>
+<span id="cb697-6"><a href="incomplete-types.html#cb697-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb697-7"><a href="incomplete-types.html#cb697-7" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb697-8"><a href="incomplete-types.html#cb697-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb697-9"><a href="incomplete-types.html#cb697-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span>                 <span class="co">// Now the struct foo is complete!</span></span>
+<span id="cb697-10"><a href="incomplete-types.html#cb697-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb697-11"><a href="incomplete-types.html#cb697-11" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo f<span class="op">;</span>      <span class="co">// Success!</span></span></code></pre></div>
+<p>Note that though <code>void</code> is an incomplete type, there’s no way to complete it. Not that anyone ever thinks of doing that weird thing. But it does explain why you can do this:</p>
+<div class="sourceCode" id="cb698"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb698-1"><a href="incomplete-types.html#cb698-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>p<span class="op">;</span>             <span class="co">// OK: pointer to incomplete type</span></span></code></pre></div>
+<p>and not either of these:</p>
+<div class="sourceCode" id="cb699"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb699-1"><a href="incomplete-types.html#cb699-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> v<span class="op">;</span>              <span class="co">// Error: declare variable of incomplete type</span></span>
+<span id="cb699-2"><a href="incomplete-types.html#cb699-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb699-3"><a href="incomplete-types.html#cb699-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// Error: dereference incomplete type</span></span></code></pre></div>
+<p>The more you know…</p>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div class="nav-header"><a href="setjmp-longjmp.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="complex-numbers.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div></body>
+</html>

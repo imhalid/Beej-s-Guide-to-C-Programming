@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="nav-header"><a href="bitwise-operations.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="locale-and-internationalization.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
+<h1 data-number="25" id="variadic-functions"><span class="header-section-number">25</span> Variadic Functions</h1>
+<p></p>
+<p><em>Variadic</em> is a fancy word for functions that take arbitrary numbers of arguments.</p>
+<p>A regular function takes a specific number of arguments, for example:</p>
+<div class="sourceCode" id="cb531"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb531-1"><a href="variadic-functions.html#cb531-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb531-2"><a href="variadic-functions.html#cb531-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb531-3"><a href="variadic-functions.html#cb531-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb531-4"><a href="variadic-functions.html#cb531-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>You can only call that with exactly two arguments which correspond to parameters <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb532"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb532-1"><a href="variadic-functions.html#cb532-1" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb532-2"><a href="variadic-functions.html#cb532-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">5</span><span class="op">,</span> <span class="dv">12</span><span class="op">);</span></span></code></pre></div>
+<p>But if you try it with more, the compiler won’t let you:</p>
+<div class="sourceCode" id="cb533"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb533-1"><a href="variadic-functions.html#cb533-1" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">);</span>  <span class="co">// ERROR</span></span>
+<span id="cb533-2"><a href="variadic-functions.html#cb533-2" aria-hidden="true" tabindex="-1"></a>add<span class="op">(</span><span class="dv">5</span><span class="op">);</span>        <span class="co">// ERROR</span></span></code></pre></div>
+<p>Variadic functions get around this limitation to a certain extent.</p>
+<p>We’ve already seen a famous example in <code>printf()</code>! You can pass all kinds of things to it.</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb534-1"><a href="variadic-functions.html#cb534-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb534-2"><a href="variadic-functions.html#cb534-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;The number is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb534-3"><a href="variadic-functions.html#cb534-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;The number is </span><span class="sc">%d</span><span class="st"> and pi is </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="fl">3.14159</span><span class="op">);</span></span></code></pre></div>
+<p>It seems to not care how many arguments you give it!</p>
+<p>Well, that’s not entirely true. Zero arguments will give you an error:</p>
+<div class="sourceCode" id="cb535"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb535-1"><a href="variadic-functions.html#cb535-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">();</span>  <span class="co">// ERROR</span></span></code></pre></div>
+<p>This leads us to one of the limitations of variadic functions in C: they must have at least one argument.</p>
+<p>But aside from that, they’re pretty flexible, even allows arguments to have different types just like <code>printf()</code> does.</p>
+<p>Let’s see how they work!</p>
+<h2 data-number="25.1" id="ellipses-in-function-signatures"><span class="header-section-number">25.1</span> Ellipses in Function Signatures</h2>
+<p>So how does it work, syntactically?</p>
+<p></p>
+<p>What you do is put all the arguments that <em>must</em> be passed first (and remember there has to be at least one) and after that, you put <code>...</code>. Just like this:</p>
+<div class="sourceCode" id="cb536"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb536-1"><a href="variadic-functions.html#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="op">...)</span>   <span class="co">// Literally 3 dots here</span></span></code></pre></div>
+<p>Here’s some code to demo that:</p>
+<div class="sourceCode" id="cb537"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb537-1"><a href="variadic-functions.html#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb537-2"><a href="variadic-functions.html#cb537-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb537-3"><a href="variadic-functions.html#cb537-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="op">...)</span></span>
+<span id="cb537-4"><a href="variadic-functions.html#cb537-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb537-5"><a href="variadic-functions.html#cb537-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;a is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Prints &quot;a is 2&quot;</span></span>
+<span id="cb537-6"><a href="variadic-functions.html#cb537-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb537-7"><a href="variadic-functions.html#cb537-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb537-8"><a href="variadic-functions.html#cb537-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb537-9"><a href="variadic-functions.html#cb537-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb537-10"><a href="variadic-functions.html#cb537-10" aria-hidden="true" tabindex="-1"></a>    func<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">6</span><span class="op">);</span></span>
+<span id="cb537-11"><a href="variadic-functions.html#cb537-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>So, great, we can get that first argument that’s in variable <code>a</code>, but what about the rest of the arguments? How do you get to them?</p>
+<p>Here’s where the fun begins!</p>
+<h2 data-number="25.2" id="getting-the-extra-arguments"><span class="header-section-number">25.2</span> Getting the Extra Arguments</h2>
+<p>You’re going to want to include <code>&lt;stdarg.h&gt;</code> to make any of this work.</p>
+<p></p>
+<p>First things first, we’re going to use a special variable of type <code>va_list</code> (variable argument list) to keep track of which variable we’re accessing at a time.</p>
+<p> </p>
+<p>The idea is that we first start processing arguments with a call to <code>va_start()</code>, process each argument in turn with <code>va_arg()</code>, and then, when done, wrap it up with <code>va_end()</code>.</p>
+<p>When you call <code>va_start()</code>, you need to pass in the <em>last named parameter</em> (the one just before the <code>...</code>) so it knows where to start looking for the additional arguments.</p>
+<p>And when you call <code>va_arg()</code> to get the next argument, you have to tell it the type of argument to get next.</p>
+<p>Here’s a demo that adds together an arbitrary number of integers. The first argument is the number of integers to add together. We’ll make use of that to figure out how many times we have to call <code>va_arg()</code>.</p>
+<div class="sourceCode" id="cb538"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb538-1"><a href="variadic-functions.html#cb538-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb538-2"><a href="variadic-functions.html#cb538-2"></a><span class="pp">#include </span><span class="im">&lt;stdarg.h&gt;</span></span>
+<span id="cb538-3"><a href="variadic-functions.html#cb538-3"></a></span>
+<span id="cb538-4"><a href="variadic-functions.html#cb538-4"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> count<span class="op">,</span> <span class="op">...)</span></span>
+<span id="cb538-5"><a href="variadic-functions.html#cb538-5"></a><span class="op">{</span></span>
+<span id="cb538-6"><a href="variadic-functions.html#cb538-6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb538-7"><a href="variadic-functions.html#cb538-7"></a>    <span class="dt">va_list</span> va<span class="op">;</span></span>
+<span id="cb538-8"><a href="variadic-functions.html#cb538-8"></a></span>
+<span id="cb538-9"><a href="variadic-functions.html#cb538-9"></a>    va_start<span class="op">(</span>va<span class="op">,</span> count<span class="op">);</span>   <span class="co">// Start with arguments after &quot;count&quot;</span></span>
+<span id="cb538-10"><a href="variadic-functions.html#cb538-10"></a></span>
+<span id="cb538-11"><a href="variadic-functions.html#cb538-11"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb538-12"><a href="variadic-functions.html#cb538-12"></a>        <span class="dt">int</span> n <span class="op">=</span> va_arg<span class="op">(</span>va<span class="op">,</span> <span class="dt">int</span><span class="op">);</span>   <span class="co">// Get the next int</span></span>
+<span id="cb538-13"><a href="variadic-functions.html#cb538-13"></a></span>
+<span id="cb538-14"><a href="variadic-functions.html#cb538-14"></a>        total <span class="op">+=</span> n<span class="op">;</span></span>
+<span id="cb538-15"><a href="variadic-functions.html#cb538-15"></a>    <span class="op">}</span></span>
+<span id="cb538-16"><a href="variadic-functions.html#cb538-16"></a></span>
+<span id="cb538-17"><a href="variadic-functions.html#cb538-17"></a>    va_end<span class="op">(</span>va<span class="op">);</span>  <span class="co">// All done</span></span>
+<span id="cb538-18"><a href="variadic-functions.html#cb538-18"></a></span>
+<span id="cb538-19"><a href="variadic-functions.html#cb538-19"></a>    <span class="cf">return</span> total<span class="op">;</span></span>
+<span id="cb538-20"><a href="variadic-functions.html#cb538-20"></a><span class="op">}</span></span>
+<span id="cb538-21"><a href="variadic-functions.html#cb538-21"></a></span>
+<span id="cb538-22"><a href="variadic-functions.html#cb538-22"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb538-23"><a href="variadic-functions.html#cb538-23"></a><span class="op">{</span></span>
+<span id="cb538-24"><a href="variadic-functions.html#cb538-24"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">4</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="op">-</span><span class="dv">4</span><span class="op">,</span> <span class="dv">17</span><span class="op">));</span>  <span class="co">// 6 + 2 - 4 + 17 = 21</span></span>
+<span id="cb538-25"><a href="variadic-functions.html#cb538-25"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">44</span><span class="op">));</span>        <span class="co">// 22 + 44 = 66</span></span>
+<span id="cb538-26"><a href="variadic-functions.html#cb538-26"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>(Note that when <code>printf()</code> is called, it uses the number of <code>%d</code>s (or whatever) in the format string to know how many more arguments there are!)</p>
+<p>If the syntax of <code>va_arg()</code> is looking strange to you (because of that loose type name floating around in there), you’re not alone. These are implemented with preprocessor macros in order to get all the proper magic in there.</p>
+<h2 data-number="25.3" id="va_list-functionality"><span class="header-section-number">25.3</span> <code>va_list</code> Functionality</h2>
+<p>What is that <code>va_list</code> variable we’re using up there? It’s an opaque variable<a href="function-specifiers-alignment-specifiersoperators.html#fn154" class="footnote-ref" id="fnref154" role="doc-noteref"><sup>154</sup></a> that holds information about which argument we’re going to get next with <code>va_arg()</code>. You see how we just call <code>va_arg()</code> over and over? The <code>va_list</code> variable is a placeholder that’s keeping track of progress so far.</p>
+<p></p>
+<p>But we have to initialize that variable to some sensible value. That’s where <code>va_start()</code> comes into play.</p>
+<p>When we called <code>va_start(va, count)</code>, above, we were saying, “Initialize the <code>va</code> variable to point to the variable argument <em>immediately after</em> <code>count</code>.”</p>
+<p></p>
+<p>And that’s <em>why</em> we need to have at least one named variable in our argument list<a href="function-specifiers-alignment-specifiersoperators.html#fn155" class="footnote-ref" id="fnref155" role="doc-noteref"><sup>155</sup></a>.</p>
+<p>Once you have that pointer to the initial parameter, you can easily get subsequent argument values by calling <code>va_arg()</code> repeatedly. When you do, you have to pass in your <code>va_list</code> variable (so it can keep on keeping track of where you are), as well as the type of argument you’re about to copy off.</p>
+<p>It’s up to you as a programmer to figure out which type you’re going to pass to <code>va_arg()</code>. In the above example, we just did <code>int</code>s. But in the case of <code>printf()</code>, it uses the format specifier to determine which type to pull off next.</p>
+<p>And when you’re done, call <code>va_end()</code> to wrap it up. You <strong>must</strong> (the spec says) call this on a particular <code>va_list</code> variable before you decide to call either <code>va_start()</code> or <code>va_copy()</code> on it again. I know we haven’t talked about <code>va_copy()</code> yet.</p>
+<p>So the standard progression is:</p>
+<ul>
+<li><code>va_start()</code> to initialize your <code>va_list</code> variable</li>
+<li>Repeatedly <code>va_arg()</code> to get the values</li>
+<li><code>va_end()</code> to deinitialize your <code>va_list</code> variable</li>
+</ul>
+<p> </p>
+<p></p>
+<p>I also mentioned <code>va_copy()</code> up there; it makes a copy of your <code>va_list</code> variable in the exact same state. That is, if you haven’t started with <code>va_arg()</code> with the source variable, the new one won’t be started, either. If you’ve consumed 5 variables with <code>va_arg()</code> so far, the copy will also reflect that.</p>
+<p><code>va_copy()</code> can be useful if you need to scan ahead through the arguments but need to also remember your current place.</p>
+<p></p>
+<h2 data-number="25.4" id="library-functions-that-use-va_lists"><span class="header-section-number">25.4</span> Library Functions That Use <code>va_list</code>s</h2>
+<p></p>
+<p>One of the other uses for these is pretty cool: writing your own custom <code>printf()</code> variant. It would be a pain to have to handle all those format specifiers right? All zillion of them?</p>
+<p>Luckily, there are <code>printf()</code> variants that accept a working <code>va_list</code> as an argument. You can use these to wrap up and make your own custom <code>printf()</code>s!</p>
+<p></p>
+<p>These functions start with the letter <code>v</code>, such as <code>vprintf()</code>, <code>vfprintf()</code>, <code>vsprintf()</code>, and <code>vsnprintf()</code>. Basically all your <code>printf()</code> golden oldies except with a <code>v</code> in front.</p>
+<p>Let’s make a function <code>my_printf()</code> that works just like <code>printf()</code> except it takes an extra argument up front.</p>
+<div class="sourceCode" id="cb539"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb539-1"><a href="variadic-functions.html#cb539-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb539-2"><a href="variadic-functions.html#cb539-2"></a><span class="pp">#include </span><span class="im">&lt;stdarg.h&gt;</span></span>
+<span id="cb539-3"><a href="variadic-functions.html#cb539-3"></a></span>
+<span id="cb539-4"><a href="variadic-functions.html#cb539-4"></a><span class="dt">int</span> my_printf<span class="op">(</span><span class="dt">int</span> serial<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>format<span class="op">,</span> <span class="op">...)</span></span>
+<span id="cb539-5"><a href="variadic-functions.html#cb539-5"></a><span class="op">{</span></span>
+<span id="cb539-6"><a href="variadic-functions.html#cb539-6"></a>    <span class="dt">va_list</span> va<span class="op">;</span></span>
+<span id="cb539-7"><a href="variadic-functions.html#cb539-7"></a>    <span class="dt">int</span> rv<span class="op">;</span></span>
+<span id="cb539-8"><a href="variadic-functions.html#cb539-8"></a></span>
+<span id="cb539-9"><a href="variadic-functions.html#cb539-9"></a>    <span class="co">// Do my custom work</span></span>
+<span id="cb539-10"><a href="variadic-functions.html#cb539-10"></a>    printf<span class="op">(</span><span class="st">&quot;The serial number is: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
+<span id="cb539-11"><a href="variadic-functions.html#cb539-11"></a></span>
+<span id="cb539-12"><a href="variadic-functions.html#cb539-12"></a>    <span class="co">// Then pass the rest off to vprintf()</span></span>
+<span id="cb539-13"><a href="variadic-functions.html#cb539-13"></a>    va_start<span class="op">(</span>va<span class="op">,</span> format<span class="op">);</span></span>
+<span id="cb539-14"><a href="variadic-functions.html#cb539-14"></a>    rv <span class="op">=</span> vprintf<span class="op">(</span>format<span class="op">,</span> va<span class="op">);</span></span>
+<span id="cb539-15"><a href="variadic-functions.html#cb539-15"></a>    va_end<span class="op">(</span>va<span class="op">);</span></span>
+<span id="cb539-16"><a href="variadic-functions.html#cb539-16"></a></span>
+<span id="cb539-17"><a href="variadic-functions.html#cb539-17"></a>    <span class="cf">return</span> rv<span class="op">;</span></span>
+<span id="cb539-18"><a href="variadic-functions.html#cb539-18"></a><span class="op">}</span></span>
+<span id="cb539-19"><a href="variadic-functions.html#cb539-19"></a></span>
+<span id="cb539-20"><a href="variadic-functions.html#cb539-20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb539-21"><a href="variadic-functions.html#cb539-21"></a><span class="op">{</span></span>
+<span id="cb539-22"><a href="variadic-functions.html#cb539-22"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb539-23"><a href="variadic-functions.html#cb539-23"></a>    <span class="dt">float</span> y <span class="op">=</span> <span class="fl">3.2</span><span class="op">;</span></span>
+<span id="cb539-24"><a href="variadic-functions.html#cb539-24"></a></span>
+<span id="cb539-25"><a href="variadic-functions.html#cb539-25"></a>    my_printf<span class="op">(</span><span class="dv">3490</span><span class="op">,</span> <span class="st">&quot;x is </span><span class="sc">%d</span><span class="st">, y is </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb539-26"><a href="variadic-functions.html#cb539-26"></a><span class="op">}</span></span></code></pre></div>
+<p>See what we did there? On lines 12-14 we started a new <code>va_list</code> variable, and then just passed it right into <code>vprintf()</code>. And it knows just want to do with it, because it has all the <code>printf()</code> smarts built-in.</p>
+<p></p>
+<p>We still have to call <code>va_end()</code> when we’re done, though, so don’t forget that!</p>
+<p> </p>
+<h2 data-number="25.5" id="variadic-macro-gotchas"><span class="header-section-number">25.5</span> Variadic Macro Gotchas</h2>
+<p>Like I’ve mentioned, <code>va_start()</code> and <code>va_end()</code> could be macros. One of the consequences of this might be that they could potentially introduce a new local scope. (That is, if <code>va_start()</code> has <code>{</code> and <code>va_end()</code> contains <code>}</code>.)</p>
+<p></p>
+<p>So we need to watch out for potential scoping issues. Take the following example:</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb540-1"><a href="variadic-functions.html#cb540-1" aria-hidden="true" tabindex="-1"></a>va_start<span class="op">(</span>va<span class="op">,</span> format<span class="op">);</span>          <span class="co">// may contain {</span></span>
+<span id="cb540-2"><a href="variadic-functions.html#cb540-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> rv <span class="op">=</span> vprintf<span class="op">(</span>format<span class="op">,</span> va<span class="op">);</span></span>
+<span id="cb540-3"><a href="variadic-functions.html#cb540-3" aria-hidden="true" tabindex="-1"></a>va_end<span class="op">(</span>va<span class="op">);</span>                    <span class="co">// may contain }</span></span>
+<span id="cb540-4"><a href="variadic-functions.html#cb540-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb540-5"><a href="variadic-functions.html#cb540-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> rv<span class="op">;</span></span></code></pre></div>
+<p>If <code>va_start()</code> opens a new scope, <code>rv</code> will be local to that scope and then the <code>return</code> statement will fail. But this will insidiously only happen on compilers that happen to do that with the <code>va</code> macros.</p>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div class="nav-header"><a href="bitwise-operations.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="locale-and-internationalization.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div></body>
+</html>

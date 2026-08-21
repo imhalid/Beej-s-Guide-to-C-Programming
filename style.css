@@ -1,3 +1,161 @@
+
+/* ==========================================================================
+   Multi-Theme System (OKLCH Custom Properties Overrides)
+   ========================================================================== */
+
+/* Theme 1: Dark Obsidian (Default) */
+:root, [data-theme="dark-obsidian"] {
+  --bg-main: oklch(12% 0.005 260);
+  --bg-sidebar: oklch(15.5% 0.008 260);
+  --bg-card: oklch(19% 0.01 260);
+  --bg-code: oklch(9% 0.005 260);
+  --border-color: oklch(24% 0.01 260);
+  --text-body: oklch(74% 0.005 260);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(55% 0.008 260);
+  --link-color: oklch(76% 0.16 235);
+  --link-hover: oklch(85% 0.18 225);
+  --code-inline-fg: oklch(86% 0.16 85);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 12%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(76% 0.22 345);
+  --syn-dt: oklch(79% 0.18 190);
+  --syn-st: oklch(82% 0.17 145);
+  --syn-ch: oklch(84% 0.16 125);
+  --syn-co: oklch(60% 0.03 260);
+  --syn-fu: oklch(80% 0.18 250);
+  --syn-pp: oklch(82% 0.18 60);
+  --syn-dv: oklch(85% 0.18 95);
+  --syn-cn: oklch(84% 0.19 40);
+  --syn-op: oklch(78% 0.12 280);
+  --syn-va: oklch(86% 0.14 210);
+  --syn-at: oklch(81% 0.16 310);
+}
+
+/* Theme 2: Cyber Neon */
+[data-theme="cyber-neon"] {
+  --bg-main: oklch(13% 0.02 290);
+  --bg-sidebar: oklch(16.5% 0.025 290);
+  --bg-card: oklch(21% 0.03 290);
+  --bg-code: oklch(10% 0.02 290);
+  --border-color: oklch(28% 0.03 290);
+  --text-body: oklch(78% 0.01 290);
+  --text-bold: oklch(98% 0.01 290);
+  --text-muted: oklch(58% 0.02 290);
+  --link-color: oklch(78% 0.23 325);
+  --link-hover: oklch(86% 0.25 320);
+  --code-inline-fg: oklch(85% 0.22 160);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(80% 0.25 325);
+  --syn-dt: oklch(82% 0.22 195);
+  --syn-st: oklch(84% 0.22 145);
+  --syn-ch: oklch(86% 0.22 130);
+  --syn-co: oklch(60% 0.04 290);
+  --syn-fu: oklch(82% 0.20 270);
+  --syn-pp: oklch(84% 0.22 55);
+  --syn-dv: oklch(86% 0.22 95);
+  --syn-cn: oklch(85% 0.22 35);
+  --syn-op: oklch(80% 0.16 300);
+  --syn-va: oklch(88% 0.18 200);
+  --syn-at: oklch(82% 0.22 330);
+}
+
+/* Theme 3: Nordic Slate */
+[data-theme="nordic-slate"] {
+  --bg-main: oklch(14% 0.015 200);
+  --bg-sidebar: oklch(17.5% 0.018 200);
+  --bg-card: oklch(22% 0.02 200);
+  --bg-code: oklch(10% 0.015 200);
+  --border-color: oklch(28% 0.02 200);
+  --text-body: oklch(76% 0.008 200);
+  --text-bold: oklch(98% 0 0);
+  --text-muted: oklch(58% 0.015 200);
+  --link-color: oklch(80% 0.17 175);
+  --link-hover: oklch(88% 0.19 165);
+  --code-inline-fg: oklch(86% 0.15 80);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 14%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  --syn-kw: oklch(78% 0.18 350);
+  --syn-dt: oklch(80% 0.17 190);
+  --syn-st: oklch(84% 0.18 150);
+  --syn-ch: oklch(86% 0.16 135);
+  --syn-co: oklch(60% 0.03 200);
+  --syn-fu: oklch(82% 0.17 230);
+  --syn-pp: oklch(84% 0.18 65);
+  --syn-dv: oklch(86% 0.18 95);
+  --syn-cn: oklch(85% 0.18 45);
+  --syn-op: oklch(80% 0.12 210);
+  --syn-va: oklch(88% 0.14 180);
+  --syn-at: oklch(82% 0.16 310);
+}
+
+/* Theme 4: Clean Light Tech */
+[data-theme="light-tech"] {
+  --bg-main: oklch(99% 0.003 260);
+  --bg-sidebar: oklch(96.5% 0.005 260);
+  --bg-card: oklch(93.5% 0.008 260);
+  --bg-code: oklch(96% 0.005 260);
+  --border-color: oklch(88% 0.008 260);
+  --text-body: oklch(35% 0.01 260);
+  --text-bold: oklch(15% 0.015 260);
+  --text-muted: oklch(52% 0.01 260);
+  --link-color: oklch(48% 0.22 260);
+  --link-hover: oklch(38% 0.25 260);
+  --code-inline-fg: oklch(42% 0.20 30);
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 10%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 25%, transparent);
+
+  --syn-kw: oklch(48% 0.25 345);
+  --syn-dt: oklch(46% 0.20 200);
+  --syn-st: oklch(42% 0.20 145);
+  --syn-ch: oklch(44% 0.18 130);
+  --syn-co: oklch(55% 0.02 260);
+  --syn-fu: oklch(46% 0.22 260);
+  --syn-pp: oklch(48% 0.22 55);
+  --syn-dv: oklch(45% 0.20 90);
+  --syn-cn: oklch(44% 0.22 35);
+  --syn-op: oklch(48% 0.15 280);
+  --syn-va: oklch(42% 0.16 210);
+  --syn-at: oklch(46% 0.20 310);
+}
+
+/* Top-Right Floating Theme Toggle Button */
+.theme-toggle-btn {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  color: var(--text-bold);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--link-color);
+  background-color: var(--bg-card);
+  color: var(--link-color);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn svg {
+  stroke: var(--link-color);
+  flex-shrink: 0;
+}
+
 /* ==========================================================================
    Beej's Guide to C Programming - Dark Monochrome & Colorful Accents
    ========================================================================== */
