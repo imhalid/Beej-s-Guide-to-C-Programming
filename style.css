@@ -1,0 +1,833 @@
+/* ==========================================================================
+   Beej's Guide to C Programming - Dark Monochrome & Colorful Accents
+   ========================================================================== */
+
+:root {
+  /* OKLCH Dark Monochrome Base Palette */
+  --bg-main: oklch(12% 0.005 260);          /* Deep dark obsidian main background */
+  --bg-sidebar: oklch(15.5% 0.008 260);     /* Slightly lighter dark sidebar */
+  --bg-card: oklch(19% 0.01 260);          /* Card / hover background */
+  --bg-code: oklch(9% 0.005 260);           /* Extra dark code block background */
+  --border-color: oklch(24% 0.01 260);      /* Subtle dark border */
+  --border-highlight: oklch(34% 0.015 260);
+
+  /* Text Contrast Hierarchy (Ton farkı ile bold belirginliği) */
+  --text-body: oklch(74% 0.005 260);        /* Soft off-white for regular text */
+  --text-bold: oklch(98% 0 0);              /* Bright pure white for strong/bold text */
+  --text-muted: oklch(55% 0.008 260);       /* Muted text for numbers and captions */
+
+  /* Vibrant Accent Colors (Links, Inline Code, and Code Highlights) */
+  --link-color: oklch(76% 0.16 235);        /* Electric Cyan-Blue link color */
+  --link-hover: oklch(85% 0.18 225);       /* Bright sky blue on hover */
+  
+  --code-inline-fg: oklch(86% 0.16 85);     /* Warm Amber-Gold for inline code */
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 12%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  /* OKLCH Syntax Highlighting Palette */
+  --syn-kw: oklch(76% 0.22 345);    /* Vibrant Pink / Magenta keywords (if, return, int) */
+  --syn-dt: oklch(79% 0.18 190);    /* Cyan data types (char, void, size_t, struct) */
+  --syn-st: oklch(82% 0.17 145);    /* Emerald Green strings */
+  --syn-ch: oklch(84% 0.16 125);    /* Lime/Mint Green char literals */
+  --syn-co: oklch(60% 0.03 260);    /* Muted Slate Grey comments */
+  --syn-fu: oklch(80% 0.18 250);    /* Vibrant Sapphire Blue functions (printf, main) */
+  --syn-pp: oklch(82% 0.18 60);     /* Amber Orange preprocessor (#include, #define) */
+  --syn-dv: oklch(85% 0.18 95);     /* Golden Yellow numbers */
+  --syn-cn: oklch(84% 0.19 40);     /* Coral Constants (NULL, SEEK_SET) */
+  --syn-op: oklch(78% 0.12 280);    /* Soft Lavender Operators (=, +, *, &) */
+  --syn-va: oklch(86% 0.14 210);    /* Soft Ice Blue variables */
+  --syn-at: oklch(81% 0.16 310);    /* Orchid Violet attributes */
+  --syn-al: oklch(75% 0.22 25);     /* Bright Crimson warnings / alerts */
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Global Resets */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background-color: var(--bg-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bold Text Hierarchy: Bold & Strong vs Regular Text */
+strong, b, th, h1, h2, h3, h4, h5, h6, .toc-section-number, .header-section-number {
+  color: var(--text-bold) !important;
+  font-weight: 700;
+}
+
+b, strong {
+  color: var(--text-bold);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+p, li, td {
+  color: var(--text-body);
+  font-weight: 400;
+}
+
+/* Links */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: color-mix(in oklch, var(--link-color) 85%, var(--text-muted));
+}
+
+/* ==========================================================================
+   2-Column App Layout for index.html
+   ========================================================================== */
+
+body.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-main);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 340px;
+  min-width: 340px;
+  height: 100vh;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-sidebar);
+}
+
+.sidebar-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--text-bold) !important;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-header .subtitle {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  margin: 0 0 16px 0;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  color: var(--text-bold);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box input:focus {
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--link-color) 25%, transparent);
+}
+
+.search-box svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  fill: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Sidebar Nav */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+}
+
+.sidebar-nav nav#TOC ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav nav#TOC > ul > li {
+  margin-bottom: 10px;
+}
+
+.sidebar-nav nav#TOC a {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--text-body);
+  text-decoration: none;
+  font-size: 0.885rem;
+  line-height: 1.4;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.sidebar-nav nav#TOC a:hover {
+  background-color: color-mix(in oklch, var(--link-color) 12%, transparent);
+  color: var(--link-hover);
+}
+
+/* Minimal TOC Active Item Styling (Bright left border line + subtle tinted background) */
+.sidebar-nav nav#TOC a.active,
+.sidebar-nav nav#TOC ul ul a.active {
+  background-color: color-mix(in oklch, var(--link-color) 16%, transparent) !important;
+  border-left: 3px solid oklch(85% 0.19 225) !important;
+  color: var(--text-bold) !important;
+  font-weight: 700;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+.sidebar-nav nav#TOC a.active .toc-section-number,
+.sidebar-nav nav#TOC ul ul a.active .toc-section-number {
+  color: oklch(85% 0.19 225) !important;
+}
+
+.sidebar-nav nav#TOC a.active:hover,
+.sidebar-nav nav#TOC ul ul a.active:hover {
+  background-color: color-mix(in oklch, var(--link-color) 26%, transparent) !important;
+  color: var(--text-bold) !important;
+  border-left-color: oklch(92% 0.20 220) !important;
+  text-decoration: none;
+}
+
+.sidebar-nav nav#TOC a.active:hover .toc-section-number,
+.sidebar-nav nav#TOC ul ul a.active:hover .toc-section-number {
+  color: oklch(92% 0.20 220) !important;
+}
+
+.sidebar-nav nav#TOC ul ul {
+  padding-left: 14px;
+  margin-top: 4px;
+  border-left: 1px solid var(--border-color);
+}
+
+.sidebar-nav nav#TOC ul ul a {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  padding: 4px 8px;
+}
+
+.sidebar-nav nav#TOC ul ul a:hover {
+  color: var(--text-bold);
+  background-color: var(--bg-card);
+}
+
+.toc-section-number {
+  font-weight: 700;
+  margin-right: 6px;
+  color: var(--text-bold);
+}
+
+/* Content Viewport */
+.content-viewport {
+  flex: 1;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-main);
+}
+
+.content-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: var(--bg-main);
+}
+
+/* Mobile topbar */
+.mobile-topbar {
+  display: none;
+  height: 52px;
+  background-color: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.mobile-toggle-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-bold);
+  font-size: 1rem;
+}
+
+.mobile-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  body.app-layout {
+    flex-direction: column;
+  }
+  .mobile-topbar {
+    display: flex;
+  }
+  .sidebar {
+    position: fixed;
+    top: 52px;
+    left: 0;
+    width: 290px;
+    height: calc(100vh - 52px);
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-md);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .content-viewport {
+    height: calc(100vh - 52px);
+  }
+}
+
+/* ==========================================================================
+   Chapter Page Content Styles
+   ========================================================================== */
+
+body:not(.app-layout) {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 40px 24px 80px 24px;
+}
+
+/* Minimal & Compact Chapter Navigation (Prev | Contents | Next) */
+div[style*="text-align:center"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 12px 0 20px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+div[style*="text-align:center"] a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: none !important;
+  transition: color 0.15s ease;
+}
+
+div[style*="text-align:center"] a:hover {
+  background: none !important;
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-bold) !important;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  letter-spacing: -0.015em;
+}
+
+h1.title {
+  font-size: 2.25rem;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--text-bold) !important;
+}
+
+h1 {
+  font-size: 1.85rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h2 {
+  font-size: 1.45rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.header-section-number {
+  color: var(--link-color) !important;
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+p {
+  margin: 1.1em 0;
+  line-height: 1.7;
+}
+
+/* Inline Code Styling */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--code-inline-fg);
+  background-color: var(--code-inline-bg);
+  border: 1px solid var(--code-inline-border);
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+/* Code Blocks */
+div.sourceCode {
+  margin: 1.6em 0;
+}
+
+pre.sourceCode {
+  background-color: var(--bg-code);
+  color: oklch(90% 0.005 260);
+  padding: 18px 22px;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  border: 1px solid color-mix(in oklch, var(--link-color) 20%, var(--border-color));
+  box-shadow: var(--shadow-md);
+}
+
+pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+}
+
+/* Syntax Highlighting Classes for C Code */
+code span.kw { color: var(--syn-kw); font-weight: 700; } /* Keywords (int, return, if, for) */
+code span.dt { color: var(--syn-dt); font-weight: 700; } /* Data Types (char, void, size_t) */
+code span.st { color: var(--syn-st); } /* Strings */
+code span.ch { color: var(--syn-ch); } /* Char Literals */
+code span.co { color: var(--syn-co); font-style: italic; } /* Comments */
+code span.cv { color: var(--syn-co); font-style: italic; font-weight: 700; }
+code span.do { color: var(--syn-co); font-style: italic; }
+code span.fu { color: var(--syn-fu); font-weight: 700; } /* Functions (printf, main) */
+code span.pp { color: var(--syn-pp); font-weight: 700; } /* Preprocessor (#include, #define) */
+code span.dv { color: var(--syn-dv); } /* Decimal Numbers */
+code span.fl { color: var(--syn-dv); } /* Float Numbers */
+code span.bn { color: var(--syn-dv); } /* BaseN Numbers */
+code span.cn { color: var(--syn-cn); font-weight: 700; } /* Constants (NULL, SEEK_SET) */
+code span.op { color: var(--syn-op); } /* Operators (=, +, *, &) */
+code span.va { color: var(--syn-va); } /* Variables */
+code span.at { color: var(--syn-at); } /* Attributes */
+code span.al { color: var(--syn-al); font-weight: 700; } /* Alert / Error */
+code span.er { color: var(--syn-al); font-weight: 700; }
+
+/* Line Numbers in Code Blocks */
+pre.numberSource code > span > a:first-child::before {
+  color: oklch(48% 0.005 260);
+  border-right: 1px solid oklch(22% 0.005 260);
+  padding-right: 8px;
+  margin-right: 10px;
+}
+
+/* Blockquotes / Callouts */
+blockquote {
+  margin: 1.6em 0;
+  padding: 16px 22px;
+  background-color: var(--bg-sidebar);
+  border-left: 4px solid var(--link-color);
+  border-radius: 0 10px 10px 0;
+  color: var(--text-body);
+}
+
+blockquote p {
+  margin: 0.5em 0;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6em 0;
+  font-size: 0.92rem;
+  overflow-x: auto;
+  display: block;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--bg-sidebar);
+  color: var(--text-bold) !important;
+  font-weight: 700;
+}
+
+tr:hover td {
+  background-color: var(--bg-card);
+}
+
+/* Modern Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(28% 0.01 260);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(40% 0.015 260);
+}
+
+
+/* Minimal Compact Top-Right / Bottom-Right Navigation Bar */
+.nav-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  padding: 2px 0 !important;
+  margin: 4px 0 16px 0 !important;
+}
+
+.nav-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  color: var(--text-muted) !important;
+  background-color: var(--bg-sidebar) !important;
+  border: 1px solid var(--border-color) !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer;
+}
+
+.nav-btn:hover:not(.disabled) {
+  color: var(--link-hover) !important;
+  background-color: var(--bg-card) !important;
+  border-color: var(--link-color) !important;
+  text-decoration: none !important;
+}
+
+.nav-btn.disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+
+/* ==========================================================================
+   Command Palette Overlay & Modal (Cmd/Ctrl + Shift + F)
+   ========================================================================== */
+
+.cmd-trigger-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 2px 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cmd-trigger-btn:hover {
+  color: var(--link-color);
+  border-color: var(--link-color);
+  background-color: color-mix(in oklch, var(--link-color) 12%, var(--bg-card));
+}
+
+.cmd-trigger-btn kbd {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.cmd-palette-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.cmd-palette-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cmd-palette-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cmd-palette-modal {
+  position: relative;
+  width: 90%;
+  max-width: 640px;
+  max-height: 70vh;
+  background-color: var(--bg-sidebar);
+  border: 1px solid oklch(35% 0.02 260);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px oklch(35% 0.02 260);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+  transform: translateY(-12px) scale(0.98);
+  transition: transform 0.2s ease;
+}
+
+.cmd-palette-overlay.active .cmd-palette-modal {
+  transform: translateY(0) scale(1);
+}
+
+.cmd-palette-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 12px;
+  background-color: var(--bg-sidebar);
+}
+
+.cmd-search-icon {
+  stroke: var(--link-color);
+  flex-shrink: 0;
+}
+
+#cmd-palette-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.05rem;
+  font-family: var(--font-sans);
+  color: var(--text-bold);
+}
+
+#cmd-palette-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.cmd-kbd {
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.cmd-palette-results {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 440px;
+  padding: 8px;
+}
+
+.cmd-palette-empty {
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.cmd-palette-empty svg {
+  stroke: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.cmd-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cmd-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.cmd-result-item:hover,
+.cmd-result-item.selected {
+  background-color: color-mix(in oklch, var(--link-color) 14%, var(--bg-card));
+  border-color: color-mix(in oklch, var(--link-color) 35%, transparent);
+}
+
+.cmd-item-main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.cmd-item-title {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cmd-item-sections {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cmd-item-score {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cmd-item-score.score-high {
+  background-color: color-mix(in oklch, oklch(75% 0.2 160) 18%, transparent);
+  color: oklch(84% 0.22 155);
+  border: 1px solid color-mix(in oklch, oklch(75% 0.2 160) 35%, transparent);
+}
+
+.cmd-item-score.score-med {
+  background-color: color-mix(in oklch, var(--link-color) 18%, transparent);
+  color: var(--link-color);
+  border: 1px solid color-mix(in oklch, var(--link-color) 35%, transparent);
+}
+
+.cmd-item-score.score-low {
+  background-color: color-mix(in oklch, oklch(80% 0.16 85) 15%, transparent);
+  color: oklch(85% 0.16 85);
+  border: 1px solid color-mix(in oklch, oklch(80% 0.16 85) 30%, transparent);
+}
+
+.cmd-palette-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 18px;
+  background-color: var(--bg-main);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.cmd-palette-footer kbd {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  color: var(--text-bold);
+}
+
+.cmd-badge-hint {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--link-color);
+  font-weight: 600;
+}

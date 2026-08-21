@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <base target="_blank" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="nav-header"><a href="fixed-width-integer-types.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="multithreading.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
+<h1 data-number="38" id="date-and-time-functionality"><span class="header-section-number">38</span> Date and Time Functionality</h1>
+<blockquote>
+<p>“Time is an illusion. Lunchtime doubly so.”<br />
+—Ford Prefect, The Hitchhikers Guide to the Galaxy</p>
+</blockquote>
+<p></p>
+<p>This isn’t too complex, but it can be a little intimidating at first, both with the different types available and the way we can convert between them.</p>
+<p>Mix in GMT (UTC) and local time and we have all the <em>Usual Fun</em>™ one gets with times and dates.</p>
+<p>And of course never forget the golden rule of dates and times: <em>Never attempt to write your own date and time functionality. Only use what the library gives you.</em></p>
+<p>Time is too complex for mere mortal programmers to handle correctly. Seriously, we all owe a point to everyone who worked on any date and time library, so put that in your budget.</p>
+<h2 data-number="38.1" id="quick-terminology-and-information"><span class="header-section-number">38.1</span> Quick Terminology and Information</h2>
+<p>Just a couple quick terms in case you don’t have them down.</p>
+<ul>
+<li><p> <strong>UTC</strong>: Coordinated Universal Time is a universally<a href="function-specifiers-alignment-specifiersoperators.html#fn191" class="footnote-ref" id="fnref191" role="doc-noteref"><sup>191</sup></a> agreed upon, absolute time. Everyone on the planet thinks it’s the same time right now in UTC… even though they have different local times.</p></li>
+<li><p> <strong>GMT</strong>: Greenwich Mean Time, effectively the same as UTC<a href="function-specifiers-alignment-specifiersoperators.html#fn192" class="footnote-ref" id="fnref192" role="doc-noteref"><sup>192</sup></a>. You probably want to say UTC, or “universal time”. If you’re talking specifically about the GMT time zone, say GMT. Confusingly, many of C’s UTC functions predate UTC and still refer to Greenwich Mean Time. When you see that, know that C means UTC.</p></li>
+<li><p> <strong>Local time</strong>: what time it is where the computer running the program is located. This is described as an offset from UTC. Although there are many time zones in the world, most computers do work in either local time or UTC.</p></li>
+</ul>
+<p></p>
+<p>As a general rule, if you are describing an event that happens one time, like a log entry, or a rocket launch, or when pointers finally clicked for you, use UTC.</p>
+<p></p>
+<p>On the other hand, if it’s something that happens the same time <em>in every time zone</em>, like New Year’s Eve or dinner time, use local time.</p>
+<p>Since a lot of languages are only good at converting between UTC and local time, you can cause yourself a lot of pain by choosing to store your dates in the wrong form. (Ask me how I know.)</p>
+<p> </p>
+<h2 data-number="38.2" id="date-types"><span class="header-section-number">38.2</span> Date Types</h2>
+<p>There are two<a href="function-specifiers-alignment-specifiersoperators.html#fn193" class="footnote-ref" id="fnref193" role="doc-noteref"><sup>193</sup></a> main types in C when it comes to dates: <code>time_t</code> and <code>struct tm</code>.</p>
+<p>The spec doesn’t actually say much about them:</p>
+<ul>
+<li><p> <code>time_t</code>: a real type capable of holding a time. So by the spec, this could be a floating type or integer type. In POSIX (Unix-likes), it’s an integer. This holds <em>calendar time</em>. Which you can think of as UTC time.</p></li>
+<li><p> <code>struct tm</code>: holds the components of a calendar time. This is a <em>broken-down time</em>, i.e. the components of the time, like hour, minute, second, day, month, year, etc.</p></li>
+</ul>
+<p></p>
+<p>On a lot of systems, <code>time_t</code> represents the number of seconds since <a href="https://en.wikipedia.org/wiki/Unix_time"><em>Epoch</em></a><a href="function-specifiers-alignment-specifiersoperators.html#fn194" class="footnote-ref" id="fnref194" role="doc-noteref"><sup>194</sup></a>. Epoch is in some ways the start of time from the computer’s perspective, which is commonly January 1, 1970 UTC. <code>time_t</code> can go negative to represent times before Epoch. Windows behaves the same way as Unix from what I can tell.</p>
+<p> </p>
+<p>And what’s in a <code>struct tm</code>? The following fields:</p>
+<div class="sourceCode" id="cb730"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb730-1"><a href="date-and-time-functionality.html#cb730-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tm <span class="op">{</span></span>
+<span id="cb730-2"><a href="date-and-time-functionality.html#cb730-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_sec<span class="op">;</span>    <span class="co">// seconds after the minute -- [0, 60]</span></span>
+<span id="cb730-3"><a href="date-and-time-functionality.html#cb730-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_min<span class="op">;</span>    <span class="co">// minutes after the hour -- [0, 59]</span></span>
+<span id="cb730-4"><a href="date-and-time-functionality.html#cb730-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_hour<span class="op">;</span>   <span class="co">// hours since midnight -- [0, 23]</span></span>
+<span id="cb730-5"><a href="date-and-time-functionality.html#cb730-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_mday<span class="op">;</span>   <span class="co">// day of the month -- [1, 31]</span></span>
+<span id="cb730-6"><a href="date-and-time-functionality.html#cb730-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_mon<span class="op">;</span>    <span class="co">// months since January -- [0, 11]</span></span>
+<span id="cb730-7"><a href="date-and-time-functionality.html#cb730-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_year<span class="op">;</span>   <span class="co">// years since 1900</span></span>
+<span id="cb730-8"><a href="date-and-time-functionality.html#cb730-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_wday<span class="op">;</span>   <span class="co">// days since Sunday -- [0, 6]</span></span>
+<span id="cb730-9"><a href="date-and-time-functionality.html#cb730-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_yday<span class="op">;</span>   <span class="co">// days since January 1 -- [0, 365]</span></span>
+<span id="cb730-10"><a href="date-and-time-functionality.html#cb730-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tm_isdst<span class="op">;</span>  <span class="co">// Daylight Saving Time flag</span></span>
+<span id="cb730-11"><a href="date-and-time-functionality.html#cb730-11" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Note that everything is zero-based except the day of the month.</p>
+<p>It’s important to know that you can put any values in these types you want. There are functions to help get the time <em>now</em>, but the types hold <em>a</em> time, not <em>the</em> time.</p>
+<p></p>
+<p>So the question becomes: “How do you initialize data of these types, and how do you convert between them?”</p>
+<h2 data-number="38.3" id="initialization-and-conversion-between-types"><span class="header-section-number">38.3</span> Initialization and Conversion Between Types</h2>
+<p></p>
+<p>First, you can get the current time and store it in a <code>time_t</code> with the <code>time()</code> function.</p>
+<div class="sourceCode" id="cb731"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb731-1"><a href="date-and-time-functionality.html#cb731-1" aria-hidden="true" tabindex="-1"></a><span class="dt">time_t</span> now<span class="op">;</span>  <span class="co">// Variable to hold the time now</span></span>
+<span id="cb731-2"><a href="date-and-time-functionality.html#cb731-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb731-3"><a href="date-and-time-functionality.html#cb731-3" aria-hidden="true" tabindex="-1"></a>now <span class="op">=</span> time<span class="op">(</span>NULL<span class="op">);</span>  <span class="co">// You can get it like this...</span></span>
+<span id="cb731-4"><a href="date-and-time-functionality.html#cb731-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb731-5"><a href="date-and-time-functionality.html#cb731-5" aria-hidden="true" tabindex="-1"></a>time<span class="op">(&amp;</span>now<span class="op">);</span>        <span class="co">// ...or this. Same as the previous line.</span></span></code></pre></div>
+<p>Great! You have a variable that gets you the time now.</p>
+<p> </p>
+<p>Amusingly, there’s only one portable way to print out what’s in a <code>time_t</code>, and that’s the rarely-used <code>ctime()</code> function that prints the value in local time:</p>
+<div class="sourceCode" id="cb732"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb732-1"><a href="date-and-time-functionality.html#cb732-1" aria-hidden="true" tabindex="-1"></a>now <span class="op">=</span> time<span class="op">(</span>NULL<span class="op">);</span></span>
+<span id="cb732-2"><a href="date-and-time-functionality.html#cb732-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> ctime<span class="op">(&amp;</span>now<span class="op">));</span></span></code></pre></div>
+<p>This returns a string with a very specific form that includes a newline at the end:</p>
+<div class="sourceCode" id="cb733"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb733-1"><a href="date-and-time-functionality.html#cb733-1" aria-hidden="true" tabindex="-1"></a>Sun Feb 28 18:47:25 2021</span></code></pre></div>
+<p></p>
+<p>So that’s kind of inflexible. If you want more control, you should convert that <code>time_t</code> into a <code>struct tm</code>.</p>
+<h3 data-number="38.3.1" id="converting-time_t-to-struct-tm"><span class="header-section-number">38.3.1</span> Converting <code>time_t</code> to <code>struct tm</code></h3>
+<p></p>
+<p>There are two amazing ways to do this conversion:</p>
+<p></p>
+<ul>
+<li><code>localtime()</code>: this function converts a <code>time_t</code> to a <code>struct tm</code> in local time.</li>
+</ul>
+<p></p>
+<ul>
+<li><code>gmtime()</code>: this function converts a <code>time_t</code> to a <code>struct tm</code> in UTC. (See ye olde GMT creeping into that function name?)</li>
+</ul>
+<p></p>
+<p>Let’s see what time it is now by printing out a <code>struct tm</code> with the <code>asctime()</code> function:</p>
+<div class="sourceCode" id="cb734"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb734-1"><a href="date-and-time-functionality.html#cb734-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Local: </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> asctime<span class="op">(</span>localtime<span class="op">(&amp;</span>now<span class="op">)));</span></span>
+<span id="cb734-2"><a href="date-and-time-functionality.html#cb734-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;  UTC: </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> asctime<span class="op">(</span>gmtime<span class="op">(&amp;</span>now<span class="op">)));</span></span></code></pre></div>
+<p> </p>
+<p>Output (I’m in the Pacific Standard Time zone):</p>
+<div class="sourceCode" id="cb735"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb735-1"><a href="date-and-time-functionality.html#cb735-1" aria-hidden="true" tabindex="-1"></a>Local: Sun Feb 28 20:15:27 2021</span>
+<span id="cb735-2"><a href="date-and-time-functionality.html#cb735-2" aria-hidden="true" tabindex="-1"></a>  UTC: Mon Mar  1 04:15:27 2021</span></code></pre></div>
+<p>Once you have your <code>time_t</code> in a <code>struct tm</code>, it opens all kinds of doors. You can print out the time in a variety of ways, figure out which day of the week a date is, and so on. Or convert it back into a <code>time_t</code>.</p>
+<p>More on that soon!</p>
+<p></p>
+<h3 data-number="38.3.2" id="converting-struct-tm-to-time_t"><span class="header-section-number">38.3.2</span> Converting <code>struct tm</code> to <code>time_t</code></h3>
+<p> </p>
+<p>If you want to go the other way, you can use <code>mktime()</code> to get that information.</p>
+<p><code>mktime()</code> sets the values of <code>tm_wday</code> and <code>tm_yday</code> for you, so don’t bother filling them out because they’ll just be overwritten.</p>
+<p>Also, you can set <code>tm_isdst</code> to <code>-1</code> to have it make the determination for you. Or you can manually set it to true or false.</p>
+<div class="sourceCode" id="cb736"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb736-1"><a href="date-and-time-functionality.html#cb736-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don&#39;t be tempted to put leading zeros on these numbers (unless you</span></span>
+<span id="cb736-2"><a href="date-and-time-functionality.html#cb736-2" aria-hidden="true" tabindex="-1"></a><span class="co">// mean for them to be in octal)!</span></span>
+<span id="cb736-3"><a href="date-and-time-functionality.html#cb736-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-4"><a href="date-and-time-functionality.html#cb736-4" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tm some_time <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb736-5"><a href="date-and-time-functionality.html#cb736-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_year<span class="op">=</span><span class="dv">82</span><span class="op">,</span>   <span class="co">// years since 1900</span></span>
+<span id="cb736-6"><a href="date-and-time-functionality.html#cb736-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_mon<span class="op">=</span><span class="dv">3</span><span class="op">,</span>     <span class="co">// months since January -- [0, 11]</span></span>
+<span id="cb736-7"><a href="date-and-time-functionality.html#cb736-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_mday<span class="op">=</span><span class="dv">12</span><span class="op">,</span>   <span class="co">// day of the month -- [1, 31]</span></span>
+<span id="cb736-8"><a href="date-and-time-functionality.html#cb736-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_hour<span class="op">=</span><span class="dv">12</span><span class="op">,</span>   <span class="co">// hours since midnight -- [0, 23]</span></span>
+<span id="cb736-9"><a href="date-and-time-functionality.html#cb736-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_min<span class="op">=</span><span class="dv">0</span><span class="op">,</span>     <span class="co">// minutes after the hour -- [0, 59]</span></span>
+<span id="cb736-10"><a href="date-and-time-functionality.html#cb736-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_sec<span class="op">=</span><span class="dv">4</span><span class="op">,</span>     <span class="co">// seconds after the minute -- [0, 60]</span></span>
+<span id="cb736-11"><a href="date-and-time-functionality.html#cb736-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>tm_isdst<span class="op">=-</span><span class="dv">1</span><span class="op">,</span>  <span class="co">// Daylight Saving Time flag</span></span>
+<span id="cb736-12"><a href="date-and-time-functionality.html#cb736-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb736-13"><a href="date-and-time-functionality.html#cb736-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-14"><a href="date-and-time-functionality.html#cb736-14" aria-hidden="true" tabindex="-1"></a><span class="dt">time_t</span> some_time_epoch<span class="op">;</span></span>
+<span id="cb736-15"><a href="date-and-time-functionality.html#cb736-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-16"><a href="date-and-time-functionality.html#cb736-16" aria-hidden="true" tabindex="-1"></a>some_time_epoch <span class="op">=</span> mktime<span class="op">(&amp;</span>some_time<span class="op">);</span></span>
+<span id="cb736-17"><a href="date-and-time-functionality.html#cb736-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-18"><a href="date-and-time-functionality.html#cb736-18" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> ctime<span class="op">(&amp;</span>some_time_epoch<span class="op">));</span></span>
+<span id="cb736-19"><a href="date-and-time-functionality.html#cb736-19" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Is DST: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> some_time<span class="op">.</span>tm_isdst<span class="op">);</span></span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode" id="cb737"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb737-1"><a href="date-and-time-functionality.html#cb737-1" aria-hidden="true" tabindex="-1"></a>Mon Apr 12 12:00:04 1982</span>
+<span id="cb737-2"><a href="date-and-time-functionality.html#cb737-2" aria-hidden="true" tabindex="-1"></a>Is DST: 0</span></code></pre></div>
+<p>When you manually load a <code>struct tm</code> like that, it should be in local time. <code>mktime()</code> will convert that local time into a <code>time_t</code> calendar time.</p>
+<p></p>
+<p>Weirdly, however, the standard doesn’t give us a way to load up a <code>struct tm</code> with a UTC time and convert that to a <code>time_t</code>. If you want to do that with Unix-likes, try the non-standard <code>timegm()</code>. On Windows, <code>_mkgmtime()</code>.</p>
+<p></p>
+<h2 data-number="38.4" id="formatted-date-output"><span class="header-section-number">38.4</span> Formatted Date Output</h2>
+<p>We’ve already seen a couple ways to print formatted date output to the screen. With <code>time_t</code> we can use <code>ctime()</code>, and with <code>struct tm</code> we can use <code>asctime()</code>.</p>
+<div class="sourceCode" id="cb738"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb738-1"><a href="date-and-time-functionality.html#cb738-1" aria-hidden="true" tabindex="-1"></a><span class="dt">time_t</span> now <span class="op">=</span> time<span class="op">(</span>NULL<span class="op">);</span></span>
+<span id="cb738-2"><a href="date-and-time-functionality.html#cb738-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tm <span class="op">*</span>local <span class="op">=</span> localtime<span class="op">(&amp;</span>now<span class="op">);</span></span>
+<span id="cb738-3"><a href="date-and-time-functionality.html#cb738-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tm <span class="op">*</span>utc <span class="op">=</span> gmtime<span class="op">(&amp;</span>now<span class="op">);</span></span>
+<span id="cb738-4"><a href="date-and-time-functionality.html#cb738-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb738-5"><a href="date-and-time-functionality.html#cb738-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Local time: </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> ctime<span class="op">(&amp;</span>now<span class="op">));</span>     <span class="co">// Local time with time_t</span></span>
+<span id="cb738-6"><a href="date-and-time-functionality.html#cb738-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Local time: </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> asctime<span class="op">(</span>local<span class="op">));</span>  <span class="co">// Local time with struct tm</span></span>
+<span id="cb738-7"><a href="date-and-time-functionality.html#cb738-7" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;UTC       : </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> asctime<span class="op">(</span>utc<span class="op">));</span>    <span class="co">// UTC with a struct tm</span></span></code></pre></div>
+<p>But what if I told you, dear reader, that there’s a way to have much more control over how the date was printed?</p>
+<p></p>
+<p>Sure, we could fish individual fields out of the <code>struct tm</code>, but there’s a great function called <code>strftime()</code> that will do a lot of the hard work for you. It’s like <code>printf()</code>, except for dates!</p>
+<p>Let’s see some examples. In each of these, we pass in a destination buffer, a maximum number of characters to write, and then a format string (in the style of—but not the same as—<code>printf()</code>) which tells <code>strftime()</code> which components of a <code>struct tm</code> to print and how.</p>
+<p>You can add other constant characters to include in the output in the format string, as well, just like with <code>printf()</code>.</p>
+<p>We get a <code>struct tm</code> in this case from <code>localtime()</code>, but any source works fine.</p>
+<div class="sourceCode" id="cb739"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb739-1"><a href="date-and-time-functionality.html#cb739-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb739-2"><a href="date-and-time-functionality.html#cb739-2"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span></span>
+<span id="cb739-3"><a href="date-and-time-functionality.html#cb739-3"></a></span>
+<span id="cb739-4"><a href="date-and-time-functionality.html#cb739-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb739-5"><a href="date-and-time-functionality.html#cb739-5"></a><span class="op">{</span></span>
+<span id="cb739-6"><a href="date-and-time-functionality.html#cb739-6"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">128</span><span class="op">];</span></span>
+<span id="cb739-7"><a href="date-and-time-functionality.html#cb739-7"></a>    <span class="dt">time_t</span> now <span class="op">=</span> time<span class="op">(</span>NULL<span class="op">);</span></span>
+<span id="cb739-8"><a href="date-and-time-functionality.html#cb739-8"></a></span>
+<span id="cb739-9"><a href="date-and-time-functionality.html#cb739-9"></a>    <span class="co">// %c: print date as per current locale</span></span>
+<span id="cb739-10"><a href="date-and-time-functionality.html#cb739-10"></a>    strftime<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> localtime<span class="op">(&amp;</span>now<span class="op">));</span></span>
+<span id="cb739-11"><a href="date-and-time-functionality.html#cb739-11"></a>    puts<span class="op">(</span>s<span class="op">);</span>   <span class="co">// Sun Feb 28 22:29:00 2021</span></span>
+<span id="cb739-12"><a href="date-and-time-functionality.html#cb739-12"></a></span>
+<span id="cb739-13"><a href="date-and-time-functionality.html#cb739-13"></a>    <span class="co">// %A: full weekday name</span></span>
+<span id="cb739-14"><a href="date-and-time-functionality.html#cb739-14"></a>    <span class="co">// %B: full month name</span></span>
+<span id="cb739-15"><a href="date-and-time-functionality.html#cb739-15"></a>    <span class="co">// %d: day of the month</span></span>
+<span id="cb739-16"><a href="date-and-time-functionality.html#cb739-16"></a>    strftime<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%A</span><span class="st">, %B </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> localtime<span class="op">(&amp;</span>now<span class="op">));</span></span>
+<span id="cb739-17"><a href="date-and-time-functionality.html#cb739-17"></a>    puts<span class="op">(</span>s<span class="op">);</span>   <span class="co">// Sunday, February 28</span></span>
+<span id="cb739-18"><a href="date-and-time-functionality.html#cb739-18"></a></span>
+<span id="cb739-19"><a href="date-and-time-functionality.html#cb739-19"></a>    <span class="co">// %I: hour (12 hour clock)</span></span>
+<span id="cb739-20"><a href="date-and-time-functionality.html#cb739-20"></a>    <span class="co">// %M: minute</span></span>
+<span id="cb739-21"><a href="date-and-time-functionality.html#cb739-21"></a>    <span class="co">// %S: second</span></span>
+<span id="cb739-22"><a href="date-and-time-functionality.html#cb739-22"></a>    <span class="co">// %p: AM or PM</span></span>
+<span id="cb739-23"><a href="date-and-time-functionality.html#cb739-23"></a>    strftime<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> <span class="st">&quot;It&#39;s %I:%M:%S </span><span class="sc">%p</span><span class="st">&quot;</span><span class="op">,</span> localtime<span class="op">(&amp;</span>now<span class="op">));</span></span>
+<span id="cb739-24"><a href="date-and-time-functionality.html#cb739-24"></a>    puts<span class="op">(</span>s<span class="op">);</span>   <span class="co">// It&#39;s 10:29:00 PM</span></span>
+<span id="cb739-25"><a href="date-and-time-functionality.html#cb739-25"></a></span>
+<span id="cb739-26"><a href="date-and-time-functionality.html#cb739-26"></a>    <span class="co">// %F: ISO 8601 yyyy-mm-dd</span></span>
+<span id="cb739-27"><a href="date-and-time-functionality.html#cb739-27"></a>    <span class="co">// %T: ISO 8601 hh:mm:ss</span></span>
+<span id="cb739-28"><a href="date-and-time-functionality.html#cb739-28"></a>    <span class="co">// %z: ISO 8601 time zone offset</span></span>
+<span id="cb739-29"><a href="date-and-time-functionality.html#cb739-29"></a>    strftime<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> <span class="st">&quot;ISO 8601: </span><span class="sc">%F</span><span class="st">T%T%z&quot;</span><span class="op">,</span> localtime<span class="op">(&amp;</span>now<span class="op">));</span></span>
+<span id="cb739-30"><a href="date-and-time-functionality.html#cb739-30"></a>    puts<span class="op">(</span>s<span class="op">);</span>   <span class="co">// ISO 8601: 2021-02-28T22:29:00-0800</span></span>
+<span id="cb739-31"><a href="date-and-time-functionality.html#cb739-31"></a><span class="op">}</span></span></code></pre></div>
+<p>There are a <em>ton</em> of date printing format specifiers for <code>strftime()</code>, so be sure to check them out in the <a href="https://beej.us/guide/bgclr/html/split/time.html#man-strftime"><code>strftime()</code> reference page</a><a href="function-specifiers-alignment-specifiersoperators.html#fn195" class="footnote-ref" id="fnref195" role="doc-noteref"><sup>195</sup></a>.</p>
+<p></p>
+<h2 data-number="38.5" id="more-resolution-with-timespec_get"><span class="header-section-number">38.5</span> More Resolution with <code>timespec_get()</code></h2>
+<p></p>
+<p>You can get the number of seconds and nanoseconds since Epoch with <code>timespec_get()</code>.</p>
+<p>Maybe.</p>
+<p>Implementations might not have nanosecond resolution (that’s one billionth of a second) so who knows how many significant places you’ll get, but give it a shot and see.</p>
+<p></p>
+<p><code>timespec_get()</code> takes two arguments. One is a pointer to a <code>struct timespec</code> to hold the time information. And the other is the <code>base</code>, which the spec lets you set to <code>TIME_UTC</code> indicating that you’re interested in seconds since Epoch. (Other implementations might give you more options for the <code>base</code>.)</p>
+<p>And the structure itself has two fields:</p>
+<div class="sourceCode" id="cb740"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb740-1"><a href="date-and-time-functionality.html#cb740-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec <span class="op">{</span></span>
+<span id="cb740-2"><a href="date-and-time-functionality.html#cb740-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">time_t</span> tv_sec<span class="op">;</span>   <span class="co">// Seconds</span></span>
+<span id="cb740-3"><a href="date-and-time-functionality.html#cb740-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">long</span>   tv_nsec<span class="op">;</span>  <span class="co">// Nanoseconds (billionths of a second)</span></span>
+<span id="cb740-4"><a href="date-and-time-functionality.html#cb740-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Here’s an example where we get the time and print it out both as integer values and also a floating value:</p>
+<div class="sourceCode" id="cb741"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb741-1"><a href="date-and-time-functionality.html#cb741-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec ts<span class="op">;</span></span>
+<span id="cb741-2"><a href="date-and-time-functionality.html#cb741-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb741-3"><a href="date-and-time-functionality.html#cb741-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>ts<span class="op">,</span> TIME_UTC<span class="op">);</span></span>
+<span id="cb741-4"><a href="date-and-time-functionality.html#cb741-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb741-5"><a href="date-and-time-functionality.html#cb741-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%ld</span><span class="st"> s, </span><span class="sc">%ld</span><span class="st"> ns</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> ts<span class="op">.</span>tv_sec<span class="op">,</span> ts<span class="op">.</span>tv_nsec<span class="op">);</span></span>
+<span id="cb741-6"><a href="date-and-time-functionality.html#cb741-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb741-7"><a href="date-and-time-functionality.html#cb741-7" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> float_time <span class="op">=</span> ts<span class="op">.</span>tv_sec <span class="op">+</span> ts<span class="op">.</span>tv_nsec<span class="op">/</span><span class="fl">1000000000.0</span><span class="op">;</span></span>
+<span id="cb741-8"><a href="date-and-time-functionality.html#cb741-8" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f</span><span class="st"> seconds since epoch</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> float_time<span class="op">);</span></span></code></pre></div>
+<p>Example output:</p>
+<div class="sourceCode" id="cb742"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb742-1"><a href="date-and-time-functionality.html#cb742-1" aria-hidden="true" tabindex="-1"></a>1614581530 s, 806325800 ns</span>
+<span id="cb742-2"><a href="date-and-time-functionality.html#cb742-2" aria-hidden="true" tabindex="-1"></a>1614581530.806326 seconds since epoch</span></code></pre></div>
+<p><code>struct timespec</code> also makes an appearance in a number of the threading functions that need to be able to specify time with that resolution.</p>
+<p> </p>
+<h2 data-number="38.6" id="differences-between-times"><span class="header-section-number">38.6</span> Differences Between Times</h2>
+<p></p>
+<p>One quick note about getting the difference between two <code>time_t</code>s: since the spec doesn’t dictate how that type represents a time, you might not be able to simply subtract two <code>time_t</code>s and get anything sensible<a href="function-specifiers-alignment-specifiersoperators.html#fn196" class="footnote-ref" id="fnref196" role="doc-noteref"><sup>196</sup></a>.</p>
+<p></p>
+<p>Luckily you can use <code>difftime()</code> to compute the difference in seconds between two dates.</p>
+<p>In the following example, we have two events that occur some time apart, and we use <code>difftime()</code> to compute the difference.</p>
+<div class="sourceCode" id="cb743"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb743-1"><a href="date-and-time-functionality.html#cb743-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb743-2"><a href="date-and-time-functionality.html#cb743-2"></a><span class="pp">#include </span><span class="im">&lt;time.h&gt;</span></span>
+<span id="cb743-3"><a href="date-and-time-functionality.html#cb743-3"></a></span>
+<span id="cb743-4"><a href="date-and-time-functionality.html#cb743-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb743-5"><a href="date-and-time-functionality.html#cb743-5"></a><span class="op">{</span></span>
+<span id="cb743-6"><a href="date-and-time-functionality.html#cb743-6"></a>    <span class="kw">struct</span> tm time_a <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb743-7"><a href="date-and-time-functionality.html#cb743-7"></a>        <span class="op">.</span>tm_year<span class="op">=</span><span class="dv">82</span><span class="op">,</span>   <span class="co">// years since 1900</span></span>
+<span id="cb743-8"><a href="date-and-time-functionality.html#cb743-8"></a>        <span class="op">.</span>tm_mon<span class="op">=</span><span class="dv">3</span><span class="op">,</span>     <span class="co">// months since January -- [0, 11]</span></span>
+<span id="cb743-9"><a href="date-and-time-functionality.html#cb743-9"></a>        <span class="op">.</span>tm_mday<span class="op">=</span><span class="dv">12</span><span class="op">,</span>   <span class="co">// day of the month -- [1, 31]</span></span>
+<span id="cb743-10"><a href="date-and-time-functionality.html#cb743-10"></a>        <span class="op">.</span>tm_hour<span class="op">=</span><span class="dv">4</span><span class="op">,</span>    <span class="co">// hours since midnight -- [0, 23]</span></span>
+<span id="cb743-11"><a href="date-and-time-functionality.html#cb743-11"></a>        <span class="op">.</span>tm_min<span class="op">=</span><span class="bn">00</span><span class="op">,</span>    <span class="co">// minutes after the hour -- [0, 59]</span></span>
+<span id="cb743-12"><a href="date-and-time-functionality.html#cb743-12"></a>        <span class="op">.</span>tm_sec<span class="op">=</span><span class="bn">04</span><span class="op">,</span>    <span class="co">// seconds after the minute -- [0, 60]</span></span>
+<span id="cb743-13"><a href="date-and-time-functionality.html#cb743-13"></a>        <span class="op">.</span>tm_isdst<span class="op">=-</span><span class="dv">1</span><span class="op">,</span>  <span class="co">// Daylight Saving Time flag</span></span>
+<span id="cb743-14"><a href="date-and-time-functionality.html#cb743-14"></a>    <span class="op">};</span></span>
+<span id="cb743-15"><a href="date-and-time-functionality.html#cb743-15"></a></span>
+<span id="cb743-16"><a href="date-and-time-functionality.html#cb743-16"></a>    <span class="kw">struct</span> tm time_b <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb743-17"><a href="date-and-time-functionality.html#cb743-17"></a>        <span class="op">.</span>tm_year<span class="op">=</span><span class="dv">120</span><span class="op">,</span>  <span class="co">// years since 1900</span></span>
+<span id="cb743-18"><a href="date-and-time-functionality.html#cb743-18"></a>        <span class="op">.</span>tm_mon<span class="op">=</span><span class="dv">10</span><span class="op">,</span>    <span class="co">// months since January -- [0, 11]</span></span>
+<span id="cb743-19"><a href="date-and-time-functionality.html#cb743-19"></a>        <span class="op">.</span>tm_mday<span class="op">=</span><span class="dv">15</span><span class="op">,</span>   <span class="co">// day of the month -- [1, 31]</span></span>
+<span id="cb743-20"><a href="date-and-time-functionality.html#cb743-20"></a>        <span class="op">.</span>tm_hour<span class="op">=</span><span class="dv">16</span><span class="op">,</span>   <span class="co">// hours since midnight -- [0, 23]</span></span>
+<span id="cb743-21"><a href="date-and-time-functionality.html#cb743-21"></a>        <span class="op">.</span>tm_min<span class="op">=</span><span class="dv">27</span><span class="op">,</span>    <span class="co">// minutes after the hour -- [0, 59]</span></span>
+<span id="cb743-22"><a href="date-and-time-functionality.html#cb743-22"></a>        <span class="op">.</span>tm_sec<span class="op">=</span><span class="bn">00</span><span class="op">,</span>    <span class="co">// seconds after the minute -- [0, 60]</span></span>
+<span id="cb743-23"><a href="date-and-time-functionality.html#cb743-23"></a>        <span class="op">.</span>tm_isdst<span class="op">=-</span><span class="dv">1</span><span class="op">,</span>  <span class="co">// Daylight Saving Time flag</span></span>
+<span id="cb743-24"><a href="date-and-time-functionality.html#cb743-24"></a>    <span class="op">};</span></span>
+<span id="cb743-25"><a href="date-and-time-functionality.html#cb743-25"></a></span>
+<span id="cb743-26"><a href="date-and-time-functionality.html#cb743-26"></a>    <span class="dt">time_t</span> cal_a <span class="op">=</span> mktime<span class="op">(&amp;</span>time_a<span class="op">);</span></span>
+<span id="cb743-27"><a href="date-and-time-functionality.html#cb743-27"></a>    <span class="dt">time_t</span> cal_b <span class="op">=</span> mktime<span class="op">(&amp;</span>time_b<span class="op">);</span></span>
+<span id="cb743-28"><a href="date-and-time-functionality.html#cb743-28"></a></span>
+<span id="cb743-29"><a href="date-and-time-functionality.html#cb743-29"></a>    <span class="dt">double</span> diff <span class="op">=</span> difftime<span class="op">(</span>cal_b<span class="op">,</span> cal_a<span class="op">);</span></span>
+<span id="cb743-30"><a href="date-and-time-functionality.html#cb743-30"></a></span>
+<span id="cb743-31"><a href="date-and-time-functionality.html#cb743-31"></a>    <span class="dt">double</span> years <span class="op">=</span> diff <span class="op">/</span> <span class="dv">60</span> <span class="op">/</span> <span class="dv">60</span> <span class="op">/</span> <span class="dv">24</span> <span class="op">/</span> <span class="fl">365.2425</span><span class="op">;</span>  <span class="co">// close enough</span></span>
+<span id="cb743-32"><a href="date-and-time-functionality.html#cb743-32"></a></span>
+<span id="cb743-33"><a href="date-and-time-functionality.html#cb743-33"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f</span><span class="st"> seconds (</span><span class="sc">%f</span><span class="st"> years) between events</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> diff<span class="op">,</span> years<span class="op">);</span></span>
+<span id="cb743-34"><a href="date-and-time-functionality.html#cb743-34"></a><span class="op">}</span></span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode" id="cb744"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb744-1"><a href="date-and-time-functionality.html#cb744-1" aria-hidden="true" tabindex="-1"></a>1217996816.000000 seconds (38.596783 years) between events</span></code></pre></div>
+<p>And there you have it! Remember to use <code>difftime()</code> to take the time difference. Even though you can just subtract on a POSIX system, might as well stay portable.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div class="nav-header"><a href="fixed-width-integer-types.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="multithreading.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div></body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <base target="_blank" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="nav-header"><a href="types-iv-qualifiers-and-specifiers.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="the-outside-environment.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div><hr>
+<h1 data-number="17" id="multifile-projects"><span class="header-section-number">17</span> Multifile Projects</h1>
+<p></p>
+<p>So far we’ve been looking at toy programs that for the most part fit in a single file. But complex C programs are made up of many files that are all compiled and linked together into a single executable.</p>
+<p>In this chapter we’ll check out some of the common patterns and practices for putting together larger projects.</p>
+<h2 data-number="17.1" id="includes-func-protos"><span class="header-section-number">17.1</span> Includes and Function Prototypes</h2>
+<p> </p>
+<p>A really common situation is that some of your functions are defined in one file, and you want to call them from another.</p>
+<p>This actually works out of the box with a warning… let’s first try it and then look at the right way to fix the warning.</p>
+<p>To compile them, you’ll need to specify all the sources on the command line:</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb292-1"><a href="multifile-projects.html#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output file   source files</span></span>
+<span id="cb292-2"><a href="multifile-projects.html#cb292-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     v            v</span></span>
+<span id="cb292-3"><a href="multifile-projects.html#cb292-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   |----| |---------|</span></span>
+<span id="cb292-4"><a href="multifile-projects.html#cb292-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> foo foo.c bar.c</span></code></pre></div>
+<p>In that example, <code>foo.c</code> and <code>bar.c</code> get built into the executable named <code>foo</code>.</p>
+<p>For these examples, we’ll put the filename as the first comment in the source. Let’s take a look at the source file <code>bar.c</code>:</p>
+<div class="sourceCode" id="cb293"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb293-1"><a href="multifile-projects.html#cb293-1"></a><span class="co">// File bar.c</span></span>
+<span id="cb293-2"><a href="multifile-projects.html#cb293-2"></a></span>
+<span id="cb293-3"><a href="multifile-projects.html#cb293-3"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb293-4"><a href="multifile-projects.html#cb293-4"></a><span class="op">{</span></span>
+<span id="cb293-5"><a href="multifile-projects.html#cb293-5"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb293-6"><a href="multifile-projects.html#cb293-6"></a><span class="op">}</span></span></code></pre></div>
+<p>And the file <code>foo.c</code> with main in it:</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb294-1"><a href="multifile-projects.html#cb294-1"></a><span class="co">// File foo.c</span></span>
+<span id="cb294-2"><a href="multifile-projects.html#cb294-2"></a></span>
+<span id="cb294-3"><a href="multifile-projects.html#cb294-3"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb294-4"><a href="multifile-projects.html#cb294-4"></a></span>
+<span id="cb294-5"><a href="multifile-projects.html#cb294-5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb294-6"><a href="multifile-projects.html#cb294-6"></a><span class="op">{</span></span>
+<span id="cb294-7"><a href="multifile-projects.html#cb294-7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">));</span>  <span class="co">// 5!</span></span>
+<span id="cb294-8"><a href="multifile-projects.html#cb294-8"></a><span class="op">}</span></span></code></pre></div>
+<p>See how from <code>main()</code> we call <code>add()</code>—but <code>add()</code> is in a completely different source file! It’s in <code>bar.c</code>, while the call to it is in <code>foo.c</code>!</p>
+<p>If we build this with:</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb295-1"><a href="multifile-projects.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> foo foo.c bar.c</span></code></pre></div>
+<p>we get this error:</p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb296-1"><a href="multifile-projects.html#cb296-1" aria-hidden="true" tabindex="-1"></a>error: implicit declaration of function &#39;add&#39; is invalid in C99</span></code></pre></div>
+<p>(Or you might get a warning. Which you should not ignore. Never ignore warnings in C; address them all.)</p>
+<p>If you recall from the <a href="functions.html#prototypes">section on prototypes</a>, implicit declarations are banned in modern C and there’s no legitimate reason to introduce them into new code. We should fix it.</p>
+<p>What <code>implicit declaration</code> means is that we’re using a function, namely <code>add()</code> in this case, without letting C know anything about it ahead of time. C wants to know what it returns, what types it takes as arguments, and things such as that.</p>
+<p>We saw how to fix that earlier with a <em>function prototype</em>. Indeed, if we add one of those to <code>foo.c</code> before we make the call, everything works well:</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb297-1"><a href="multifile-projects.html#cb297-1"></a><span class="co">// File foo.c</span></span>
+<span id="cb297-2"><a href="multifile-projects.html#cb297-2"></a></span>
+<span id="cb297-3"><a href="multifile-projects.html#cb297-3"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb297-4"><a href="multifile-projects.html#cb297-4"></a></span>
+<span id="cb297-5"><a href="multifile-projects.html#cb297-5"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span>  <span class="co">// Add the prototype</span></span>
+<span id="cb297-6"><a href="multifile-projects.html#cb297-6"></a></span>
+<span id="cb297-7"><a href="multifile-projects.html#cb297-7"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb297-8"><a href="multifile-projects.html#cb297-8"></a><span class="op">{</span></span>
+<span id="cb297-9"><a href="multifile-projects.html#cb297-9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">));</span>  <span class="co">// 5!</span></span>
+<span id="cb297-10"><a href="multifile-projects.html#cb297-10"></a><span class="op">}</span></span></code></pre></div>
+<p>No more error!</p>
+<p>But that’s a pain—needing to type in the prototype every time you want to use a function. I mean, we used <code>printf()</code> right there and didn’t need to type in a prototype; what gives?</p>
+<p><em>We actually did include the prototype for <code>printf()</code></em>! It’s in the file <code>stdio.h</code>! And we included that with <code>#include</code>!</p>
+<p>Can we do the same with our <code>add()</code> function? Make a prototype for it and put it in a header file?</p>
+<p>Sure!</p>
+<p>Header files in C have a <code>.h</code> extension by convention. And they often, but not always, have the same name as their corresponding <code>.c</code> file. So let’s make a <code>bar.h</code> file for our <code>bar.c</code> file, and we’ll stick the prototype in it:</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb298-1"><a href="multifile-projects.html#cb298-1"></a><span class="co">// File bar.h</span></span>
+<span id="cb298-2"><a href="multifile-projects.html#cb298-2"></a></span>
+<span id="cb298-3"><a href="multifile-projects.html#cb298-3"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span></span></code></pre></div>
+<p>And now let’s modify <code>foo.c</code> to include that file. Assuming it’s in the same directory, we include it inside double quotes (as opposed to angle brackets):</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb299-1"><a href="multifile-projects.html#cb299-1"></a><span class="co">// File foo.c</span></span>
+<span id="cb299-2"><a href="multifile-projects.html#cb299-2"></a></span>
+<span id="cb299-3"><a href="multifile-projects.html#cb299-3"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb299-4"><a href="multifile-projects.html#cb299-4"></a></span>
+<span id="cb299-5"><a href="multifile-projects.html#cb299-5"></a><span class="pp">#include </span><span class="im">&quot;bar.h&quot;</span><span class="pp">  </span><span class="co">// Include from current directory</span></span>
+<span id="cb299-6"><a href="multifile-projects.html#cb299-6"></a></span>
+<span id="cb299-7"><a href="multifile-projects.html#cb299-7"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb299-8"><a href="multifile-projects.html#cb299-8"></a><span class="op">{</span></span>
+<span id="cb299-9"><a href="multifile-projects.html#cb299-9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">));</span>  <span class="co">// 5!</span></span>
+<span id="cb299-10"><a href="multifile-projects.html#cb299-10"></a><span class="op">}</span></span></code></pre></div>
+<p>Notice how we don’t have the prototype in <code>foo.c</code> anymore—we included it from <code>bar.h</code>. Now <em>any</em> file that wants that <code>add()</code> functionality can just <code>#include "bar.h"</code> to get it, and you don’t need to worry about typing in the function prototype.</p>
+<p>As you might have guessed, <code>#include</code> literally includes the named file <em>right there</em> in your source code, just as if you’d typed it in.</p>
+<p>And building and running:</p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb300-1"><a href="multifile-projects.html#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span></span>
+<span id="cb300-2"><a href="multifile-projects.html#cb300-2" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span></span></code></pre></div>
+<p>Indeed, we get the result of <span class="math inline">\(2+3\)</span>! Yay!</p>
+<p>But don’t crack open your drink of choice quite yet. We’re almost there! There’s just one more piece of boilerplate we have to add.</p>
+<p></p>
+<h2 data-number="17.2" id="dealing-with-repeated-includes"><span class="header-section-number">17.2</span> Dealing with Repeated Includes</h2>
+<p>It’s not uncommon that a header file will itself <code>#include</code> other headers needed for the functionality of its corresponding C files. I mean, why not?</p>
+<p>And it could be that you have a header <code>#include</code>d multiple times from different places. Maybe that’s no problem, but maybe it would cause compiler errors. And we can’t control how many places <code>#include</code> it!</p>
+<p>Even, worse we might get into a crazy situation where header <code>a.h</code> includes header <code>b.h</code>, and <code>b.h</code> includes <code>a.h</code>! It’s an <code>#include</code> infinite cycle!</p>
+<p>Trying to build such a thing gives an error:</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb301-1"><a href="multifile-projects.html#cb301-1" aria-hidden="true" tabindex="-1"></a>error: #include nested depth 200 exceeds maximum of 200</span></code></pre></div>
+<p>Maybe it would have resolved the cycle on the 201st step…</p>
+<p>What we need to do is make it so that if a file gets included once, subsequent <code>#include</code>s for that file are ignored.</p>
+<p><strong>The stuff that we’re about to do is so common that you should just automatically do it every time you make a header file!</strong></p>
+<p>And the common way to do this is with a preprocessor variable that we set the first time we <code>#include</code> the file. And then for subsequent <code>#include</code>s, we first check to make sure that the variable isn’t defined.</p>
+<p>For that variable name, it’s super common to take the name of the header file, like <code>bar.h</code>, make it uppercase, and replace the period with an underscore: <code>BAR_H</code>.</p>
+<p>So put a check at the very, very top of the file where you see if it’s already been included, and effectively comment the whole thing out if it has.</p>
+<p>(Don’t put a leading underscore (because a leading underscore followed by a capital letter is reserved) or a double leading underscore (because that’s also reserved.))</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb302-1"><a href="multifile-projects.html#cb302-1"></a><span class="pp">#ifndef BAR_H   </span><span class="co">// If BAR_H isn&#39;t defined...</span></span>
+<span id="cb302-2"><a href="multifile-projects.html#cb302-2"></a><span class="pp">#define BAR_H   </span><span class="co">// Define it (with no particular value)</span></span>
+<span id="cb302-3"><a href="multifile-projects.html#cb302-3"></a></span>
+<span id="cb302-4"><a href="multifile-projects.html#cb302-4"></a><span class="co">// File bar.h</span></span>
+<span id="cb302-5"><a href="multifile-projects.html#cb302-5"></a></span>
+<span id="cb302-6"><a href="multifile-projects.html#cb302-6"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span></span>
+<span id="cb302-7"><a href="multifile-projects.html#cb302-7"></a></span>
+<span id="cb302-8"><a href="multifile-projects.html#cb302-8"></a><span class="pp">#endif          </span><span class="co">// End of the #ifndef BAR_H</span></span></code></pre></div>
+<p>This will effectively cause the header file to be included only a single time, no matter how many places try to <code>#include</code> it.</p>
+<p></p>
+<h2 data-number="17.3" id="static-and-extern"><span class="header-section-number">17.3</span> <code>static</code> and <code>extern</code></h2>
+<p> </p>
+<p>You can refer to objects in other files with <code>extern</code>.</p>
+<p>You can make sure file-scope variables and functions are <em>not</em> visible from other source files (even if <code>extern</code> is used) with the <code>static</code> keyword.</p>
+<p>For more info, check out the sections in the book on the <a href="types-iv-qualifiers-and-specifiers.html#static"><code>static</code></a> and <a href="types-iv-qualifiers-and-specifiers.html#extern"><code>extern</code></a> storage-class specifiers.</p>
+<p> </p>
+<h2 data-number="17.4" id="compiling-with-object-files"><span class="header-section-number">17.4</span> Compiling with Object Files</h2>
+<p></p>
+<p>This isn’t part of the spec, but it’s 99.999% common in the C world.</p>
+<p>You can compile C files into intermediate representations called <em>object files</em>. These hold the machine code (that is, 1s and 0s of the actual instructions) that haven’t been built into an executable yet.</p>
+<p>Object files in Windows have a <code>.OBJ</code> extension; in Unix-likes, they’re <code>.o</code>.</p>
+<p></p>
+<p>In gcc, we can build some like this, with the <code>-c</code> (compile only!) flag:</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb303-1"><a href="multifile-projects.html#cb303-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-c</span> foo.c     <span class="co"># produces foo.o</span></span>
+<span id="cb303-2"><a href="multifile-projects.html#cb303-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-c</span> bar.c     <span class="co"># produces bar.o</span></span></code></pre></div>
+<p>And then we can <em>link</em> those together into a single executable:</p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb304-1"><a href="multifile-projects.html#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> foo foo.o bar.o</span></code></pre></div>
+<p><em>Voila</em>, we’ve produced an executable <code>foo</code> from the two object files.</p>
+<p>But you’re thinking, why bother? Can’t we just:</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb305-1"><a href="multifile-projects.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> foo foo.c bar.c</span></code></pre></div>
+<p>and kill two <a href="https://en.wikipedia.org/wiki/Boids">boids</a><a href="function-specifiers-alignment-specifiersoperators.html#fn119" class="footnote-ref" id="fnref119" role="doc-noteref"><sup>119</sup></a> with one stone?</p>
+<p></p>
+<p>For little programs, that’s fine. I do it all the time.</p>
+<p>But for larger programs, we can take advantage of the fact that compiling from source to object files is relatively slow, and linking together a bunch of object files is relatively fast.</p>
+<p>This really shows with the <code>make</code> utility that only rebuilds sources that are newer than their outputs.</p>
+<p>Let’s say you had a thousand C files. You could compile them all to object files to start (slowly) and then combine all those object files into an executable (fast).</p>
+<p>Now say you modified just one of those C source files—here’s the magic: <em>you only have to rebuild that one object file for that source file</em>! And then you rebuild the executable (fast). All the other C files don’t have to be touched.</p>
+<p>In other words, by only rebuilding the object files we need to, we cut down on compilation times radically. (Unless of course you’re doing a “clean” build, in which case all the object files have to be created.)</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div class="nav-header"><a href="types-iv-qualifiers-and-specifiers.html" rel="prev" title="Önceki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></a><a href="the-outside-environment.html" rel="next" title="Sonraki Bölüm" class="nav-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div></body>
+</html>
