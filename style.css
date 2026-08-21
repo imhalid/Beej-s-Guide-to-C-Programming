@@ -424,6 +424,7 @@ body.app-layout {
 }
 
 .sidebar-nav nav#TOC a {
+  position: relative;
   display: block;
   padding: 5px 8px;
   border-radius: var(--radius-sm);
@@ -440,6 +441,7 @@ body.app-layout {
 
 /* Nested links */
 .sidebar-nav nav#TOC ul ul a {
+  position: relative;
   font-size: 0.82rem;
   color: var(--text-muted);
   padding: 4px 8px;
@@ -454,10 +456,21 @@ body.app-layout {
 .sidebar-nav nav#TOC a.active,
 .sidebar-nav nav#TOC ul ul a.active {
   background-color: color-mix(in oklch, var(--link-color) 16%, transparent) !important;
-  border-left: 3px solid var(--link-color) !important;
   color: var(--text-bold) !important;
-  font-weight: 700;
+  font-weight: 500;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+  border-left: none !important;
+}
+
+.sidebar-nav nav#TOC a.active::before,
+.sidebar-nav nav#TOC ul ul a.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--link-color);
 }
 
 .sidebar-nav nav#TOC a.active .toc-section-number,
@@ -469,8 +482,12 @@ body.app-layout {
 .sidebar-nav nav#TOC ul ul a.active:hover {
   background-color: color-mix(in oklch, var(--link-color) 26%, transparent) !important;
   color: var(--text-bold) !important;
-  border-left-color: var(--link-hover) !important;
   text-decoration: none;
+}
+
+.sidebar-nav nav#TOC a.active:hover::before,
+.sidebar-nav nav#TOC ul ul a.active:hover::before {
+  background-color: var(--link-hover);
 }
 
 .sidebar-nav nav#TOC a.active:hover .toc-section-number,
@@ -489,9 +506,18 @@ body.app-layout {
   flex: 1;
   height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
   background-color: var(--bg-main);
+  box-sizing: border-box;
   view-transition-name: content-viewport;
+}
+
+.main-content-body {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 32px 80px 32px;
+  box-sizing: border-box;
 }
 
 ::view-transition-old(content-viewport),

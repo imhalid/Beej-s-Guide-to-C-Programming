@@ -1,9 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const iframe = document.getElementById('content-frame');
   const searchInput = document.getElementById('toc-search');
   const tocNav = document.getElementById('TOC');
   const toggleBtn = document.getElementById('sidebar-toggle');
   const sidebar = document.getElementById('sidebar');
+  const sidebarNav = document.getElementById('sidebar-nav') || document.querySelector('.sidebar-nav');
+  const mainViewport = document.querySelector('.content-viewport');
+  const mainContentBody = document.getElementById('main-content-body');
+
+  // Sidebar Scroll Position Restoration & Live Tracking
+  if (sidebarNav) {
+    const savedSidebarScroll = localStorage.getItem('bgc-sidebar-scroll');
+    if (savedSidebarScroll) {
+      const y = parseInt(savedSidebarScroll, 10);
+      if (!isNaN(y) && y > 0) {
+        sidebarNav.scrollTop = y;
+      }
+    }
+
+    sidebarNav.addEventListener('scroll', () => {
+      const sy = sidebarNav.scrollTop || 0;
+      localStorage.setItem('bgc-sidebar-scroll', Math.round(sy).toString());
+    }, { passive: true });
+  }
+
+  const pageCache = {};
+  let currentLoadedPage = '';
+  let isExplicitUserClick = false;
 
   // Mobile sidebar toggle
   if (toggleBtn && sidebar) {
@@ -55,32 +77,128 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {}
   }
 
-  function changeIframePage(targetUrl) {
-    if (!iframe || !targetUrl) return;
-    
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        iframe.src = targetUrl;
-      });
+  let isRestoringScroll = false;
+
+  // Native SPA HTML Injection Engine
+  async function loadChapterContent(targetUrl, isExplicitClick = false) {
+    if (!mainContentBody || !targetUrl) return;
+
+    const parts = targetUrl.split('#');
+    const pageFile = parts[0];
+    const targetHash = parts[1] ? '#' + parts[1] : '';
+
+    if (!pageFile || pageFile === 'index.html') return;
+
+    isRestoringScroll = true;
+
+    const doInject = async () => {
+      try {
+        let htmlText = pageCache[pageFile];
+        if (!htmlText) {
+          const resp = await fetch(pageFile);
+          if (!resp.ok) {
+            isRestoringScroll = false;
+            return;
+          }
+          htmlText = await resp.text();
+          pageCache[pageFile] = htmlText;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, 'text/html');
+        const container = doc.querySelector('.container') || doc.body;
+
+        if (container) {
+          mainContentBody.innerHTML = container.innerHTML;
+          try {
+            localStorage.setItem('bgc-active-html', container.innerHTML);
+          } catch (e) {}
+          currentLoadedPage = pageFile;
+          savePageLocation(targetUrl);
+          handleExternalLinks(mainContentBody);
+
+          const savedScrollY = localStorage.getItem('bgc-scroll-' + pageFile);
+
+          const applyTargetPosition = () => {
+            if (isExplicitClick && targetHash) {
+              const targetEl = mainContentBody.querySelector(targetHash);
+              if (targetEl && mainViewport) {
+                targetEl.scrollIntoView({ block: 'start', behavior: 'instant' });
+                const newY = mainViewport.scrollTop || 0;
+                localStorage.setItem('bgc-scroll-' + pageFile, Math.round(newY).toString());
+              } else if (mainViewport) {
+                mainViewport.scrollTop = 0;
+                localStorage.setItem('bgc-scroll-' + pageFile, '0');
+              }
+            } else if (savedScrollY !== null) {
+              const yPos = parseInt(savedScrollY, 10);
+              if (!isNaN(yPos) && mainViewport) {
+                mainViewport.scrollTop = yPos;
+              }
+            } else if (mainViewport) {
+              mainViewport.scrollTop = 0;
+            }
+          };
+
+          applyTargetPosition();
+
+          requestAnimationFrame(() => {
+            applyTargetPosition();
+            setTimeout(() => {
+              applyTargetPosition();
+              mainContentBody.classList.remove('loading-init');
+              setTimeout(() => {
+                isRestoringScroll = false;
+              }, 120);
+            }, 25);
+          });
+        }
+      } catch (err) {
+        console.error('Error loading chapter content:', err);
+        isRestoringScroll = false;
+      }
+    };
+
+    if (document.startViewTransition && currentLoadedPage && currentLoadedPage !== pageFile) {
+      document.startViewTransition(doInject);
     } else {
-      iframe.classList.add('loading');
-      iframe.src = targetUrl;
+      await doInject();
     }
   }
 
   // Active Link Highlighting in TOC
   function setActiveLink(matchingHref) {
-    if (!tocNav) return;
+    if (!tocNav || !matchingHref) return;
+
+    // Clean up temporary Frame 1 initial style tag if present to prevent stuck link highlights
+    const initStyle = document.getElementById('bgc-initial-active-style');
+    if (initStyle) {
+      initStyle.remove();
+    }
+
     const links = tocNav.querySelectorAll('a');
     links.forEach(a => a.classList.remove('active'));
-    if (!matchingHref) return;
 
     let matched = null;
+
+    // 1. Try exact match first
     for (let a of links) {
       const href = a.getAttribute('href');
-      if (href === matchingHref || (href && href.split('#')[0] === matchingHref.split('#')[0])) {
+      if (href === matchingHref) {
         matched = a;
-        if (href === matchingHref) break;
+        break;
+      }
+    }
+
+    // 2. Fallback: match first link belonging to same page file
+    if (!matched) {
+      const targetPage = matchingHref.split('#')[0];
+      for (let a of links) {
+        const href = a.getAttribute('href');
+        if (href && href.split('#')[0] === targetPage) {
+          matched = a;
+          break;
+        }
       }
     }
 
@@ -89,15 +207,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Live Scroll Listener on Main Viewport Container
+  if (mainViewport) {
+    mainViewport.addEventListener('scroll', () => {
+      if (!currentLoadedPage || isRestoringScroll) return;
+      const sy = mainViewport.scrollTop || 0;
+      localStorage.setItem('bgc-scroll-' + currentLoadedPage, Math.round(sy).toString());
+
+      // Live Active Heading Detection for TOC highlighting
+      try {
+        const headings = mainContentBody.querySelectorAll('h1[id], h2[id], h3[id]');
+        let activeId = '';
+        for (let i = 0; i < headings.length; i++) {
+          const rect = headings[i].getBoundingClientRect();
+          if (rect.top <= 140) {
+            activeId = headings[i].id;
+          } else {
+            break;
+          }
+        }
+        const targetHref = activeId ? (currentLoadedPage + '#' + activeId) : currentLoadedPage;
+        savePageLocation(targetHref);
+      } catch (hErr) {}
+    }, { passive: true });
+  }
+
   if (tocNav) {
     const links = tocNav.querySelectorAll('a');
     links.forEach(a => {
       a.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default browser anchor jump and scroll behavior
+        e.preventDefault();
         const href = this.getAttribute('href');
         if (href) {
-          savePageLocation(href);
-          changeIframePage(href);
+          isExplicitUserClick = true;
+          loadChapterContent(href, true);
         }
         if (sidebar && sidebar.classList.contains('open')) {
           sidebar.classList.remove('open');
@@ -115,44 +258,14 @@ document.addEventListener('DOMContentLoaded', () => {
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener noreferrer');
       });
-    } catch (e) {
-      // Ignored
-    }
+    } catch (e) {}
   }
 
   handleExternalLinks(document);
 
-  if (iframe) {
-    iframe.addEventListener('load', () => {
-      try {
-        let page = '';
-        let hash = '';
-        try {
-          const path = iframe.contentWindow.location.pathname;
-          page = path.substring(path.lastIndexOf('/') + 1);
-          hash = iframe.contentWindow.location.hash;
-        } catch (corsErr) {}
-        
-        if (hash) {
-          try {
-            const targetEl = iframe.contentWindow.document.querySelector(hash);
-            if (targetEl) {
-              targetEl.scrollIntoView({ block: 'start', behavior: 'auto' });
-            }
-          } catch (anchorErr) {}
-        }
-
-        if (page && page !== 'index.html' && page !== 'about:blank') {
-          savePageLocation(page + hash);
-        }
-
-        handleExternalLinks(iframe.contentWindow.document);
-        applyTheme(themes[currentThemeIndex].id);
-      } catch (e) {
-        // Fallback
-      }
-    });
-  }
+  // Initial Chapter Load
+  const initialPage = window.__INITIAL_FULL_PAGE__ || window.__INITIAL_PAGE__ || 'foreword.html';
+  loadChapterContent(initialPage, false);
 
   // ==========================================================================
   // Multi-Theme Switching System
@@ -506,34 +619,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function navigateToResult(item) {
     if (!item) return;
+    isExplicitUserClick = true;
     const targetFile = item.file;
-    savePageLocation(targetFile);
-
-    if (iframe) {
-      const parts = targetFile.split('#');
-      const targetPage = parts[0];
-      const targetHash = parts[1] ? '#' + parts[1] : '';
-
-      try {
-        const path = iframe.contentWindow.location.pathname;
-        const currentPage = path.substring(path.lastIndexOf('/') + 1);
-
-        if (currentPage === targetPage && targetHash) {
-          // Same page: Scroll directly to section anchor element inside iframe instantly
-          const elem = iframe.contentWindow.document.querySelector(targetHash);
-          if (elem) {
-            elem.scrollIntoView({ block: 'start', behavior: 'auto' });
-          } else {
-            iframe.contentWindow.location.hash = targetHash;
-          }
-        } else {
-          // Different page: Load new page with View Transitions API
-          changeIframePage(targetFile);
-        }
-      } catch (e) {
-        changeIframePage(targetFile);
-      }
-    }
+    loadChapterContent(targetFile, true);
     closeCmdPalette();
   }
 

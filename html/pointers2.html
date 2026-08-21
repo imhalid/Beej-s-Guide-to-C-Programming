@@ -2,6 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="">
 <head>
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  </script>
+  <style>
+    html.no-restore-yet {
+      visibility: hidden !important;
+    }
+  </style>
+  <script>
+    document.documentElement.classList.add('no-restore-yet');
     (function() {
       function applySavedTheme(t) {
         var theme = t || localStorage.getItem("bgc-theme");
@@ -20,6 +31,56 @@
           applySavedTheme(e.newValue);
         }
       });
+
+      // Synchronous Direct Scroll Position Preservation & Restoration
+      try {
+        var pageKey = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+        var savedY = localStorage.getItem('bgc-scroll-' + pageKey);
+        
+        var restoreScrollPosition = function() {
+          if (savedY && !location.hash) {
+            var y = parseInt(savedY, 10);
+            if (!isNaN(y) && y > 0) {
+              window.scrollTo(0, y);
+              if (document.documentElement) document.documentElement.scrollTop = y;
+              if (document.body) document.body.scrollTop = y;
+            }
+          }
+          document.documentElement.classList.remove('no-restore-yet');
+        };
+
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+          restoreScrollPosition();
+        } else {
+          document.addEventListener('DOMContentLoaded', restoreScrollPosition);
+          window.addEventListener('load', restoreScrollPosition);
+        }
+
+        window.addEventListener('scroll', function() {
+          var sy = window.scrollY || window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0) || 0;
+          localStorage.setItem('bgc-scroll-' + pageKey, Math.round(sy).toString());
+
+          // Live Active Heading Detection for TOC highlighting
+          try {
+            var headings = document.querySelectorAll('h1[id], h2[id], h3[id]');
+            var activeId = '';
+            for (var i = 0; i < headings.length; i++) {
+              var rect = headings[i].getBoundingClientRect();
+              if (rect.top <= 140) {
+                activeId = headings[i].id;
+              } else {
+                break;
+              }
+            }
+            var targetHref = activeId ? (pageKey + '#' + activeId) : pageKey;
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'BGC_ACTIVE_HEADING', href: targetHref }, '*');
+            }
+          } catch (hErr) {}
+        }, { passive: true });
+      } catch (e) {
+        document.documentElement.classList.remove('no-restore-yet');
+      }
     })();
   </script>
   

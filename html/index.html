@@ -2,6 +2,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
 <head>
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  </script>
+  <style>
+    html.no-restore-yet {
+      visibility: hidden !important;
+    }
+    .main-content-body.loading-init {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .cmd-trigger-btn {
+      background: var(--bg-card, #262830) !important;
+      border: 1px solid var(--border-color, #383a45) !important;
+      color: var(--text-muted, #9496a1) !important;
+      font-size: 0.72rem !important;
+      border-radius: 0 !important;
+      padding: 2px 5px !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .cmd-trigger-btn kbd {
+      font-family: inherit !important;
+      font-weight: 600 !important;
+    }
+  </style>
+  <script>
+    document.documentElement.classList.add('no-restore-yet');
     (function() {
       function applySavedTheme(t) {
         var theme = t || localStorage.getItem("bgc-theme") || "dark-obsidian";
@@ -34,8 +65,17 @@
         if (!targetPage || targetPage === 'index.html' || targetPage === 'about:blank') {
           targetPage = 'foreword.html';
         }
-        window.__INITIAL_PAGE__ = targetPage;
+        window.__INITIAL_FULL_PAGE__ = targetPage;
+        window.__INITIAL_PAGE__ = targetPage.split('#')[0] || 'foreword.html';
+
+        // Synchronously highlight exact active TOC link on Frame 1 to eliminate any micro-flicker
+        var activeSelector = 'nav#TOC a[href="' + targetPage + '"]';
+        document.write('<style id="bgc-initial-active-style">' + activeSelector + ' { background-color: color-mix(in oklch, var(--link-color) 16%, transparent) !important; color: var(--text-bold) !important; font-weight: 500; }</style>');
       } catch (err) {}
+
+      document.addEventListener('DOMContentLoaded', function() {
+        document.documentElement.classList.remove('no-restore-yet');
+      });
     })();
   </script>
   
@@ -72,7 +112,21 @@
       </div>
     </div>
     
-    <div class="sidebar-nav">
+    <div class="sidebar-nav" id="sidebar-nav">
+      <script>
+        (function() {
+          try {
+            var s = localStorage.getItem('bgc-sidebar-scroll');
+            if (s) {
+              var y = parseInt(s, 10);
+              if (!isNaN(y) && y > 0) {
+                var nav = document.getElementById('sidebar-nav');
+                if (nav) nav.scrollTop = y;
+              }
+            }
+          } catch(e) {}
+        })();
+      </script>
       <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="foreword.html#foreword" id="toc-foreword"><span class="toc-section-number">1</span> Önsöz</a>
@@ -706,15 +760,30 @@
       </svg>
       <span class="theme-name-badge">Dark Obsidian</span>
     </button>
-    <iframe name="content-frame" id="content-frame" class="content-frame" title="Bölüm İçeriği"></iframe>
-    <script>
-      (function() {
-        var f = document.getElementById('content-frame');
-        if (f && window.__INITIAL_PAGE__) {
-          f.src = window.__INITIAL_PAGE__;
-        }
-      })();
-    </script>
+    <div id="main-content-body" class="main-content-body">
+      <script>
+        (function() {
+          try {
+            var cached = localStorage.getItem('bgc-active-html');
+            if (cached) {
+              document.write(cached);
+              var savedPage = localStorage.getItem('bgc-last-page');
+              if (savedPage) {
+                var p = savedPage.split('#')[0];
+                var s = localStorage.getItem('bgc-scroll-' + p);
+                if (s) {
+                  var y = parseInt(s, 10);
+                  if (!isNaN(y) && y > 0) {
+                    var v = document.querySelector('.content-viewport');
+                    if (v) v.scrollTop = y;
+                  }
+                }
+              }
+            }
+          } catch(e) {}
+        })();
+      </script>
+    </div>
   </main>
 
   <!-- Command Palette Modal (Cmd/Ctrl + Shift + F) -->
