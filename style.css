@@ -1,10 +1,54 @@
 
 /* ==========================================================================
-   Multi-Theme System (OKLCH Custom Properties Overrides)
+   Beej's Guide to C Programming - Base Variables & Multi-Theme System
    ========================================================================== */
 
+:root {
+  /* OKLCH Dark Monochrome Base Palette (Default: Dark Obsidian) */
+  --bg-main: oklch(12% 0.005 260);          /* Deep dark obsidian main background */
+  --bg-sidebar: oklch(15.5% 0.008 260);     /* Slightly lighter dark sidebar */
+  --bg-card: oklch(19% 0.01 260);          /* Card / hover background */
+  --bg-code: oklch(9% 0.005 260);           /* Extra dark code block background */
+  --border-color: oklch(24% 0.01 260);      /* Subtle dark border */
+  --border-highlight: oklch(34% 0.015 260);
+
+  /* Text Contrast Hierarchy (Ton farkı ile bold belirginliği) */
+  --text-body: oklch(74% 0.005 260);        /* Soft off-white for regular text */
+  --text-bold: oklch(98% 0 0);              /* Bright pure white for strong/bold text */
+  --text-muted: oklch(55% 0.008 260);       /* Muted text for numbers and captions */
+
+  /* Vibrant Accent Colors (Links, Inline Code, and Code Highlights) */
+  --link-color: oklch(76% 0.16 235);        /* Electric Cyan-Blue link color */
+  --link-hover: oklch(85% 0.18 225);       /* Bright sky blue on hover */
+  
+  --code-inline-fg: oklch(86% 0.16 85);     /* Warm Amber-Gold for inline code */
+  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 12%, var(--bg-card));
+  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
+
+  /* OKLCH Syntax Highlighting Palette */
+  --syn-kw: oklch(76% 0.22 345);    /* Vibrant Pink / Magenta keywords (if, return, int) */
+  --syn-dt: oklch(79% 0.18 190);    /* Cyan data types (char, void, size_t, struct) */
+  --syn-st: oklch(82% 0.17 145);    /* Emerald Green strings */
+  --syn-ch: oklch(84% 0.16 125);    /* Lime/Mint Green char literals */
+  --syn-co: oklch(60% 0.03 260);    /* Muted Slate Grey comments */
+  --syn-fu: oklch(80% 0.18 250);    /* Vibrant Sapphire Blue functions (printf, main) */
+  --syn-pp: oklch(82% 0.18 60);     /* Amber Orange preprocessor (#include, #define) */
+  --syn-dv: oklch(85% 0.18 95);     /* Golden Yellow numbers */
+  --syn-cn: oklch(84% 0.19 40);     /* Coral Constants (NULL, SEEK_SET) */
+  --syn-op: oklch(78% 0.12 280);    /* Soft Lavender Operators (=, +, *, &) */
+  --syn-va: oklch(86% 0.14 210);    /* Soft Ice Blue variables */
+  --syn-at: oklch(81% 0.16 310);    /* Orchid Violet attributes */
+  --syn-al: oklch(75% 0.22 25);     /* Bright Crimson warnings / alerts */
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
 /* Theme 1: Dark Obsidian (Default) */
-:root, [data-theme="dark-obsidian"] {
+:root[data-theme="dark-obsidian"], [data-theme="dark-obsidian"] {
   --bg-main: oklch(12% 0.005 260);
   --bg-sidebar: oklch(15.5% 0.008 260);
   --bg-card: oklch(19% 0.01 260);
@@ -34,7 +78,7 @@
 }
 
 /* Theme 2: Cyber Neon */
-[data-theme="cyber-neon"] {
+:root[data-theme="cyber-neon"], [data-theme="cyber-neon"] {
   --bg-main: oklch(13% 0.02 290);
   --bg-sidebar: oklch(16.5% 0.025 290);
   --bg-card: oklch(21% 0.03 290);
@@ -64,7 +108,7 @@
 }
 
 /* Theme 3: Nordic Slate */
-[data-theme="nordic-slate"] {
+:root[data-theme="nordic-slate"], [data-theme="nordic-slate"] {
   --bg-main: oklch(14% 0.015 200);
   --bg-sidebar: oklch(17.5% 0.018 200);
   --bg-card: oklch(22% 0.02 200);
@@ -94,7 +138,7 @@
 }
 
 /* Theme 4: Clean Light Tech */
-[data-theme="light-tech"] {
+:root[data-theme="light-tech"], [data-theme="light-tech"] {
   --bg-main: oklch(99% 0.003 260);
   --bg-sidebar: oklch(96.5% 0.005 260);
   --bg-card: oklch(93.5% 0.008 260);
@@ -155,53 +199,6 @@
   stroke: var(--link-color);
   flex-shrink: 0;
 }
-
-/* ==========================================================================
-   Beej's Guide to C Programming - Dark Monochrome & Colorful Accents
-   ========================================================================== */
-
-:root {
-  /* OKLCH Dark Monochrome Base Palette */
-  --bg-main: oklch(12% 0.005 260);          /* Deep dark obsidian main background */
-  --bg-sidebar: oklch(15.5% 0.008 260);     /* Slightly lighter dark sidebar */
-  --bg-card: oklch(19% 0.01 260);          /* Card / hover background */
-  --bg-code: oklch(9% 0.005 260);           /* Extra dark code block background */
-  --border-color: oklch(24% 0.01 260);      /* Subtle dark border */
-  --border-highlight: oklch(34% 0.015 260);
-
-  /* Text Contrast Hierarchy (Ton farkı ile bold belirginliği) */
-  --text-body: oklch(74% 0.005 260);        /* Soft off-white for regular text */
-  --text-bold: oklch(98% 0 0);              /* Bright pure white for strong/bold text */
-  --text-muted: oklch(55% 0.008 260);       /* Muted text for numbers and captions */
-
-  /* Vibrant Accent Colors (Links, Inline Code, and Code Highlights) */
-  --link-color: oklch(76% 0.16 235);        /* Electric Cyan-Blue link color */
-  --link-hover: oklch(85% 0.18 225);       /* Bright sky blue on hover */
-  
-  --code-inline-fg: oklch(86% 0.16 85);     /* Warm Amber-Gold for inline code */
-  --code-inline-bg: color-mix(in oklch, var(--code-inline-fg) 12%, var(--bg-card));
-  --code-inline-border: color-mix(in oklch, var(--code-inline-fg) 30%, transparent);
-
-  /* OKLCH Syntax Highlighting Palette */
-  --syn-kw: oklch(76% 0.22 345);    /* Vibrant Pink / Magenta keywords (if, return, int) */
-  --syn-dt: oklch(79% 0.18 190);    /* Cyan data types (char, void, size_t, struct) */
-  --syn-st: oklch(82% 0.17 145);    /* Emerald Green strings */
-  --syn-ch: oklch(84% 0.16 125);    /* Lime/Mint Green char literals */
-  --syn-co: oklch(60% 0.03 260);    /* Muted Slate Grey comments */
-  --syn-fu: oklch(80% 0.18 250);    /* Vibrant Sapphire Blue functions (printf, main) */
-  --syn-pp: oklch(82% 0.18 60);     /* Amber Orange preprocessor (#include, #define) */
-  --syn-dv: oklch(85% 0.18 95);     /* Golden Yellow numbers */
-  --syn-cn: oklch(84% 0.19 40);     /* Coral Constants (NULL, SEEK_SET) */
-  --syn-op: oklch(78% 0.12 280);    /* Soft Lavender Operators (=, +, *, &) */
-  --syn-va: oklch(86% 0.14 210);    /* Soft Ice Blue variables */
-  --syn-at: oklch(81% 0.16 310);    /* Orchid Violet attributes */
-  --syn-al: oklch(75% 0.22 25);     /* Bright Crimson warnings / alerts */
-
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", "JetBrains Mono", "Courier New", monospace;
-  
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 /* Global Resets */
