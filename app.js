@@ -23,6 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
+  // Homepage Navigation (Clicking top-left title)
+  const brandTitle = document.getElementById('sidebar-brand-title');
+  const mobileTitle = document.getElementById('mobile-title');
+  const goToHomepage = (e) => {
+    if (e) e.preventDefault();
+    loadChapterContent('foreword.html#foreword', true);
+    if (sidebarNav) sidebarNav.scrollTop = 0;
+  };
+  if (brandTitle) brandTitle.addEventListener('click', goToHomepage);
+  if (mobileTitle) mobileTitle.addEventListener('click', goToHomepage);
+
   const pageCache = {};
   let currentLoadedPage = '';
   let isExplicitUserClick = false;
@@ -273,20 +284,87 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {}
   }
 
-  // C Terms Glossary Data
+  // C Terms Glossary Data (Extremely Rich C Dictionary)
   const C_GLOSSARY = {
+    // Compilers & Build Tools
+    'gcc': 'GNU Compiler Collection: C/C++ ve diğer diller için dünyaca ünlü özgür derleyici koleksiyonu.',
+    'clang': 'Clang C Derleyicisi: LLVM altyapısını kullanan hızlı, modüler ve gelişmiş C/C++ derleyicisi.',
+    'make': 'Derleme Yöneticisi: Çoklu kaynak dosyalı C projelerini otomatik derleyen yapılandırma aracı.',
+    'gdb': 'GNU Debugger: C programlarını adım adım çalıştırma ve bellek hatalarını izleme aracı.',
+    'valgrind': 'Bellek Hata İzleyici: C programlarındaki bellek sızıntılarını ve hatalı erişimleri tespit eden analiz aracı.',
+
+    // Fundamental Data Types
+    'int': 'Tamsayı Türü (Integer): İşaretli tamsayı değerlerini saklar (genellikle 32-bit / 4 bayt).',
+    'char': 'Karakter Türü (Character): Tek bir ASCII/UTF-8 karakterini veya 1 baytlık küçük tamsayıyı saklar.',
+    'float': 'Kayan Noktalı Sayı: Tek duyarlıklı (single precision) ondalıklı sayı türü (4 bayt).',
+    'double': 'Çift Duyarlıklı Sayı: Yüksek hassasiyetli kayan noktalı ondalıklı sayı türü (8 bayt).',
+    'long': 'Uzun Tamsayı: Normal int türünden daha geniş aralıkta tamsayı saklayan tür.',
+    'short': 'Kısa Tamsayı: Genellikle 16-bit (2 bayt) yer kaplayan küçük tamsayı türü.',
+    'unsigned': 'İşaretsiz Niteleyici: Değişkenin yalnızca pozitif değerler almasını sağlayarak üst sınırı iki katına çıkarır.',
+    'signed': 'İşaretli Niteleyici: Değişkenin hem negatif hem de pozitif değerler alabildiğini belirtir.',
+    'bool': 'Mantıksal Tür: true (1) veya false (0) değerlerini temsil eden mantıksal veri türü.',
+    '_bool': 'Mantıksal Tür (C99): Yerleşik yerel boolean türü.',
+
+    // Memory Allocation & Pointer Management
     'malloc': 'Bellek Tahsisi (Memory Allocation): Heap alanından dinamik olarak belirtilen bayt kadar yer ayırır.',
+    'calloc': 'Temizlenmiş Bellek Tahsisi: Heap alanından yer ayırır ve ayrılan tüm baytları otomatik 0 yapar.',
+    'realloc': 'Bellek Yeniden Boyutlandırma: Daha önce ayrılmış bir bellek bloğunun boyutunu büyütür veya küçültür.',
     'free': 'Bellek Serbest Bırakma: malloc/calloc ile ayrılan heap belleğini sisteme geri iade eder.',
     'sizeof': 'Tür Boyutu Operatörü: Bir değişkenin veya veri türünün bellekte kapladığı bayt sayısını verir.',
     'size_t': 'İşaretsiz Tamsayı Türü: stddef.h içinde tanımlı, bellek boyutlarını temsil eden işaretsiz tamsayı türü.',
     'pointer': 'İşaretçi (Pointer): Bir değişkenin değerini değil, bellekteki adresini saklayan değişken.',
+    'null': 'Boş İşaretçi Sabiti: Hiçbir geçerli bellek adresini göstermeyen 0 değerli adres sabiti.',
+    'memcpy': 'Bellek Kopyalama: Bir bellek bloğundaki baytları başka bir bellek alanına kopyalar.',
+    'memset': 'Bellek Doldurma: Belirtilen bellek bloğunu sabit bir bayt değeri ile doldurur.',
+    'memmove': 'Çakışmasız Bellek Kopyalama: Bellek alanları birbiriyle çakışsa bile güvenli kopyalama yapar.',
+
+    // Structures & Keywords
     'struct': 'Yapı (Structure): Farklı türlerdeki değişkenleri tek bir çatı altında toplayan özel veri türü.',
     'typedef': 'Tür Takma Adı: Var olan bir veri türüne yeni ve okunabilir bir isim verir.',
-    'null': 'Boş İşaretçi Sabiti: Hiçbir geçerli bellek adresini göstermeyen 0 değerli adres sabiti.',
+    'union': 'Birlik (Union): Tüm üyeleri aynı bellek adresini paylaşan karmaşık veri türü.',
+    'enum': 'Numaralandırma Türü: İsimlendirilmiş tamsayı sabitlerinden oluşan özel veri türü.',
     'const': 'Sabit Niteleyicisi: Değişkenin değerinin ilk atamadan sonra değiştirilmesini engeller.',
     'volatile': 'Değişken Niteleyicisi: Derleyiciye bu değişkenin donanım tarafından her an değiştirilebileceğini bildirir.',
     'void': 'Boş Tür: Fonksiyonun değer döndürmediğini veya parametre almadığını gösterir.',
-    'memcpy': 'Bellek Kopyalama: Bir bellek bloğundaki baytları başka bir bellek alanına kopyalar.'
+    'static': 'Statik Niteleyici: Değişkenin veya fonksiyonun ömrünü program sonuna kadar uzatır / görünürlüğünü sınırlar.',
+    'extern': 'Harici Niteleyici: Başka bir dosyada tanımlanmış değişkene erişim sağlar.',
+    'register': 'Yazmaç İpucu: Derleyiciye değişkenin hızlı erişim için CPU register\'ında tutulmasını önerir.',
+    'inline': 'Satır İçi Fonksiyon İpucu: Derleyiciye fonksiyon çağrısını doğrudan kodun içine gömmesini önerir.',
+    'restrict': 'Kısıtlı Gösterici İpucu: Göstericinin o bellek alanına tek erişim noktası olduğunu derleyiciye bildirir.',
+    'alignas': 'Hizalama Belirteci: Değişkenin bellekte kaç baytlık sınıra hizalanacağını belirler.',
+    'alignof': 'Hizalama Operatörü: Bir türün bellekteki hizalama sınırını verir.',
+
+    // Control Flow Keywords
+    'if': 'Koşul Bloğu: Belirtilen şart doğru (true) ise kod bloğunu çalıştırır.',
+    'else': 'Değilse Bloğu: if koşulu sağlanmadığında çalışacak alternatif blok.',
+    'switch': 'Çoklu Seçim Bloğu: Bir değişkenin değerine göre ilgili case bloğuna dallanır.',
+    'case': 'Durum Etiketi: switch bloğu içindeki sabit değer durumu.',
+    'default': 'Varsayılan Durum: switch içinde hiçbir case uymadığında çalışan blok.',
+    'while': 'Koşullu Döngü: Şart doğru olduğu sürece bloğu tekrarlar.',
+    'do': 'En Az Bir Kere Çalışan Döngü: Şartı döngü sonunda kontrol eden yapı.',
+    'for': 'Sayaçlı Döngü: Başlangıç, bitiş ve artış miktarı belirlenmiş standart döngü.',
+    'break': 'Döngü/Switch Kırma: İçinde bulunulan döngüyü veya switch bloğunu anında sonlandırır.',
+    'continue': 'Sonraki Yineleme: Döngünün mevcut adımını atlayarak sonraki adıma geçer.',
+    'goto': 'Koşulsuz Atlama: Program akışını doğrudan belirtilen etikete (label) yönlendirir.',
+    'return': 'Fonksiyon Dönüşü: Fonksiyondan çıkış yapar ve çağıran yere değer döndürür.',
+
+    // Standard I/O & Header Files
+    'printf': 'Biçimli Çıktı: Ekrana (stdout) biçimlendirilmiş metin ve değişken yazdırır.',
+    'scanf': 'Biçimli Girdi: Kullanıcıdan (stdin) değişkenlere değer okur.',
+    'fopen': 'Dosya Açma: Belirtilen modda (r, w, a, rb, wb) diskten dosya akışı açar.',
+    'fclose': 'Dosya Kapatma: Açık dosya akışını kapatır ve arabellekteki verileri diske yazar.',
+    'fread': 'Dosyadan Blok Okuma: İkili veya metin dosyasından belirtilen boyutta bayt okur.',
+    'fwrite': 'Dosyaya Blok Yazma: İkili veya metin dosyasına ham bayt bloğu yazar.',
+    'strlen': 'String Uzunluğu: Null karakterine (\\0) kadar olan karakter sayısını verir.',
+    'strcpy': 'String Kopyalama: Bir katı metni hedef bellek alanına kopyalar.',
+    'strcmp': 'String Karşılaştırma: İki metni sözlük sırasına göre alfabetik karşılaştırır.',
+    'stdio.h': 'Standart Girdi/Çıktı Başlığı: printf, scanf, fopen gibi temel I/O fonksiyonlarını içerir.',
+    'stdlib.h': 'Standart Kütüphane Başlığı: malloc, free, exit, rand gibi temel fonksiyonları içerir.',
+    'string.h': 'String & Bellek Başlığı: strlen, strcpy, memcpy, memset gibi fonksiyonları içerir.',
+    'stdbool.h': 'Mantıksal Tür Başlığı: bool, true, false tanımlarını içerir.',
+    'stdint.h': 'Sabit Genişlikli Tamsayılar: int32_t, uint64_t gibi sabit boyutlu türleri içerir.',
+    'stddef.h': 'Standart Tanımlar: size_t, NULL, offsetof gibi temel tür ve makroları içerir.',
+    'math.h': 'Matematik Kütüphanesi: sin, cos, sqrt, pow gibi matematiksel fonksiyonları içerir.'
   };
 
   // 0ms Instant Custom Theme-Aware Tooltip Engine
@@ -353,13 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyGlossaryTooltips(container) {
     if (!container) return;
     try {
-      const codeNodes = container.querySelectorAll('code');
+      const codeNodes = container.querySelectorAll('code, code span.kw, code span.dt, code span.im, code span.bu, code span.pp');
       codeNodes.forEach(node => {
-        const word = node.textContent.trim().toLowerCase();
+        const rawText = node.textContent.trim();
+        const word = rawText.toLowerCase().replace(/^[#<>&;]+|[#<>&;]+$/g, '');
         if (C_GLOSSARY[word] && !node.classList.contains('has-tooltip')) {
           node.classList.add('has-tooltip');
           node.removeAttribute('title');
-          node.setAttribute('data-tooltip-title', '💡 C Terimi: ' + node.textContent.trim());
+          node.setAttribute('data-tooltip-title', '💡 C Terimi: ' + rawText);
           node.setAttribute('data-tooltip-body', C_GLOSSARY[word]);
         }
       });

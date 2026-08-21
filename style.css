@@ -256,6 +256,11 @@ html, body {
   box-sizing: border-box;
 }
 
+button, input[type="button"], .theme-toggle-btn, .cmd-trigger-btn, .mobile-toggle-btn, .nav-btn, .cmd-tag-btn {
+  transition: none !important;
+  animation: none !important;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -867,7 +872,7 @@ tr:hover td {
   color: var(--text-muted) !important;
   background-color: var(--bg-sidebar) !important;
   border: 1px solid var(--border-color) !important;
-  transition: all 0.15s ease !important;
+  transition: none !important;
   cursor: pointer;
 }
 
@@ -900,7 +905,7 @@ tr:hover td {
   font-size: 0.72rem;
   padding: 2px 5px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: none !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1043,7 +1048,7 @@ tr:hover td {
   padding: 5px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: border-color 0.12s ease, background-color 0.12s ease, color 0.12s ease;
+  transition: none !important;
 }
 
 .cmd-tag-btn:hover {
