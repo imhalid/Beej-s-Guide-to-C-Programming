@@ -825,9 +825,10 @@ body.app-layout {
   }
 
   .theme-toggle-btn {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
+    position: fixed !important;
+    top: 12px !important;
+    right: 16px !important;
+    z-index: 1001 !important;
     margin: 0 !important;
     width: 28px !important;
     height: 28px !important;

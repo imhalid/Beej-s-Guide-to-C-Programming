@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             localStorage.setItem('bgc-active-html', container.innerHTML);
           } catch (e) {}
-          attachThemeBtnToTopNav();
+          ensureThemeButton();
           currentLoadedPage = pageFile;
           savePageLocation(targetUrl);
           handleInternalLinks(mainContentBody);
@@ -610,25 +610,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  function attachThemeBtnToTopNav() {
-    const themeBtn = document.getElementById('theme-toggle-btn');
-    if (!themeBtn || !mainContentBody) return;
-
-    const topNavHeader = mainContentBody.querySelector('.nav-header:first-of-type');
-    if (topNavHeader && !topNavHeader.contains(themeBtn)) {
-      topNavHeader.appendChild(themeBtn);
-    }
-  }
-
-  // Initial Chapter Load
-  const initialPage = window.__INITIAL_FULL_PAGE__ || window.__INITIAL_PAGE__ || 'foreword.html';
-  loadChapterContent(initialPage, false);
-  setTimeout(attachThemeBtnToTopNav, 60);
-
-  // ==========================================================================
-  // Multi-Theme Switching System
-  // ==========================================================================
-
   const themes = [
     { id: 'dark-obsidian', name: 'Dark Obsidian' },
     { id: 'tokyo-night', name: 'Tokyo Night' },
@@ -648,6 +629,40 @@ document.addEventListener('DOMContentLoaded', () => {
     if (foundIdx !== -1) currentThemeIndex = foundIdx;
   }
 
+  function ensureThemeButton() {
+    let themeBtn = document.getElementById('theme-toggle-btn');
+    const themeObj = themes[currentThemeIndex] || themes[0];
+    if (!themeBtn) {
+      themeBtn = document.createElement('button');
+      themeBtn.id = 'theme-toggle-btn';
+      themeBtn.className = 'theme-toggle-btn';
+      themeBtn.title = 'Tema Değiştir';
+      themeBtn.innerHTML = `
+        <svg class="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <span class="theme-name-badge">${themeObj ? themeObj.name : 'Dark Obsidian'}</span>
+      `;
+    }
+    if (mainViewport && themeBtn.parentElement !== mainViewport) {
+      mainViewport.insertBefore(themeBtn, mainViewport.firstChild);
+    }
+    return themeBtn;
+  }
+
+  // Initial Chapter Load
+  const initialPage = window.__INITIAL_FULL_PAGE__ || window.__INITIAL_PAGE__ || 'foreword.html';
+  loadChapterContent(initialPage, false);
+  setTimeout(ensureThemeButton, 60);
+
   function applyTheme(themeId) {
     document.documentElement.setAttribute('data-theme', themeId);
     localStorage.setItem('bgc-theme', themeId);
@@ -655,11 +670,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeObj = themes.find(t => t.id === themeId) || themes[0];
     const nextThemeObj = themes[(currentThemeIndex + 1) % themes.length];
     
-    const nameBadge = document.querySelector('.theme-name-badge');
-    const btn = document.getElementById('theme-toggle-btn');
+    const btn = ensureThemeButton();
+    const nameBadge = btn ? btn.querySelector('.theme-name-badge') : document.querySelector('.theme-name-badge');
     if (nameBadge) nameBadge.textContent = themeObj.name;
     if (btn) btn.setAttribute('title', `Tema Değiştir (Sıradaki: ${nextThemeObj.name})`);
-
   }
 
   applyTheme(themes[currentThemeIndex].id);
