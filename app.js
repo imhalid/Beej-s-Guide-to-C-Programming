@@ -144,19 +144,74 @@ document.addEventListener('DOMContentLoaded', () => {
   function resolveFetchUrl(path) {
     if (!path) return path;
     if (path.startsWith('/') || path.startsWith('http://') || path.startsWith('https://')) return path;
+    const cleanPath = path.replace(/^html\//, '');
+    if (window.location.protocol === 'file:' || window.location.pathname.includes('/html/')) {
+      return cleanPath;
+    }
     if (path.startsWith('html/')) return '/' + path;
-    return '/html/' + path;
+    return '/html/' + cleanPath;
+  }
+
+  function showErrorState(pageFile) {
+    if (!mainContentBody) return;
+    const isFileProto = window.location.protocol === 'file:';
+    mainContentBody.innerHTML = `
+      <div style="max-width: 680px; margin: 40px auto; padding: 28px; border: 1px solid var(--border-color, #383a45); border-radius: 12px; background: var(--bg-card, #262830); color: var(--text-color, #e0e0e0); line-height: 1.6; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <h2 style="margin-top: 0; color: #ff6b6b; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+          ⚠️ Sayfa İçeriği Yüklenemedi
+        </h2>
+        ${isFileProto ? `
+          <p style="margin-top: 12px;">Dosyayı tarayıcıda doğrudan (<code>file://</code> adresi ile) açtınız. Modern web tarayıcıları (Chrome, Edge, Safari vb.), güvenlik (CORS) kuralları nedeniyle yerel dosyaların JavaScript ile dinamik çekilmesine izin vermez.</p>
+        ` : `
+          <p style="margin-top: 12px;"><code>${pageFile}</code> dosyası sunucudan çekilemedi veya bir ağ hatası oluştu.</p>
+        `}
+        <p style="font-size: 0.95rem; opacity: 0.85; background: rgba(255,255,255,0.05); padding: 10px 14px; border-left: 3px solid #ff6b6b; border-radius: 4px;">
+          💡 <strong>Diğer bilgisayarınızda görünmesinin sebebi:</strong> O bilgisayarda önceden bir web sunucusu çalıştırılmış olması ya da tarayıcı önbelleğinde (<code>localStorage</code>) içeriklerin kayıtlı kalmış olmasıdır.
+        </p>
+        <h3 style="color: var(--link-color, #4dabf7); margin-top: 24px; font-size: 1.05rem;">Çözüm Seçenekleri (Nasıl Çalıştırılır?):</h3>
+        <ol style="padding-left: 20px; margin-bottom: 0;">
+          <li style="margin-bottom: 12px;"><strong>VS Code Live Server (En Kolayı):</strong> VS Code kullanıyorsanız, <code>html/index.html</code> dosyasına sağ tıklayıp <em>"Open with Live Server"</em> seçeneğini tıklayın.</li>
+          <li style="margin-bottom: 12px;"><strong>Terminal ile Python Sunucusu Başlatma:</strong>
+            <br>Terminal veya Komut Satırında bu proje klasöründeyken şu komutu çalıştırın:
+            <pre style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; overflow-x: auto; margin: 6px 0; color: #4dabf7; font-family: monospace;">python3 -m http.server 8000</pre>
+            Ardından tarayıcınızda <a href="http://localhost:8000/html/index.html" target="_blank" style="color: #4dabf7; text-decoration: underline;">http://localhost:8000/html/index.html</a> adresine gidin.
+          </li>
+          <li><strong>Docker ile Çalıştırma:</strong>
+            <pre style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; overflow-x: auto; margin: 6px 0; color: #4dabf7; font-family: monospace;">docker-compose up</pre>
+            Ardından <a href="http://localhost" target="_blank" style="color: #4dabf7; text-decoration: underline;">http://localhost</a> adresini açın.
+          </li>
+        </ol>
+      </div>
+    `;
+    mainContentBody.classList.remove('loading-init');
   }
 
   const doInject = async () => {
     try {
       let htmlText = pageCache[pageFile];
       if (!htmlText) {
-        let resp = await fetch(resolveFetchUrl(pageFile));
-        if (!resp.ok) {
-          resp = await fetch(pageFile);
+        let resp = null;
+        const cleanFile = pageFile.replace(/^html\//, '');
+        const candidateUrls = Array.from(new Set([
+          resolveFetchUrl(pageFile),
+          cleanFile,
+          'html/' + cleanFile,
+          '/' + cleanFile,
+          '/html/' + cleanFile
+        ]));
+
+        for (const url of candidateUrls) {
+          try {
+            const r = await fetch(url);
+            if (r && r.ok) {
+              resp = r;
+              break;
+            }
+          } catch (e) {}
         }
-        if (!resp.ok) {
+
+        if (!resp || !resp.ok) {
+          showErrorState(cleanFile);
           isRestoringScroll = false;
           return;
         }
@@ -183,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const savedScrollY = localStorage.getItem('bgc-scroll-' + pageFile);
 
           const applyTargetPosition = () => {
+            window.scrollTo(0, 0);
             if (isExplicitClick && targetHash) {
               const targetEl = mainContentBody.querySelector(targetHash);
               if (targetEl && mainViewport) {
@@ -218,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (err) {
         console.error('Error loading chapter content:', err);
+        showErrorState(pageFile);
         isRestoringScroll = false;
       }
     };
